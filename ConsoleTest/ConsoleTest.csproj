@@ -7,4 +7,19 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Ajuna.NetApi\Ajuna.NetApi\Ajuna.NetApi.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Types\" />
+    <None Remove="Types\Base\" />
+    <None Remove="Query\" />
+    <None Remove="TypeGenerator\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Types\" />
+    <Folder Include="Types\Base\" />
+    <Folder Include="Query\" />
+    <Folder Include="TypeGenerator\" />
+  </ItemGroup>
 </Project>

@@ -1,0 +1,195 @@
+﻿{
+  "Owner": {
+    "Value": [
+      {
+        "Value": 230
+      },
+      {
+        "Value": 89
+      },
+      {
+        "Value": 167
+      },
+      {
+        "Value": 161
+      },
+      {
+        "Value": 98
+      },
+      {
+        "Value": 140
+      },
+      {
+        "Value": 221
+      },
+      {
+        "Value": 147
+      },
+      {
+        "Value": 254
+      },
+      {
+        "Value": 188
+      },
+      {
+        "Value": 4
+      },
+      {
+        "Value": 164
+      },
+      {
+        "Value": 224
+      },
+      {
+        "Value": 100
+      },
+      {
+        "Value": 110
+      },
+      {
+        "Value": 162
+      },
+      {
+        "Value": 14
+      },
+      {
+        "Value": 159
+      },
+      {
+        "Value": 95
+      },
+      {
+        "Value": 12
+      },
+      {
+        "Value": 224
+      },
+      {
+        "Value": 151
+      },
+      {
+        "Value": 217
+      },
+      {
+        "Value": 160
+      },
+      {
+        "Value": 82
+      },
+      {
+        "Value": 144
+      },
+      {
+        "Value": 212
+      },
+      {
+        "Value": 169
+      },
+      {
+        "Value": 224
+      },
+      {
+        "Value": 84
+      },
+      {
+        "Value": 223
+      },
+      {
+        "Value": 78
+      }
+    ]
+  },
+  "Instances": {
+    "Value": 0
+  },
+  "Attributes": {
+    "Value": 8
+  },
+  "Name": {
+    "TypeSize": 7,
+    "Value": [
+      {
+        "Value": 83
+      },
+      {
+        "Value": 104
+      },
+      {
+        "Value": 105
+      },
+      {
+        "Value": 101
+      },
+      {
+        "Value": 108
+      },
+      {
+        "Value": 100
+      }
+    ]
+  },
+  "Bettor": {
+    "TypeSize": 1,
+    "OptionFlag": false,
+    "Value": null
+  },
+  "Purchased": {
+    "TypeSize": 35,
+    "OptionFlag": true,
+    "Value": {
+      "Offers": {
+        "TypeSize": 34,
+        "Value": [
+          {
+            "Fa": {
+              "Value": 0
+            },
+            "Price": {
+              "Value": 28
+            },
+            "Attributes": {
+              "TypeSize": 13,
+              "Value": [
+                {
+                  "Key": {
+                    "TypeSize": 6,
+                    "Value": [
+                      {
+                        "Value": 80
+                      },
+                      {
+                        "Value": 114
+                      },
+                      {
+                        "Value": 105
+                      },
+                      {
+                        "Value": 99
+                      },
+                      {
+                        "Value": 101
+                      }
+                    ]
+                  },
+                  "Value": {
+                    "Value": "Number",
+                    "Value2": {
+                      "NumberValue": {
+                        "Value": 28
+                      },
+                      "NumberMax": {
+                        "TypeSize": 1,
+                        "OptionFlag": false,
+                        "Value": null
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

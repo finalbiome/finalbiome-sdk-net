@@ -5,6 +5,21 @@ VisualStudioVersion = 25.0.1703.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTest", "ConsoleTest\ConsoleTest.csproj", "{15B86CA8-73B7-4207-AC66-6699B45E5913}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "New Folder", "New Folder", "{88C20DA6-83DC-40E2-A18B-2F336577D48D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ajuna.NetApi", "Ajuna.NetApi\Ajuna.NetApi\Ajuna.NetApi.csproj", "{4EAF14C7-E40E-428C-8D96-902A62A1F01C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ajuna.NetApi.TestNode", "Ajuna.NetApi\Ajuna.NetApi.TestNode\Ajuna.NetApi.TestNode.csproj", "{271E6015-11ED-4E47-9278-F889294F83E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ajuna.NetApi.Test", "Ajuna.NetApi\Ajuna.NetApi.Test\Ajuna.NetApi.Test.csproj", "{A1FDB386-7F8B-47EC-8304-EFA64D1B458F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubstrateNetApi", "SubstrateNetApi\SubstrateNetApi\SubstrateNetApi.csproj", "{6C2C04C9-B6FC-46DF-BD82-A3731441985F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F19AE8A4-5D3D-470E-BE86-8919BB027E8A}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,11 +30,29 @@ Global
 		{15B86CA8-73B7-4207-AC66-6699B45E5913}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15B86CA8-73B7-4207-AC66-6699B45E5913}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15B86CA8-73B7-4207-AC66-6699B45E5913}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EAF14C7-E40E-428C-8D96-902A62A1F01C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EAF14C7-E40E-428C-8D96-902A62A1F01C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EAF14C7-E40E-428C-8D96-902A62A1F01C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EAF14C7-E40E-428C-8D96-902A62A1F01C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{271E6015-11ED-4E47-9278-F889294F83E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{271E6015-11ED-4E47-9278-F889294F83E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{271E6015-11ED-4E47-9278-F889294F83E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{271E6015-11ED-4E47-9278-F889294F83E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1FDB386-7F8B-47EC-8304-EFA64D1B458F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1FDB386-7F8B-47EC-8304-EFA64D1B458F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1FDB386-7F8B-47EC-8304-EFA64D1B458F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1FDB386-7F8B-47EC-8304-EFA64D1B458F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C2C04C9-B6FC-46DF-BD82-A3731441985F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C2C04C9-B6FC-46DF-BD82-A3731441985F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C2C04C9-B6FC-46DF-BD82-A3731441985F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C2C04C9-B6FC-46DF-BD82-A3731441985F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {78143F4E-CC88-49A7-8C16-04A06E24956A}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 EndGlobal

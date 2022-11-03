@@ -1,0 +1,32 @@
+///
+/// This file is generated automatically
+/// DO NOT CHANGE THE CONTENT OF THE FILE!
+///
+using Ajuna.NetApi;
+using Ajuna.NetApi.Model.Meta;
+using Ajuna.NetApi.Model.Types;
+using Newtonsoft.Json.Linq;
+
+namespace FinalBiome.Sdk.Query
+{
+    public partial class Balances
+    {
+        /// <summary>
+        ///  Named reserves on some account balances.
+        /// </summary>
+        [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
+        public async Task<FinalBiome.Sdk.PalletBalances.BoundedVecReserveData> Reserves(FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, CancellationToken token)
+        {
+            Storage.Hasher[] hashers = new Storage.Hasher[] {
+                Storage.Hasher.BlakeTwo128Concat,
+            };
+            IType[] keys = new IType[] {
+                accountId32,
+            };
+
+            string req = RequestGenerator.GetStorage("Balances", "Reserves", Storage.Type.Map, hashers, keys);
+
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletBalances.BoundedVecReserveData>(req, token);
+        }
+    }
+}
