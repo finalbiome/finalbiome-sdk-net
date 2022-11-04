@@ -5,10 +5,12 @@ using Ajuna.NetApi.Model.Meta;
 using Ajuna.NetApi.Model.Types.Primitive;
 using Ajuna.NetApi.Model.Types;
 using Ajuna.NetApi.Model.Types.Base;
-using Newtonsoft.Json.Linq;
 using System.Numerics;
 using FinalBiome.Sdk;
 using FinalBiome.TypeGenerator;
+using Newtonsoft.Json;
+using ConsoleTest;
+using Newtonsoft.Json.Converters;
 
 namespace HelloWorld
 {
@@ -23,6 +25,8 @@ namespace HelloWorld
             //Console.WriteLine($"{Environment.NewLine}Hello, {name}, on {currentDate:d} at {currentDate:t}!");
 
             MainAsync().GetAwaiter().GetResult();
+
+            //SerializeTypes();
 
             Console.Write($"{Environment.NewLine}Press any key to exit...");
             Console.ReadKey(true);
@@ -61,7 +65,7 @@ namespace HelloWorld
             string reqCurrentBlock = RequestGenerator.GetStorage("System", "Number", Storage.Type.Plain, null, null);
             U32 resCurrentBlock = await client.client.GetStorageAsync<U32>(reqCurrentBlock, token);
 
-            Console.WriteLine($"Current Block data: {resCurrentBlock}");
+            Console.WriteLine($"Current Block data: {Stringify(resCurrentBlock)}");
 
 
             #endregion
@@ -124,28 +128,53 @@ namespace HelloWorld
 
 
             FinalBiome.Sdk.FrameSystem.AccountInfo res = await client.client.GetStorageAsync<FinalBiome.Sdk.FrameSystem.AccountInfo>(req, token);
-            Console.WriteLine($"Account Info: {res}");
+            Console.WriteLine($"Account Info: {Stringify(res)}");
             #endregion
 
             #region Get NFA by id
             FinalBiome.Sdk.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId classId = new FinalBiome.Sdk.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId();
-            classId.Create(1);
-            var nfaDetails = await client.Query.NonFungibleAssets.Classes(classId, token);
-            Console.WriteLine($"nfaDetails: {nfaDetails}");
+            classId.Create(0);
+            var nfaClassDetails = await client.Query.NonFungibleAssets.Classes(classId, token);
+            Console.WriteLine($"nfaClassDetails: {Stringify(nfaClassDetails)}");
+            FinalBiome.Sdk.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId nfaAssetId = new FinalBiome.Sdk.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId();
+            nfaAssetId.Create(0);
+            var nfaDetails = await client.Query.NonFungibleAssets.Assets(classId, nfaAssetId, token);
+
             #endregion
 
             #region Get FA by id
+
             FinalBiome.Sdk.PalletSupport.Types.FungibleAssetId.FungibleAssetId assetId = new FinalBiome.Sdk.PalletSupport.Types.FungibleAssetId.FungibleAssetId();
-            assetId.Create(0);
+            assetId.Create(1);
             var faDetails = await client.Query.FungibleAssets.Assets(assetId, token);
-            Console.WriteLine($"faDetails: {nfaDetails}");
+            //Console.WriteLine($"faDetails:\n{JsonConvert.SerializeObject(faDetails, Formatting.Indented, sOpt)}");
+
+
+            Console.WriteLine($"nfaClassDetails:\n{Stringify(nfaClassDetails)}");
+            Console.WriteLine($"nfaDetails:\n{Stringify(nfaDetails)}");
+            Console.WriteLine($"nfaDetails:\n{Stringify(nfaClassDetails)}");
 
             #endregion
+
 
             #region Close connection
             await client.client.CloseAsync();
             client.client.Dispose();
             #endregion
+        }
+
+        static string Stringify(IType value)
+        {
+            var sOpt = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                Converters = {
+                    new ApiTypesJsonConverter(),
+                    new StringEnumConverter(),
+                }
+            };
+
+            return JsonConvert.SerializeObject(value, Formatting.Indented, sOpt);
         }
     }
 }
