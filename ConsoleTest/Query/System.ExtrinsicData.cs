@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class System
     {
         /// <summary>
-        ///  Extrinsics data for the current block (maps an extrinsic's index to its data).
+        ///  Extrinsics data for the current block (maps an extrinsic's index to its data).<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<FinalBiome.Sdk.VecU8> ExtrinsicData(Ajuna.NetApi.Model.Types.Primitive.U32 u32, CancellationToken token)

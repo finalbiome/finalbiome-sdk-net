@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class Timestamp
     {
         /// <summary>
-        ///  Current time for the current block.
+        ///  Current time for the current block.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<Ajuna.NetApi.Model.Types.Primitive.U64> Now(CancellationToken token)

@@ -8,7 +8,7 @@ using Ajuna.NetApi.Model.Types.Base;
 namespace FinalBiome.Sdk.PalletTemplate.Pallet
 {
     /// <summary>
-    ///  Custom [dispatch errors](https://docs.substrate.io/main-docs/build/events-errors/) of this pallet. 
+    ///  Custom [dispatch errors](https://docs.substrate.io/main-docs/build/events-errors/) of this pallet. <br/>
     ///
     ///
     /// Generated from meta with Type Id 168
@@ -16,16 +16,16 @@ namespace FinalBiome.Sdk.PalletTemplate.Pallet
     public enum InnerError
     {
     /// <summary>
-    /// Error names should be descriptive.
+    /// Error names should be descriptive.<br/>
     /// </summary>
         NoneValue,
     /// <summary>
-    /// Errors should have helpful documentation associated with them.
+    /// Errors should have helpful documentation associated with them.<br/>
     /// </summary>
         StorageOverflow,
     }
     /// <summary>
-    ///  Custom [dispatch errors](https://docs.substrate.io/main-docs/build/events-errors/) of this pallet. 
+    ///  Custom [dispatch errors](https://docs.substrate.io/main-docs/build/events-errors/) of this pallet. <br/>
     ///
     ///
     /// Generated from meta with Type Id 168

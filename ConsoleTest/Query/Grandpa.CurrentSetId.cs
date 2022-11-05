@@ -12,8 +12,8 @@ namespace FinalBiome.Sdk.Query
     public partial class Grandpa
     {
         /// <summary>
-        ///  The number of changes (both in terms of keys and underlying economic responsibilities)
-        ///  in the "set" of Grandpa validators from genesis.
+        ///  The number of changes (both in terms of keys and underlying economic responsibilities)<br/>
+        ///  in the "set" of Grandpa validators from genesis.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<Ajuna.NetApi.Model.Types.Primitive.U64> CurrentSetId(CancellationToken token)

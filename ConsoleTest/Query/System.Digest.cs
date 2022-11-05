@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class System
     {
         /// <summary>
-        ///  Digest of the current block, also part of the block header.
+        ///  Digest of the current block, also part of the block header.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<FinalBiome.Sdk.SpRuntime.Generic.Digest.Digest> Digest(CancellationToken token)

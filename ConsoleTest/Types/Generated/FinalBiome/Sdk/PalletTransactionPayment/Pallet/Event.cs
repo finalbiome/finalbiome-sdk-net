@@ -8,7 +8,7 @@ using Ajuna.NetApi.Model.Types.Base;
 namespace FinalBiome.Sdk.PalletTransactionPayment.Pallet
 {
     /// <summary>
-    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. 
+    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>
     ///
     ///
     /// Generated from meta with Type Id 34
@@ -16,13 +16,13 @@ namespace FinalBiome.Sdk.PalletTransactionPayment.Pallet
     public enum InnerEvent
     {
     /// <summary>
-    /// A transaction fee `actual_fee`, of which `tip` was added to the minimum inclusion fee,
-    /// has been paid by `who`.
+    /// A transaction fee `actual_fee`, of which `tip` was added to the minimum inclusion fee,<br/>
+    /// has been paid by `who`.<br/>
     /// </summary>
         TransactionFeePaid,
     }
     /// <summary>
-    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. 
+    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>
     ///
     ///
     /// Generated from meta with Type Id 34

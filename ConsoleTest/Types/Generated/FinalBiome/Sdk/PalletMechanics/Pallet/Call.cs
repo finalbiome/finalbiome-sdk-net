@@ -8,7 +8,7 @@ using Ajuna.NetApi.Model.Types.Base;
 namespace FinalBiome.Sdk.PalletMechanics.Pallet
 {
     /// <summary>
-    /// Contains one variant per dispatchable that can be called by an extrinsic.
+    /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>
     ///
     ///
     /// Generated from meta with Type Id 163
@@ -16,20 +16,20 @@ namespace FinalBiome.Sdk.PalletMechanics.Pallet
     public enum InnerCall
     {
     /// <summary>
-    /// Execute mechanic `Buy NFA`
+    /// Execute mechanic `Buy NFA`<br/>
     /// </summary>
         exec_buy_nfa,
     /// <summary>
-    /// Execute mechanic `Bet`
+    /// Execute mechanic `Bet`<br/>
     /// </summary>
         exec_bet,
     /// <summary>
-    /// Upgrade mechanic
+    /// Upgrade mechanic<br/>
     /// </summary>
         upgrade,
     }
     /// <summary>
-    /// Contains one variant per dispatchable that can be called by an extrinsic.
+    /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>
     ///
     ///
     /// Generated from meta with Type Id 163

@@ -8,7 +8,7 @@ using Ajuna.NetApi.Model.Types.Base;
 namespace FinalBiome.Sdk.PalletNonFungibleAssets.Pallet
 {
     /// <summary>
-    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. 
+    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>
     ///
     ///
     /// Generated from meta with Type Id 44
@@ -16,41 +16,41 @@ namespace FinalBiome.Sdk.PalletNonFungibleAssets.Pallet
     public enum InnerEvent
     {
     /// <summary>
-    /// An asset class has been created.
+    /// An asset class has been created.<br/>
     /// </summary>
         Created,
     /// <summary>
-    /// An asset class has been destroyed.
+    /// An asset class has been destroyed.<br/>
     /// </summary>
         Destroyed,
     /// <summary>
-    /// An asset class has been updated.
+    /// An asset class has been updated.<br/>
     /// </summary>
         Updated,
     /// <summary>
-    /// An asset `instance` has been issued.
+    /// An asset `instance` has been issued.<br/>
     /// </summary>
         Issued,
     /// <summary>
-    /// New attribute metadata has been set for the asset class.
+    /// New attribute metadata has been set for the asset class.<br/>
     /// </summary>
         AttributeCreated,
     /// <summary>
-    /// Attribute metadata has been removed for the asset class.
+    /// Attribute metadata has been removed for the asset class.<br/>
     /// </summary>
         AttributeRemoved,
     /// <summary>
-    /// An asset `instance` was destroyed.
+    /// An asset `instance` was destroyed.<br/>
     /// </summary>
         Burned,
     /// <summary>
-    /// Event documentation should end with an array that provides descriptive names for event
-    /// parameters. [something, who]
+    /// Event documentation should end with an array that provides descriptive names for event<br/>
+    /// parameters. [something, who]<br/>
     /// </summary>
         SomethingStored,
     }
     /// <summary>
-    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. 
+    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>
     ///
     ///
     /// Generated from meta with Type Id 44

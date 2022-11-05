@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class Grandpa
     {
         /// <summary>
-        ///  next block number where we can force a change.
+        ///  next block number where we can force a change.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<Ajuna.NetApi.Model.Types.Primitive.U32> NextForced(CancellationToken token)

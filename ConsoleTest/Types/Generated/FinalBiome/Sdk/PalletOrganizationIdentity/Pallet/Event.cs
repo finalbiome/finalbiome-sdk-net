@@ -8,7 +8,7 @@ using Ajuna.NetApi.Model.Types.Base;
 namespace FinalBiome.Sdk.PalletOrganizationIdentity.Pallet
 {
     /// <summary>
-    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. 
+    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>
     ///
     ///
     /// Generated from meta with Type Id 40
@@ -16,33 +16,33 @@ namespace FinalBiome.Sdk.PalletOrganizationIdentity.Pallet
     public enum InnerEvent
     {
     /// <summary>
-    /// Event documentation should end with an array that provides descriptive names for event
-    /// parameters. [something, who]
+    /// Event documentation should end with an array that provides descriptive names for event<br/>
+    /// parameters. [something, who]<br/>
     /// </summary>
         SomethingStored,
     /// <summary>
-    /// An organization has been created. [organization_name, who]
+    /// An organization has been created. [organization_name, who]<br/>
     /// </summary>
         CreatedOrganization,
     /// <summary>
-    /// An asset class has been updated.
+    /// An asset class has been updated.<br/>
     /// </summary>
         UpdatedOrganization,
     /// <summary>
-    /// An member was added to an organization. [organization, member]
+    /// An member was added to an organization. [organization, member]<br/>
     /// </summary>
         MemberAdded,
     /// <summary>
-    /// An member was removed from organization. [organization, member]
+    /// An member was removed from organization. [organization, member]<br/>
     /// </summary>
         MemberRemoved,
     /// <summary>
-    /// Assets for the game has been airdropped.
+    /// Assets for the game has been airdropped.<br/>
     /// </summary>
         Onboard,
     }
     /// <summary>
-    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. 
+    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>
     ///
     ///
     /// Generated from meta with Type Id 40

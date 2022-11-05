@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class System
     {
         /// <summary>
-        ///  Total extrinsics count for the current block.
+        ///  Total extrinsics count for the current block.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<Ajuna.NetApi.Model.Types.Primitive.U32> ExtrinsicCount(CancellationToken token)

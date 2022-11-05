@@ -12,9 +12,9 @@ namespace FinalBiome.Sdk.Query
     public partial class RandomnessCollectiveFlip
     {
         /// <summary>
-        ///  Series of block headers from the last 81 blocks that acts as random seed material. This
-        ///  is arranged as a ring buffer with `block_number % 81` being the index into the `Vec` of
-        ///  the oldest hash.
+        ///  Series of block headers from the last 81 blocks that acts as random seed material. This<br/>
+        ///  is arranged as a ring buffer with `block_number % 81` being the index into the `Vec` of<br/>
+        ///  the oldest hash.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<FinalBiome.Sdk.PrimitiveTypes.BoundedVecH256> RandomMaterial(CancellationToken token)

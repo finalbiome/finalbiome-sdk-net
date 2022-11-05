@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class Grandpa
     {
         /// <summary>
-        ///  `true` if we are currently stalled.
+        ///  `true` if we are currently stalled.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<FinalBiome.Sdk.Model.Types.Base.Tuple_U32_U32> Stalled(CancellationToken token)

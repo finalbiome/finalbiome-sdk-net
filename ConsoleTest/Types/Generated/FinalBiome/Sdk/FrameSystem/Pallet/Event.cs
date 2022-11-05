@@ -8,7 +8,7 @@ using Ajuna.NetApi.Model.Types.Base;
 namespace FinalBiome.Sdk.FrameSystem.Pallet
 {
     /// <summary>
-    /// Event for the System pallet.
+    /// Event for the System pallet.<br/>
     ///
     ///
     /// Generated from meta with Type Id 18
@@ -16,32 +16,32 @@ namespace FinalBiome.Sdk.FrameSystem.Pallet
     public enum InnerEvent
     {
     /// <summary>
-    /// An extrinsic completed successfully.
+    /// An extrinsic completed successfully.<br/>
     /// </summary>
         ExtrinsicSuccess,
     /// <summary>
-    /// An extrinsic failed.
+    /// An extrinsic failed.<br/>
     /// </summary>
         ExtrinsicFailed,
     /// <summary>
-    /// `:code` was updated.
+    /// `:code` was updated.<br/>
     /// </summary>
         CodeUpdated,
     /// <summary>
-    /// A new account was created.
+    /// A new account was created.<br/>
     /// </summary>
         NewAccount,
     /// <summary>
-    /// An account was reaped.
+    /// An account was reaped.<br/>
     /// </summary>
         KilledAccount,
     /// <summary>
-    /// On on-chain remark happened.
+    /// On on-chain remark happened.<br/>
     /// </summary>
         Remarked,
     }
     /// <summary>
-    /// Event for the System pallet.
+    /// Event for the System pallet.<br/>
     ///
     ///
     /// Generated from meta with Type Id 18

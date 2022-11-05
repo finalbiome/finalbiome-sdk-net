@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class Grandpa
     {
         /// <summary>
-        ///  State of the current authority set.
+        ///  State of the current authority set.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<FinalBiome.Sdk.PalletGrandpa.StoredState> State(CancellationToken token)

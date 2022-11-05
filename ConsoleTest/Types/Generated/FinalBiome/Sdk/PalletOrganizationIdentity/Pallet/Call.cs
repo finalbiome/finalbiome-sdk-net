@@ -8,7 +8,7 @@ using Ajuna.NetApi.Model.Types.Base;
 namespace FinalBiome.Sdk.PalletOrganizationIdentity.Pallet
 {
     /// <summary>
-    /// Contains one variant per dispatchable that can be called by an extrinsic.
+    /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>
     ///
     ///
     /// Generated from meta with Type Id 131
@@ -16,48 +16,48 @@ namespace FinalBiome.Sdk.PalletOrganizationIdentity.Pallet
     public enum InnerCall
     {
     /// <summary>
-    /// Create an organization.
-    /// Will return an OrganizationExists error if the organization has already
-    /// been created. Will emit a CreatedOrganization event on success.
-    /// 
-    /// The dispatch origin for this call must be Signed.
+    /// Create an organization.<br/>
+    /// Will return an OrganizationExists error if the organization has already<br/>
+    /// been created. Will emit a CreatedOrganization event on success.<br/>
+    /// <para></para>
+    /// The dispatch origin for this call must be Signed.<br/>
     /// </summary>
         create_organization,
     /// <summary>
-    /// Add member to an organization.
-    /// 
-    /// # Events
-    /// * `MemberAdded`
-    /// # Errors
-    /// * `NotOrganization` if origin not an organization
-    /// * `MembershipLimitReached` if members limit exceeded
-    /// * `InvalidMember` if member is organization
-    /// * `AlreadyMember` if member already added
+    /// Add member to an organization.<br/>
+    /// <para></para>
+    /// # Events<br/>
+    /// * `MemberAdded`<br/>
+    /// # Errors<br/>
+    /// * `NotOrganization` if origin not an organization<br/>
+    /// * `MembershipLimitReached` if members limit exceeded<br/>
+    /// * `InvalidMember` if member is organization<br/>
+    /// * `AlreadyMember` if member already added<br/>
     /// </summary>
         add_member,
     /// <summary>
-    /// Removes a member from organization.
-    /// 
-    /// # Events
-    /// * `MemberRemoved`
-    /// 
-    /// # Errors
-    /// * `NotOrganization` if origin not an organization
-    /// * `NotMember` if a member doesn't exist
-    /// * ``
+    /// Removes a member from organization.<br/>
+    /// <para></para>
+    /// # Events<br/>
+    /// * `MemberRemoved`<br/>
+    /// <para></para>
+    /// # Errors<br/>
+    /// * `NotOrganization` if origin not an organization<br/>
+    /// * `NotMember` if a member doesn't exist<br/>
+    /// * ``<br/>
     /// </summary>
         remove_member,
     /// <summary>
-    /// Set assets which will be airdroped at game onboarding
+    /// Set assets which will be airdroped at game onboarding<br/>
     /// </summary>
         set_onboarding_assets,
     /// <summary>
-    /// Onboirding to game
+    /// Onboirding to game<br/>
     /// </summary>
         onboarding,
     }
     /// <summary>
-    /// Contains one variant per dispatchable that can be called by an extrinsic.
+    /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>
     ///
     ///
     /// Generated from meta with Type Id 131

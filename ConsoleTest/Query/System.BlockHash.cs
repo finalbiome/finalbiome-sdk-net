@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class System
     {
         /// <summary>
-        ///  Map of block numbers to block hashes.
+        ///  Map of block numbers to block hashes.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<FinalBiome.Sdk.PrimitiveTypes.H256> BlockHash(Ajuna.NetApi.Model.Types.Primitive.U32 u32, CancellationToken token)

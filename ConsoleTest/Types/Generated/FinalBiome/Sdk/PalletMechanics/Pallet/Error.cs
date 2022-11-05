@@ -8,7 +8,7 @@ using Ajuna.NetApi.Model.Types.Base;
 namespace FinalBiome.Sdk.PalletMechanics.Pallet
 {
     /// <summary>
-    ///  Custom [dispatch errors](https://docs.substrate.io/main-docs/build/events-errors/) of this pallet. 
+    ///  Custom [dispatch errors](https://docs.substrate.io/main-docs/build/events-errors/) of this pallet. <br/>
     ///
     ///
     /// Generated from meta with Type Id 199
@@ -16,32 +16,32 @@ namespace FinalBiome.Sdk.PalletMechanics.Pallet
     public enum InnerError
     {
     /// <summary>
-    /// Mechanics are not available for this asset or this origin
+    /// Mechanics are not available for this asset or this origin<br/>
     /// </summary>
         MechanicsNotAvailable,
     /// <summary>
-    /// Internal error
+    /// Internal error<br/>
     /// </summary>
         Internal,
     /// <summary>
-    /// The number of assets exceeds the allowable
+    /// The number of assets exceeds the allowable<br/>
     /// </summary>
         AssetsExceedsAllowable,
     /// <summary>
-    /// Asset is incompatible with mechanic
+    /// Asset is incompatible with mechanic<br/>
     /// </summary>
         IncompatibleAsset,
     /// <summary>
-    /// Given data is incompatible with mechanic
+    /// Given data is incompatible with mechanic<br/>
     /// </summary>
         IncompatibleData,
     /// <summary>
-    /// The signing account has no permission to do the operation.
+    /// The signing account has no permission to do the operation.<br/>
     /// </summary>
         NoPermission,
     }
     /// <summary>
-    ///  Custom [dispatch errors](https://docs.substrate.io/main-docs/build/events-errors/) of this pallet. 
+    ///  Custom [dispatch errors](https://docs.substrate.io/main-docs/build/events-errors/) of this pallet. <br/>
     ///
     ///
     /// Generated from meta with Type Id 199

@@ -11,12 +11,18 @@ using FinalBiome.TypeGenerator;
 using Newtonsoft.Json;
 using ConsoleTest;
 using Newtonsoft.Json.Converters;
+using Schnorrkel.Keys;
+using Ajuna.NetApi.Model.Extrinsics;
+using Newtonsoft.Json.Linq;
+using System.Text;
+using Ajuna.NetApi.Model.Rpc;
+using Utils = Ajuna.NetApi.Utils;
 
 namespace HelloWorld
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             //Console.WriteLine("What is your name?");
             //var name = Console.ReadLine();
@@ -24,7 +30,7 @@ namespace HelloWorld
 
             //Console.WriteLine($"{Environment.NewLine}Hello, {name}, on {currentDate:d} at {currentDate:t}!");
 
-            MainAsync().GetAwaiter().GetResult();
+            await MainAsync();
 
             //SerializeTypes();
 
@@ -52,6 +58,7 @@ namespace HelloWorld
             } catch (Exception ex)
             {
                 Console.WriteLine($"Caught Exception: {ex.Message}");
+                return;
             }
             #endregion
 
@@ -103,42 +110,37 @@ namespace HelloWorld
 
 
                 Console.WriteLine($"=== Statistics ===");
-                Console.WriteLine($"Found {generator.ParsedTypes.Count} types");
-                int i = 0;
-                foreach (var item in generator.ParsedTypes)
-                {
-                    if (item.Value.Parsed) i++;
-                }
-                Console.WriteLine($"Generated {i} types");
+                Console.WriteLine($"Generated {generator.CountParsedTypes()} types");
+                Console.WriteLine($"Generated {generator.CountParsedStorages()} storages");
+                Console.WriteLine($"Generated {generator.CountParsedTransactionTypes()} transaction types");
+                return;
             }
             #endregion
 
             #region Get Account Info
+
             string address = "5CiPPseXPECbkjWCa6MnjNokrgYjMqmKndv2rSnekmSK2DjL";
             byte[] publicKey = Utils.GetPublicKeyFrom(address);
-
-            Storage.Hasher[] hashers = new[] { Storage.Hasher.BlakeTwo128Concat };
 
             FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId = new FinalBiome.Sdk.SpCore.Crypto.AccountId32();
             accountId.Create(publicKey);
 
-            IType[] keys = new[] { accountId };
+            var r = await client.Query.System.Account(accountId, token);
+            Console.WriteLine($"Account Info: {Stringify(r)}");
 
-            string req = RequestGenerator.GetStorage("System", "Account", Storage.Type.Map, hashers, keys);
-
-
-            FinalBiome.Sdk.FrameSystem.AccountInfo res = await client.client.GetStorageAsync<FinalBiome.Sdk.FrameSystem.AccountInfo>(req, token);
-            Console.WriteLine($"Account Info: {Stringify(res)}");
             #endregion
 
             #region Get NFA by id
+
             FinalBiome.Sdk.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId classId = new FinalBiome.Sdk.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId();
             classId.Create(0);
+
             var nfaClassDetails = await client.Query.NonFungibleAssets.Classes(classId, token);
             Console.WriteLine($"nfaClassDetails: {Stringify(nfaClassDetails)}");
-            FinalBiome.Sdk.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId nfaAssetId = new FinalBiome.Sdk.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId();
-            nfaAssetId.Create(0);
-            var nfaDetails = await client.Query.NonFungibleAssets.Assets(classId, nfaAssetId, token);
+
+            //FinalBiome.Sdk.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId nfaAssetId = new FinalBiome.Sdk.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId();
+            //nfaAssetId.Create(0);
+            //var nfaDetails = await client.Query.NonFungibleAssets.Assets(classId, nfaAssetId, token);
 
             #endregion
 
@@ -147,15 +149,53 @@ namespace HelloWorld
             FinalBiome.Sdk.PalletSupport.Types.FungibleAssetId.FungibleAssetId assetId = new FinalBiome.Sdk.PalletSupport.Types.FungibleAssetId.FungibleAssetId();
             assetId.Create(1);
             var faDetails = await client.Query.FungibleAssets.Assets(assetId, token);
-            //Console.WriteLine($"faDetails:\n{JsonConvert.SerializeObject(faDetails, Formatting.Indented, sOpt)}");
-
-
-            Console.WriteLine($"nfaClassDetails:\n{Stringify(nfaClassDetails)}");
-            Console.WriteLine($"nfaDetails:\n{Stringify(nfaDetails)}");
-            Console.WriteLine($"nfaDetails:\n{Stringify(nfaClassDetails)}");
+            Console.WriteLine($"faDetails:\n{Stringify(faDetails)}");
 
             #endregion
 
+            #region Exec Extrinsic Create NFA
+            FinalBiome.Sdk.SpRuntime.Multiaddress.InnerMultiAddress addressType = FinalBiome.Sdk.SpRuntime.Multiaddress.InnerMultiAddress.Id;
+            FinalBiome.Sdk.SpRuntime.Multiaddress.MultiAddress orgId = new FinalBiome.Sdk.SpRuntime.Multiaddress.MultiAddress();
+            FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32 = new FinalBiome.Sdk.SpCore.Crypto.AccountId32();
+
+            string addressOrgAcc = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw"; // Eve
+            accountId32.Create(Utils.GetPublicKeyFrom(addressOrgAcc));
+            orgId.Create(addressType, accountId32);
+
+            //target/release/subkey inspect //Ferdie
+            //Secret Key URI `//Ferdie` is account:
+            //  Network ID:        substrate 
+            // Secret seed:       0x42438b7883391c05512a938e36c2df0131e088b3756d6aa7a755fbff19d2f842
+            //  Public key (hex):  0x1cbd2d43530a44705ad088af313e18f80b53ef16b36177cd4b77b846f2a5f07c
+            //  Account ID:        0x1cbd2d43530a44705ad088af313e18f80b53ef16b36177cd4b77b846f2a5f07c
+            //  Public key (SS58): 5CiPPseXPECbkjWCa6MnjNokrgYjMqmKndv2rSnekmSK2DjL
+            //  SS58 Address:      5CiPPseXPECbkjWCa6MnjNokrgYjMqmKndv2rSnekmSK2DjL
+            MiniSecret MiniSecretBob = new MiniSecret(Utils.HexToByteArray("0x42438b7883391c05512a938e36c2df0131e088b3756d6aa7a755fbff19d2f842"), ExpandMode.Ed25519);
+            Account Ferdie = Account.Build(KeyType.Sr25519, MiniSecretBob.ExpandToSecret().ToBytes(), MiniSecretBob.GetPair().Public.Key);
+
+            FinalBiome.Sdk.VecU8 nfaName = new FinalBiome.Sdk.VecU8();
+
+            // with subscribe ext status
+            Func<string, ExtrinsicStatus, Task> actionExtrinsicUpdate = async (subscriptionId, extrinsicStatus) =>
+            {
+                Console.WriteLine($"extrinsicStatus:\n{extrinsicStatus}");
+                if (extrinsicStatus.Finalized is not null)
+                {
+                    await client.client.Author.UnwatchExtrinsicAsync(subscriptionId);
+                }
+            };
+
+
+            /// Create as client native method
+            nfaName.Create(Utils.SizePrefixedByteArray(Encoding.UTF8.GetBytes("test4").ToList()));
+            await client.Tx.NonFungibleAssets.Create(Ferdie, orgId, nfaName);
+
+            nfaName.Create(Utils.SizePrefixedByteArray(Encoding.UTF8.GetBytes("test5").ToList()));
+            await client.Tx.NonFungibleAssets.Create(Ferdie, orgId, nfaName, actionExtrinsicUpdate);
+
+            Thread.Sleep(5_000);
+
+            #endregion
 
             #region Close connection
             await client.client.CloseAsync();

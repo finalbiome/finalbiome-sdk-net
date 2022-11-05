@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class Mechanics
     {
         /// <summary>
-        ///  Schedule when mechanics time out
+        ///  Schedule when mechanics time out<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<FinalBiome.Sdk.Tuple_Empty> Timeouts(Ajuna.NetApi.Model.Types.Primitive.U32 u32, FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, Ajuna.NetApi.Model.Types.Primitive.U32 u320, CancellationToken token)

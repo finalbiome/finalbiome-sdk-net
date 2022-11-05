@@ -12,8 +12,8 @@ namespace FinalBiome.Sdk.Query
     public partial class System
     {
         /// <summary>
-        ///  True if we have upgraded so that AccountInfo contains three types of `RefCount`. False
-        ///  (default) if not.
+        ///  True if we have upgraded so that AccountInfo contains three types of `RefCount`. False<br/>
+        ///  (default) if not.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<Ajuna.NetApi.Model.Types.Primitive.Bool> UpgradedToTripleRefCount(CancellationToken token)

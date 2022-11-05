@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class FungibleAssets
     {
         /// <summary>
-        ///  Details of an asset.
+        ///  Details of an asset.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<FinalBiome.Sdk.PalletFungibleAssets.Types.AssetDetails> Assets(FinalBiome.Sdk.PalletSupport.Types.FungibleAssetId.FungibleAssetId fungibleAssetId, CancellationToken token)

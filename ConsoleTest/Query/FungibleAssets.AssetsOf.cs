@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class FungibleAssets
     {
         /// <summary>
-        ///  Asset ids by owners (organizations).
+        ///  Asset ids by owners (organizations).<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<FinalBiome.Sdk.Tuple_Empty> AssetsOf(FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, FinalBiome.Sdk.PalletSupport.Types.FungibleAssetId.FungibleAssetId fungibleAssetId, CancellationToken token)

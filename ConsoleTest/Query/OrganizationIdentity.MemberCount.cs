@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class OrganizationIdentity
     {
         /// <summary>
-        ///  Counts of members in organization.
+        ///  Counts of members in organization.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<Ajuna.NetApi.Model.Types.Primitive.U8> MemberCount(FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, CancellationToken token)

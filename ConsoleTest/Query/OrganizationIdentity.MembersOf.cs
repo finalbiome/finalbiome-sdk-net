@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class OrganizationIdentity
     {
         /// <summary>
-        ///  Members of organizations.
+        ///  Members of organizations.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<FinalBiome.Sdk.Tuple_Empty> MembersOf(FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId320, CancellationToken token)

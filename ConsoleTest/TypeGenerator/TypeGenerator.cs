@@ -20,6 +20,7 @@ namespace FinalBiome.TypeGenerator
     {
         public static string RootNamespace = "FinalBiome.Sdk";
         public static string StorageNamespacePrefix = "Query";
+        public static string TransactionsNamespacePrefix = "Transactions";
         public static string[] banner =
         {
             "///",
@@ -31,13 +32,9 @@ namespace FinalBiome.TypeGenerator
 
         List<ParsedType> existedTypes = new List<ParsedType>();
 
-        /// <summary>
-        /// Regex for replacing whitespaces
-        /// </summary>
-        public static readonly Regex rCleanDocs = new Regex(@"[\r\n\t\f\v]+");
-
         TypeParser typeParser;
         StateParser stateParser;
+        CallParser callParser;
 
         public TypeGenerator(MetaData metaData)
         {
@@ -45,6 +42,7 @@ namespace FinalBiome.TypeGenerator
 
             typeParser = new TypeParser(metaData.NodeMetadata.Types);
             stateParser = new StateParser(metaData.NodeMetadata.Modules, typeParser);
+            callParser = new CallParser(metaData.NodeMetadata, typeParser);
         }
 
         /// <summary>
@@ -64,6 +62,7 @@ namespace FinalBiome.TypeGenerator
         {
             typeParser.Save(outputDir + "/Types/Generated");
             stateParser.Save(outputDir);
+            callParser.Save(outputDir);
         }
 
         /// <summary>
@@ -73,14 +72,37 @@ namespace FinalBiome.TypeGenerator
         {
             typeParser.Parse();
             stateParser.Parse();
+            callParser.Parse();
         }
 
-        public Dictionary<uint, ParsedType> ParsedTypes
+        public int CountParsedTypes()
         {
-            get { return typeParser.parsedTypes; }
+            return typeParser.parsedTypes.Where((t) => t.Value.Parsed).Count();
         }
+        public int CountParsedStorages()
+        {
+            return stateParser.parsedStorages.Where((t) => t.Parsed).Count();
+        }
+        public int CountParsedTransactionTypes()
+        {
+            return callParser.parsedCalls.Where((t) => t.Parsed).Count();
+        }
+    }
 
+    public class Utils
+    {
+        /// <summary>
+        /// Regex for replacing whitespaces
+        /// </summary>
+        public static readonly Regex rCleanDocs = new Regex(@"[\r\n\t\f\v]+");
 
+        public static string CleanDocString(string value)
+        {
+            value = rCleanDocs.Replace(value, " ");
+            if (value.Length == 0 || value == " ") return "<para></para>";
+            value += "<br/>";
+            return value;
+        }
     }
 }
 

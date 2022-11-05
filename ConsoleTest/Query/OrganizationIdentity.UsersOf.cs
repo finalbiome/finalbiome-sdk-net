@@ -12,9 +12,9 @@ namespace FinalBiome.Sdk.Query
     public partial class OrganizationIdentity
     {
         /// <summary>
-        ///  Users of organizations.
-        /// 
-        ///  Stores users who has been onboarded into the game
+        ///  Users of organizations.<br/>
+        /// <para></para>
+        ///  Stores users who has been onboarded into the game<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<FinalBiome.Sdk.Tuple_Empty> UsersOf(FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId320, CancellationToken token)

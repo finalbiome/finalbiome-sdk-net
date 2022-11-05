@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class System
     {
         /// <summary>
-        ///  Stores the `spec_version` and `spec_name` of when the last runtime upgrade happened.
+        ///  Stores the `spec_version` and `spec_name` of when the last runtime upgrade happened.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<FinalBiome.Sdk.FrameSystem.LastRuntimeUpgradeInfo> LastRuntimeUpgrade(CancellationToken token)

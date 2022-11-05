@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class FungibleAssets
     {
         /// <summary>
-        ///  Accounts with assets which maybe need to top upped in next block.
+        ///  Accounts with assets which maybe need to top upped in next block.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<FinalBiome.Sdk.Tuple_Empty> TopUpQueue(FinalBiome.Sdk.PalletSupport.Types.FungibleAssetId.FungibleAssetId fungibleAssetId, FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, CancellationToken token)

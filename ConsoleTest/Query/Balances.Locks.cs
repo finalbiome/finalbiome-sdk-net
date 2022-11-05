@@ -12,8 +12,8 @@ namespace FinalBiome.Sdk.Query
     public partial class Balances
     {
         /// <summary>
-        ///  Any liquidity locks on some account balances.
-        ///  NOTE: Should only be accessed when setting, changing and freeing a lock.
+        ///  Any liquidity locks on some account balances.<br/>
+        ///  NOTE: Should only be accessed when setting, changing and freeing a lock.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<FinalBiome.Sdk.PalletBalances.WeakBoundedVecBalanceLock> Locks(FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, CancellationToken token)

@@ -60,13 +60,13 @@ namespace FinalBiome.TypeGenerator
     public class StateParser
     {
         Dictionary<uint, PalletModule> modules;
-        List<ParsedStorage> parsedStorages;
+        internal List<ParsedStorage> parsedStorages;
         /// <summary>
         /// Holds code of module classes.
         /// Key - the module name
         /// </summary>
         Dictionary<string, ParsedStorage> parsedModules = new Dictionary<string, ParsedStorage>();
-        List<string> queryClassSource;
+        List<string> queryClassSource = new List<string>();
         TypeParser typeParser;
 
         public StateParser(Dictionary<uint, PalletModule> modules, TypeParser typeParser)
@@ -130,7 +130,7 @@ namespace FinalBiome.TypeGenerator
                     ps.Docs = new List<string>();
                     foreach (var s in storage.Docs)
                     {
-                        ps.Docs.Add(TypeGenerator.rCleanDocs.Replace(s, " "));
+                        ps.Docs.Add(Utils.CleanDocString(s));
                     }
                 }
 

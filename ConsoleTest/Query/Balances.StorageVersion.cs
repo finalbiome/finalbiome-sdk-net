@@ -12,9 +12,9 @@ namespace FinalBiome.Sdk.Query
     public partial class Balances
     {
         /// <summary>
-        ///  Storage version of the pallet.
-        /// 
-        ///  This is set to v2.0.0 for new networks.
+        ///  Storage version of the pallet.<br/>
+        /// <para></para>
+        ///  This is set to v2.0.0 for new networks.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<FinalBiome.Sdk.PalletBalances.Releases> StorageVersion(CancellationToken token)

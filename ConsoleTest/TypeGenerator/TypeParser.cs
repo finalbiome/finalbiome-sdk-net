@@ -836,10 +836,20 @@ namespace FinalBiome.TypeGenerator
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        string SnakeCaseToTitle(string value)
+        public static string SnakeCaseToTitle(string value)
         {
             TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
             return textInfo.ToTitleCase(value.Replace("_", " ")).Replace(" ", "");
+        }
+        /// <summary>
+        /// Transform string from `snake_case` to `camelCase`
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string SnakeCaseToCamel(string value)
+        {
+            value = SnakeCaseToTitle(value);
+            return Char.ToLowerInvariant(value[0]) + value.Substring(1);
         }
 
         /// <summary>
@@ -855,7 +865,7 @@ namespace FinalBiome.TypeGenerator
             {
                 foreach (var item in Types[typeId].Docs)
                 {
-                    docs.Add($"    /// {TypeGenerator.rCleanDocs.Replace(item, " ")}");
+                    docs.Add($"    /// {Utils.CleanDocString(item)}");
                 }
 
                 docs.Add("    ///");
@@ -878,7 +888,7 @@ namespace FinalBiome.TypeGenerator
             docs.Add("    /// <summary>");
             foreach (var item in str)
             {
-                docs.Add($"    /// {TypeGenerator.rCleanDocs.Replace(item, " ")}");
+                docs.Add($"    /// {Utils.CleanDocString(item)}");
             }
             docs.Add("    /// </summary>");
 

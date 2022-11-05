@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class NonFungibleAssets
     {
         /// <summary>
-        ///  The assets held by any given account.
+        ///  The assets held by any given account.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<FinalBiome.Sdk.Tuple_Empty> Accounts(FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, FinalBiome.Sdk.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId nonFungibleClassId, FinalBiome.Sdk.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId nonFungibleAssetId, CancellationToken token)

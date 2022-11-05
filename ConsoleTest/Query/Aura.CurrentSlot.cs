@@ -12,9 +12,9 @@ namespace FinalBiome.Sdk.Query
     public partial class Aura
     {
         /// <summary>
-        ///  The current slot of this block.
-        /// 
-        ///  This will be set in `on_initialize`.
+        ///  The current slot of this block.<br/>
+        /// <para></para>
+        ///  This will be set in `on_initialize`.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<FinalBiome.Sdk.SpConsensusSlots.Slot> CurrentSlot(CancellationToken token)

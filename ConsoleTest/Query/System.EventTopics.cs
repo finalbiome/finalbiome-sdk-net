@@ -12,16 +12,16 @@ namespace FinalBiome.Sdk.Query
     public partial class System
     {
         /// <summary>
-        ///  Mapping between a topic (represented by T::Hash) and a vector of indexes
-        ///  of events in the `<Events<T>>` list.
-        /// 
-        ///  All topic vectors have deterministic storage locations depending on the topic. This
-        ///  allows light-clients to leverage the changes trie storage tracking mechanism and
-        ///  in case of changes fetch the list of events of interest.
-        /// 
-        ///  The value has the type `(T::BlockNumber, EventIndex)` because if we used only just
-        ///  the `EventIndex` then in case if the topic has the same contents on the next block
-        ///  no notification will be triggered thus the event might be lost.
+        ///  Mapping between a topic (represented by T::Hash) and a vector of indexes<br/>
+        ///  of events in the `<Events<T>>` list.<br/>
+        /// <para></para>
+        ///  All topic vectors have deterministic storage locations depending on the topic. This<br/>
+        ///  allows light-clients to leverage the changes trie storage tracking mechanism and<br/>
+        ///  in case of changes fetch the list of events of interest.<br/>
+        /// <para></para>
+        ///  The value has the type `(T::BlockNumber, EventIndex)` because if we used only just<br/>
+        ///  the `EventIndex` then in case if the topic has the same contents on the next block<br/>
+        ///  no notification will be triggered thus the event might be lost.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<FinalBiome.Sdk.Model.Types.Base.VecTuple_U32_U32> EventTopics(FinalBiome.Sdk.PrimitiveTypes.H256 h256, CancellationToken token)

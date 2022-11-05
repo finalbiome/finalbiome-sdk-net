@@ -8,7 +8,7 @@ using Ajuna.NetApi.Model.Types.Base;
 namespace FinalBiome.Sdk.PalletMechanics.Pallet
 {
     /// <summary>
-    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. 
+    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>
     ///
     ///
     /// Generated from meta with Type Id 52
@@ -16,16 +16,16 @@ namespace FinalBiome.Sdk.PalletMechanics.Pallet
     public enum InnerEvent
     {
     /// <summary>
-    /// Mechanics done.
+    /// Mechanics done.<br/>
     /// </summary>
         Finished,
     /// <summary>
-    /// Mechanics was stopped.
+    /// Mechanics was stopped.<br/>
     /// </summary>
         Stopped,
     }
     /// <summary>
-    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. 
+    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>
     ///
     ///
     /// Generated from meta with Type Id 52

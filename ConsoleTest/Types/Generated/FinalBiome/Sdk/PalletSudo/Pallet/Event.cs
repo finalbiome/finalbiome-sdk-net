@@ -8,7 +8,7 @@ using Ajuna.NetApi.Model.Types.Base;
 namespace FinalBiome.Sdk.PalletSudo.Pallet
 {
     /// <summary>
-    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. 
+    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>
     ///
     ///
     /// Generated from meta with Type Id 35
@@ -16,20 +16,20 @@ namespace FinalBiome.Sdk.PalletSudo.Pallet
     public enum InnerEvent
     {
     /// <summary>
-    /// A sudo just took place. \[result\]
+    /// A sudo just took place. \[result\]<br/>
     /// </summary>
         Sudid,
     /// <summary>
-    /// The \[sudoer\] just switched identity; the old key is supplied if one existed.
+    /// The \[sudoer\] just switched identity; the old key is supplied if one existed.<br/>
     /// </summary>
         KeyChanged,
     /// <summary>
-    /// A sudo just took place. \[result\]
+    /// A sudo just took place. \[result\]<br/>
     /// </summary>
         SudoAsDone,
     }
     /// <summary>
-    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. 
+    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>
     ///
     ///
     /// Generated from meta with Type Id 35

@@ -8,7 +8,7 @@ using Ajuna.NetApi.Model.Types.Base;
 namespace FinalBiome.Sdk.PalletFungibleAssets.Pallet
 {
     /// <summary>
-    ///  Custom [dispatch errors](https://docs.substrate.io/main-docs/build/events-errors/) of this pallet. 
+    ///  Custom [dispatch errors](https://docs.substrate.io/main-docs/build/events-errors/) of this pallet. <br/>
     ///
     ///
     /// Generated from meta with Type Id 180
@@ -16,53 +16,53 @@ namespace FinalBiome.Sdk.PalletFungibleAssets.Pallet
     public enum InnerError
     {
     /// <summary>
-    /// Error names should be descriptive.
+    /// Error names should be descriptive.<br/>
     /// </summary>
         NoneValue,
     /// <summary>
-    /// Errors should have helpful documentation associated with them.
+    /// Errors should have helpful documentation associated with them.<br/>
     /// </summary>
         StorageOverflow,
     /// <summary>
-    /// The asset ID is already taken.
+    /// The asset ID is already taken.<br/>
     /// </summary>
         InUse,
         NoAvailableAssetId,
     /// <summary>
-    /// The signing account has no permission to do the operation.
+    /// The signing account has no permission to do the operation.<br/>
     /// </summary>
         NoPermission,
     /// <summary>
-    /// Asset name is too long.
+    /// Asset name is too long.<br/>
     /// </summary>
         AssetNameTooLong,
     /// <summary>
-    /// Limit of tipupped assets is reached.
+    /// Limit of tipupped assets is reached.<br/>
     /// </summary>
         MaxTopUppedAssetsReached,
     /// <summary>
-    /// Global Cup must be above zero.
+    /// Global Cup must be above zero.<br/>
     /// </summary>
         ZeroGlobalCup,
     /// <summary>
-    /// Local Cup must be above zero.
+    /// Local Cup must be above zero.<br/>
     /// </summary>
         ZeroLocalCup,
     /// <summary>
-    /// Top upped speed must be above zero.
+    /// Top upped speed must be above zero.<br/>
     /// </summary>
         ZeroTopUpped,
     /// <summary>
-    /// Top upped speed can't be set without a local cup.
+    /// Top upped speed can't be set without a local cup.<br/>
     /// </summary>
         TopUppedWithNoCup,
     /// <summary>
-    /// The account to alter does not exist.
+    /// The account to alter does not exist.<br/>
     /// </summary>
         NoAccount,
     }
     /// <summary>
-    ///  Custom [dispatch errors](https://docs.substrate.io/main-docs/build/events-errors/) of this pallet. 
+    ///  Custom [dispatch errors](https://docs.substrate.io/main-docs/build/events-errors/) of this pallet. <br/>
     ///
     ///
     /// Generated from meta with Type Id 180

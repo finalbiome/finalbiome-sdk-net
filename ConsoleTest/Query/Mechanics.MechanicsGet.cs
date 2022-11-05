@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class Mechanics
     {
         /// <summary>
-        ///  Store of the Mechanics.
+        ///  Store of the Mechanics.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<FinalBiome.Sdk.PalletMechanics.Types.MechanicDetails> MechanicsGet(FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, Ajuna.NetApi.Model.Types.Primitive.U32 u32, CancellationToken token)

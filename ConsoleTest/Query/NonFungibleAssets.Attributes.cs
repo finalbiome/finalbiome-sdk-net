@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class NonFungibleAssets
     {
         /// <summary>
-        ///  Attributes of an assets.
+        ///  Attributes of an assets.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<FinalBiome.Sdk.PalletSupport.AttributeValue> Attributes(FinalBiome.Sdk.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId nonFungibleAssetId, FinalBiome.Sdk.BoundedVecU8 boundedVecU8, CancellationToken token)

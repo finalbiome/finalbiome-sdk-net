@@ -8,7 +8,7 @@ using Ajuna.NetApi.Model.Types.Base;
 namespace FinalBiome.Sdk.PalletSudo.Pallet
 {
     /// <summary>
-    /// Error for the Sudo pallet
+    /// Error for the Sudo pallet<br/>
     ///
     ///
     /// Generated from meta with Type Id 167
@@ -16,12 +16,12 @@ namespace FinalBiome.Sdk.PalletSudo.Pallet
     public enum InnerError
     {
     /// <summary>
-    /// Sender must be the Sudo account
+    /// Sender must be the Sudo account<br/>
     /// </summary>
         RequireSudo,
     }
     /// <summary>
-    /// Error for the Sudo pallet
+    /// Error for the Sudo pallet<br/>
     ///
     ///
     /// Generated from meta with Type Id 167

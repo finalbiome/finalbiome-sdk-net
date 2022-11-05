@@ -8,7 +8,7 @@ using Ajuna.NetApi.Model.Types.Base;
 namespace FinalBiome.Sdk.PalletTemplate.Pallet
 {
     /// <summary>
-    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. 
+    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>
     ///
     ///
     /// Generated from meta with Type Id 39
@@ -16,13 +16,13 @@ namespace FinalBiome.Sdk.PalletTemplate.Pallet
     public enum InnerEvent
     {
     /// <summary>
-    /// Event documentation should end with an array that provides descriptive names for event
-    /// parameters. [something, who]
+    /// Event documentation should end with an array that provides descriptive names for event<br/>
+    /// parameters. [something, who]<br/>
     /// </summary>
         SomethingStored,
     }
     /// <summary>
-    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. 
+    ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>
     ///
     ///
     /// Generated from meta with Type Id 39

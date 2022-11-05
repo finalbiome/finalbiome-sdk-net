@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class Sudo
     {
         /// <summary>
-        ///  The `AccountId` of the sudo key.
+        ///  The `AccountId` of the sudo key.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<FinalBiome.Sdk.SpCore.Crypto.AccountId32> Key(CancellationToken token)

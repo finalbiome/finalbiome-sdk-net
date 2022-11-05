@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class Balances
     {
         /// <summary>
-        ///  Named reserves on some account balances.
+        ///  Named reserves on some account balances.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public async Task<FinalBiome.Sdk.PalletBalances.BoundedVecReserveData> Reserves(FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, CancellationToken token)
