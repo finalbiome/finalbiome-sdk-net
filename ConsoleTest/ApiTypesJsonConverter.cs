@@ -120,15 +120,16 @@ namespace ConsoleTest
 
                 // it's composite object. writes it as an object
                 writer.WriteStartObject();
-                foreach (var childToken in token.AsEnumerable())
+                foreach (JToken childToken in token.AsEnumerable())
                 {
-                    var propName = childToken.Path;
+                    string propName = childToken.Path;
                     var propVal = value.GetType().GetProperty(propName);
-                    var val = propVal.GetValue(value);
-
-                    writer.WritePropertyName(propName);
-                    serializer.Serialize(writer, val);
-
+                    if (propVal is not null)
+                    {
+                        var val = propVal.GetValue(value);
+                        writer.WritePropertyName(propName);
+                        serializer.Serialize(writer, val);
+                    }
                 }
                 writer.WriteEndObject();
             }
