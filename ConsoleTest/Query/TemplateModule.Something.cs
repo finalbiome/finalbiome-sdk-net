@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class TemplateModule
     {
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<Ajuna.NetApi.Model.Types.Primitive.U32> Something(CancellationToken token)
+        public async Task<Ajuna.NetApi.Model.Types.Primitive.U32> Something(byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
             };
@@ -21,7 +21,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("TemplateModule", "Something", Storage.Type.Plain, hashers, keys);
 
-            return await _client.client.GetStorageAsync<Ajuna.NetApi.Model.Types.Primitive.U32>(req, token);
+            return await _client.client.GetStorageAsync<Ajuna.NetApi.Model.Types.Primitive.U32>(req, hash, token);
         }
     }
 }

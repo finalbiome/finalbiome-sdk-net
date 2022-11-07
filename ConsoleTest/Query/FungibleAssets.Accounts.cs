@@ -15,7 +15,7 @@ namespace FinalBiome.Sdk.Query
         ///  The holdings of a specific account for a specific asset<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.PalletFungibleAssets.Types.AssetAccount> Accounts(FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, FinalBiome.Sdk.PalletSupport.Types.FungibleAssetId.FungibleAssetId fungibleAssetId, CancellationToken token)
+        public async Task<FinalBiome.Sdk.PalletFungibleAssets.Types.AssetAccount> Accounts(FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, FinalBiome.Sdk.PalletSupport.Types.FungibleAssetId.FungibleAssetId fungibleAssetId, byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
                 Storage.Hasher.BlakeTwo128Concat,
@@ -28,7 +28,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("FungibleAssets", "Accounts", Storage.Type.Map, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletFungibleAssets.Types.AssetAccount>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletFungibleAssets.Types.AssetAccount>(req, hash, token);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace FinalBiome.Sdk.Query
         ///  The current authority set.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.SpConsensusAura.Sr25519.AppSr25519.BoundedVecPublic> Authorities(CancellationToken token)
+        public async Task<FinalBiome.Sdk.SpConsensusAura.Sr25519.AppSr25519.BoundedVecPublic> Authorities(byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
             };
@@ -24,7 +24,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("Aura", "Authorities", Storage.Type.Plain, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.SpConsensusAura.Sr25519.AppSr25519.BoundedVecPublic>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.SpConsensusAura.Sr25519.AppSr25519.BoundedVecPublic>(req, hash, token);
         }
     }
 }

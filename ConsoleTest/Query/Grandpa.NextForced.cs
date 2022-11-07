@@ -15,7 +15,7 @@ namespace FinalBiome.Sdk.Query
         ///  next block number where we can force a change.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<Ajuna.NetApi.Model.Types.Primitive.U32> NextForced(CancellationToken token)
+        public async Task<Ajuna.NetApi.Model.Types.Primitive.U32> NextForced(byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
             };
@@ -24,7 +24,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("Grandpa", "NextForced", Storage.Type.Plain, hashers, keys);
 
-            return await _client.client.GetStorageAsync<Ajuna.NetApi.Model.Types.Primitive.U32>(req, token);
+            return await _client.client.GetStorageAsync<Ajuna.NetApi.Model.Types.Primitive.U32>(req, hash, token);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace FinalBiome.Sdk.Query
         ///  Counts of members in organization.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<Ajuna.NetApi.Model.Types.Primitive.U8> MemberCount(FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, CancellationToken token)
+        public async Task<Ajuna.NetApi.Model.Types.Primitive.U8> MemberCount(FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
                 Storage.Hasher.BlakeTwo128Concat,
@@ -26,7 +26,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("OrganizationIdentity", "MemberCount", Storage.Type.Map, hashers, keys);
 
-            return await _client.client.GetStorageAsync<Ajuna.NetApi.Model.Types.Primitive.U8>(req, token);
+            return await _client.client.GetStorageAsync<Ajuna.NetApi.Model.Types.Primitive.U8>(req, hash, token);
         }
     }
 }

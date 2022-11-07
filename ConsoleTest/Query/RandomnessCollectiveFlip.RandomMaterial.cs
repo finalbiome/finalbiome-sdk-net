@@ -17,7 +17,7 @@ namespace FinalBiome.Sdk.Query
         ///  the oldest hash.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.PrimitiveTypes.BoundedVecH256> RandomMaterial(CancellationToken token)
+        public async Task<FinalBiome.Sdk.PrimitiveTypes.BoundedVecH256> RandomMaterial(byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
             };
@@ -26,7 +26,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("RandomnessCollectiveFlip", "RandomMaterial", Storage.Type.Plain, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PrimitiveTypes.BoundedVecH256>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PrimitiveTypes.BoundedVecH256>(req, hash, token);
         }
     }
 }

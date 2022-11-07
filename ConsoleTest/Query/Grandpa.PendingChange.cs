@@ -15,7 +15,7 @@ namespace FinalBiome.Sdk.Query
         ///  Pending change: (signaled at, scheduled change).<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.PalletGrandpa.StoredPendingChange> PendingChange(CancellationToken token)
+        public async Task<FinalBiome.Sdk.PalletGrandpa.StoredPendingChange> PendingChange(byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
             };
@@ -24,7 +24,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("Grandpa", "PendingChange", Storage.Type.Plain, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletGrandpa.StoredPendingChange>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletGrandpa.StoredPendingChange>(req, hash, token);
         }
     }
 }

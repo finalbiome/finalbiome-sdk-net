@@ -15,7 +15,7 @@ namespace FinalBiome.Sdk.Query
         ///  Storing the next asset id<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId> NextAssetId(CancellationToken token)
+        public async Task<FinalBiome.Sdk.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId> NextAssetId(byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
             };
@@ -24,7 +24,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("NonFungibleAssets", "NextAssetId", Storage.Type.Plain, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId>(req, hash, token);
         }
     }
 }

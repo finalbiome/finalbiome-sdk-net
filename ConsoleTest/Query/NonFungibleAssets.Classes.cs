@@ -15,7 +15,7 @@ namespace FinalBiome.Sdk.Query
         ///  Details of asset classes.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.PalletSupport.TypesNfa.ClassDetails> Classes(FinalBiome.Sdk.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId nonFungibleClassId, CancellationToken token)
+        public async Task<FinalBiome.Sdk.PalletSupport.TypesNfa.ClassDetails> Classes(FinalBiome.Sdk.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId nonFungibleClassId, byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
                 Storage.Hasher.BlakeTwo128Concat,
@@ -26,7 +26,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("NonFungibleAssets", "Classes", Storage.Type.Map, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletSupport.TypesNfa.ClassDetails>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletSupport.TypesNfa.ClassDetails>(req, hash, token);
         }
     }
 }

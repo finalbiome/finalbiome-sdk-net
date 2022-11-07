@@ -21,7 +21,7 @@ namespace FinalBiome.Sdk.Query
         ///  just in case someone still reads them from within the runtime.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.FrameSystem.VecEventRecord> Events(CancellationToken token)
+        public async Task<FinalBiome.Sdk.FrameSystem.VecEventRecord> Events(byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
             };
@@ -30,7 +30,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("System", "Events", Storage.Type.Plain, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.FrameSystem.VecEventRecord>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.FrameSystem.VecEventRecord>(req, hash, token);
         }
     }
 }

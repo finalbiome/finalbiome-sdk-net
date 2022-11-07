@@ -15,7 +15,7 @@ namespace FinalBiome.Sdk.Query
         ///  Digest of the current block, also part of the block header.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.SpRuntime.Generic.Digest.Digest> Digest(CancellationToken token)
+        public async Task<FinalBiome.Sdk.SpRuntime.Generic.Digest.Digest> Digest(byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
             };
@@ -24,7 +24,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("System", "Digest", Storage.Type.Plain, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.SpRuntime.Generic.Digest.Digest>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.SpRuntime.Generic.Digest.Digest>(req, hash, token);
         }
     }
 }

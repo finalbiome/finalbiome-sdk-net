@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class TransactionPayment
     {
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.SpArithmetic.FixedPoint.FixedU128> NextFeeMultiplier(CancellationToken token)
+        public async Task<FinalBiome.Sdk.SpArithmetic.FixedPoint.FixedU128> NextFeeMultiplier(byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
             };
@@ -21,7 +21,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("TransactionPayment", "NextFeeMultiplier", Storage.Type.Plain, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.SpArithmetic.FixedPoint.FixedU128>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.SpArithmetic.FixedPoint.FixedU128>(req, hash, token);
         }
     }
 }

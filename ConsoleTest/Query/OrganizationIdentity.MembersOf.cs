@@ -15,7 +15,7 @@ namespace FinalBiome.Sdk.Query
         ///  Members of organizations.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.Tuple_Empty> MembersOf(FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId320, CancellationToken token)
+        public async Task<FinalBiome.Sdk.Tuple_Empty> MembersOf(FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId320, byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
                 Storage.Hasher.BlakeTwo128Concat,
@@ -28,7 +28,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("OrganizationIdentity", "MembersOf", Storage.Type.Map, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.Tuple_Empty>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.Tuple_Empty>(req, hash, token);
         }
     }
 }

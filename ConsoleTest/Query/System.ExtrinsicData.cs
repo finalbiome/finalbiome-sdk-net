@@ -15,7 +15,7 @@ namespace FinalBiome.Sdk.Query
         ///  Extrinsics data for the current block (maps an extrinsic's index to its data).<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.VecU8> ExtrinsicData(Ajuna.NetApi.Model.Types.Primitive.U32 u32, CancellationToken token)
+        public async Task<FinalBiome.Sdk.VecU8> ExtrinsicData(Ajuna.NetApi.Model.Types.Primitive.U32 u32, byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
                 Storage.Hasher.Twox64Concat,
@@ -26,7 +26,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("System", "ExtrinsicData", Storage.Type.Map, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.VecU8>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.VecU8>(req, hash, token);
         }
     }
 }

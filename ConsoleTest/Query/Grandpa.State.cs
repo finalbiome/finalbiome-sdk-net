@@ -15,7 +15,7 @@ namespace FinalBiome.Sdk.Query
         ///  State of the current authority set.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.PalletGrandpa.StoredState> State(CancellationToken token)
+        public async Task<FinalBiome.Sdk.PalletGrandpa.StoredState> State(byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
             };
@@ -24,7 +24,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("Grandpa", "State", Storage.Type.Plain, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletGrandpa.StoredState>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletGrandpa.StoredState>(req, hash, token);
         }
     }
 }

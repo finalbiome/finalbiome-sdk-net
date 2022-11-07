@@ -15,7 +15,7 @@ namespace FinalBiome.Sdk.Query
         ///  The execution phase of the block.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.FrameSystem.Phase> ExecutionPhase(CancellationToken token)
+        public async Task<FinalBiome.Sdk.FrameSystem.Phase> ExecutionPhase(byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
             };
@@ -24,7 +24,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("System", "ExecutionPhase", Storage.Type.Plain, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.FrameSystem.Phase>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.FrameSystem.Phase>(req, hash, token);
         }
     }
 }

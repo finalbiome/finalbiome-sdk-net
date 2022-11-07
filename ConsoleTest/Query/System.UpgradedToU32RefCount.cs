@@ -15,7 +15,7 @@ namespace FinalBiome.Sdk.Query
         ///  True if we have upgraded so that `type RefCount` is `u32`. False (default) if not.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<Ajuna.NetApi.Model.Types.Primitive.Bool> UpgradedToU32RefCount(CancellationToken token)
+        public async Task<Ajuna.NetApi.Model.Types.Primitive.Bool> UpgradedToU32RefCount(byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
             };
@@ -24,7 +24,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("System", "UpgradedToU32RefCount", Storage.Type.Plain, hashers, keys);
 
-            return await _client.client.GetStorageAsync<Ajuna.NetApi.Model.Types.Primitive.Bool>(req, token);
+            return await _client.client.GetStorageAsync<Ajuna.NetApi.Model.Types.Primitive.Bool>(req, hash, token);
         }
     }
 }

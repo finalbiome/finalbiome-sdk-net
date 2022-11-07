@@ -18,7 +18,7 @@ namespace FinalBiome.Sdk.Query
         ///  TWOX-NOTE: `SetId` is not under user control.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<Ajuna.NetApi.Model.Types.Primitive.U32> SetIdSession(Ajuna.NetApi.Model.Types.Primitive.U64 u64, CancellationToken token)
+        public async Task<Ajuna.NetApi.Model.Types.Primitive.U32> SetIdSession(Ajuna.NetApi.Model.Types.Primitive.U64 u64, byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
                 Storage.Hasher.Twox64Concat,
@@ -29,7 +29,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("Grandpa", "SetIdSession", Storage.Type.Map, hashers, keys);
 
-            return await _client.client.GetStorageAsync<Ajuna.NetApi.Model.Types.Primitive.U32>(req, token);
+            return await _client.client.GetStorageAsync<Ajuna.NetApi.Model.Types.Primitive.U32>(req, hash, token);
         }
     }
 }

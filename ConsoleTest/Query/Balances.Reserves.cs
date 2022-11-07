@@ -15,7 +15,7 @@ namespace FinalBiome.Sdk.Query
         ///  Named reserves on some account balances.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.PalletBalances.BoundedVecReserveData> Reserves(FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, CancellationToken token)
+        public async Task<FinalBiome.Sdk.PalletBalances.BoundedVecReserveData> Reserves(FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
                 Storage.Hasher.BlakeTwo128Concat,
@@ -26,7 +26,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("Balances", "Reserves", Storage.Type.Map, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletBalances.BoundedVecReserveData>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletBalances.BoundedVecReserveData>(req, hash, token);
         }
     }
 }

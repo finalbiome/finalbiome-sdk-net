@@ -38,7 +38,7 @@ namespace FinalBiome.Sdk.Query
         ///  NOTE: This is only used in the case that this pallet is used to store balances.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.PalletBalances.AccountData> Account(FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, CancellationToken token)
+        public async Task<FinalBiome.Sdk.PalletBalances.AccountData> Account(FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
                 Storage.Hasher.BlakeTwo128Concat,
@@ -49,7 +49,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("Balances", "Account", Storage.Type.Map, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletBalances.AccountData>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletBalances.AccountData>(req, hash, token);
         }
     }
 }

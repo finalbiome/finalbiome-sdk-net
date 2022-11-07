@@ -16,7 +16,7 @@ namespace FinalBiome.Sdk.Query
         ///  NOTE: Should only be accessed when setting, changing and freeing a lock.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.PalletBalances.WeakBoundedVecBalanceLock> Locks(FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, CancellationToken token)
+        public async Task<FinalBiome.Sdk.PalletBalances.WeakBoundedVecBalanceLock> Locks(FinalBiome.Sdk.SpCore.Crypto.AccountId32 accountId32, byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
                 Storage.Hasher.BlakeTwo128Concat,
@@ -27,7 +27,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("Balances", "Locks", Storage.Type.Map, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletBalances.WeakBoundedVecBalanceLock>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletBalances.WeakBoundedVecBalanceLock>(req, hash, token);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace FinalBiome.Sdk.Query
         ///  Details of assets.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.PalletSupport.TypesNfa.AssetDetails> Assets(FinalBiome.Sdk.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId nonFungibleClassId, FinalBiome.Sdk.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId nonFungibleAssetId, CancellationToken token)
+        public async Task<FinalBiome.Sdk.PalletSupport.TypesNfa.AssetDetails> Assets(FinalBiome.Sdk.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId nonFungibleClassId, FinalBiome.Sdk.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId nonFungibleAssetId, byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
                 Storage.Hasher.BlakeTwo128Concat,
@@ -28,7 +28,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("NonFungibleAssets", "Assets", Storage.Type.Map, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletSupport.TypesNfa.AssetDetails>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletSupport.TypesNfa.AssetDetails>(req, hash, token);
         }
     }
 }

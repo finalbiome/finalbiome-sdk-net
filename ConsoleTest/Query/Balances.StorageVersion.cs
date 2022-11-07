@@ -17,7 +17,7 @@ namespace FinalBiome.Sdk.Query
         ///  This is set to v2.0.0 for new networks.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.PalletBalances.Releases> StorageVersion(CancellationToken token)
+        public async Task<FinalBiome.Sdk.PalletBalances.Releases> StorageVersion(byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
             };
@@ -26,7 +26,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("Balances", "StorageVersion", Storage.Type.Plain, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletBalances.Releases>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletBalances.Releases>(req, hash, token);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace FinalBiome.Sdk.Query
         ///  no notification will be triggered thus the event might be lost.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.Model.Types.Base.VecTuple_U32_U32> EventTopics(FinalBiome.Sdk.PrimitiveTypes.H256 h256, CancellationToken token)
+        public async Task<FinalBiome.Sdk.Model.Types.Base.VecTuple_U32_U32> EventTopics(FinalBiome.Sdk.PrimitiveTypes.H256 h256, byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
                 Storage.Hasher.BlakeTwo128Concat,
@@ -35,7 +35,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("System", "EventTopics", Storage.Type.Map, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.Model.Types.Base.VecTuple_U32_U32>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.Model.Types.Base.VecTuple_U32_U32>(req, hash, token);
         }
     }
 }

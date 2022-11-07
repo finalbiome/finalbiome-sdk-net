@@ -12,7 +12,7 @@ namespace FinalBiome.Sdk.Query
     public partial class TransactionPayment
     {
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.PalletTransactionPayment.Releases> StorageVersion(CancellationToken token)
+        public async Task<FinalBiome.Sdk.PalletTransactionPayment.Releases> StorageVersion(byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
             };
@@ -21,7 +21,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("TransactionPayment", "StorageVersion", Storage.Type.Plain, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletTransactionPayment.Releases>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.PalletTransactionPayment.Releases>(req, hash, token);
         }
     }
 }

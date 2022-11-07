@@ -15,7 +15,7 @@ namespace FinalBiome.Sdk.Query
         ///  Stores the `spec_version` and `spec_name` of when the last runtime upgrade happened.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.FrameSystem.LastRuntimeUpgradeInfo> LastRuntimeUpgrade(CancellationToken token)
+        public async Task<FinalBiome.Sdk.FrameSystem.LastRuntimeUpgradeInfo> LastRuntimeUpgrade(byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
             };
@@ -24,7 +24,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("System", "LastRuntimeUpgrade", Storage.Type.Plain, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.FrameSystem.LastRuntimeUpgradeInfo>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.FrameSystem.LastRuntimeUpgradeInfo>(req, hash, token);
         }
     }
 }

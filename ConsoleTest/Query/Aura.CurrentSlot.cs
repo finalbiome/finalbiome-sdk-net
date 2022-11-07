@@ -17,7 +17,7 @@ namespace FinalBiome.Sdk.Query
         ///  This will be set in `on_initialize`.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.SpConsensusSlots.Slot> CurrentSlot(CancellationToken token)
+        public async Task<FinalBiome.Sdk.SpConsensusSlots.Slot> CurrentSlot(byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
             };
@@ -26,7 +26,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("Aura", "CurrentSlot", Storage.Type.Plain, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.SpConsensusSlots.Slot>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.SpConsensusSlots.Slot>(req, hash, token);
         }
     }
 }

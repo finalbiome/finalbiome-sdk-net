@@ -16,7 +16,7 @@ namespace FinalBiome.Sdk.Query
         ///  in the "set" of Grandpa validators from genesis.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<Ajuna.NetApi.Model.Types.Primitive.U64> CurrentSetId(CancellationToken token)
+        public async Task<Ajuna.NetApi.Model.Types.Primitive.U64> CurrentSetId(byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
             };
@@ -25,7 +25,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("Grandpa", "CurrentSetId", Storage.Type.Plain, hashers, keys);
 
-            return await _client.client.GetStorageAsync<Ajuna.NetApi.Model.Types.Primitive.U64>(req, token);
+            return await _client.client.GetStorageAsync<Ajuna.NetApi.Model.Types.Primitive.U64>(req, hash, token);
         }
     }
 }

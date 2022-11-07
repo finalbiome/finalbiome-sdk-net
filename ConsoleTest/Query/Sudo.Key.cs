@@ -15,7 +15,7 @@ namespace FinalBiome.Sdk.Query
         ///  The `AccountId` of the sudo key.<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<FinalBiome.Sdk.SpCore.Crypto.AccountId32> Key(CancellationToken token)
+        public async Task<FinalBiome.Sdk.SpCore.Crypto.AccountId32> Key(byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
             };
@@ -24,7 +24,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("Sudo", "Key", Storage.Type.Plain, hashers, keys);
 
-            return await _client.client.GetStorageAsync<FinalBiome.Sdk.SpCore.Crypto.AccountId32>(req, token);
+            return await _client.client.GetStorageAsync<FinalBiome.Sdk.SpCore.Crypto.AccountId32>(req, hash, token);
         }
     }
 }

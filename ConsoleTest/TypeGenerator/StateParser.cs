@@ -193,7 +193,7 @@ namespace FinalBiome.TypeGenerator
                 file.Add($"        /// </summary>");
             }
             file.Add($"        [global::System.Diagnostics.CodeAnalysis.SuppressMessage(\"Style\", \"VSTHRD200:Use \\\"Async\\\" suffix for async methods\", Justification = \"<Pending>\")]");
-            file.Add($"        public async Task<{ps.OutputType}> {ps.Storage}({inputParams}CancellationToken token)");
+            file.Add($"        public async Task<{ps.OutputType}> {ps.Storage}({inputParams}byte[]? hash = null, CancellationToken? token = null)");
             file.Add($"        {{");
             file.Add($"            Storage.Hasher[] hashers = new Storage.Hasher[] {{");
             foreach (var h in ps.Hashers)
@@ -210,7 +210,7 @@ namespace FinalBiome.TypeGenerator
             file.Add($"");
             file.Add($"            string req = RequestGenerator.GetStorage(\"{ps.Module}\", \"{ps.Storage}\", Storage.Type.{ps.Type}, hashers, keys);");
             file.Add($"");
-            file.Add($"            return await _client.client.GetStorageAsync<{ps.OutputType}>(req, token);");
+            file.Add($"            return await _client.client.GetStorageAsync<{ps.OutputType}>(req, hash, token);");
             file.Add($"        }}");
             file.Add($"    }}");
             file.Add($"}}");

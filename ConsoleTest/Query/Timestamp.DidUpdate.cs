@@ -15,7 +15,7 @@ namespace FinalBiome.Sdk.Query
         ///  Did the timestamp get updated in this block?<br/>
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
-        public async Task<Ajuna.NetApi.Model.Types.Primitive.Bool> DidUpdate(CancellationToken token)
+        public async Task<Ajuna.NetApi.Model.Types.Primitive.Bool> DidUpdate(byte[]? hash = null, CancellationToken? token = null)
         {
             Storage.Hasher[] hashers = new Storage.Hasher[] {
             };
@@ -24,7 +24,7 @@ namespace FinalBiome.Sdk.Query
 
             string req = RequestGenerator.GetStorage("Timestamp", "DidUpdate", Storage.Type.Plain, hashers, keys);
 
-            return await _client.client.GetStorageAsync<Ajuna.NetApi.Model.Types.Primitive.Bool>(req, token);
+            return await _client.client.GetStorageAsync<Ajuna.NetApi.Model.Types.Primitive.Bool>(req, hash, token);
         }
     }
 }
