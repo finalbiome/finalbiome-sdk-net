@@ -62,7 +62,7 @@ namespace FinalBiome.Sdk.PalletOrganizationIdentity.Pallet
     ///
     /// Generated from meta with Type Id 131
     /// </summary>
-    public class Call : BaseEnumExt<InnerCall, FinalBiome.Sdk.VecU8, FinalBiome.Sdk.SpCore.Crypto.AccountId32, FinalBiome.Sdk.SpCore.Crypto.AccountId32, BaseTuple<FinalBiome.Sdk.SpCore.Crypto.AccountId32, FinalBiome.Sdk.Model.Types.Base.OptionBoundedVecAirDropAsset>, FinalBiome.Sdk.SpCore.Crypto.AccountId32>
+    public class Call : BaseEnumExt<InnerCall, FinalBiome.Sdk.PalletOrganizationIdentity.Pallet.CallCreateOrganization, FinalBiome.Sdk.PalletOrganizationIdentity.Pallet.CallAddMember, FinalBiome.Sdk.PalletOrganizationIdentity.Pallet.CallRemoveMember, FinalBiome.Sdk.PalletOrganizationIdentity.Pallet.CallSetOnboardingAssets, FinalBiome.Sdk.PalletOrganizationIdentity.Pallet.CallOnboarding>
     {
         public override string TypeName() => "Call";
     }

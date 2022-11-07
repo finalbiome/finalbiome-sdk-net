@@ -77,15 +77,15 @@ namespace FinalBiome.TypeGenerator
 
         public int CountParsedTypes()
         {
-            return typeParser.parsedTypes.Where((t) => t.Value.Parsed).Count();
+            return typeParser.parsedTypes.Where((t) => t.Value.Parsed).Count() + typeParser.parsedVariantsTypes.Where((t) => t.Value.Parsed).Count();
         }
         public int CountParsedStorages()
         {
-            return stateParser.parsedStorages.Where((t) => t.Parsed).Count();
+            return stateParser.parsedStorages.Where((t) => t.Parsed).Count() + stateParser.parsedModules.Where((t) => t.Value.Parsed).Count() + 1;
         }
         public int CountParsedTransactionTypes()
         {
-            return callParser.parsedCalls.Where((t) => t.Parsed).Count();
+            return callParser.parsedCalls.Where((t) => t.Parsed).Count() + callParser.parsedModules.Where((t) => t.Value.Parsed).Count() + 1;
         }
     }
 

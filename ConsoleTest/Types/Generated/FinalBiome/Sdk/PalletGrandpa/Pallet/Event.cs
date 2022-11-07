@@ -34,7 +34,7 @@ namespace FinalBiome.Sdk.PalletGrandpa.Pallet
     ///
     /// Generated from meta with Type Id 27
     /// </summary>
-    public class Event : BaseEnumExt<InnerEvent, FinalBiome.Sdk.Model.Types.Base.VecTuple_Public_U64, BaseVoid, BaseVoid>
+    public class Event : BaseEnumExt<InnerEvent, FinalBiome.Sdk.PalletGrandpa.Pallet.EventNewAuthorities, BaseVoid, BaseVoid>
     {
         public override string TypeName() => "Event";
     }

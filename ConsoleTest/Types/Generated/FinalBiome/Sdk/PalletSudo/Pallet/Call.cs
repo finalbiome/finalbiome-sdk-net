@@ -75,7 +75,7 @@ namespace FinalBiome.Sdk.PalletSudo.Pallet
     ///
     /// Generated from meta with Type Id 128
     /// </summary>
-    public class Call : BaseEnumExt<InnerCall, FinalBiome.Sdk.FinalbiomeNodeRuntime.Call, BaseTuple<FinalBiome.Sdk.FinalbiomeNodeRuntime.Call, Ajuna.NetApi.Model.Types.Primitive.U64>, FinalBiome.Sdk.SpRuntime.Multiaddress.MultiAddress, BaseTuple<FinalBiome.Sdk.SpRuntime.Multiaddress.MultiAddress, FinalBiome.Sdk.FinalbiomeNodeRuntime.Call>>
+    public class Call : BaseEnumExt<InnerCall, FinalBiome.Sdk.PalletSudo.Pallet.CallSudo, FinalBiome.Sdk.PalletSudo.Pallet.CallSudoUncheckedWeight, FinalBiome.Sdk.PalletSudo.Pallet.CallSetKey, FinalBiome.Sdk.PalletSudo.Pallet.CallSudoAs>
     {
         public override string TypeName() => "Call";
     }

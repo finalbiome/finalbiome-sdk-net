@@ -27,7 +27,7 @@ namespace FinalBiome.Sdk.PalletTransactionPayment.Pallet
     ///
     /// Generated from meta with Type Id 34
     /// </summary>
-    public class Event : BaseEnumExt<InnerEvent, BaseTuple<FinalBiome.Sdk.SpCore.Crypto.AccountId32, Ajuna.NetApi.Model.Types.Primitive.U128, Ajuna.NetApi.Model.Types.Primitive.U128>>
+    public class Event : BaseEnumExt<InnerEvent, FinalBiome.Sdk.PalletTransactionPayment.Pallet.EventTransactionFeePaid>
     {
         public override string TypeName() => "Event";
     }

@@ -30,7 +30,7 @@ namespace FinalBiome.Sdk.PalletMechanics.Pallet
     ///
     /// Generated from meta with Type Id 52
     /// </summary>
-    public class Event : BaseEnumExt<InnerEvent, BaseTuple<FinalBiome.Sdk.SpCore.Crypto.AccountId32, Ajuna.NetApi.Model.Types.Primitive.U32, FinalBiome.Sdk.Model.Types.Base.OptionEventMechanicResultData>, BaseTuple<FinalBiome.Sdk.SpCore.Crypto.AccountId32, Ajuna.NetApi.Model.Types.Primitive.U32, FinalBiome.Sdk.PalletMechanics.Types.EventMechanicStopReason>>
+    public class Event : BaseEnumExt<InnerEvent, FinalBiome.Sdk.PalletMechanics.Pallet.EventFinished, FinalBiome.Sdk.PalletMechanics.Pallet.EventStopped>
     {
         public override string TypeName() => "Event";
     }

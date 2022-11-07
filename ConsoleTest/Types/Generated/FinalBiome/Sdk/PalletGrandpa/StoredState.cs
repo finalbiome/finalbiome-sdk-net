@@ -20,7 +20,7 @@ namespace FinalBiome.Sdk.PalletGrandpa
     /// <summary>
     /// Generated from meta with Type Id 95
     /// </summary>
-    public class StoredState : BaseEnumExt<InnerStoredState, BaseVoid, BaseTuple<Ajuna.NetApi.Model.Types.Primitive.U32, Ajuna.NetApi.Model.Types.Primitive.U32>, BaseVoid, BaseTuple<Ajuna.NetApi.Model.Types.Primitive.U32, Ajuna.NetApi.Model.Types.Primitive.U32>>
+    public class StoredState : BaseEnumExt<InnerStoredState, BaseVoid, FinalBiome.Sdk.PalletGrandpa.StoredStatePendingPause, BaseVoid, FinalBiome.Sdk.PalletGrandpa.StoredStatePendingResume>
     {
         public override string TypeName() => "StoredState";
     }

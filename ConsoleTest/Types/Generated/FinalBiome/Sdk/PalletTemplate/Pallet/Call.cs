@@ -31,7 +31,7 @@ namespace FinalBiome.Sdk.PalletTemplate.Pallet
     ///
     /// Generated from meta with Type Id 130
     /// </summary>
-    public class Call : BaseEnumExt<InnerCall, Ajuna.NetApi.Model.Types.Primitive.U32, BaseVoid>
+    public class Call : BaseEnumExt<InnerCall, FinalBiome.Sdk.PalletTemplate.Pallet.CallDoSomething, BaseVoid>
     {
         public override string TypeName() => "Call";
     }

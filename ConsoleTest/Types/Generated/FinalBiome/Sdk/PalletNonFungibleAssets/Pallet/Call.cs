@@ -54,7 +54,7 @@ namespace FinalBiome.Sdk.PalletNonFungibleAssets.Pallet
     ///
     /// Generated from meta with Type Id 145
     /// </summary>
-    public class Call : BaseEnumExt<InnerCall, BaseTuple<FinalBiome.Sdk.SpRuntime.Multiaddress.MultiAddress, FinalBiome.Sdk.VecU8>, BaseTuple<FinalBiome.Sdk.SpRuntime.Multiaddress.MultiAddress, FinalBiome.Sdk.PalletSupport.Types.NonFungibleClassId.CompactNonFungibleClassId>, BaseTuple<FinalBiome.Sdk.SpRuntime.Multiaddress.MultiAddress, FinalBiome.Sdk.PalletSupport.Types.NonFungibleClassId.CompactNonFungibleClassId, FinalBiome.Sdk.PalletSupport.Attribute>, BaseTuple<FinalBiome.Sdk.SpRuntime.Multiaddress.MultiAddress, FinalBiome.Sdk.PalletSupport.Types.NonFungibleClassId.CompactNonFungibleClassId, FinalBiome.Sdk.BoundedVecU8>, BaseTuple<FinalBiome.Sdk.SpRuntime.Multiaddress.MultiAddress, FinalBiome.Sdk.PalletSupport.Types.NonFungibleClassId.CompactNonFungibleClassId, FinalBiome.Sdk.PalletSupport.Characteristics.Characteristic>>
+    public class Call : BaseEnumExt<InnerCall, FinalBiome.Sdk.PalletNonFungibleAssets.Pallet.CallCreate, FinalBiome.Sdk.PalletNonFungibleAssets.Pallet.CallDestroy, FinalBiome.Sdk.PalletNonFungibleAssets.Pallet.CallCreateAttribute, FinalBiome.Sdk.PalletNonFungibleAssets.Pallet.CallRemoveAttribute, FinalBiome.Sdk.PalletNonFungibleAssets.Pallet.CallSetCharacteristic>
     {
         public override string TypeName() => "Call";
     }

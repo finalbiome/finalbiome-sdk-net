@@ -46,7 +46,7 @@ namespace FinalBiome.Sdk.FrameSystem.Pallet
     ///
     /// Generated from meta with Type Id 18
     /// </summary>
-    public class Event : BaseEnumExt<InnerEvent, FinalBiome.Sdk.FrameSupport.Weights.DispatchInfo, BaseTuple<FinalBiome.Sdk.SpRuntime.DispatchError, FinalBiome.Sdk.FrameSupport.Weights.DispatchInfo>, BaseVoid, FinalBiome.Sdk.SpCore.Crypto.AccountId32, FinalBiome.Sdk.SpCore.Crypto.AccountId32, BaseTuple<FinalBiome.Sdk.SpCore.Crypto.AccountId32, FinalBiome.Sdk.PrimitiveTypes.H256>>
+    public class Event : BaseEnumExt<InnerEvent, FinalBiome.Sdk.FrameSystem.Pallet.EventExtrinsicSuccess, FinalBiome.Sdk.FrameSystem.Pallet.EventExtrinsicFailed, BaseVoid, FinalBiome.Sdk.FrameSystem.Pallet.EventNewAccount, FinalBiome.Sdk.FrameSystem.Pallet.EventKilledAccount, FinalBiome.Sdk.FrameSystem.Pallet.EventRemarked>
     {
         public override string TypeName() => "Event";
     }

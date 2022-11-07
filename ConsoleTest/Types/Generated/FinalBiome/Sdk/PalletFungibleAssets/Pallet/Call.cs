@@ -42,7 +42,7 @@ namespace FinalBiome.Sdk.PalletFungibleAssets.Pallet
     ///
     /// Generated from meta with Type Id 139
     /// </summary>
-    public class Call : BaseEnumExt<InnerCall, BaseTuple<FinalBiome.Sdk.SpRuntime.Multiaddress.MultiAddress, FinalBiome.Sdk.VecU8, FinalBiome.Sdk.Model.Types.Base.OptionTopUppedFA, FinalBiome.Sdk.Model.Types.Base.OptionCupFA, FinalBiome.Sdk.Model.Types.Base.OptionCupFA>, BaseTuple<FinalBiome.Sdk.SpRuntime.Multiaddress.MultiAddress, FinalBiome.Sdk.PalletSupport.Types.FungibleAssetId.CompactFungibleAssetId>>
+    public class Call : BaseEnumExt<InnerCall, FinalBiome.Sdk.PalletFungibleAssets.Pallet.CallCreate, FinalBiome.Sdk.PalletFungibleAssets.Pallet.CallDestroy>
     {
         public override string TypeName() => "Call";
     }

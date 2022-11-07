@@ -105,7 +105,7 @@ namespace FinalBiome.Sdk.PalletBalances.Pallet
     ///
     /// Generated from meta with Type Id 120
     /// </summary>
-    public class Call : BaseEnumExt<InnerCall, BaseTuple<FinalBiome.Sdk.SpRuntime.Multiaddress.MultiAddress, FinalBiome.Sdk.CompactU128>, BaseTuple<FinalBiome.Sdk.SpRuntime.Multiaddress.MultiAddress, FinalBiome.Sdk.CompactU128, FinalBiome.Sdk.CompactU128>, BaseTuple<FinalBiome.Sdk.SpRuntime.Multiaddress.MultiAddress, FinalBiome.Sdk.SpRuntime.Multiaddress.MultiAddress, FinalBiome.Sdk.CompactU128>, BaseTuple<FinalBiome.Sdk.SpRuntime.Multiaddress.MultiAddress, FinalBiome.Sdk.CompactU128>, BaseTuple<FinalBiome.Sdk.SpRuntime.Multiaddress.MultiAddress, Ajuna.NetApi.Model.Types.Primitive.Bool>, BaseTuple<FinalBiome.Sdk.SpRuntime.Multiaddress.MultiAddress, Ajuna.NetApi.Model.Types.Primitive.U128>>
+    public class Call : BaseEnumExt<InnerCall, FinalBiome.Sdk.PalletBalances.Pallet.CallTransfer, FinalBiome.Sdk.PalletBalances.Pallet.CallSetBalance, FinalBiome.Sdk.PalletBalances.Pallet.CallForceTransfer, FinalBiome.Sdk.PalletBalances.Pallet.CallTransferKeepAlive, FinalBiome.Sdk.PalletBalances.Pallet.CallTransferAll, FinalBiome.Sdk.PalletBalances.Pallet.CallForceUnreserve>
     {
         public override string TypeName() => "Call";
     }

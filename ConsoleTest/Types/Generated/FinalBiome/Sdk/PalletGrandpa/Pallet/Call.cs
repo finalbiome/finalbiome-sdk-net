@@ -56,7 +56,7 @@ namespace FinalBiome.Sdk.PalletGrandpa.Pallet
     ///
     /// Generated from meta with Type Id 98
     /// </summary>
-    public class Call : BaseEnumExt<InnerCall, BaseTuple<FinalBiome.Sdk.SpFinalityGrandpa.EquivocationProof, FinalBiome.Sdk.SpCore.Void>, BaseTuple<FinalBiome.Sdk.SpFinalityGrandpa.EquivocationProof, FinalBiome.Sdk.SpCore.Void>, BaseTuple<Ajuna.NetApi.Model.Types.Primitive.U32, Ajuna.NetApi.Model.Types.Primitive.U32>>
+    public class Call : BaseEnumExt<InnerCall, FinalBiome.Sdk.PalletGrandpa.Pallet.CallReportEquivocation, FinalBiome.Sdk.PalletGrandpa.Pallet.CallReportEquivocationUnsigned, FinalBiome.Sdk.PalletGrandpa.Pallet.CallNoteStalled>
     {
         public override string TypeName() => "Call";
     }

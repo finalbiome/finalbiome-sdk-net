@@ -41,7 +41,7 @@ namespace FinalBiome.Sdk.PalletTimestamp.Pallet
     ///
     /// Generated from meta with Type Id 88
     /// </summary>
-    public class Call : BaseEnumExt<InnerCall, FinalBiome.Sdk.CompactU64>
+    public class Call : BaseEnumExt<InnerCall, FinalBiome.Sdk.PalletTimestamp.Pallet.CallSet>
     {
         public override string TypeName() => "Call";
     }

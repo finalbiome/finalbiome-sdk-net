@@ -84,7 +84,7 @@ namespace FinalBiome.Sdk.FrameSystem.Pallet
     ///
     /// Generated from meta with Type Id 68
     /// </summary>
-    public class Call : BaseEnumExt<InnerCall, FinalBiome.Sdk.SpArithmetic.PerThings.Perbill, FinalBiome.Sdk.VecU8, Ajuna.NetApi.Model.Types.Primitive.U64, FinalBiome.Sdk.VecU8, FinalBiome.Sdk.VecU8, FinalBiome.Sdk.Model.Types.Base.VecTuple_VecU8_VecU8, FinalBiome.Sdk.VecVecU8, BaseTuple<FinalBiome.Sdk.VecU8, Ajuna.NetApi.Model.Types.Primitive.U32>, FinalBiome.Sdk.VecU8>
+    public class Call : BaseEnumExt<InnerCall, FinalBiome.Sdk.FrameSystem.Pallet.CallFillBlock, FinalBiome.Sdk.FrameSystem.Pallet.CallRemark, FinalBiome.Sdk.FrameSystem.Pallet.CallSetHeapPages, FinalBiome.Sdk.FrameSystem.Pallet.CallSetCode, FinalBiome.Sdk.FrameSystem.Pallet.CallSetCodeWithoutChecks, FinalBiome.Sdk.FrameSystem.Pallet.CallSetStorage, FinalBiome.Sdk.FrameSystem.Pallet.CallKillStorage, FinalBiome.Sdk.FrameSystem.Pallet.CallKillPrefix, FinalBiome.Sdk.FrameSystem.Pallet.CallRemarkWithEvent>
     {
         public override string TypeName() => "Call";
     }

@@ -12,6 +12,13 @@ namespace FinalBiome.TypeGenerator
         /// </summary>
         public Dictionary<uint, ParsedType> parsedTypes;
 
+        /// <summary>
+        /// Store named variants types
+        /// Where key is (typeId_of_Variant, variant_index)
+        /// Name of specific variant type makes as TypevariantnameVariantname
+        /// </summary>
+        public Dictionary<(uint, int), ParsedType> parsedVariantsTypes;
+
         List<ParsedType> existedTypes = new List<ParsedType>();
 
         /// <summary>
@@ -26,6 +33,7 @@ namespace FinalBiome.TypeGenerator
             this.Types = types;
             this.parsedTypes = new Dictionary<uint, ParsedType>();
             this.newTypes = new Dictionary<uint, ParsedType>();
+            this.parsedVariantsTypes = new Dictionary<(uint, int), ParsedType>();
         }
 
         public void AddExistedTypes(List<ParsedType> types)
@@ -39,7 +47,7 @@ namespace FinalBiome.TypeGenerator
         /// <param name="outputDir">Root dir for the generated types</param>
         public void Save(string outputDir)
         {
-            var types = parsedTypes.Values.ToArray().Concat(newTypes.Values.ToArray());
+            var types = parsedTypes.Values.ToArray().Concat(newTypes.Values.ToArray()).Concat(parsedVariantsTypes.Values.ToArray());
             foreach (var t in types)
             {
                 if (!t.Parsed)
@@ -209,7 +217,7 @@ namespace FinalBiome.TypeGenerator
                     }
                 }
 
-            // Option is generic, so skip it
+            // Option
             if (IsOption(val))
             {
                 GenerateOptionType(val.Id);
@@ -222,10 +230,24 @@ namespace FinalBiome.TypeGenerator
                 return;
             }
 
+            // create generic base enum if enum with given number of vsriants doesn't exist
             if (val.Variants is not null && val.Variants.Length > 101)
             {
                 GenerateBaseEnumExt((uint)val.Variants.Length);
             }
+
+            // if specific variant has named type fields, then generates a class for it
+            if (val.Variants is not null)
+                foreach (var v in val.Variants)
+                {
+                    // If the first field has a name, we assume that the rest do too (it'll either
+                    // be a class or a tuple type). If no fields, assume unnamed.
+                    if (v.TypeFields is not null && v.TypeFields.Length > 0 && v.TypeFields[0].Name is not null)
+                    {
+                        ParseVariantFieldClass(val, v.Index);
+                    }
+                }
+
 
             GenerateEnumType(val.Id);
         }
@@ -413,6 +435,29 @@ namespace FinalBiome.TypeGenerator
             //foundedTypes[fieldType.TypeId] = pt;
         }
 
+        void ParseVariantFieldClass(NodeTypeVariant val, int variandId)
+        {
+            // Get name of the parent Variant
+            string typeName = GetTypeNameFormMeta(val);
+
+            TypeVariant specVariant = val.Variants[variandId];
+
+            // Name of the type set as Variant + SpecificVariantName
+            typeName += SnakeCaseToTitle(specVariant.Name);
+
+            // parse each type field into type
+            foreach (NodeTypeField fieldType in specVariant.TypeFields)
+            {
+                // create inner type
+                ParseFieldType(fieldType);
+            }
+
+            ParsedType pt = new ParsedType(typeName);
+            parsedVariantsTypes[(val.Id, variandId)] = pt;
+
+            GenerateVariantFieldClass(val.Id, variandId);
+        }
+
         /// <summary>
         /// Generates wrapper type classes
         /// </summary>
@@ -477,19 +522,29 @@ namespace FinalBiome.TypeGenerator
                 {
                     types[idx] = "BaseVoid";
                 }
-                else if (v.TypeFields.Length == 1)
+                else if (v.TypeFields.Length == 1 && v.TypeFields[0].Name is null)
                 {
                     string wrappedType = parsedTypes[v.TypeFields[0].TypeId].CanonicalName.Item1 + "." + parsedTypes[v.TypeFields[0].TypeId].CanonicalName.Item2;
                     types[idx] = wrappedType;
                 }
                 else
                 {
-                    List<string> innerTypes = new List<string>();
-                    foreach (var t in v.TypeFields)
+                    string wrappedType;
+                    if (v.TypeFields[0].Name is not null)
                     {
-                        innerTypes.Add(parsedTypes[t.TypeId].FullCanonicalName);
+                        // assume that all fields are named
+                        wrappedType = parsedVariantsTypes[(val.Id, v.Index)].FullCanonicalName;
                     }
-                    string wrappedType = $"BaseTuple<{String.Join(", ", innerTypes)}>";
+                    else
+                    {
+                        List<string> innerTypes = new List<string>();
+
+                        foreach (var t in v.TypeFields)
+                        {
+                            innerTypes.Add(parsedTypes[t.TypeId].FullCanonicalName);
+                        }
+                        wrappedType = $"BaseTuple<{String.Join(", ", innerTypes)}>";
+                    }
                     types[idx] = wrappedType;
                 }
 
@@ -594,6 +649,80 @@ namespace FinalBiome.TypeGenerator
             file.Add($"namespace {canonicalName.Item1}");
             file.Add($"{{");
             file.AddRange(DocumentationForType(typeId));
+            file.Add($"    public class {canonicalName.Item2} : BaseType");
+            file.Add($"    {{");
+            file.Add($"        public override string TypeName() => \"{canonicalName.Item2}\";");
+            file.Add($"");
+            file.Add($"        private int _size;");
+            file.Add($"        public override int TypeSize => _size;");
+            // properties
+            file.Add($"#pragma warning disable CS8618");
+            foreach (var field in fields)
+            {
+                string type = parsedTypes[field.TypeId].FullCanonicalName;
+                Debug.Assert(field.Name is not null);
+                string methodName = SnakeCaseToTitle(field.Name);
+                file.Add($"        public {type} {methodName} {{ get; private set; }}");
+            }
+            file.Add($"#pragma warning restore CS8618");
+            // methods
+            file.Add($"");
+            file.Add($"        public override byte[] Encode()");
+            file.Add($"        {{");
+            file.Add($"            throw new NotImplementedException();");
+            file.Add($"        }}");
+            file.Add($"");
+            file.Add($"        public override void Decode(byte[] byteArray, ref int p)");
+            file.Add($"        {{");
+            file.Add($"            var start = p;");
+            file.Add($"");
+            // decode each field
+            foreach (var field in fields)
+            {
+                string type = parsedTypes[field.TypeId].FullCanonicalName;
+                Debug.Assert(field.Name is not null);
+                string methodName = SnakeCaseToTitle(field.Name);
+
+                file.Add($"            {methodName} = new {type}();");
+                file.Add($"            {methodName}.Decode(byteArray, ref p);");
+                file.Add($"");
+            }
+            file.Add($"            _size = p - start;");
+            file.Add($"        }}");
+            file.Add($"    }}");
+            file.Add($"}}");
+
+            pt.GeneratedCode = file;
+            pt.Parsed = true;
+        }
+
+        /// <summary>
+        /// Generate class for named variants fields
+        /// </summary>
+        /// <param name="typeId">Id of Variant Type</param>
+        /// <param name="variandId">Id of the concrete variant</param>
+        void GenerateVariantFieldClass(uint typeId, int variandId)
+        {
+            ParsedType pt = parsedVariantsTypes[(typeId, variandId)];
+            if (pt.Parsed) return;
+
+            NodeTypeVariant vt = (NodeTypeVariant)Types[typeId];
+
+            if (IsBoundedVec(vt) || IsWeakBoundedVec(vt)) throw new Exception($"Expected NOT BoundedVec, found {String.Join(",", vt.Path)}. Id: {typeId}");
+
+            var canonicalName = pt.CanonicalName;
+            var fields = vt.Variants[variandId].TypeFields;
+
+            List<string> file = new List<string>();
+
+
+            file.Add($"using System;");
+            file.Add($"using Ajuna.NetApi.Model.Types.Base;");
+            file.Add($"using Ajuna.NetApi.Model.Types.Primitive;");
+            file.Add($"using FinalBiome.Sdk.Model.Types.Base;");
+            file.Add($"namespace {canonicalName.Item1}");
+            file.Add($"{{");
+            file.AddRange(DocumentationForType(typeId, variandId));
             file.Add($"    public class {canonicalName.Item2} : BaseType");
             file.Add($"    {{");
             file.Add($"        public override string TypeName() => \"{canonicalName.Item2}\";");
@@ -838,8 +967,14 @@ namespace FinalBiome.TypeGenerator
         /// <returns></returns>
         public static string SnakeCaseToTitle(string value)
         {
-            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-            return textInfo.ToTitleCase(value.Replace("_", " ")).Replace(" ", "");
+            if (value.Contains("_"))
+            {
+                TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+                return textInfo.ToTitleCase(value.Replace("_", " ")).Replace(" ", "");
+            } else
+            {
+                return Char.ToUpperInvariant(value[0]) + value.Substring(1);
+            }
         }
         /// <summary>
         /// Transform string from `snake_case` to `camelCase`
@@ -857,13 +992,15 @@ namespace FinalBiome.TypeGenerator
         /// </summary>
         /// <param name="typeId"></param>
         /// <returns></returns>
-        List<string> DocumentationForType(uint typeId)
+        List<string> DocumentationForType(uint typeId, int? variandId = null)
         {
             List<string> docs = new List<string>();
             docs.Add("    /// <summary>");
-            if (Types[typeId].Docs is not null)
+
+            string[] typeDocs = variandId is null ? Types[typeId].Docs : ((NodeTypeVariant)Types[typeId]).Variants[(int)variandId].Docs;
+            if (typeDocs is not null)
             {
-                foreach (var item in Types[typeId].Docs)
+                foreach (var item in typeDocs)
                 {
                     docs.Add($"    /// {Utils.CleanDocString(item)}");
                 }
@@ -871,7 +1008,7 @@ namespace FinalBiome.TypeGenerator
                 docs.Add("    ///");
                 docs.Add("    ///");
             }
-            docs.Add($"    /// Generated from meta with Type Id {typeId}");
+            docs.Add($"    /// Generated from meta with Type Id {typeId}" + (variandId is null ? "" : $", Variant Id {variandId}"));
             docs.Add("    /// </summary>");
 
             return docs;

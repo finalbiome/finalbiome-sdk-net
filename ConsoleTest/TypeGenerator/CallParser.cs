@@ -199,7 +199,7 @@ namespace FinalBiome.TypeGenerator
         /// Holds code of module classes.
         /// Key - the module name
         /// </summary>
-        Dictionary<string, ParsedCalls> parsedModules = new Dictionary<string, ParsedCalls>();
+        internal Dictionary<string, ParsedCalls> parsedModules = new Dictionary<string, ParsedCalls>();
 
         List<string> transactionsClassSource = new List<string>();
         TypeParser typeParser;

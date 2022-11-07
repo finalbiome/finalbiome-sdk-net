@@ -34,7 +34,7 @@ namespace FinalBiome.Sdk.PalletSudo.Pallet
     ///
     /// Generated from meta with Type Id 35
     /// </summary>
-    public class Event : BaseEnumExt<InnerEvent, FinalBiome.Sdk.Model.Types.Base.ResultTuple_Empty_DispatchError, FinalBiome.Sdk.Model.Types.Base.OptionAccountId32, FinalBiome.Sdk.Model.Types.Base.ResultTuple_Empty_DispatchError>
+    public class Event : BaseEnumExt<InnerEvent, FinalBiome.Sdk.PalletSudo.Pallet.EventSudid, FinalBiome.Sdk.PalletSudo.Pallet.EventKeyChanged, FinalBiome.Sdk.PalletSudo.Pallet.EventSudoAsDone>
     {
         public override string TypeName() => "Event";
     }

@@ -43,7 +43,7 @@ namespace FinalBiome.Sdk.PalletFungibleAssets.Pallet
     ///
     /// Generated from meta with Type Id 41
     /// </summary>
-    public class Event : BaseEnumExt<InnerEvent, BaseTuple<FinalBiome.Sdk.PalletSupport.Types.FungibleAssetId.FungibleAssetId, FinalBiome.Sdk.SpCore.Crypto.AccountId32>, BaseTuple<FinalBiome.Sdk.PalletSupport.Types.FungibleAssetId.FungibleAssetId, FinalBiome.Sdk.SpCore.Crypto.AccountId32, FinalBiome.Sdk.PalletSupport.Types.FungibleAssetBalance.FungibleAssetBalance>, BaseTuple<FinalBiome.Sdk.PalletSupport.Types.FungibleAssetId.FungibleAssetId, FinalBiome.Sdk.SpCore.Crypto.AccountId32, FinalBiome.Sdk.PalletSupport.Types.FungibleAssetBalance.FungibleAssetBalance>, BaseTuple<Ajuna.NetApi.Model.Types.Primitive.U32, FinalBiome.Sdk.SpCore.Crypto.AccountId32>, BaseTuple<FinalBiome.Sdk.PalletSupport.Types.FungibleAssetId.FungibleAssetId, FinalBiome.Sdk.SpCore.Crypto.AccountId32>>
+    public class Event : BaseEnumExt<InnerEvent, FinalBiome.Sdk.PalletFungibleAssets.Pallet.EventCreated, FinalBiome.Sdk.PalletFungibleAssets.Pallet.EventIssued, FinalBiome.Sdk.PalletFungibleAssets.Pallet.EventBurned, BaseTuple<Ajuna.NetApi.Model.Types.Primitive.U32, FinalBiome.Sdk.SpCore.Crypto.AccountId32>, FinalBiome.Sdk.PalletFungibleAssets.Pallet.EventDestroyed>
     {
         public override string TypeName() => "Event";
     }

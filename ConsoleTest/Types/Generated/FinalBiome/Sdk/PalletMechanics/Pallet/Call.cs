@@ -34,7 +34,7 @@ namespace FinalBiome.Sdk.PalletMechanics.Pallet
     ///
     /// Generated from meta with Type Id 163
     /// </summary>
-    public class Call : BaseEnumExt<InnerCall, BaseTuple<FinalBiome.Sdk.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId, Ajuna.NetApi.Model.Types.Primitive.U32>, BaseTuple<FinalBiome.Sdk.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId, FinalBiome.Sdk.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId>, FinalBiome.Sdk.PalletMechanics.Types.MechanicUpgradeData>
+    public class Call : BaseEnumExt<InnerCall, FinalBiome.Sdk.PalletMechanics.Pallet.CallExecBuyNfa, FinalBiome.Sdk.PalletMechanics.Pallet.CallExecBet, FinalBiome.Sdk.PalletMechanics.Pallet.CallUpgrade>
     {
         public override string TypeName() => "Call";
     }
