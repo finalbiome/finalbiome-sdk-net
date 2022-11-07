@@ -8,6 +8,10 @@ namespace FinalBiome.Sdk
         public SubstrateClient client;
         public FinalBiome.Sdk.Query.Query Query;
         public FinalBiome.Sdk.Transactions.Transactions Tx;
+        /// <summary>
+        /// Work with events.
+        /// </summary>
+        public Events.EventClient Events;
 
         public Client(string url)
         {
@@ -15,6 +19,7 @@ namespace FinalBiome.Sdk
 
             Query = new Query.Query(this);
             Tx = new Transactions.Transactions(this);
+            Events = new Events.EventClient(this);
         }
     }
 }

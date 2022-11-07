@@ -8952,7 +8952,7 @@
       }
     },
     "Modules": {
-  {
+      {
         "Name": "System",
         "Storage": {
           "Prefix": "System",
@@ -9935,7 +9935,7 @@
         },
         "Index": 9
       },
-    {
+      {
         "Name": "FungibleAssets",
         "Storage": {
           "Prefix": "FungibleAssets",

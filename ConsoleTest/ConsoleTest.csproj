@@ -13,15 +13,13 @@
   <ItemGroup>
     <None Remove="Types\" />
     <None Remove="Types\Base\" />
-    <None Remove="Query\" />
     <None Remove="TypeGenerator\" />
-    <None Remove="Transactions\" />
+    <None Remove="Events\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Types\" />
     <Folder Include="Types\Base\" />
-    <Folder Include="Query\" />
     <Folder Include="TypeGenerator\" />
-    <Folder Include="Transactions\" />
+    <Folder Include="Events\" />
   </ItemGroup>
 </Project>
