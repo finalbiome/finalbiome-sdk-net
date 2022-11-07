@@ -30,7 +30,7 @@ namespace FinalBiome.Sdk.PalletSudo.Pallet
         private int _size;
         public override int TypeSize => _size;
 #pragma warning disable CS8618
-        public FinalBiome.Sdk.SpRuntime.Multiaddress.MultiAddress New { get; private set; }
+        public FinalBiome.Sdk.SpRuntime.Multiaddress.MultiAddress _New { get; private set; }
 #pragma warning restore CS8618
 
         public override byte[] Encode()
@@ -42,8 +42,8 @@ namespace FinalBiome.Sdk.PalletSudo.Pallet
         {
             var start = p;
 
-            New = new FinalBiome.Sdk.SpRuntime.Multiaddress.MultiAddress();
-            New.Decode(byteArray, ref p);
+            _New = new FinalBiome.Sdk.SpRuntime.Multiaddress.MultiAddress();
+            _New.Decode(byteArray, ref p);
 
             _size = p - start;
         }

@@ -7,6 +7,10 @@ namespace FinalBiome.TypeGenerator
 {
     public class TypeParser
     {
+        static string[] reservedPropertyNames =
+        {
+            "New",
+        };
         /// <summary>
         /// Store parsed files
         /// </summary>
@@ -662,6 +666,7 @@ namespace FinalBiome.TypeGenerator
                 string type = parsedTypes[field.TypeId].FullCanonicalName;
                 Debug.Assert(field.Name is not null);
                 string methodName = SnakeCaseToTitle(field.Name);
+                if (reservedPropertyNames.Contains(methodName)) methodName = "_" + methodName;
                 file.Add($"        public {type} {methodName} {{ get; private set; }}");
             }
             file.Add($"#pragma warning restore CS8618");
@@ -682,6 +687,7 @@ namespace FinalBiome.TypeGenerator
                 string type = parsedTypes[field.TypeId].FullCanonicalName;
                 Debug.Assert(field.Name is not null);
                 string methodName = SnakeCaseToTitle(field.Name);
+                if (reservedPropertyNames.Contains(methodName)) methodName = "_" + methodName;
 
                 file.Add($"            {methodName} = new {type}();");
                 file.Add($"            {methodName}.Decode(byteArray, ref p);");
@@ -736,6 +742,7 @@ namespace FinalBiome.TypeGenerator
                 string type = parsedTypes[field.TypeId].FullCanonicalName;
                 Debug.Assert(field.Name is not null);
                 string methodName = SnakeCaseToTitle(field.Name);
+                if (reservedPropertyNames.Contains(methodName)) methodName = "_" + methodName;
                 file.Add($"        public {type} {methodName} {{ get; private set; }}");
             }
             file.Add($"#pragma warning restore CS8618");
@@ -756,6 +763,7 @@ namespace FinalBiome.TypeGenerator
                 string type = parsedTypes[field.TypeId].FullCanonicalName;
                 Debug.Assert(field.Name is not null);
                 string methodName = SnakeCaseToTitle(field.Name);
+                if (reservedPropertyNames.Contains(methodName)) methodName = "_" + methodName;
 
                 file.Add($"            {methodName} = new {type}();");
                 file.Add($"            {methodName}.Decode(byteArray, ref p);");
