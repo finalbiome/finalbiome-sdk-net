@@ -13,7 +13,7 @@ namespace FinalBiome.Sdk.PalletBalances.Pallet
     ///
     /// Generated from meta with Type Id 120
     /// </summary>
-    public enum InnerCall
+    public enum InnerCall : byte
     {
     /// <summary>
     /// Transfer some liquid free balance to another account.<br/>
@@ -42,7 +42,7 @@ namespace FinalBiome.Sdk.PalletBalances.Pallet
     /// - Origin account is already in memory, so no DB operations for them.<br/>
     /// # </weight><br/>
     /// </summary>
-        transfer,
+        transfer = 0,
     /// <summary>
     /// Set the balances of a given account.<br/>
     /// <para></para>
@@ -53,7 +53,7 @@ namespace FinalBiome.Sdk.PalletBalances.Pallet
     /// <para></para>
     /// The dispatch origin for this call is `root`.<br/>
     /// </summary>
-        set_balance,
+        set_balance = 1,
     /// <summary>
     /// Exactly as `transfer`, except the origin must be root and the source account may be<br/>
     /// specified.<br/>
@@ -62,7 +62,7 @@ namespace FinalBiome.Sdk.PalletBalances.Pallet
     ///   assumed to be in the overlay.<br/>
     /// # </weight><br/>
     /// </summary>
-        force_transfer,
+        force_transfer = 2,
     /// <summary>
     /// Same as the [`transfer`] call, but with a check that the transfer will not kill the<br/>
     /// origin account.<br/>
@@ -71,7 +71,7 @@ namespace FinalBiome.Sdk.PalletBalances.Pallet
     /// <para></para>
     /// [`transfer`]: struct.Pallet.html#method.transfer<br/>
     /// </summary>
-        transfer_keep_alive,
+        transfer_keep_alive = 3,
     /// <summary>
     /// Transfer the entire transferable balance from the caller account.<br/>
     /// <para></para>
@@ -91,13 +91,13 @@ namespace FinalBiome.Sdk.PalletBalances.Pallet
     /// - O(1). Just like transfer, but reading the user's transferable balance first.<br/>
     ///   #</weight><br/>
     /// </summary>
-        transfer_all,
+        transfer_all = 4,
     /// <summary>
     /// Unreserve some balance from a user by force.<br/>
     /// <para></para>
     /// Can only be called by ROOT.<br/>
     /// </summary>
-        force_unreserve,
+        force_unreserve = 5,
     }
     /// <summary>
     /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>

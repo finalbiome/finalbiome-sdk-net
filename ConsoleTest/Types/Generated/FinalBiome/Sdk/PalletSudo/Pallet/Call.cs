@@ -13,7 +13,7 @@ namespace FinalBiome.Sdk.PalletSudo.Pallet
     ///
     /// Generated from meta with Type Id 128
     /// </summary>
-    public enum InnerCall
+    public enum InnerCall : byte
     {
     /// <summary>
     /// Authenticates the sudo key and dispatches a function call with `Root` origin.<br/>
@@ -27,7 +27,7 @@ namespace FinalBiome.Sdk.PalletSudo.Pallet
     /// - Weight of derivative `call` execution + 10,000.<br/>
     /// # </weight><br/>
     /// </summary>
-        sudo,
+        sudo = 0,
     /// <summary>
     /// Authenticates the sudo key and dispatches a function call with `Root` origin.<br/>
     /// This function does not check the weight of the call, and instead allows the<br/>
@@ -40,7 +40,7 @@ namespace FinalBiome.Sdk.PalletSudo.Pallet
     /// - The weight of this call is defined by the caller.<br/>
     /// # </weight><br/>
     /// </summary>
-        sudo_unchecked_weight,
+        sudo_unchecked_weight = 1,
     /// <summary>
     /// Authenticates the current sudo key and sets the given AccountId (`new`) as the new sudo<br/>
     /// key.<br/>
@@ -53,7 +53,7 @@ namespace FinalBiome.Sdk.PalletSudo.Pallet
     /// - One DB change.<br/>
     /// # </weight><br/>
     /// </summary>
-        set_key,
+        set_key = 2,
     /// <summary>
     /// Authenticates the sudo key and dispatches a function call with `Signed` origin from<br/>
     /// a given account.<br/>
@@ -67,7 +67,7 @@ namespace FinalBiome.Sdk.PalletSudo.Pallet
     /// - Weight of derivative `call` execution + 10,000.<br/>
     /// # </weight><br/>
     /// </summary>
-        sudo_as,
+        sudo_as = 3,
     }
     /// <summary>
     /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>

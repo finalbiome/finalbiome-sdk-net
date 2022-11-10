@@ -10,11 +10,11 @@ namespace FinalBiome.Sdk.FrameSupport.Weights
     /// <summary>
     /// Generated from meta with Type Id 20
     /// </summary>
-    public enum InnerDispatchClass
+    public enum InnerDispatchClass : byte
     {
-        Normal,
-        Operational,
-        Mandatory,
+        Normal = 0,
+        Operational = 1,
+        Mandatory = 2,
     }
     /// <summary>
     /// Generated from meta with Type Id 20

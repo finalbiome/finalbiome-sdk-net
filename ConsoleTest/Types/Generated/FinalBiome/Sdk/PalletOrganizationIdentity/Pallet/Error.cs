@@ -13,48 +13,48 @@ namespace FinalBiome.Sdk.PalletOrganizationIdentity.Pallet
     ///
     /// Generated from meta with Type Id 172
     /// </summary>
-    public enum InnerError
+    public enum InnerError : byte
     {
     /// <summary>
     /// Error names should be descriptive.<br/>
     /// </summary>
-        NoneValue,
+        NoneValue = 0,
     /// <summary>
     /// Errors should have helpful documentation associated with them.<br/>
     /// </summary>
-        StorageOverflow,
+        StorageOverflow = 1,
     /// <summary>
     /// Cannot create the organization because it already exists.<br/>
     /// </summary>
-        OrganizationExists,
+        OrganizationExists = 2,
     /// <summary>
     /// Organization name is too long.<br/>
     /// </summary>
-        OrganizationNameTooLong,
+        OrganizationNameTooLong = 3,
     /// <summary>
     /// Account is not an organization<br/>
     /// </summary>
-        NotOrganization,
+        NotOrganization = 4,
     /// <summary>
     /// Cannot add a user to an organization to which they already belong.<br/>
     /// </summary>
-        AlreadyMember,
+        AlreadyMember = 5,
     /// <summary>
     /// Cannot add another member because the limit is already reached.<br/>
     /// </summary>
-        MembershipLimitReached,
+        MembershipLimitReached = 6,
     /// <summary>
     /// Cannot add organization as an organization's member.<br/>
     /// </summary>
-        InvalidMember,
+        InvalidMember = 7,
     /// <summary>
     /// Member not exits.<br/>
     /// </summary>
-        NotMember,
+        NotMember = 8,
     /// <summary>
     /// Account has already been onboarded.<br/>
     /// </summary>
-        AlreadyOnboarded,
+        AlreadyOnboarded = 9,
     }
     /// <summary>
     ///  Custom [dispatch errors](https://docs.substrate.io/main-docs/build/events-errors/) of this pallet. <br/>

@@ -13,7 +13,7 @@ namespace FinalBiome.Sdk.PalletOrganizationIdentity.Pallet
     ///
     /// Generated from meta with Type Id 131
     /// </summary>
-    public enum InnerCall
+    public enum InnerCall : byte
     {
     /// <summary>
     /// Create an organization.<br/>
@@ -22,7 +22,7 @@ namespace FinalBiome.Sdk.PalletOrganizationIdentity.Pallet
     /// <para></para>
     /// The dispatch origin for this call must be Signed.<br/>
     /// </summary>
-        create_organization,
+        create_organization = 0,
     /// <summary>
     /// Add member to an organization.<br/>
     /// <para></para>
@@ -34,7 +34,7 @@ namespace FinalBiome.Sdk.PalletOrganizationIdentity.Pallet
     /// * `InvalidMember` if member is organization<br/>
     /// * `AlreadyMember` if member already added<br/>
     /// </summary>
-        add_member,
+        add_member = 1,
     /// <summary>
     /// Removes a member from organization.<br/>
     /// <para></para>
@@ -46,15 +46,15 @@ namespace FinalBiome.Sdk.PalletOrganizationIdentity.Pallet
     /// * `NotMember` if a member doesn't exist<br/>
     /// * ``<br/>
     /// </summary>
-        remove_member,
+        remove_member = 2,
     /// <summary>
     /// Set assets which will be airdroped at game onboarding<br/>
     /// </summary>
-        set_onboarding_assets,
+        set_onboarding_assets = 3,
     /// <summary>
     /// Onboirding to game<br/>
     /// </summary>
-        onboarding,
+        onboarding = 4,
     }
     /// <summary>
     /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>

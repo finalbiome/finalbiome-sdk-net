@@ -10,10 +10,10 @@ namespace FinalBiome.Sdk.PalletTransactionPayment
     /// <summary>
     /// Generated from meta with Type Id 127
     /// </summary>
-    public enum InnerReleases
+    public enum InnerReleases : byte
     {
-        V1Ancient,
-        V2,
+        V1Ancient = 0,
+        V2 = 1,
     }
     /// <summary>
     /// Generated from meta with Type Id 127

@@ -13,33 +13,33 @@ namespace FinalBiome.Sdk.PalletOrganizationIdentity.Pallet
     ///
     /// Generated from meta with Type Id 40
     /// </summary>
-    public enum InnerEvent
+    public enum InnerEvent : byte
     {
     /// <summary>
     /// Event documentation should end with an array that provides descriptive names for event<br/>
     /// parameters. [something, who]<br/>
     /// </summary>
-        SomethingStored,
+        SomethingStored = 0,
     /// <summary>
     /// An organization has been created. [organization_name, who]<br/>
     /// </summary>
-        CreatedOrganization,
+        CreatedOrganization = 1,
     /// <summary>
     /// An asset class has been updated.<br/>
     /// </summary>
-        UpdatedOrganization,
+        UpdatedOrganization = 2,
     /// <summary>
     /// An member was added to an organization. [organization, member]<br/>
     /// </summary>
-        MemberAdded,
+        MemberAdded = 3,
     /// <summary>
     /// An member was removed from organization. [organization, member]<br/>
     /// </summary>
-        MemberRemoved,
+        MemberRemoved = 4,
     /// <summary>
     /// Assets for the game has been airdropped.<br/>
     /// </summary>
-        Onboard,
+        Onboard = 5,
     }
     /// <summary>
     ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>

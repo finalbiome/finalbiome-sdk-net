@@ -10,10 +10,10 @@ namespace FinalBiome.Sdk.PalletSupport
     /// <summary>
     /// Generated from meta with Type Id 48
     /// </summary>
-    public enum InnerAttributeValue
+    public enum InnerAttributeValue : byte
     {
-        Number,
-        Text,
+        Number = 0,
+        Text = 1,
     }
     /// <summary>
     /// Generated from meta with Type Id 48

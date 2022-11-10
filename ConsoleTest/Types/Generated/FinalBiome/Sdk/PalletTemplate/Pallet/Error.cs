@@ -13,16 +13,16 @@ namespace FinalBiome.Sdk.PalletTemplate.Pallet
     ///
     /// Generated from meta with Type Id 168
     /// </summary>
-    public enum InnerError
+    public enum InnerError : byte
     {
     /// <summary>
     /// Error names should be descriptive.<br/>
     /// </summary>
-        NoneValue,
+        NoneValue = 0,
     /// <summary>
     /// Errors should have helpful documentation associated with them.<br/>
     /// </summary>
-        StorageOverflow,
+        StorageOverflow = 1,
     }
     /// <summary>
     ///  Custom [dispatch errors](https://docs.substrate.io/main-docs/build/events-errors/) of this pallet. <br/>

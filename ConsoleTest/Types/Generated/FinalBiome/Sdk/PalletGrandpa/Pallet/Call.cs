@@ -13,7 +13,7 @@ namespace FinalBiome.Sdk.PalletGrandpa.Pallet
     ///
     /// Generated from meta with Type Id 98
     /// </summary>
-    public enum InnerCall
+    public enum InnerCall : byte
     {
     /// <summary>
     /// Report voter equivocation/misbehavior. This method will verify the<br/>
@@ -21,7 +21,7 @@ namespace FinalBiome.Sdk.PalletGrandpa.Pallet
     /// against the extracted offender. If both are valid, the offence<br/>
     /// will be reported.<br/>
     /// </summary>
-        report_equivocation,
+        report_equivocation = 0,
     /// <summary>
     /// Report voter equivocation/misbehavior. This method will verify the<br/>
     /// equivocation proof and validate the given key ownership proof<br/>
@@ -33,7 +33,7 @@ namespace FinalBiome.Sdk.PalletGrandpa.Pallet
     /// if the block author is defined it will be defined as the equivocation<br/>
     /// reporter.<br/>
     /// </summary>
-        report_equivocation_unsigned,
+        report_equivocation_unsigned = 1,
     /// <summary>
     /// Note that the current authority set of the GRANDPA finality gadget has stalled.<br/>
     /// <para></para>
@@ -48,7 +48,7 @@ namespace FinalBiome.Sdk.PalletGrandpa.Pallet
     /// <para></para>
     /// Only callable by root.<br/>
     /// </summary>
-        note_stalled,
+        note_stalled = 2,
     }
     /// <summary>
     /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>

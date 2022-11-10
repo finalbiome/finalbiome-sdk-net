@@ -13,12 +13,12 @@ namespace FinalBiome.Sdk.PalletSudo.Pallet
     ///
     /// Generated from meta with Type Id 167
     /// </summary>
-    public enum InnerError
+    public enum InnerError : byte
     {
     /// <summary>
     /// Sender must be the Sudo account<br/>
     /// </summary>
-        RequireSudo,
+        RequireSudo = 0,
     }
     /// <summary>
     /// Error for the Sudo pallet<br/>

@@ -13,36 +13,36 @@ namespace FinalBiome.Sdk.FrameSystem.Pallet
     ///
     /// Generated from meta with Type Id 86
     /// </summary>
-    public enum InnerError
+    public enum InnerError : byte
     {
     /// <summary>
     /// The name of specification does not match between the current runtime<br/>
     /// and the new runtime.<br/>
     /// </summary>
-        InvalidSpecName,
+        InvalidSpecName = 0,
     /// <summary>
     /// The specification version is not allowed to decrease between the current runtime<br/>
     /// and the new runtime.<br/>
     /// </summary>
-        SpecVersionNeedsToIncrease,
+        SpecVersionNeedsToIncrease = 1,
     /// <summary>
     /// Failed to extract the runtime version from the new runtime.<br/>
     /// <para></para>
     /// Either calling `Core_version` or decoding `RuntimeVersion` failed.<br/>
     /// </summary>
-        FailedToExtractRuntimeVersion,
+        FailedToExtractRuntimeVersion = 2,
     /// <summary>
     /// Suicide called when the account has non-default composite data.<br/>
     /// </summary>
-        NonDefaultComposite,
+        NonDefaultComposite = 3,
     /// <summary>
     /// There is a non-zero reference count preventing the account from being purged.<br/>
     /// </summary>
-        NonZeroRefCount,
+        NonZeroRefCount = 4,
     /// <summary>
     /// The origin filter prevent the call to be dispatched.<br/>
     /// </summary>
-        CallFiltered,
+        CallFiltered = 5,
     }
     /// <summary>
     /// Error for the System pallet<br/>

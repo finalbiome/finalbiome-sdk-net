@@ -10,10 +10,10 @@ namespace FinalBiome.Sdk.Model.Types.Base
     /// <summary>
     /// Generated from meta with Type Id 36
     /// </summary>
-    public enum InnerResultTuple_Empty_DispatchError
+    public enum InnerResultTuple_Empty_DispatchError : byte
     {
-        Ok,
-        Err,
+        Ok = 0,
+        Err = 1,
     }
     /// <summary>
     /// Generated from meta with Type Id 36

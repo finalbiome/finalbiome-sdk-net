@@ -10,9 +10,9 @@ namespace FinalBiome.Sdk.PalletMechanics.Types
     /// <summary>
     /// Generated from meta with Type Id 59
     /// </summary>
-    public enum InnerEventMechanicStopReason
+    public enum InnerEventMechanicStopReason : byte
     {
-        UpgradeNeeded,
+        UpgradeNeeded = 0,
     }
     /// <summary>
     /// Generated from meta with Type Id 59

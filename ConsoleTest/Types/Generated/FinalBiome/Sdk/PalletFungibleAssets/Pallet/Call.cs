@@ -13,7 +13,7 @@ namespace FinalBiome.Sdk.PalletFungibleAssets.Pallet
     ///
     /// Generated from meta with Type Id 139
     /// </summary>
-    public enum InnerCall
+    public enum InnerCall : byte
     {
     /// <summary>
     /// Issue a new fungible asset from.<br/>
@@ -28,13 +28,13 @@ namespace FinalBiome.Sdk.PalletFungibleAssets.Pallet
     /// <para></para>
     /// Emits `Created` event when successful.<br/>
     /// </summary>
-        create,
+        create = 0,
     /// <summary>
     /// Destroy a fungible asset.<br/>
     /// <para></para>
     /// The origin must be Signed and must be a member of the organization<br/>
     /// </summary>
-        destroy,
+        destroy = 1,
     }
     /// <summary>
     /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>

@@ -10,11 +10,11 @@ namespace FinalBiome.Sdk.PalletMechanics.Types
     /// <summary>
     /// Generated from meta with Type Id 58
     /// </summary>
-    public enum InnerBetResult
+    public enum InnerBetResult : byte
     {
-        Won,
-        Lost,
-        Draw,
+        Won = 0,
+        Lost = 1,
+        Draw = 2,
     }
     /// <summary>
     /// Generated from meta with Type Id 58

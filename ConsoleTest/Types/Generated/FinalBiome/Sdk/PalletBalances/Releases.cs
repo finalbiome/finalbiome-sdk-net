@@ -10,10 +10,10 @@ namespace FinalBiome.Sdk.PalletBalances
     /// <summary>
     /// Generated from meta with Type Id 119
     /// </summary>
-    public enum InnerReleases
+    public enum InnerReleases : byte
     {
-        V1_0_0,
-        V2_0_0,
+        V1_0_0 = 0,
+        V2_0_0 = 1,
     }
     /// <summary>
     /// Generated from meta with Type Id 119

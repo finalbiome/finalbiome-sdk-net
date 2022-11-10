@@ -13,17 +13,17 @@ namespace FinalBiome.Sdk.PalletTemplate.Pallet
     ///
     /// Generated from meta with Type Id 130
     /// </summary>
-    public enum InnerCall
+    public enum InnerCall : byte
     {
     /// <summary>
     /// An example dispatchable that takes a singles value as a parameter, writes the value to<br/>
     /// storage and emits an event. This function must be dispatched by a signed extrinsic.<br/>
     /// </summary>
-        do_something,
+        do_something = 0,
     /// <summary>
     /// An example dispatchable that may throw a custom error.<br/>
     /// </summary>
-        cause_error,
+        cause_error = 1,
     }
     /// <summary>
     /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>

@@ -10,10 +10,10 @@ namespace FinalBiome.Sdk.SpFinalityGrandpa
     /// <summary>
     /// Generated from meta with Type Id 100
     /// </summary>
-    public enum InnerEquivocation
+    public enum InnerEquivocation : byte
     {
-        Prevote,
-        Precommit,
+        Prevote = 0,
+        Precommit = 1,
     }
     /// <summary>
     /// Generated from meta with Type Id 100

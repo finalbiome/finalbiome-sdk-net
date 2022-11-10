@@ -13,50 +13,50 @@ namespace FinalBiome.Sdk.PalletBalances.Pallet
     ///
     /// Generated from meta with Type Id 32
     /// </summary>
-    public enum InnerEvent
+    public enum InnerEvent : byte
     {
     /// <summary>
     /// An account was created with some free balance.<br/>
     /// </summary>
-        Endowed,
+        Endowed = 0,
     /// <summary>
     /// An account was removed whose balance was non-zero but below ExistentialDeposit,<br/>
     /// resulting in an outright loss.<br/>
     /// </summary>
-        DustLost,
+        DustLost = 1,
     /// <summary>
     /// Transfer succeeded.<br/>
     /// </summary>
-        Transfer,
+        Transfer = 2,
     /// <summary>
     /// A balance was set by root.<br/>
     /// </summary>
-        BalanceSet,
+        BalanceSet = 3,
     /// <summary>
     /// Some balance was reserved (moved from free to reserved).<br/>
     /// </summary>
-        Reserved,
+        Reserved = 4,
     /// <summary>
     /// Some balance was unreserved (moved from reserved to free).<br/>
     /// </summary>
-        Unreserved,
+        Unreserved = 5,
     /// <summary>
     /// Some balance was moved from the reserve of the first account to the second account.<br/>
     /// Final argument indicates the destination balance type.<br/>
     /// </summary>
-        ReserveRepatriated,
+        ReserveRepatriated = 6,
     /// <summary>
     /// Some amount was deposited (e.g. for transaction fees).<br/>
     /// </summary>
-        Deposit,
+        Deposit = 7,
     /// <summary>
     /// Some amount was withdrawn from the account (e.g. for transaction fees).<br/>
     /// </summary>
-        Withdraw,
+        Withdraw = 8,
     /// <summary>
     /// Some amount was removed from the account (e.g. for misbehavior).<br/>
     /// </summary>
-        Slashed,
+        Slashed = 9,
     }
     /// <summary>
     ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>

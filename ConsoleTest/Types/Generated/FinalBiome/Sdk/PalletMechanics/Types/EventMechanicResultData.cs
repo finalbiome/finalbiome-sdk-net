@@ -10,10 +10,10 @@ namespace FinalBiome.Sdk.PalletMechanics.Types
     /// <summary>
     /// Generated from meta with Type Id 54
     /// </summary>
-    public enum InnerEventMechanicResultData
+    public enum InnerEventMechanicResultData : byte
     {
-        BuyNfa,
-        Bet,
+        BuyNfa = 0,
+        Bet = 1,
     }
     /// <summary>
     /// Generated from meta with Type Id 54

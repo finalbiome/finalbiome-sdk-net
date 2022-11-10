@@ -113,7 +113,7 @@ namespace HelloWorld
 
                 generator.Parse();
 
-                generator.Save("../../../Test");
+                generator.Save("../../..");
 
 
                 Console.WriteLine($"=== Statistics ===");

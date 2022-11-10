@@ -13,32 +13,32 @@ namespace FinalBiome.Sdk.PalletMechanics.Pallet
     ///
     /// Generated from meta with Type Id 199
     /// </summary>
-    public enum InnerError
+    public enum InnerError : byte
     {
     /// <summary>
     /// Mechanics are not available for this asset or this origin<br/>
     /// </summary>
-        MechanicsNotAvailable,
+        MechanicsNotAvailable = 0,
     /// <summary>
     /// Internal error<br/>
     /// </summary>
-        Internal,
+        Internal = 1,
     /// <summary>
     /// The number of assets exceeds the allowable<br/>
     /// </summary>
-        AssetsExceedsAllowable,
+        AssetsExceedsAllowable = 2,
     /// <summary>
     /// Asset is incompatible with mechanic<br/>
     /// </summary>
-        IncompatibleAsset,
+        IncompatibleAsset = 3,
     /// <summary>
     /// Given data is incompatible with mechanic<br/>
     /// </summary>
-        IncompatibleData,
+        IncompatibleData = 4,
     /// <summary>
     /// The signing account has no permission to do the operation.<br/>
     /// </summary>
-        NoPermission,
+        NoPermission = 5,
     }
     /// <summary>
     ///  Custom [dispatch errors](https://docs.substrate.io/main-docs/build/events-errors/) of this pallet. <br/>

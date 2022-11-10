@@ -10,10 +10,10 @@ namespace FinalBiome.Sdk.SpRuntime
     /// <summary>
     /// Generated from meta with Type Id 26
     /// </summary>
-    public enum InnerTransactionalError
+    public enum InnerTransactionalError : byte
     {
-        LimitReached,
-        NoLayer,
+        LimitReached = 0,
+        NoLayer = 1,
     }
     /// <summary>
     /// Generated from meta with Type Id 26

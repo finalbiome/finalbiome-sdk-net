@@ -13,12 +13,12 @@ namespace FinalBiome.Sdk.FrameSystem.Pallet
     ///
     /// Generated from meta with Type Id 68
     /// </summary>
-    public enum InnerCall
+    public enum InnerCall : byte
     {
     /// <summary>
     /// A dispatch that will fill the block weight up to the given ratio.<br/>
     /// </summary>
-        fill_block,
+        fill_block = 0,
     /// <summary>
     /// Make some on-chain remark.<br/>
     /// <para></para>
@@ -26,11 +26,11 @@ namespace FinalBiome.Sdk.FrameSystem.Pallet
     /// - `O(1)`<br/>
     /// # </weight><br/>
     /// </summary>
-        remark,
+        remark = 1,
     /// <summary>
     /// Set the number of pages in the WebAssembly environment's heap.<br/>
     /// </summary>
-        set_heap_pages,
+        set_heap_pages = 2,
     /// <summary>
     /// Set the new runtime code.<br/>
     /// <para></para>
@@ -45,7 +45,7 @@ namespace FinalBiome.Sdk.FrameSystem.Pallet
     /// expensive. We will treat this as a full block.<br/>
     /// # </weight><br/>
     /// </summary>
-        set_code,
+        set_code = 3,
     /// <summary>
     /// Set the new runtime code without doing any checks of the given `code`.<br/>
     /// <para></para>
@@ -57,26 +57,26 @@ namespace FinalBiome.Sdk.FrameSystem.Pallet
     /// The weight of this function is dependent on the runtime. We will treat this as a full<br/>
     /// block. # </weight><br/>
     /// </summary>
-        set_code_without_checks,
+        set_code_without_checks = 4,
     /// <summary>
     /// Set some items of storage.<br/>
     /// </summary>
-        set_storage,
+        set_storage = 5,
     /// <summary>
     /// Kill some items from storage.<br/>
     /// </summary>
-        kill_storage,
+        kill_storage = 6,
     /// <summary>
     /// Kill all storage items with a key that starts with the given prefix.<br/>
     /// <para></para>
     /// **NOTE:** We rely on the Root origin to provide us the number of subkeys under<br/>
     /// the prefix we are removing to accurately calculate the weight of this function.<br/>
     /// </summary>
-        kill_prefix,
+        kill_prefix = 7,
     /// <summary>
     /// Make some on-chain remark and emit event.<br/>
     /// </summary>
-        remark_with_event,
+        remark_with_event = 8,
     }
     /// <summary>
     /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>

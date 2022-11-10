@@ -10,13 +10,13 @@ namespace FinalBiome.Sdk.SpRuntime.Multiaddress
     /// <summary>
     /// Generated from meta with Type Id 121
     /// </summary>
-    public enum InnerMultiAddress
+    public enum InnerMultiAddress : byte
     {
-        Id,
-        Index,
-        Raw,
-        Address32,
-        Address20,
+        Id = 0,
+        Index = 1,
+        Raw = 2,
+        Address32 = 3,
+        Address20 = 4,
     }
     /// <summary>
     /// Generated from meta with Type Id 121

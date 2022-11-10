@@ -13,13 +13,13 @@ namespace FinalBiome.Sdk.PalletTemplate.Pallet
     ///
     /// Generated from meta with Type Id 39
     /// </summary>
-    public enum InnerEvent
+    public enum InnerEvent : byte
     {
     /// <summary>
     /// Event documentation should end with an array that provides descriptive names for event<br/>
     /// parameters. [something, who]<br/>
     /// </summary>
-        SomethingStored,
+        SomethingStored = 0,
     }
     /// <summary>
     ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>

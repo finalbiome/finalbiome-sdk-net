@@ -10,10 +10,10 @@ namespace FinalBiome.Sdk.PalletSupport.Characteristics
     /// <summary>
     /// Generated from meta with Type Id 147
     /// </summary>
-    public enum InnerCharacteristic
+    public enum InnerCharacteristic : byte
     {
-        Bettor,
-        Purchased,
+        Bettor = 0,
+        Purchased = 1,
     }
     /// <summary>
     /// Generated from meta with Type Id 147

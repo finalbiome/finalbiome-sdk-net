@@ -10,10 +10,10 @@ namespace FinalBiome.Sdk.PalletSupport
     /// <summary>
     /// Generated from meta with Type Id 194
     /// </summary>
-    public enum InnerLockedAccet
+    public enum InnerLockedAccet : byte
     {
-        Fa,
-        Nfa,
+        Fa = 0,
+        Nfa = 1,
     }
     /// <summary>
     /// Generated from meta with Type Id 194

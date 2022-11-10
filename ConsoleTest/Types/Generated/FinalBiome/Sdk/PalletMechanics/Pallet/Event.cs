@@ -13,16 +13,16 @@ namespace FinalBiome.Sdk.PalletMechanics.Pallet
     ///
     /// Generated from meta with Type Id 52
     /// </summary>
-    public enum InnerEvent
+    public enum InnerEvent : byte
     {
     /// <summary>
     /// Mechanics done.<br/>
     /// </summary>
-        Finished,
+        Finished = 0,
     /// <summary>
     /// Mechanics was stopped.<br/>
     /// </summary>
-        Stopped,
+        Stopped = 1,
     }
     /// <summary>
     ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>

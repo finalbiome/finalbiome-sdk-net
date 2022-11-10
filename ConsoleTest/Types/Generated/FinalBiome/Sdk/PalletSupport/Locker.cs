@@ -10,10 +10,10 @@ namespace FinalBiome.Sdk.PalletSupport
     /// <summary>
     /// Generated from meta with Type Id 186
     /// </summary>
-    public enum InnerLocker
+    public enum InnerLocker : byte
     {
-        None,
-        Mechanic,
+        None = 0,
+        Mechanic = 1,
     }
     /// <summary>
     /// Generated from meta with Type Id 186

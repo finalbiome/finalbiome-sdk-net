@@ -13,29 +13,29 @@ namespace FinalBiome.Sdk.PalletFungibleAssets.Pallet
     ///
     /// Generated from meta with Type Id 41
     /// </summary>
-    public enum InnerEvent
+    public enum InnerEvent : byte
     {
     /// <summary>
     /// The asset has been created.<br/>
     /// </summary>
-        Created,
+        Created = 0,
     /// <summary>
     /// Some assets were issued.<br/>
     /// </summary>
-        Issued,
+        Issued = 1,
     /// <summary>
     /// Some assets were destroyed.<br/>
     /// </summary>
-        Burned,
+        Burned = 2,
     /// <summary>
     /// Event documentation should end with an array that provides descriptive names for event<br/>
     /// parameters. [something, who]<br/>
     /// </summary>
-        SomethingStored,
+        SomethingStored = 3,
     /// <summary>
     /// An asset class was destroyed.<br/>
     /// </summary>
-        Destroyed,
+        Destroyed = 4,
     }
     /// <summary>
     ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>

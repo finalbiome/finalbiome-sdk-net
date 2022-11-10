@@ -13,20 +13,20 @@ namespace FinalBiome.Sdk.PalletSudo.Pallet
     ///
     /// Generated from meta with Type Id 35
     /// </summary>
-    public enum InnerEvent
+    public enum InnerEvent : byte
     {
     /// <summary>
     /// A sudo just took place. \[result\]<br/>
     /// </summary>
-        Sudid,
+        Sudid = 0,
     /// <summary>
     /// The \[sudoer\] just switched identity; the old key is supplied if one existed.<br/>
     /// </summary>
-        KeyChanged,
+        KeyChanged = 1,
     /// <summary>
     /// A sudo just took place. \[result\]<br/>
     /// </summary>
-        SudoAsDone,
+        SudoAsDone = 2,
     }
     /// <summary>
     ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>

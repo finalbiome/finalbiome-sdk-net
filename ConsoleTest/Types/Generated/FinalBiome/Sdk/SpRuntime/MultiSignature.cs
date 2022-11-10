@@ -10,11 +10,11 @@ namespace FinalBiome.Sdk.SpRuntime
     /// <summary>
     /// Generated from meta with Type Id 201
     /// </summary>
-    public enum InnerMultiSignature
+    public enum InnerMultiSignature : byte
     {
-        Ed25519,
-        Sr25519,
-        Ecdsa,
+        Ed25519 = 0,
+        Sr25519 = 1,
+        Ecdsa = 2,
     }
     /// <summary>
     /// Generated from meta with Type Id 201

@@ -510,16 +510,19 @@ namespace FinalBiome.TypeGenerator
 
             // create enums
             NodeTypeVariant val = (NodeTypeVariant)Types[typeId];
-            int size = val.Variants.Length;
+            // set size of variants not as Variants.Length but as max index in Variants
+            int size = val.Variants.Select(v => v.Index).Max() + 1;
+
             // enum element names
             string[] elements = new string[size];
+            // enum element types
             string[] types = new string[size];
             // doc string
             string[][] docs = new string[size][];
-            var vars = val.Variants.ToArray();
-            for (int idx = 0; idx < size; idx++)
+
+            foreach (var v in val.Variants)
             {
-                var v = vars[idx];
+                int idx = v.Index;
                 elements[idx] = v.Name;
                 if (v.Docs is not null) docs[idx] = v.Docs;
                 if (v.TypeFields is null)
@@ -551,7 +554,16 @@ namespace FinalBiome.TypeGenerator
                     }
                     types[idx] = wrappedType;
                 }
-
+            }
+            // Fill gaps in arrays. These elements is not used.
+            // Just adaptation for BaseEnumExt idexed enums
+            for (int i = 0; i < size; i++)
+            {
+                if (elements[i] is null)
+                {
+                    elements[i] = $"Unsupported_{i}";
+                    types[i] = "BaseVoid";
+                }
             }
 
             List<string> file = new List<string>();
@@ -563,12 +575,12 @@ namespace FinalBiome.TypeGenerator
             file.Add("{");
             // generate inner enum type
             file.AddRange(DocumentationForType(typeId));
-            file.Add($"    public enum Inner{canonical_name.Item2}");
+            file.Add($"    public enum Inner{canonical_name.Item2} : byte");
             file.Add("    {");
             for (int idx = 0; idx < size; idx++)
             {
                 if (docs[idx] is not null) file.AddRange(DocumentationForField(docs[idx]));
-                file.Add($"        {elements[idx]},");
+                file.Add($"        {elements[idx]} = {idx},");
             }
             file.Add("    }");
             // generate wrapper class

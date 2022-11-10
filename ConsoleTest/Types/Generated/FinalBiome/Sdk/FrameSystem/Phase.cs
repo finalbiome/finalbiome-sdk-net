@@ -10,11 +10,11 @@ namespace FinalBiome.Sdk.FrameSystem
     /// <summary>
     /// Generated from meta with Type Id 60
     /// </summary>
-    public enum InnerPhase
+    public enum InnerPhase : byte
     {
-        ApplyExtrinsic,
-        Finalization,
-        Initialization,
+        ApplyExtrinsic = 0,
+        Finalization = 1,
+        Initialization = 2,
     }
     /// <summary>
     /// Generated from meta with Type Id 60

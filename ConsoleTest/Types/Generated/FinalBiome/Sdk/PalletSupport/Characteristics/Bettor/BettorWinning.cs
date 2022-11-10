@@ -10,10 +10,10 @@ namespace FinalBiome.Sdk.PalletSupport.Characteristics.Bettor
     /// <summary>
     /// Generated from meta with Type Id 155
     /// </summary>
-    public enum InnerBettorWinning
+    public enum InnerBettorWinning : byte
     {
-        Fa,
-        Nfa,
+        Fa = 0,
+        Nfa = 1,
     }
     /// <summary>
     /// Generated from meta with Type Id 155

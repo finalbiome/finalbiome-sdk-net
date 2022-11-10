@@ -13,13 +13,13 @@ namespace FinalBiome.Sdk.PalletTransactionPayment.Pallet
     ///
     /// Generated from meta with Type Id 34
     /// </summary>
-    public enum InnerEvent
+    public enum InnerEvent : byte
     {
     /// <summary>
     /// A transaction fee `actual_fee`, of which `tip` was added to the minimum inclusion fee,<br/>
     /// has been paid by `who`.<br/>
     /// </summary>
-        TransactionFeePaid,
+        TransactionFeePaid = 0,
     }
     /// <summary>
     ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>

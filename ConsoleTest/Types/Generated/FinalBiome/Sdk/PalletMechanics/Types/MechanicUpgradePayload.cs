@@ -10,9 +10,9 @@ namespace FinalBiome.Sdk.PalletMechanics.Types
     /// <summary>
     /// Generated from meta with Type Id 166
     /// </summary>
-    public enum InnerMechanicUpgradePayload
+    public enum InnerMechanicUpgradePayload : byte
     {
-        Bet,
+        Bet = 0,
     }
     /// <summary>
     /// Generated from meta with Type Id 166

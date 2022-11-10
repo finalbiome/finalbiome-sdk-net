@@ -13,53 +13,53 @@ namespace FinalBiome.Sdk.PalletFungibleAssets.Pallet
     ///
     /// Generated from meta with Type Id 180
     /// </summary>
-    public enum InnerError
+    public enum InnerError : byte
     {
     /// <summary>
     /// Error names should be descriptive.<br/>
     /// </summary>
-        NoneValue,
+        NoneValue = 0,
     /// <summary>
     /// Errors should have helpful documentation associated with them.<br/>
     /// </summary>
-        StorageOverflow,
+        StorageOverflow = 1,
     /// <summary>
     /// The asset ID is already taken.<br/>
     /// </summary>
-        InUse,
-        NoAvailableAssetId,
+        InUse = 2,
+        NoAvailableAssetId = 3,
     /// <summary>
     /// The signing account has no permission to do the operation.<br/>
     /// </summary>
-        NoPermission,
+        NoPermission = 4,
     /// <summary>
     /// Asset name is too long.<br/>
     /// </summary>
-        AssetNameTooLong,
+        AssetNameTooLong = 5,
     /// <summary>
     /// Limit of tipupped assets is reached.<br/>
     /// </summary>
-        MaxTopUppedAssetsReached,
+        MaxTopUppedAssetsReached = 6,
     /// <summary>
     /// Global Cup must be above zero.<br/>
     /// </summary>
-        ZeroGlobalCup,
+        ZeroGlobalCup = 7,
     /// <summary>
     /// Local Cup must be above zero.<br/>
     /// </summary>
-        ZeroLocalCup,
+        ZeroLocalCup = 8,
     /// <summary>
     /// Top upped speed must be above zero.<br/>
     /// </summary>
-        ZeroTopUpped,
+        ZeroTopUpped = 9,
     /// <summary>
     /// Top upped speed can't be set without a local cup.<br/>
     /// </summary>
-        TopUppedWithNoCup,
+        TopUppedWithNoCup = 10,
     /// <summary>
     /// The account to alter does not exist.<br/>
     /// </summary>
-        NoAccount,
+        NoAccount = 11,
     }
     /// <summary>
     ///  Custom [dispatch errors](https://docs.substrate.io/main-docs/build/events-errors/) of this pallet. <br/>

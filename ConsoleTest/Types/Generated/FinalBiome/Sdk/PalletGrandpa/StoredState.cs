@@ -10,12 +10,12 @@ namespace FinalBiome.Sdk.PalletGrandpa
     /// <summary>
     /// Generated from meta with Type Id 95
     /// </summary>
-    public enum InnerStoredState
+    public enum InnerStoredState : byte
     {
-        Live,
-        PendingPause,
-        Paused,
-        PendingResume,
+        Live = 0,
+        PendingPause = 1,
+        Paused = 2,
+        PendingResume = 3,
     }
     /// <summary>
     /// Generated from meta with Type Id 95

@@ -13,20 +13,20 @@ namespace FinalBiome.Sdk.PalletGrandpa.Pallet
     ///
     /// Generated from meta with Type Id 27
     /// </summary>
-    public enum InnerEvent
+    public enum InnerEvent : byte
     {
     /// <summary>
     /// New authority set has been applied.<br/>
     /// </summary>
-        NewAuthorities,
+        NewAuthorities = 0,
     /// <summary>
     /// Current authority set has been paused.<br/>
     /// </summary>
-        Paused,
+        Paused = 1,
     /// <summary>
     /// Current authority set has been resumed.<br/>
     /// </summary>
-        Resumed,
+        Resumed = 2,
     }
     /// <summary>
     ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>

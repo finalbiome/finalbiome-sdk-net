@@ -13,32 +13,32 @@ namespace FinalBiome.Sdk.FrameSystem.Pallet
     ///
     /// Generated from meta with Type Id 18
     /// </summary>
-    public enum InnerEvent
+    public enum InnerEvent : byte
     {
     /// <summary>
     /// An extrinsic completed successfully.<br/>
     /// </summary>
-        ExtrinsicSuccess,
+        ExtrinsicSuccess = 0,
     /// <summary>
     /// An extrinsic failed.<br/>
     /// </summary>
-        ExtrinsicFailed,
+        ExtrinsicFailed = 1,
     /// <summary>
     /// `:code` was updated.<br/>
     /// </summary>
-        CodeUpdated,
+        CodeUpdated = 2,
     /// <summary>
     /// A new account was created.<br/>
     /// </summary>
-        NewAccount,
+        NewAccount = 3,
     /// <summary>
     /// An account was reaped.<br/>
     /// </summary>
-        KilledAccount,
+        KilledAccount = 4,
     /// <summary>
     /// On on-chain remark happened.<br/>
     /// </summary>
-        Remarked,
+        Remarked = 5,
     }
     /// <summary>
     /// Event for the System pallet.<br/>

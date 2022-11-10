@@ -10,15 +10,15 @@ namespace FinalBiome.Sdk.SpRuntime
     /// <summary>
     /// Generated from meta with Type Id 24
     /// </summary>
-    public enum InnerTokenError
+    public enum InnerTokenError : byte
     {
-        NoFunds,
-        WouldDie,
-        BelowMinimum,
-        CannotCreate,
-        UnknownAsset,
-        Frozen,
-        Unsupported,
+        NoFunds = 0,
+        WouldDie = 1,
+        BelowMinimum = 2,
+        CannotCreate = 3,
+        UnknownAsset = 4,
+        Frozen = 5,
+        Unsupported = 6,
     }
     /// <summary>
     /// Generated from meta with Type Id 24

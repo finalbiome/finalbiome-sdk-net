@@ -10,11 +10,11 @@ namespace FinalBiome.Sdk.PalletBalances
     /// <summary>
     /// Generated from meta with Type Id 114
     /// </summary>
-    public enum InnerReasons
+    public enum InnerReasons : byte
     {
-        Fee,
-        Misc,
-        All,
+        Fee = 0,
+        Misc = 1,
+        All = 2,
     }
     /// <summary>
     /// Generated from meta with Type Id 114

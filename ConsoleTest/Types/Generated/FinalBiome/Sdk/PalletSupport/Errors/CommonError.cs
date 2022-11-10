@@ -10,11 +10,11 @@ namespace FinalBiome.Sdk.PalletSupport.Errors
     /// <summary>
     /// Generated from meta with Type Id 190
     /// </summary>
-    public enum InnerCommonError
+    public enum InnerCommonError : byte
     {
-        WrongCharacteristic,
-        WrongBettor,
-        WrongPurchased,
+        WrongCharacteristic = 0,
+        WrongBettor = 1,
+        WrongPurchased = 2,
     }
     /// <summary>
     /// Generated from meta with Type Id 190

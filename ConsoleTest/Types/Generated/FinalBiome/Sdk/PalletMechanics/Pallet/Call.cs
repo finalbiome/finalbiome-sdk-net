@@ -13,20 +13,20 @@ namespace FinalBiome.Sdk.PalletMechanics.Pallet
     ///
     /// Generated from meta with Type Id 163
     /// </summary>
-    public enum InnerCall
+    public enum InnerCall : byte
     {
     /// <summary>
     /// Execute mechanic `Buy NFA`<br/>
     /// </summary>
-        exec_buy_nfa,
+        exec_buy_nfa = 0,
     /// <summary>
     /// Execute mechanic `Bet`<br/>
     /// </summary>
-        exec_bet,
+        exec_bet = 1,
     /// <summary>
     /// Upgrade mechanic<br/>
     /// </summary>
-        upgrade,
+        upgrade = 2,
     }
     /// <summary>
     /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>

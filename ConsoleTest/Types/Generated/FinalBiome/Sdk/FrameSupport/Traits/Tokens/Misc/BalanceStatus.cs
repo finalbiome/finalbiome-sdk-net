@@ -10,10 +10,10 @@ namespace FinalBiome.Sdk.FrameSupport.Traits.Tokens.Misc
     /// <summary>
     /// Generated from meta with Type Id 33
     /// </summary>
-    public enum InnerBalanceStatus
+    public enum InnerBalanceStatus : byte
     {
-        Free,
-        Reserved,
+        Free = 0,
+        Reserved = 1,
     }
     /// <summary>
     /// Generated from meta with Type Id 33

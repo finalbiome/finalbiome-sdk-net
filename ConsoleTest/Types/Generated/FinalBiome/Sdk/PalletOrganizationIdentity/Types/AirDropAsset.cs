@@ -10,10 +10,10 @@ namespace FinalBiome.Sdk.PalletOrganizationIdentity.Types
     /// <summary>
     /// Generated from meta with Type Id 134
     /// </summary>
-    public enum InnerAirDropAsset
+    public enum InnerAirDropAsset : byte
     {
-        Fa,
-        Nfa,
+        Fa = 0,
+        Nfa = 1,
     }
     /// <summary>
     /// Generated from meta with Type Id 134

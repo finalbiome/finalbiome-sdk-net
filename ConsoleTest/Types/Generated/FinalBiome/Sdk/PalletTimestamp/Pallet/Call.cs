@@ -13,7 +13,7 @@ namespace FinalBiome.Sdk.PalletTimestamp.Pallet
     ///
     /// Generated from meta with Type Id 88
     /// </summary>
-    public enum InnerCall
+    public enum InnerCall : byte
     {
     /// <summary>
     /// Set the current time.<br/>
@@ -33,7 +33,7 @@ namespace FinalBiome.Sdk.PalletTimestamp.Pallet
     /// - 1 event handler `on_timestamp_set`. Must be `O(1)`.<br/>
     /// # </weight><br/>
     /// </summary>
-        set,
+        set = 0,
     }
     /// <summary>
     /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>

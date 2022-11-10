@@ -10,18 +10,22 @@ namespace FinalBiome.Sdk.SpRuntime.Generic.Digest
     /// <summary>
     /// Generated from meta with Type Id 13
     /// </summary>
-    public enum InnerDigestItem
+    public enum InnerDigestItem : byte
     {
-        PreRuntime,
-        Consensus,
-        Seal,
-        Other,
-        RuntimeEnvironmentUpdated,
+        Other = 0,
+        Unsupported_1 = 1,
+        Unsupported_2 = 2,
+        Unsupported_3 = 3,
+        Consensus = 4,
+        Seal = 5,
+        PreRuntime = 6,
+        Unsupported_7 = 7,
+        RuntimeEnvironmentUpdated = 8,
     }
     /// <summary>
     /// Generated from meta with Type Id 13
     /// </summary>
-    public class DigestItem : BaseEnumExt<InnerDigestItem, BaseTuple<FinalBiome.Sdk.Model.Types.Base.Array4U8, FinalBiome.Sdk.VecU8>, BaseTuple<FinalBiome.Sdk.Model.Types.Base.Array4U8, FinalBiome.Sdk.VecU8>, BaseTuple<FinalBiome.Sdk.Model.Types.Base.Array4U8, FinalBiome.Sdk.VecU8>, FinalBiome.Sdk.VecU8, BaseVoid>
+    public class DigestItem : BaseEnumExt<InnerDigestItem, FinalBiome.Sdk.VecU8, BaseVoid, BaseVoid, BaseVoid, BaseTuple<FinalBiome.Sdk.Model.Types.Base.Array4U8, FinalBiome.Sdk.VecU8>, BaseTuple<FinalBiome.Sdk.Model.Types.Base.Array4U8, FinalBiome.Sdk.VecU8>, BaseTuple<FinalBiome.Sdk.Model.Types.Base.Array4U8, FinalBiome.Sdk.VecU8>, BaseVoid, BaseVoid>
     {
         public override string TypeName() => "DigestItem";
     }
