@@ -12,6 +12,7 @@ namespace FinalBiome.Sdk
         /// Work with events.
         /// </summary>
         public Events.EventClient Events;
+        public Blocks.BlockClient Block;
 
         public Client(string url)
         {
@@ -20,6 +21,7 @@ namespace FinalBiome.Sdk
             Query = new Query.Query(this);
             Tx = new Transactions.Transactions(this);
             Events = new Events.EventClient(this);
+            Block = new Blocks.BlockClient(this);
         }
     }
 }

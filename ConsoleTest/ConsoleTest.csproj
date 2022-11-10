@@ -15,11 +15,13 @@
     <None Remove="Types\Base\" />
     <None Remove="TypeGenerator\" />
     <None Remove="Events\" />
+    <None Remove="Blocks\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Types\" />
     <Folder Include="Types\Base\" />
     <Folder Include="TypeGenerator\" />
     <Folder Include="Events\" />
+    <Folder Include="Blocks\" />
   </ItemGroup>
 </Project>

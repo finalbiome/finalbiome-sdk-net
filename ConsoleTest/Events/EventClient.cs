@@ -30,7 +30,7 @@ namespace FinalBiome.Sdk.Events
                 hash = await _client.client.Chain.GetBlockHashAsync();
             }
 
-            var events = await _client.Query.System.Events();
+            var events = await _client.Query.System.Events(hash.Encode());
 
             return new Events(hash, events);
         }
