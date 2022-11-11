@@ -50,8 +50,7 @@ namespace FinalBiome.Sdk.Transactions
             
             if (subscription is null)
             {
-                await _client.client.Author.SubmitExtrinsicAsync(method, account, charge, lifeTime, (CancellationToken)token);
-                return null;
+                return (await _client.client.Author.SubmitExtrinsicAsync(method, account, charge, lifeTime, (CancellationToken)token)).Value;
             }
             else
             {

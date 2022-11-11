@@ -276,9 +276,9 @@ namespace HelloWorld
                     };
 
                     var transferTx = await client.Tx.Balances.Transfer(Alice, bobMulti, transferAmount);
-                    Console.WriteLine($"Transfer Tx Hash: {transferTx}");
+                    Console.WriteLine($"Transfer Tx Hash from call: {transferTx}");
 
-                    while (true)
+                    while (false)
                     {
                         amount += 100_000_000;
                         CompactU128 transferAmountNext = new CompactU128();
@@ -296,20 +296,26 @@ namespace HelloWorld
                 Func<string, FinalBiome.Sdk.Blocks.Block, Task> cb = async (subId, block) =>
                 {
                     // Ask for the events for this block.
-                    var events = await block.Events();
+                    //var events = await block.Events();
                     var blockHash = block.Hash.Value;
 
-                    Console.WriteLine($"  Dynamic event details: {blockHash}:");
-                    foreach (var e in events.EventRecords.Value)
-                    {
-                        Console.WriteLine($"    {Stringify(e)}");
-                    }
+                    Console.WriteLine($"  Dynamic event details for block {blockHash}:");
 
                     var blockBody = await block.Body();
                     foreach (var ext in blockBody.Extrinsics())
                     {
-                        Console.WriteLine($"  Extrinsic index: {ext.Index}");
+                        var ev = await ext.Events();
+                        Console.WriteLine($"Events for Extrinsic {ext.Index}, {ev.ExtrinsicHash.Value}");
+                        Console.WriteLine("");
+                        foreach (var er in ev)
+                        {
+                            Console.WriteLine($"   Event of the extrinsic {ev.ExtrinsicHash}:\n" +
+                                              $"{Stringify(er, Formatting.None)}");
+
+                        }
+                        Console.WriteLine("");
                     };
+
                 };
 
                 // Subscribe to (in this case, finalized) blocks.
@@ -465,14 +471,15 @@ namespace HelloWorld
 
                 // r1SFrTG1XHznHryM
                 Hash h = new Hash();
-                h.Create("0xB8ECA7A10CD653CE7B9D68DC670DCE456BD2CCCA17384CCA69D22B7ACB83F33F");
+                h.Create("0x805FF2AC25682B3D6FBD24883BC750BE156940ACDF43EA9E74F4C2A8C374E9D8");
 
                 var block = await client.Block.At(h);
                 var body = await block.Body();
                 foreach (var e in body.Extrinsics())
                 {
-                    //Console.WriteLine($"  Extrinsic {e.Index} : {e.}");
                     var ev = await e.Events();
+                    Console.WriteLine($"Events for Extrinsic {e.Index}, {ev.ExtrinsicHash}");
+                    Console.WriteLine("");
                     foreach (var er in ev)
                     {
                         Console.WriteLine($"   Event of the extrinsic {ev.ExtrinsicHash}:\n" +
@@ -485,7 +492,8 @@ namespace HelloWorld
             if (false)
             {
                 FinalBiome.Sdk.FrameSystem.VecEventRecord ev = new FinalBiome.Sdk.FrameSystem.VecEventRecord();
-                ev.Create("0x1400000000000000001c6c0900000000020000000100000005081cbd2d43530a44705ad088af313e18f80b53ef16b36177cd4b77b846f2a5f07c21ce24050000000000000000000000000000010000000b0009000000e659a7a1628cdd93febc04a4e0646ea20e9f5f0ce097d9a05290d4a9e054df4e00000100000006001cbd2d43530a44705ad088af313e18f80b53ef16b36177cd4b77b846f2a5f07c21ce24050000000000000000000000000000000000000000000000000000000000000100000000008093dc1400000000000000");
+                ev.Create("0x1400000000000000001c6c0900000000020000000100000005081cbd2d43530a44705ad088af313e18f80b53ef16b36177cd4b77b846f2a5f07c21ce24050000000000000000000000000000010000000b0006000000e659a7a1628cdd93febc04a4e0646ea20e9f5f0ce097d9a05290d4a9e054df4e00000100000006001cbd2d43530a44705ad088af313e18f80b53ef16b36177cd4b77b846f2a5f07c21ce24050000000000000000000000000000000000000000000000000000000000000100000000008093dc1400000000000000");
+                Console.WriteLine(Stringify(ev));
             }
 
             #region Close connection

@@ -325,8 +325,7 @@ namespace FinalBiome.TypeGenerator
             file.Add($"            ");
             file.Add($"            if (subscription is null)");
             file.Add($"            {{");
-            file.Add($"                await _client.client.Author.SubmitExtrinsicAsync(method, account, charge, lifeTime, (CancellationToken)token);");
-            file.Add($"                return null;");
+            file.Add($"                return (await _client.client.Author.SubmitExtrinsicAsync(method, account, charge, lifeTime, (CancellationToken)token)).Value;");
             file.Add($"            }}");
             file.Add($"            else");
             file.Add($"            {{");
