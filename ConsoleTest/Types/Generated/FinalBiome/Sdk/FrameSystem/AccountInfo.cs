@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.FrameSystem
     /// <summary>
     /// Generated from meta with Type Id 3
     /// </summary>
-    public class AccountInfo : BaseType
+    public class AccountInfo : BaseComposite
     {
         public override string TypeName() => "AccountInfo";
 
@@ -27,7 +27,13 @@ namespace FinalBiome.Sdk.FrameSystem
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(Nonce.Encode());
+            bytes.AddRange(Consumers.Encode());
+            bytes.AddRange(Providers.Encode());
+            bytes.AddRange(Sufficients.Encode());
+            bytes.AddRange(Data.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -50,6 +56,8 @@ namespace FinalBiome.Sdk.FrameSystem
             Data.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

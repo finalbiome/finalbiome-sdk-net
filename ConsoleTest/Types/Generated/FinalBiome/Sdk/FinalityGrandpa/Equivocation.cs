@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.FinalityGrandpa
     /// <summary>
     /// Generated from meta with Type Id 107
     /// </summary>
-    public class Equivocation : BaseType
+    public class Equivocation : BaseComposite
     {
         public override string TypeName() => "Equivocation";
 
@@ -26,7 +26,12 @@ namespace FinalBiome.Sdk.FinalityGrandpa
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(RoundNumber.Encode());
+            bytes.AddRange(Identity.Encode());
+            bytes.AddRange(First.Encode());
+            bytes.AddRange(Second.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -46,6 +51,8 @@ namespace FinalBiome.Sdk.FinalityGrandpa
             Second.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

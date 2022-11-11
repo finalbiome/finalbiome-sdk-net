@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.FrameSupport.Weights
     /// <summary>
     /// Generated from meta with Type Id 19
     /// </summary>
-    public class DispatchInfo : BaseType
+    public class DispatchInfo : BaseComposite
     {
         public override string TypeName() => "DispatchInfo";
 
@@ -25,7 +25,11 @@ namespace FinalBiome.Sdk.FrameSupport.Weights
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(Weight.Encode());
+            bytes.AddRange(Class.Encode());
+            bytes.AddRange(PaysFee.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -42,6 +46,8 @@ namespace FinalBiome.Sdk.FrameSupport.Weights
             PaysFee.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

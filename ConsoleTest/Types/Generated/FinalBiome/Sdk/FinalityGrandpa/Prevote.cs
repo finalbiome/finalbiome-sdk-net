@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.FinalityGrandpa
     /// <summary>
     /// Generated from meta with Type Id 102
     /// </summary>
-    public class Prevote : BaseType
+    public class Prevote : BaseComposite
     {
         public override string TypeName() => "Prevote";
 
@@ -24,7 +24,10 @@ namespace FinalBiome.Sdk.FinalityGrandpa
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(TargetHash.Encode());
+            bytes.AddRange(TargetNumber.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -38,6 +41,8 @@ namespace FinalBiome.Sdk.FinalityGrandpa
             TargetNumber.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

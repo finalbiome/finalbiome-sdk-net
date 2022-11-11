@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.PalletFungibleAssets.Types
     /// <summary>
     /// Generated from meta with Type Id 141
     /// </summary>
-    public class TopUppedFA : BaseType
+    public class TopUppedFA : BaseComposite
     {
         public override string TypeName() => "TopUppedFA";
 
@@ -23,7 +23,9 @@ namespace FinalBiome.Sdk.PalletFungibleAssets.Types
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(Speed.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -34,6 +36,8 @@ namespace FinalBiome.Sdk.PalletFungibleAssets.Types
             Speed.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.PalletSupport
     /// <summary>
     /// Generated from meta with Type Id 165
     /// </summary>
-    public class MechanicId : BaseType
+    public class MechanicId : BaseComposite
     {
         public override string TypeName() => "MechanicId";
 
@@ -24,7 +24,10 @@ namespace FinalBiome.Sdk.PalletSupport
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(AccountId.Encode());
+            bytes.AddRange(Nonce.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -38,6 +41,8 @@ namespace FinalBiome.Sdk.PalletSupport
             Nonce.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

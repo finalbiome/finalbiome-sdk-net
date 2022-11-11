@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.PalletSupport.Characteristics.Purchased
     /// <summary>
     /// Generated from meta with Type Id 159
     /// </summary>
-    public class Purchased : BaseType
+    public class Purchased : BaseComposite
     {
         public override string TypeName() => "Purchased";
 
@@ -23,7 +23,9 @@ namespace FinalBiome.Sdk.PalletSupport.Characteristics.Purchased
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(Offers.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -34,6 +36,8 @@ namespace FinalBiome.Sdk.PalletSupport.Characteristics.Purchased
             Offers.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

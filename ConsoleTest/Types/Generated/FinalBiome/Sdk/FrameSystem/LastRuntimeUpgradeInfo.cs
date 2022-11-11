@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.FrameSystem
     /// <summary>
     /// Generated from meta with Type Id 64
     /// </summary>
-    public class LastRuntimeUpgradeInfo : BaseType
+    public class LastRuntimeUpgradeInfo : BaseComposite
     {
         public override string TypeName() => "LastRuntimeUpgradeInfo";
 
@@ -24,7 +24,10 @@ namespace FinalBiome.Sdk.FrameSystem
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(SpecVersion.Encode());
+            bytes.AddRange(SpecName.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -38,6 +41,8 @@ namespace FinalBiome.Sdk.FrameSystem
             SpecName.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

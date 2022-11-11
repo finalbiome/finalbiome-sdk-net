@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.PalletSupport
     /// <summary>
     /// Generated from meta with Type Id 136
     /// </summary>
-    public class Attribute : BaseType
+    public class Attribute : BaseComposite
     {
         public override string TypeName() => "Attribute";
 
@@ -24,7 +24,10 @@ namespace FinalBiome.Sdk.PalletSupport
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(Key.Encode());
+            bytes.AddRange(Value.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -38,6 +41,8 @@ namespace FinalBiome.Sdk.PalletSupport
             Value.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.SpVersion
     /// <summary>
     /// Generated from meta with Type Id 80
     /// </summary>
-    public class RuntimeVersion : BaseType
+    public class RuntimeVersion : BaseComposite
     {
         public override string TypeName() => "RuntimeVersion";
 
@@ -30,7 +30,16 @@ namespace FinalBiome.Sdk.SpVersion
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(SpecName.Encode());
+            bytes.AddRange(ImplName.Encode());
+            bytes.AddRange(AuthoringVersion.Encode());
+            bytes.AddRange(SpecVersion.Encode());
+            bytes.AddRange(ImplVersion.Encode());
+            bytes.AddRange(Apis.Encode());
+            bytes.AddRange(TransactionVersion.Encode());
+            bytes.AddRange(StateVersion.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -62,6 +71,8 @@ namespace FinalBiome.Sdk.SpVersion
             StateVersion.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

@@ -665,7 +665,7 @@ namespace FinalBiome.TypeGenerator
             file.Add($"namespace {canonicalName.Item1}");
             file.Add($"{{");
             file.AddRange(DocumentationForType(typeId));
-            file.Add($"    public class {canonicalName.Item2} : BaseType");
+            file.Add($"    public class {canonicalName.Item2} : BaseComposite");
             file.Add($"    {{");
             file.Add($"        public override string TypeName() => \"{canonicalName.Item2}\";");
             file.Add($"");
@@ -686,7 +686,16 @@ namespace FinalBiome.TypeGenerator
             file.Add($"");
             file.Add($"        public override byte[] Encode()");
             file.Add($"        {{");
-            file.Add($"            throw new NotImplementedException();");
+            file.Add($"            var bytes = new List<byte>();");
+            foreach (var field in fields)
+            {
+                Debug.Assert(field.Name is not null);
+                string methodName = SnakeCaseToTitle(field.Name);
+                if (reservedPropertyNames.Contains(methodName)) methodName = "_" + methodName;
+
+                file.Add($"            bytes.AddRange({methodName}.Encode());");
+            }
+            file.Add($"            return bytes.ToArray();");
             file.Add($"        }}");
             file.Add($"");
             file.Add($"        public override void Decode(byte[] byteArray, ref int p)");
@@ -706,6 +715,8 @@ namespace FinalBiome.TypeGenerator
                 file.Add($"");
             }
             file.Add($"            _size = p - start;");
+            file.Add($"            Bytes = new byte[TypeSize];");
+            file.Add($"            Array.Copy(byteArray, start, Bytes, 0, TypeSize);");
             file.Add($"        }}");
             file.Add($"    }}");
             file.Add($"}}");

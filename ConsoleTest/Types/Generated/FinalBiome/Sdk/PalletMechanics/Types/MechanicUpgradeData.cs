@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.PalletMechanics.Types
     /// <summary>
     /// Generated from meta with Type Id 164
     /// </summary>
-    public class MechanicUpgradeData : BaseType
+    public class MechanicUpgradeData : BaseComposite
     {
         public override string TypeName() => "MechanicUpgradeData";
 
@@ -24,7 +24,10 @@ namespace FinalBiome.Sdk.PalletMechanics.Types
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(MechanicId.Encode());
+            bytes.AddRange(Payload.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -38,6 +41,8 @@ namespace FinalBiome.Sdk.PalletMechanics.Types
             Payload.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

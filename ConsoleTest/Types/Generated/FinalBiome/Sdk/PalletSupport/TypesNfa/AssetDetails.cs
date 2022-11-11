@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.PalletSupport.TypesNfa
     /// <summary>
     /// Generated from meta with Type Id 185
     /// </summary>
-    public class AssetDetails : BaseType
+    public class AssetDetails : BaseComposite
     {
         public override string TypeName() => "AssetDetails";
 
@@ -24,7 +24,10 @@ namespace FinalBiome.Sdk.PalletSupport.TypesNfa
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(Owner.Encode());
+            bytes.AddRange(Locked.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -38,6 +41,8 @@ namespace FinalBiome.Sdk.PalletSupport.TypesNfa
             Locked.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

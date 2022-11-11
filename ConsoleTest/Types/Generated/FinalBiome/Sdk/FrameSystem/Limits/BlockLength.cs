@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.FrameSystem.Limits
     /// <summary>
     /// Generated from meta with Type Id 77
     /// </summary>
-    public class BlockLength : BaseType
+    public class BlockLength : BaseComposite
     {
         public override string TypeName() => "BlockLength";
 
@@ -23,7 +23,9 @@ namespace FinalBiome.Sdk.FrameSystem.Limits
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(Max.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -34,6 +36,8 @@ namespace FinalBiome.Sdk.FrameSystem.Limits
             Max.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

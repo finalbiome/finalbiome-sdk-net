@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.PalletSupport.Characteristics.Bettor
     /// <summary>
     /// Generated from meta with Type Id 151
     /// </summary>
-    public class BettorOutcome : BaseType
+    public class BettorOutcome : BaseComposite
     {
         public override string TypeName() => "BettorOutcome";
 
@@ -25,7 +25,11 @@ namespace FinalBiome.Sdk.PalletSupport.Characteristics.Bettor
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(Name.Encode());
+            bytes.AddRange(Probability.Encode());
+            bytes.AddRange(Result.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -42,6 +46,8 @@ namespace FinalBiome.Sdk.PalletSupport.Characteristics.Bettor
             Result.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

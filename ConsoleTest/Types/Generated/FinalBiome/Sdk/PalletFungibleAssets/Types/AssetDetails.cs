@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.PalletFungibleAssets.Types
     /// <summary>
     /// Generated from meta with Type Id 173
     /// </summary>
-    public class AssetDetails : BaseType
+    public class AssetDetails : BaseComposite
     {
         public override string TypeName() => "AssetDetails";
 
@@ -30,7 +30,16 @@ namespace FinalBiome.Sdk.PalletFungibleAssets.Types
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(Owner.Encode());
+            bytes.AddRange(Supply.Encode());
+            bytes.AddRange(Accounts.Encode());
+            bytes.AddRange(References.Encode());
+            bytes.AddRange(Name.Encode());
+            bytes.AddRange(TopUpped.Encode());
+            bytes.AddRange(CupGlobal.Encode());
+            bytes.AddRange(CupLocal.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -62,6 +71,8 @@ namespace FinalBiome.Sdk.PalletFungibleAssets.Types
             CupLocal.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

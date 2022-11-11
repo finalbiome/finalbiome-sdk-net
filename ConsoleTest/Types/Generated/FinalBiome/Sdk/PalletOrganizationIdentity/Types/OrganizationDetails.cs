@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.PalletOrganizationIdentity.Types
     /// <summary>
     /// Generated from meta with Type Id 169
     /// </summary>
-    public class OrganizationDetails : BaseType
+    public class OrganizationDetails : BaseComposite
     {
         public override string TypeName() => "OrganizationDetails";
 
@@ -24,7 +24,10 @@ namespace FinalBiome.Sdk.PalletOrganizationIdentity.Types
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(Name.Encode());
+            bytes.AddRange(OnboardingAssets.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -38,6 +41,8 @@ namespace FinalBiome.Sdk.PalletOrganizationIdentity.Types
             OnboardingAssets.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

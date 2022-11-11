@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.PalletBalances
     /// <summary>
     /// Generated from meta with Type Id 117
     /// </summary>
-    public class ReserveData : BaseType
+    public class ReserveData : BaseComposite
     {
         public override string TypeName() => "ReserveData";
 
@@ -24,7 +24,10 @@ namespace FinalBiome.Sdk.PalletBalances
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(Id.Encode());
+            bytes.AddRange(Amount.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -38,6 +41,8 @@ namespace FinalBiome.Sdk.PalletBalances
             Amount.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

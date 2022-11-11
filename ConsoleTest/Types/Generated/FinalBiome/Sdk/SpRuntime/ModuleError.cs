@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.SpRuntime
     /// <summary>
     /// Generated from meta with Type Id 23
     /// </summary>
-    public class ModuleError : BaseType
+    public class ModuleError : BaseComposite
     {
         public override string TypeName() => "ModuleError";
 
@@ -24,7 +24,10 @@ namespace FinalBiome.Sdk.SpRuntime
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(Index.Encode());
+            bytes.AddRange(Error.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -38,6 +41,8 @@ namespace FinalBiome.Sdk.SpRuntime
             Error.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

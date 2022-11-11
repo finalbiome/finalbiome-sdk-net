@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.PalletMechanics.Types
     /// <summary>
     /// Generated from meta with Type Id 55
     /// </summary>
-    public class EventMechanicResultDataBet : BaseType
+    public class EventMechanicResultDataBet : BaseComposite
     {
         public override string TypeName() => "EventMechanicResultDataBet";
 
@@ -24,7 +24,10 @@ namespace FinalBiome.Sdk.PalletMechanics.Types
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(Outcomes.Encode());
+            bytes.AddRange(Result.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -38,6 +41,8 @@ namespace FinalBiome.Sdk.PalletMechanics.Types
             Result.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

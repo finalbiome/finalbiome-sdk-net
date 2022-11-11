@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.FrameSupport.Weights
     /// <summary>
     /// Generated from meta with Type Id 78
     /// </summary>
-    public class PerDispatchClass : BaseType
+    public class PerDispatchClass : BaseComposite
     {
         public override string TypeName() => "PerDispatchClass";
 
@@ -25,7 +25,11 @@ namespace FinalBiome.Sdk.FrameSupport.Weights
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(Normal.Encode());
+            bytes.AddRange(Operational.Encode());
+            bytes.AddRange(Mandatory.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -42,6 +46,8 @@ namespace FinalBiome.Sdk.FrameSupport.Weights
             Mandatory.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.SpRuntime.Generic.Digest
     /// <summary>
     /// Generated from meta with Type Id 11
     /// </summary>
-    public class Digest : BaseType
+    public class Digest : BaseComposite
     {
         public override string TypeName() => "Digest";
 
@@ -23,7 +23,9 @@ namespace FinalBiome.Sdk.SpRuntime.Generic.Digest
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(Logs.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -34,6 +36,8 @@ namespace FinalBiome.Sdk.SpRuntime.Generic.Digest
             Logs.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

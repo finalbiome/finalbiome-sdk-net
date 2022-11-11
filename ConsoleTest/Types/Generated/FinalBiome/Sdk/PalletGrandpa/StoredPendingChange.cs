@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.PalletGrandpa
     /// <summary>
     /// Generated from meta with Type Id 96
     /// </summary>
-    public class StoredPendingChange : BaseType
+    public class StoredPendingChange : BaseComposite
     {
         public override string TypeName() => "StoredPendingChange";
 
@@ -26,7 +26,12 @@ namespace FinalBiome.Sdk.PalletGrandpa
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(ScheduledAt.Encode());
+            bytes.AddRange(Delay.Encode());
+            bytes.AddRange(NextAuthorities.Encode());
+            bytes.AddRange(Forced.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -46,6 +51,8 @@ namespace FinalBiome.Sdk.PalletGrandpa
             Forced.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

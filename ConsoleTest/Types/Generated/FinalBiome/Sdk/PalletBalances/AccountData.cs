@@ -11,7 +11,7 @@ namespace FinalBiome.Sdk.PalletBalances
     /// <summary>
     /// Generated from meta with Type Id 5
     /// </summary>
-    public class AccountData : BaseType
+    public class AccountData : BaseComposite
     {
         public override string TypeName() => "AccountData";
 
@@ -26,7 +26,12 @@ namespace FinalBiome.Sdk.PalletBalances
 
         public override byte[] Encode()
         {
-            throw new NotImplementedException();
+            var bytes = new List<byte>();
+            bytes.AddRange(Free.Encode());
+            bytes.AddRange(Reserved.Encode());
+            bytes.AddRange(MiscFrozen.Encode());
+            bytes.AddRange(FeeFrozen.Encode());
+            return bytes.ToArray();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
@@ -46,6 +51,8 @@ namespace FinalBiome.Sdk.PalletBalances
             FeeFrozen.Decode(byteArray, ref p);
 
             _size = p - start;
+            Bytes = new byte[TypeSize];
+            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }
