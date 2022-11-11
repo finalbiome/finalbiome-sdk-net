@@ -4,29 +4,26 @@ using System.Numerics;
 using FinalBiome.Api.Utils;
 using Types.Primitive;
 
-public class U128Tests
+public class U256Tests
 {
     [Test]
-    public void U128FromHexTest()
+    public void U256FromHexTest()
     {
-        var val = new U128();
-        val.InitFromHex("0xffffff00ffffff00ffffff00ffffff00");
-        Assert.That(BigInteger.Parse("1329227916866238350086128051511361535"), Is.EqualTo(val.Value));
+        var val = new U256();
+        val.Init("0xffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00");
+        var b = BigInteger.Parse("452312821728632006638659744032470891714787547825123743022878680681856106495");
+        //var b1 = BigInteger.Parse("452325621728632006638659744032470891714787547825123743022878680681856106495");
+        //var val2 = new U256();
+        //val2.Init(b1);
+        //Assert.That(b1, Is.EqualTo(val2.Value));
+        Assert.That(BigInteger.Parse("452312821728632006638659744032470891714787547825123743022878680681856106495"), Is.EqualTo(val.Value));
     }
 
     [Test]
-    public void U128FromNative()
+    public void U256FromNative()
     {
-        var val = U128.From(new BigInteger(33333));
-        Assert.That(HexUtils.Bytes2HexString(val.Bytes), Is.EqualTo("0x35820000000000000000000000000000"));
-
-        var val2 = new U128();
-        val2.InitFromHex("0x35820000000000000000000000000000");
-        U128.From(new BigInteger(33333));
-
-        Assert.That(new BigInteger(33333), Is.EqualTo(val2.Value));
-        Assert.That(val.Bytes, Is.EqualTo(val2.Bytes));
-
+        var val = U256.From(BigInteger.Parse("452312821728632006638659744032470891714787547825123743022878680681856106495"));
+        Assert.That(HexUtils.Bytes2HexString(val.Bytes).ToLower(), Is.EqualTo("0xffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00"));
     }
 }
 

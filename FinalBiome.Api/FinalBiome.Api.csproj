@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Types\" />
+    <None Remove="Newtonsoft.Json" />
+    <None Remove="Utils\" />
+    <None Remove="Types\Primitive\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Types\" />
+    <Folder Include="Utils\" />
+    <Folder Include="Types\Primitive\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+</Project>

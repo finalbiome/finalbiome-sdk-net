@@ -9,7 +9,7 @@ public class U16Tests
     public void U16FromHexTest()
     {
         var val = new U16();
-        val.InitFromHex("0x2a00");
+        val.Init("0x2a00");
         Assert.That(val.Value, Is.EqualTo(42));
     }
 

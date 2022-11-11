@@ -3,21 +3,21 @@
 using FinalBiome.Api.Utils;
 using Types.Primitive;
 
-public class U16Tests
+public class U64Tests
 {
     [Test]
-    public void U16FromHexTest()
+    public void U64FromHexTest()
     {
-        var val = new U16();
-        val.InitFromHex("0x2a00");
-        Assert.That(val.Value, Is.EqualTo(42));
+        var val = new U64();
+        val.Init("0xffffff00ffffff00");
+        Assert.That(val.Value, Is.EqualTo(72057589759737855));
     }
 
     [Test]
-    public void U16FromNative()
+    public void U64FromNative()
     {
-        var val = U16.From(33333);
-        Assert.That(HexUtils.Bytes2HexString(val.Bytes), Is.EqualTo("0x3582"));
+        var val = U64.From(33333);
+        Assert.That(HexUtils.Bytes2HexString(val.Bytes), Is.EqualTo("0x3582000000000000"));
     }
 }
 

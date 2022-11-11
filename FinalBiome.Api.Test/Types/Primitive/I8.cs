@@ -1,14 +1,14 @@
 ﻿namespace FinalBiome.Api.Test;
 using Types.Primitive;
 
-public class U8Tests
+public class I8Tests
 {
     [Test]
     public void U8Test()
     {
-        var val = new U8();
-        val.InitFromHex("0x45");
-        Assert.That(val.Value, Is.EqualTo(69));
+        var val = new I8();
+        val.Init("0xf5");
+        Assert.That(val.Value, Is.EqualTo(-11));
     }
 }
 

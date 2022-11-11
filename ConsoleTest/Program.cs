@@ -86,7 +86,7 @@ namespace HelloWorld
 
             #region Generate types
 
-            if (true)
+            if (false)
             {
                 var meta = client.client.MetaData;
                 var types = meta.NodeMetadata.Types;
