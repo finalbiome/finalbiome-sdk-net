@@ -5,7 +5,7 @@ namespace FinalBiome.Api.Types
     {
         public abstract void Init(T value);
 
-        public T Value { get; set; }
+        public virtual T Value { get; set; }
 
         public override void Decode(byte[] byteArray, ref int pos)
         {

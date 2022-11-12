@@ -19,10 +19,14 @@
   <ItemGroup>
     <None Remove="Types\" />
     <None Remove="Types\Primitive\" />
+    <None Remove="Types\Base\" />
+    <None Remove="Utils\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Types\" />
     <Folder Include="Types\Primitive\" />
+    <Folder Include="Types\Base\" />
+    <Folder Include="Utils\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FinalBiome.Api\FinalBiome.Api.csproj" />

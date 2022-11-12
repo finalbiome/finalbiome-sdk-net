@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Numerics;
 using FinalBiome.Api.Utils;
 
 namespace FinalBiome.Api.Types.Primitive
 {
-    public abstract class Number<T> : Primitive<T>
+    public abstract class Number<T> : Primitive<T> where T : INumber<T>
     {
         public override byte[] Encode() => Bytes;
 
