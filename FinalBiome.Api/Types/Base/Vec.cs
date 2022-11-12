@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using FinalBiome.Api.Utils;
+﻿using FinalBiome.Api.Utils;
 
 namespace FinalBiome.Api.Types
 {

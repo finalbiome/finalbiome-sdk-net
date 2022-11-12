@@ -1,0 +1,120 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#
+    int numberGeneratedTypes = 9;
+    List<string> typeNames = new List<string>();
+    for(int i = 0; i < numberGeneratedTypes; i++) typeNames.Add($"T{i}");
+
+    string typesByComma(int num) {
+        if (num == 0) return "";
+        string res = String.Join(", ", typeNames.GetRange(0, num));
+        return res;
+    }
+
+    string genericTypes(int num) {
+        if (num == 0) return "";
+        string res = "<";
+        res += typesByComma(num);
+        res += ">";
+        return res;
+    }
+
+    string genericWhere(int num) {
+        if (num == 0) return "";
+        return String.Join("", typeNames.GetRange(0, num).Select(t => $" where {t} : Codec, new()"));
+    }
+    string generateTypeName(int num) {
+        if (num == 0) return "()";
+        return "(" + String.Join(", ", typeNames.GetRange(0, num).Select(t => $"{{new {t}().TypeName()}}")) + ")";
+    }
+
+    string generateParams(int num) {
+        if (num == 0) return "";
+        return String.Join(", ", typeNames.GetRange(0, num).Select((t, i) => $"{t} t{i}"));
+    }
+#>
+namespace FinalBiome.Api.Types
+{
+    public abstract class TupleBase : Codec
+    {
+#pragma warning disable CS8618
+        public Codec[] Value { get; internal set; }
+#pragma warning restore CS8618
+        public override byte[] Encode()
+        {
+            var result = new List<byte>();
+            foreach (var v in Value)
+            {
+                result.AddRange(v.Encode());
+            }
+            return result.ToArray();
+        }
+    }
+
+<#
+for(int i = 0; i < numberGeneratedTypes; i++)
+{
+#>
+    public class Tuple<#= genericTypes(i) #> : TupleBase <#= genericWhere(i) #>
+    {
+        public override string TypeName() => $"<#= generateTypeName(i) #>";
+
+        public override void Decode(byte[] bytes, ref int pos)
+        {
+            var start = pos;
+
+            Value = new Codec[<#= i #>];
+
+<#
+foreach (var t in typeNames.GetRange(0, i).Select((value, i) => new { i, value }))
+{
+    var varName = $"t{t.i}";
+#>
+            var <#= varName #> = new <#= t.value #>();
+            <#= varName #>.Decode(bytes, ref pos);
+            Value[<#= t.i #>] = <#= varName #>;
+
+<#
+}
+#>
+            TypeSize = pos - start;
+
+            Bytes = new byte[TypeSize];
+            Array.Copy(bytes, start, Bytes, 0, TypeSize);
+        }
+
+        public void Init(<#= generateParams(i) #>)
+        {
+            var bytes = new List<byte>();
+<#
+foreach (var t in typeNames.GetRange(0, i).Select((value, i) => new { i, value }))
+{
+#>
+            bytes.AddRange(t<#= t.i #>.Encode());
+<#
+}
+#>
+            bytes.ToArray();
+
+            Value = new Codec[<#= i #>];
+<#
+foreach (var t in typeNames.GetRange(0, i).Select((value, i) => new { i, value }))
+{
+#>
+            Value[<#= t.i #>] = t<#= t.i #>;
+<#
+}
+#>
+
+            TypeSize = bytes.Count;
+            Bytes = bytes.ToArray();
+        }
+    }
+
+<#
+}
+#>
+}
