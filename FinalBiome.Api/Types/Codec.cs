@@ -11,16 +11,24 @@ namespace FinalBiome.Api.Types
         [JsonIgnore]
         public virtual int TypeSize { get; internal set; }
         [JsonIgnore]
-        public byte[] Bytes { get; internal set; }
+        public virtual byte[] Bytes { get; internal set; }
         public abstract byte[] Encode();
         public abstract void Decode(byte[] bytes, ref int pos);
+        public virtual void Decode(byte[] bytes)
+        {
+            int pos = 0;
+            Decode(bytes, ref pos);
+        }
         //public abstract void Init(string str);
         public virtual void InitFromHex(string hexString)
         {
             var bytes = HexUtils.HexToBytes(hexString);
             Init(bytes);
         }
-        public abstract void Init(byte[] bytes);
+        public virtual void Init(byte[] bytes)
+        {
+            Decode(bytes);
+        }
 
         public virtual void Init(string str) => Init(HexUtils.HexToBytes(str));
 

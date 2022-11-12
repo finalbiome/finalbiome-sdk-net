@@ -11,11 +11,13 @@
     <None Remove="Newtonsoft.Json" />
     <None Remove="Utils\" />
     <None Remove="Types\Primitive\" />
+    <None Remove="Types\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Types\" />
     <Folder Include="Utils\" />
     <Folder Include="Types\Primitive\" />
+    <Folder Include="Types\Base\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
