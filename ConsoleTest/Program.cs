@@ -120,7 +120,6 @@ namespace HelloWorld
                 Console.WriteLine($"Generated {generator.CountParsedTypes()} types");
                 Console.WriteLine($"Generated {generator.CountParsedStorages()} storages");
                 Console.WriteLine($"Generated {generator.CountParsedTransactionTypes()} transaction types");
-                return;
             }
             #endregion
 

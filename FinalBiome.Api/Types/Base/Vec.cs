@@ -5,7 +5,9 @@ namespace FinalBiome.Api.Types
     public class Vec<T> : Codec where T : Codec, new()
     {
         public override string TypeName() => $"Vec<{new T().TypeName()}>";
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public T[] Value { get; internal set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         public override byte[] Encode()
         {

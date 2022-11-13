@@ -16,7 +16,7 @@ public class EnumTests
         var e3 = new Enum<A>();
 
         e1.Init("0x00");
-        e2.Init(A.A, new Types.Void());
+        e2.Init(A.A, new Types.BaseVoid());
         e3.Decode(e2.Encode());
 
         Assert.Multiple(() =>
@@ -27,7 +27,7 @@ public class EnumTests
         });
 
         e1.Init("0x02");
-        e2.Init(A.C, new Types.Void());
+        e2.Init(A.C, new Types.BaseVoid());
 
         Assert.Multiple(() =>
         {

@@ -24,4 +24,7 @@
     <Folder Include="Events\" />
     <Folder Include="Blocks\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.editorconfig" />
+  </ItemGroup>
 </Project>

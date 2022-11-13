@@ -17,7 +17,7 @@ namespace FinalBiome.Api.Types
         public abstract string TypeName();
         [JsonIgnore]
         public virtual int TypeSize { get; internal set; }
-#pragma disable restore CS8618
+#pragma warning disable CS8618
         [JsonIgnore]
         public virtual byte[] Bytes { get; internal set; }
 #pragma warning restore CS8618

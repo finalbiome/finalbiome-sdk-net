@@ -1,7 +1,7 @@
 ﻿using System;
 namespace FinalBiome.Api.Types
 {
-    public class Void : Codec
+    public class BaseVoid : Codec
     {
         public override string TypeName() => "Void";
         public override int TypeSize => 0;
