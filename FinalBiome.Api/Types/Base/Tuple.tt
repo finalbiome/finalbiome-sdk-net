@@ -26,6 +26,7 @@
         if (num == 0) return "";
         return String.Join("", typeNames.GetRange(0, num).Select(t => $" where {t} : Codec, new()"));
     }
+
     string generateTypeName(int num) {
         if (num == 0) return "()";
         return "(" + String.Join(", ", typeNames.GetRange(0, num).Select(t => $"{{new {t}().TypeName()}}")) + ")";
