@@ -7,6 +7,13 @@ namespace FinalBiome.Api.Types
 {
     public abstract class Codec
     {
+        public static T Decode<T>(byte[] bytes, ref int pos) where T : Codec, new()
+        {
+            var val = new T();
+            val.Decode(bytes, ref pos);
+            return val;
+        }
+
         public abstract string TypeName();
         [JsonIgnore]
         public virtual int TypeSize { get; internal set; }
