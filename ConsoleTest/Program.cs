@@ -30,19 +30,78 @@ namespace HelloWorld
     {
         static async Task Main(string[] args)
         {
-            //Console.WriteLine("What is your name?");
-            //var name = Console.ReadLine();
-            //var currentDate = DateTime.Now;
+            var cts = new CancellationTokenSource();
+            Console.CancelKeyPress += (s, e) =>
+            {
+                Console.WriteLine("\nCanceling...");
+                cts.Cancel();
+                e.Cancel = true;
+            };
+            //await MainAsync();
+            
+            try
+            {
+                await SubscribeTst(cts.Token);
+            } catch (TaskCanceledException) { }
 
-            //Console.WriteLine($"{Environment.NewLine}Hello, {name}, on {currentDate:d} at {currentDate:t}!");
+            if (!cts.IsCancellationRequested)
+            {
+                Console.Write($"{Environment.NewLine}Press any key to exit...");
+                Console.ReadKey(true);
+            }
+        }
+
+        static async Task SubscribeTst(CancellationToken cancellationToken)
+        {
+            #region Connect to node
+            string url = "ws://127.0.0.1:9944";
+            Client client = new Client(url);
+
+            try
+            {
+                Console.WriteLine("Connecting to node...");
+                await client.client.ConnectAsync();
+                if (client.client.IsConnected)
+                {
+                    Console.WriteLine($"Client connected to node {url}");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Caught Exception: {ex.Message}");
+                return;
+            }
+            #endregion
+
+            #region Subscribe to head
 
 
-            await MainAsync();
+            var subBlock = await client.client.Chain.SubscribeToHeaders(cancellationToken);
+            using CancellationTokenRegistration ctr = cancellationToken.Register(() =>
+            {
+                Task.Run(() => 
+                    client.client.Chain.Unsubscribe(subBlock)
+                    ).Wait();
+            });
 
-            //SerializeTypes();
+            await foreach (var blockHeader in subBlock.data())
+            {
+                Console.WriteLine($"New Block: \n{blockHeader.Number.Value}\n");
+            }
 
-            Console.Write($"{Environment.NewLine}Press any key to exit...");
-            Console.ReadKey(true);
+
+
+            //Thread.Sleep(30_000);
+            var cancelled = cancellationToken.WaitHandle.WaitOne(20000);
+
+
+            #endregion
+
+            #region Close connection
+            await client.client.CloseAsync();
+            client.client.Dispose();
+            #endregion
         }
 
         private static async Task MainAsync()

@@ -41,6 +41,17 @@ namespace FinalBiome.Api.Types
 
         public virtual void Init(string str) => Init(HexUtils.HexToBytes(str));
 
+        /// <summary>
+        /// Represent value as a hex string
+        /// </summary>
+        /// <returns></returns>
+        public string? ToHex()
+        {
+            byte[] bytes = this.Encode();
+            if (bytes.Length == 0) return null;
+            return HexUtils.Bytes2HexString(this.Encode());
+        }
+
     }
 }
 

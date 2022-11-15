@@ -103,10 +103,10 @@ namespace FinalBiome.Api.Codegen
                 ps.Type = storage.StorageType.ToString();
                 switch (storage.StorageType)
                 {
-                    case Storage.Type.Plain:
+                    case Ajuna.NetApi.Model.Meta.Storage.Type.Plain:
                         ps.OutputType = typeParser.parsedTypes[storage.TypeMap.Item1].FullCanonicalName;
                         break;
-                    case Storage.Type.Map:
+                    case Ajuna.NetApi.Model.Meta.Storage.Type.Map:
                         ps.OutputType = typeParser.parsedTypes[storage.TypeMap.Item2.Value].FullCanonicalName;
                         if (storage.TypeMap.Item2.Hashers.Length == 1)
                         {

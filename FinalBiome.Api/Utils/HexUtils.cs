@@ -45,11 +45,11 @@ namespace FinalBiome.Api.Utils
             switch (format)
             {
                 case HexStringFormat.Pure:
-                    return BitConverter.ToString(bytes).Replace("-", string.Empty);
+                    return Convert.ToHexString(bytes);
                 case HexStringFormat.Dash:
                     return BitConverter.ToString(bytes);
                 case HexStringFormat.Prefixed:
-                    return $"0x{BitConverter.ToString(bytes).Replace("-", string.Empty)}";
+                    return $"0x{Convert.ToHexString(bytes)}";
                 default:
                     throw new Exception($"Unimplemented hex string format '{format}'");
             }

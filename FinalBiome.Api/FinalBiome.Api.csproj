@@ -13,6 +13,17 @@
     <None Remove="Types\Primitive\" />
     <None Remove="Types\Base\" />
     <None Remove="Client\" />
+    <None Remove="Rpc\" />
+    <None Remove="Tx\" />
+    <None Remove="Events\" />
+    <None Remove="Storage\" />
+    <None Remove="Constants\" />
+    <None Remove="Blocks\" />
+    <None Remove="StreamJsonRpc" />
+    <None Remove="Rpc\JsonConverters\" />
+    <None Remove="Rpc\Types\" />
+    <None Remove="Blake2Core" />
+    <None Remove="SauceControl.Blake2Fast" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Types\" />
@@ -20,9 +31,19 @@
     <Folder Include="Types\Primitive\" />
     <Folder Include="Types\Base\" />
     <Folder Include="Client\" />
+    <Folder Include="Rpc\" />
+    <Folder Include="Tx\" />
+    <Folder Include="Events\" />
+    <Folder Include="Storage\" />
+    <Folder Include="Constants\" />
+    <Folder Include="Blocks\" />
+    <Folder Include="Rpc\JsonConverters\" />
+    <Folder Include="Rpc\Types\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="StreamJsonRpc" Version="2.13.33" />
+    <PackageReference Include="SauceControl.Blake2Fast" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Types\Base\Tuple.tt">

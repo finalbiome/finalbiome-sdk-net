@@ -21,12 +21,16 @@
     <None Remove="Types\Primitive\" />
     <None Remove="Types\Base\" />
     <None Remove="Utils\" />
+    <None Remove="Rpc\" />
+    <None Remove="Rpc\JsonConverters\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Types\" />
     <Folder Include="Types\Primitive\" />
     <Folder Include="Types\Base\" />
     <Folder Include="Utils\" />
+    <Folder Include="Rpc\" />
+    <Folder Include="Rpc\JsonConverters\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FinalBiome.Api\FinalBiome.Api.csproj" />
