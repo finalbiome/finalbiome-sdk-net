@@ -46,6 +46,10 @@ public class Program
         assetId.Init(1);
         var faDetails = await client.Storage.FungibleAssets.Assets(assetId);
         Console.WriteLine($"faDetails:\n{Stringify(faDetails)}");
+
+        var nextId = await client.Storage.FungibleAssets.NextAssetId();
+        Console.WriteLine($"nextId:\n{Stringify(nextId)}");
+
     }
 
     static string Stringify(Codec? value, Formatting formatting = Formatting.Indented)
