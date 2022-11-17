@@ -57,7 +57,7 @@ namespace FinalBiome.Api.Codegen
         }
     }
 
-    public class StateParser
+    public class StorageParser
     {
         Dictionary<uint, PalletModule> modules;
         internal List<ParsedStorage> parsedStorages;
@@ -69,7 +69,7 @@ namespace FinalBiome.Api.Codegen
         List<string> queryClassSource = new List<string>();
         TypeParser typeParser;
 
-        public StateParser(Dictionary<uint, PalletModule> modules, TypeParser typeParser)
+        public StorageParser(Dictionary<uint, PalletModule> modules, TypeParser typeParser)
         {
             this.modules = modules;
             parsedStorages = new List<ParsedStorage>();

@@ -3,6 +3,7 @@ using FinalBiome.Api.Types.PrimitiveTypes;
 using FinalBiome.Api.Types.Primitive;
 using FinalBiome.Api.Types;
 using FinalBiome.Api.Utils;
+using FinalBiome.Api.Rpc.Types;
 
 namespace FinalBiome.Api.Rpc;
 
@@ -10,7 +11,7 @@ using Index = U32;
 using AccountId = FinalBiome.Api.Types.SpCore.Crypto.AccountId32;
 using Hash = H256;
 using BlockNumber = U32;
-
+using StorageKey = Vec<U8>;
 /// <summary>
 /// Client for substrate rpc interfaces
 /// </summary>
@@ -24,6 +25,58 @@ public class Rpc
     public Rpc(RpcClient client)
     {
         this.client = client;
+    }
+
+    /// <summary>
+    /// Fetch the data for a given storage key
+    /// </summary>
+    /// <typeparam name="TResult"></typeparam>
+    /// <param name="key"></param>
+    /// <param name="hash"></param>
+    /// <returns></returns>
+    public async Task<TResult> Storage<TResult>(List<byte> key, Hash? hash)
+    {
+        return await client.Request<TResult>("state_getStorage", RpcClient.RpcParams(key.ToHex(), hash?.ToHex()));
+    }
+
+    /// <summary>
+    /// Returns the keys with prefix with pagination support.
+    /// Up to `count` keys will be returned.
+    /// If `start_key` is passed, return next keys in storage in lexicographic order.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="count"></param>
+    /// <param name="startKey"></param>
+    /// <param name="hash"></param>
+    /// <returns></returns>
+    public async Task<Vec<StorageKey>> StorageKeysPaged(List<byte> key, uint count, Array<U8>? startKey, Hash? hash)
+    {
+        return await client.Request<Vec<StorageKey>>("state_getKeysPaged", RpcClient.RpcParams(key.ToHex(), count, startKey?.ToHex(), hash?.ToHex()));
+    }
+
+    /// <summary>
+    /// Query historical storage entries
+    /// </summary>
+    /// <param name="keys"></param>
+    /// <param name="from"></param>
+    /// <param name="to"></param>
+    /// <returns></returns>
+    public async Task<Vec<StorageChangeSet>> QueryStorage(List<List<byte>> keys, Hash from, Hash? to)
+    {
+        List<string> keysHashes = keys.Select(k => k.ToHex()!).ToList();
+        return await client.Request<Vec<StorageChangeSet>>("state_queryStorage", RpcClient.RpcParams(keysHashes, from.ToHex(), to?.ToHex()));
+    }
+
+    /// <summary>
+    /// Query historical storage entries
+    /// </summary>
+    /// <param name="keys"></param>
+    /// <param name="at"></param>
+    /// <returns></returns>
+    public async Task<Vec<StorageChangeSet>> QueryStorageAt(List<List<byte>> keys, Hash? at)
+    {
+        List<string> keysHashes = keys.Select(k => k.ToHex()!).ToList();
+        return await client.Request<Vec<StorageChangeSet>>("state_queryStorageAt", RpcClient.RpcParams(keysHashes, at?.ToHex()));
     }
 
     /// <summary>
@@ -102,7 +155,7 @@ public class Rpc
     /// <returns></returns>
     public async Task<Index> SystemAccountNextIndex(AccountId account)
     {
-        return await client.Request<Index>("system_accountNextIndex", RpcClient.RpcParams(account));
+        return await client.Request<Index>("system_accountNextIndex", RpcClient.RpcParams(account.ToHex()));
     }
 
     /// <summary>
@@ -120,10 +173,9 @@ public class Rpc
     /// </summary>
     /// <param name="blockNumber"></param>
     /// <returns></returns>
-    public async Task<Hash> BlockHash(BlockNumber blockNumber)
+    public async Task<Hash> BlockHash(BlockNumber? blockNumber)
     {
-        
-        return await client.Request<Hash>("chain_getBlockHash", RpcClient.RpcParams(blockNumber.Value));
+        return await client.Request<Hash>("chain_getBlockHash", RpcClient.RpcParams(blockNumber?.Value));
     }
 
     /// <summary>
@@ -169,11 +221,10 @@ public class Rpc
     /// <param name="keys"></param>
     /// <param name="hash"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public async Task<T> ReadProof<T>(Vec<U8> keys, Hash hash)
+    public async Task<T> ReadProof<T>(List<List<byte>> keys, Hash hash)
     {
-        throw new NotImplementedException();
-        return await client.Request<T>("state_getReadProof", RpcClient.RpcParams(keys.ToHex(), hash.ToHex()));
+        List<string> keysHashes = keys.Select(k => k.ToHex()!).ToList();
+        return await client.Request<T>("state_getReadProof", RpcClient.RpcParams(keysHashes, hash.ToHex()));
     }
 
     /// <summary>
@@ -184,9 +235,7 @@ public class Rpc
     /// <returns></returns>
     public async Task<RuntimeVersion> RuntimeVersion(Hash? at)
     {
-        string? hexHash = null;
-        if (at is not null) hexHash = at.ToHex();
-        return await client.Request<RuntimeVersion>("state_getRuntimeVersion", RpcClient.RpcParams(hexHash));
+        return await client.Request<RuntimeVersion>("state_getRuntimeVersion", RpcClient.RpcParams(at?.ToHex()));
     }
 
     /// <summary>
@@ -260,7 +309,7 @@ public class Rpc
     /// <returns></returns>
     public async Task<Hash> SubmitExtrinsic<T>(T extrinsic) where T : Codec
     {
-        return await client.Request<Hash>("author_submitExtrinsic", RpcClient.RpcParams(extrinsic));
+        return await client.Request<Hash>("author_submitExtrinsic", RpcClient.RpcParams(extrinsic.ToHex()));
     }
 
     /// <summary>
@@ -276,7 +325,7 @@ public class Rpc
         throw new NotImplementedException();
         return await client.Subscribe<T>(
             "author_submitAndWatchExtrinsic",
-            RpcClient.RpcParams(extrinsic),
+            RpcClient.RpcParams(extrinsic.ToHex()),
             "author_unwatchExtrinsic"
             );
     }
@@ -288,9 +337,9 @@ public class Rpc
     /// <param name="suri"></param>
     /// <param name="public_"></param>
     /// <returns></returns>
-    public async Task InsertKey(string keyType, string suri, byte[] public_ )
+    public async Task InsertKey(string keyType, Str suri, List<byte> publicKey)
     {
-        await client.Request<BaseVoid>("author_insertKey", RpcClient.RpcParams(keyType, suri, public_));
+        await client.Request<BaseVoid>("author_insertKey", RpcClient.RpcParams(keyType, suri.ToHex(), publicKey.ToHex()));
     }
 
     /// <summary>
@@ -310,11 +359,11 @@ public class Rpc
     ///
     /// Returns `true` iff all private keys could be found.
     /// </summary>
-    /// <param name="sessionKeys"></param>
+    /// <param name="sessionKeys">Hex-serialized shim for Vec u8.</param>
     /// <returns></returns>
-    public async Task<bool> HasSessionKeys(byte[] sessionKeys)
+    public async Task<bool> HasSessionKeys(Vec<U8> sessionKeys)
     {
-        return await client.Request<bool>("author_hasSessionKeys", RpcClient.RpcParams(sessionKeys));
+        return await client.Request<bool>("author_hasSessionKeys", RpcClient.RpcParams(sessionKeys.ToHex()));
     }
 
     /// <summary>
@@ -325,9 +374,9 @@ public class Rpc
     /// <param name="publicKey"></param>
     /// <param name="keyType"></param>
     /// <returns></returns>
-    public async Task<bool> HasKey(byte[] publicKey, string keyType)
+    public async Task<bool> HasKey(IEnumerable<byte> publicKey, string keyType)
     {
-        return await client.Request<bool>("author_hasKey", RpcClient.RpcParams(publicKey, keyType));
+        return await client.Request<bool>("author_hasKey", RpcClient.RpcParams(publicKey.ToHex(), keyType));
     }
 
     /// <summary>
@@ -340,10 +389,10 @@ public class Rpc
     /// <param name="at"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public async Task<T> DryRun<T>(Vec<U8> encodedSigned, Hash at) where T : Codec
+    public async Task<T> DryRun<T>(IEnumerable<byte> encodedSigned, Hash? at) where T : Codec
     {
         throw new NotImplementedException();
-        return await client.Request<T>("system_dryRun", RpcClient.RpcParams(encodedSigned.ToHex(), at.ToHex()));
+        return await client.Request<T>("system_dryRun", RpcClient.RpcParams(encodedSigned.ToHex(), at?.ToHex()));
     }
 
 

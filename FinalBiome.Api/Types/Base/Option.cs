@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using FinalBiome.Api.Types.Primitive;
+using Newtonsoft.Json;
 
 namespace FinalBiome.Api.Types
 {
@@ -8,7 +9,9 @@ namespace FinalBiome.Api.Types
     {
         public override string TypeName() => $"Option<{new T().TypeName()}>";
 
+        [JsonIgnore]
         public bool IsSome { get; set; }
+        [JsonIgnore]
         public bool IsNone => !IsSome;
         public T Value { get; internal set; }
 

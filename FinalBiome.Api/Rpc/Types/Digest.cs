@@ -115,9 +115,9 @@ public class DigestItem : Enum<innerDigestItem,
                                       BaseVoid, // Undefined = 1,
                                       BaseVoid, // Undefined = 2,
                                       BaseVoid, // Undefined = 3,
-                                      Types.Tuple<ConsensusEngineId, Vec<U8>>, // Consensus = 4,
-                                      Types.Tuple<ConsensusEngineId, Vec<U8>>, // Seal = 5
-                                      Types.Tuple<ConsensusEngineId, Vec<U8>>, // PreRuntime = 6,
+                                      FinalBiome.Api.Types.Tuple<ConsensusEngineId, Vec<U8>>, // Consensus = 4,
+                                      FinalBiome.Api.Types.Tuple<ConsensusEngineId, Vec<U8>>, // Seal = 5
+                                      FinalBiome.Api.Types.Tuple<ConsensusEngineId, Vec<U8>>, // PreRuntime = 6,
                                       BaseVoid, // Undefined = 7,
                                       BaseVoid> // RuntimeEnvironmentUpdated = 8,
 {

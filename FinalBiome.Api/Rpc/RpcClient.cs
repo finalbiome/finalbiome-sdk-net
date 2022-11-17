@@ -118,5 +118,10 @@ public class RpcClient
     {
         return new object[] { t0, t1, t2 };
     }
+
+    internal static object[] RpcParams<T0, T1, T2, T3>(T0 t0, T1 t1, T2 t2, T3 t3)
+    {
+        return new object[] { t0, t1, t2, t3 };
+    }
 }
 

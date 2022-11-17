@@ -126,7 +126,7 @@ public class Justifications : Vec<Justification>
 /// to identify the consensus engine that generated the proof (we might have
 /// multiple justifications from different engines for the same block).
 /// </summary>
-public class Justification : Types.Tuple<ConsensusEngineId, EncodedJustification>
+public class Justification : FinalBiome.Api.Types.Tuple<ConsensusEngineId, EncodedJustification>
 {
     public override string TypeName() => "Justification";
 }

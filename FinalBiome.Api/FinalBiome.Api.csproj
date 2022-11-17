@@ -24,6 +24,10 @@
     <None Remove="Rpc\Types\" />
     <None Remove="Blake2Core" />
     <None Remove="SauceControl.Blake2Fast" />
+    <None Remove="Standart.Hash.xxHash" />
+    <!--<None Remove="Storage\StorageClient.Generated" />-->
+    <!--<None Remove="Storage\FungibleAssets.Assets" />-->
+    <None Remove="SimpleBase" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Types\" />
@@ -44,6 +48,8 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="StreamJsonRpc" Version="2.13.33" />
     <PackageReference Include="SauceControl.Blake2Fast" Version="2.0.0" />
+    <PackageReference Include="Standart.Hash.xxHash" Version="4.0.5" />
+    <PackageReference Include="SimpleBase" Version="4.0.0" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Types\Base\Tuple.tt">
@@ -55,6 +61,10 @@
       <LastGenOutput>Enum.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <!--<ItemGroup>
+    <Compile Include="Storage\StorageClient.Generated.cs" />
+    <Compile Include="Storage\FungibleAssets.Assets.cs" />
+  </ItemGroup>-->
   <ItemGroup>
     <Compile Update="Types\Base\Tuple.cs">
       <DependentUpon>Tuple.tt</DependentUpon>

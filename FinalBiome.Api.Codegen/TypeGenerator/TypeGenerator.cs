@@ -22,7 +22,7 @@ namespace FinalBiome.Api.Codegen
         List<ParsedType> existedTypes = new List<ParsedType>();
 
         TypeParser typeParser;
-        StateParser stateParser;
+        StorageParser stateParser;
         CallParser callParser;
 
         public TypeGenerator(MetaData metaData)
@@ -30,7 +30,7 @@ namespace FinalBiome.Api.Codegen
             this.metaData = metaData;
 
             typeParser = new TypeParser(metaData.NodeMetadata.Types);
-            stateParser = new StateParser(metaData.NodeMetadata.Modules, typeParser);
+            stateParser = new StorageParser(metaData.NodeMetadata.Modules, typeParser);
             callParser = new CallParser(metaData.NodeMetadata, typeParser);
         }
 

@@ -1,11 +1,46 @@
-﻿using System;
-namespace FinalBiome.Api.Storage
+﻿using FinalBiome.Api.Types;
+using FinalBiome.Api.Types.Primitive;
+using FinalBiome.Api.Utils;
+
+namespace FinalBiome.Api.Storage;
+
+using Hash = FinalBiome.Api.Types.PrimitiveTypes.H256;
+
+/// <summary>
+/// Query the runtime storage.
+/// </summary>
+public partial class StorageClient
 {
-    public class StorageClient
+    /// <summary>
+    /// Fetch the encoded data value at the address/key given.
+    /// </summary>
+    /// <typeparam name="TResuls"></typeparam>
+    /// <param name="key"></param>
+    /// <param name="hash"></param>
+    /// <returns></returns>
+    public async Task<string?> FetchRaw(List<byte> key, IEnumerable<byte>? hash)
     {
-        public StorageClient()
-        {
-        }
+        Hash? decodedHash = new Hash();
+        if (hash is not null) decodedHash.Init(hash.ToArray());
+        else decodedHash = null;
+        return await client.Rpc.Storage<string>(key, decodedHash);
+    }
+
+    /// <summary>
+    /// Fetch a decoded value from storage at a given address and optional block hash.
+    /// </summary>
+    /// <typeparam name="TResult"></typeparam>
+    /// <param name="address"></param>
+    /// <param name="hash"></param>
+    /// <returns></returns>
+    public async Task<TResult?> Fetch<TResult>(StorageAddress address, IEnumerable<byte>? hash) where TResult : Codec, new()
+    {
+        var lookupBytes = StorageUtils.StorageAddressBytes(address);
+        var raw = await client.Storage.FetchRaw(lookupBytes, hash);
+        if (raw is null || raw.Length == 0) return null;
+        TResult result = new TResult();
+        result.Init(raw);
+        return result;
     }
 }
 

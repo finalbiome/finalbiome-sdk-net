@@ -17,7 +17,6 @@ public class PrimitiveCodecTypeConverter<T> : JsonConverter<T> where T : Codec, 
     public override void WriteJson(JsonWriter writer, T? value, JsonSerializer serializer)
     {
         throw new NotImplementedException();
-        //writer.WriteValue(JsonConvert.SerializeObject(value));
     }
 }
 

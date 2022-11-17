@@ -10,7 +10,7 @@ using FinalBiome.Api.Types.Primitive;
 using FinalBiome.Api.Types.PrimitiveTypes;
 using FinalBiome.Api.Types.SpVersion;
 
-namespace FinalBiome.Api.Client;
+namespace FinalBiome.Api;
 
 using Hash = H256;
 
@@ -65,8 +65,8 @@ public class Client
         Rpc = rpc;
 
         Tx = new TxClient();
-        Events = new EventsClient();
-        Storage = new StorageClient();
+        Events = new EventsClient(this);
+        Storage = new StorageClient(this);
         Constants = new ConstantsClient();
         Blocks = new BlocksClient();
     }
