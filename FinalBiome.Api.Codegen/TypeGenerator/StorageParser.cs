@@ -82,8 +82,8 @@ namespace FinalBiome.Api.Codegen
             {
                 ParseModule(module.Value);
             }
-            GenerateStateClasses();
-            GenerateQueryClass();
+            GenerateStorageClasses();
+            GenerateStorageClientPartialClass();
         }
 
         void ParseModule(PalletModule module)
@@ -97,9 +97,7 @@ namespace FinalBiome.Api.Codegen
             {
                 ParsedStorage ps = new ParsedStorage();
                 ps.Module = module.Name;
-                // stupid Compiler Error CS0542
-                if (storage.Name == module.Name) ps.Storage = storage.Name + "Get";
-                else ps.Storage = storage.Name;
+                ps.Storage = storage.Name;
                 ps.Type = storage.StorageType.ToString();
                 switch (storage.StorageType)
                 {
@@ -138,16 +136,16 @@ namespace FinalBiome.Api.Codegen
             }
         }
 
-        void GenerateStateClasses()
+        void GenerateStorageClasses()
         {
             foreach (var ps in parsedStorages)
             {
-                GenerageStateClassConstructor(ps);
-                GenerateStateClass(ps);
+                GenerageStorageClassConstructor(ps);
+                GenerateStorageClass(ps);
             }
         }
 
-        void GenerateStateClass(ParsedStorage ps)
+        void GenerateStorageClass(ParsedStorage ps)
         {
             string getUniqueParamName(List<string> parameters, string newParameterName, int? suffix = null) {
                 if (parameters.Contains(newParameterName + suffix))
@@ -172,55 +170,44 @@ namespace FinalBiome.Api.Codegen
             string inputParams = String.Join(", ", inputParamsList);
             if (inputParams.Length > 0) inputParams += ", ";
 
+            // stupid Compiler Error CS0542
+            string methodName = (ps.Module != ps.Storage) ? ps.Storage : ps.Storage + "Get";
+
             List<string> file = new List<string>();
 
-            file.Add($"using Ajuna.NetApi;");
-            file.Add($"using Ajuna.NetApi.Model.Meta;");
-            file.Add($"using Ajuna.NetApi.Model.Types;");
-            file.Add($"using Newtonsoft.Json.Linq;");
-            file.Add($"");
-            file.Add($"namespace {ps.CanonicalName.Item1}");
+            file.Add($"namespace {ps.CanonicalName.Item1};");
+            file.Add($"public partial class {ps.Module}");
             file.Add($"{{");
-            file.Add($"    public partial class {ps.Module}");
-            file.Add($"    {{");
             if (ps.Docs is not null && ps.Docs.Count > 0)
             {
-                file.Add($"        /// <summary>");
+                file.Add($"    /// <summary>");
                 foreach (var s in ps.Docs)
                 {
-                    file.Add($"        /// {s}");
+                    file.Add($"    /// {s}");
                 }
-                file.Add($"        /// </summary>");
+                file.Add($"    /// </summary>");
             }
-            file.Add($"        [global::System.Diagnostics.CodeAnalysis.SuppressMessage(\"Style\", \"VSTHRD200:Use \\\"Async\\\" suffix for async methods\", Justification = \"<Pending>\")]");
-            file.Add($"        public async Task<{ps.OutputType}> {ps.Storage}({inputParams}byte[]? hash = null, CancellationToken? token = null)");
-            file.Add($"        {{");
-            file.Add($"            Storage.Hasher[] hashers = new Storage.Hasher[] {{");
-            foreach (var h in ps.Hashers)
+            file.Add($"    public async Task<{ps.OutputType}?> {methodName}({inputParams}IEnumerable<byte>? hash = null)");
+            file.Add($"    {{");
+            file.Add($"        List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();");
+            foreach (var h in ps.Hashers.Zip(inputParamNamesList))
             {
-                file.Add($"                Storage.Hasher.{h},");
+                file.Add($"        storageEntryKeys.Add(new StorageMapKey({h.Second}, FinalBiome.Api.Storage.StorageHasher.{HasherConverter(h.First).ToString()}));");
             }
-            file.Add($"            }};");
-            file.Add($"            IType[] keys = new IType[] {{");
-            foreach (var i in inputParamNamesList)
-            {
-                file.Add($"                {i},");
-            }
-            file.Add($"            }};");
             file.Add($"");
-            file.Add($"            string req = RequestGenerator.GetStorage(\"{ps.Module}\", \"{ps.Storage}\", Storage.Type.{ps.Type}, hashers, keys);");
+            file.Add($"        StaticStorageAddress address = new StaticStorageAddress(\"{ps.Module}\", \"{ps.Storage}\", storageEntryKeys);");
             file.Add($"");
-            file.Add($"            return await _client.client.GetStorageAsync<{ps.OutputType}>(req, hash, token);");
-            file.Add($"        }}");
+            file.Add($"        return await client.Storage.Fetch<{ps.OutputType}>(address, hash);");
             file.Add($"    }}");
             file.Add($"}}");
+            file.Add($"");
 
             ps.FileSuffix = $".{ps.Storage}";
             ps.GeneratedCode = file;
             ps.Parsed = true;
         }
 
-        void GenerageStateClassConstructor(ParsedStorage ps)
+        void GenerageStorageClassConstructor(ParsedStorage ps)
         {
             if (parsedModules.ContainsKey(ps.Module)) return;
 
@@ -231,22 +218,16 @@ namespace FinalBiome.Api.Codegen
 
             List<string> file = new List<string>();
 
-            file.Add($"using Ajuna.NetApi;");
-            file.Add($"using Ajuna.NetApi.Model.Meta;");
-            file.Add($"using Ajuna.NetApi.Model.Types;");
-            file.Add($"using Newtonsoft.Json.Linq;");
-            file.Add($"");
-            file.Add($"namespace {ps.CanonicalName.Item1}");
+            file.Add($"namespace {ps.CanonicalName.Item1};");
+            file.Add($"public partial class {ps.Module}");
             file.Add($"{{");
-            file.Add($"    public partial class {ps.Module}");
+            file.Add($"    readonly Client client;");
+            file.Add($"    public {ps.Module}(Client client)");
             file.Add($"    {{");
-            file.Add($"        readonly Client _client;");
-            file.Add($"        public {ps.Module}(Client client)");
-            file.Add($"        {{");
-            file.Add($"            _client = client;");
-            file.Add($"        }}");
+            file.Add($"        this.client = client;");
             file.Add($"    }}");
             file.Add($"}}");
+            file.Add($"");
 
             psm.GeneratedCode = file;
             psm.Parsed = true;
@@ -254,27 +235,26 @@ namespace FinalBiome.Api.Codegen
             parsedModules[psm.Module] = psm;
         }
 
-        void GenerateQueryClass()
+        void GenerateStorageClientPartialClass()
         {
             List<string> file = new List<string>();
 
-            file.Add($"namespace FinalBiome.Sdk.Query");
+            file.Add($"namespace {TypeGenerator.RootNamespace}.{TypeGenerator.StorageNamespacePrefix};");
+            file.Add($"public partial class StorageClient");
             file.Add($"{{");
-            file.Add($"    public class Query");
+            file.Add($"    readonly Client client;");
+            file.Add($"");
+            foreach (var m in parsedModules)
+                file.Add($"    public {m.Key} {m.Key} {{ get; internal set; }}");
+            file.Add($"");
+            file.Add($"    public StorageClient(Client client)");
             file.Add($"    {{");
-            file.Add($"        readonly Client _client;");
-            file.Add($"");
+            file.Add($"        this.client = client;");
             foreach (var m in parsedModules)
-                file.Add($"        public {m.Key} {m.Key};");
-            file.Add($"");
-            file.Add($"        public Query(Client client)");
-            file.Add($"        {{");
-            file.Add($"            _client = client;");
-            foreach (var m in parsedModules)
-                file.Add($"            {m.Key} = new {m.Key}(this._client);");
-            file.Add($"        }}");
+                file.Add($"        {m.Key} = new {m.Key}(this.client);");
             file.Add($"    }}");
             file.Add($"}}");
+            file.Add($"");
 
             queryClassSource = file;
         }
@@ -294,10 +274,34 @@ namespace FinalBiome.Api.Codegen
                 Console.WriteLine($"Write file {pathFileName}");
                 File.WriteAllLines(pathFileName, TypeGenerator.banner.Concat(s.GeneratedCode));
             }
-            // save Query class
-            string pathQueryFileName = $"{outputDir}/{TypeGenerator.StorageNamespacePrefix}/Query.cs";
+            // save StorageClient class
+            string pathQueryFileName = $"{outputDir}/{TypeGenerator.StorageNamespacePrefix}/StorageClient.cs";
             Console.WriteLine($"Write file {pathQueryFileName}");
             File.WriteAllLines(pathQueryFileName, TypeGenerator.banner.Concat(queryClassSource));
+        }
+
+        FinalBiome.Api.Storage.StorageHasher HasherConverter(string ajHasher)
+        {
+            switch (ajHasher)
+            {
+                case "Twox64Concat":
+                    return FinalBiome.Api.Storage.StorageHasher.Twox64Concat;
+                case "Twox128":
+                    return FinalBiome.Api.Storage.StorageHasher.Twox128;
+                case "Twox256":
+                    return FinalBiome.Api.Storage.StorageHasher.Twox256;
+                case "BlakeTwo128":
+                    return FinalBiome.Api.Storage.StorageHasher.Blake2_128;
+                case "BlakeTwo128Concat":
+                    return FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat;
+                case "BlakeTwo256":
+                    return FinalBiome.Api.Storage.StorageHasher.Blake2_256;
+                case "Identity":
+                    return FinalBiome.Api.Storage.StorageHasher.Identity;
+
+                default:
+                    throw new Exception($"Hasher {ajHasher} is not impemented");
+            }
         }
     }
 }

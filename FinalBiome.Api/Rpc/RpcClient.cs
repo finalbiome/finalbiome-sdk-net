@@ -99,6 +99,7 @@ public class RpcClient
         this.subscriptionTarget.RemoveSubscription(subscription);
     }
 
+#pragma warning disable CS8601 // Possible null reference assignment.
     internal static object[] RpcParams()
     {
         return new object[] { };
@@ -123,5 +124,6 @@ public class RpcClient
     {
         return new object[] { t0, t1, t2, t3 };
     }
+#pragma warning restore CS8601 // Possible null reference assignment.
 }
 

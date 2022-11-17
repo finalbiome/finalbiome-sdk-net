@@ -8,7 +8,7 @@ namespace FinalBiome.Api.Codegen
         // TODO: implement checks for existing all primitive types which present in the metadata.
         public static string RootNamespace = "FinalBiome.Api";
         public static string TypesNamespacePrefix = "Types";
-        public static string StorageNamespacePrefix = "Query";
+        public static string StorageNamespacePrefix = "Storage";
         public static string TransactionsNamespacePrefix = "Transactions";
         public static string[] banner =
         {
@@ -22,7 +22,7 @@ namespace FinalBiome.Api.Codegen
         List<ParsedType> existedTypes = new List<ParsedType>();
 
         TypeParser typeParser;
-        StorageParser stateParser;
+        StorageParser storageParser;
         CallParser callParser;
 
         public TypeGenerator(MetaData metaData)
@@ -30,7 +30,7 @@ namespace FinalBiome.Api.Codegen
             this.metaData = metaData;
 
             typeParser = new TypeParser(metaData.NodeMetadata.Types);
-            stateParser = new StorageParser(metaData.NodeMetadata.Modules, typeParser);
+            storageParser = new StorageParser(metaData.NodeMetadata.Modules, typeParser);
             callParser = new CallParser(metaData.NodeMetadata, typeParser);
         }
 
@@ -50,7 +50,7 @@ namespace FinalBiome.Api.Codegen
         public void Save(string outputDir)
         {
             typeParser.Save(outputDir + "/Types");
-            //stateParser.Save(outputDir);
+            storageParser.Save(outputDir);
             //callParser.Save(outputDir);
         }
 
@@ -60,7 +60,7 @@ namespace FinalBiome.Api.Codegen
         public void Parse()
         {
             typeParser.Parse();
-            stateParser.Parse();
+            storageParser.Parse();
             callParser.Parse();
         }
 
@@ -70,7 +70,7 @@ namespace FinalBiome.Api.Codegen
         }
         public int CountParsedStorages()
         {
-            return stateParser.parsedStorages.Where((t) => t.Parsed).Count() + stateParser.parsedModules.Where((t) => t.Value.Parsed).Count() + 1;
+            return storageParser.parsedStorages.Where((t) => t.Parsed).Count() + storageParser.parsedModules.Where((t) => t.Value.Parsed).Count() + 1;
         }
         public int CountParsedTransactionTypes()
         {
@@ -88,6 +88,8 @@ namespace FinalBiome.Api.Codegen
         public static string CleanDocString(string value)
         {
             value = rCleanDocs.Replace(value, " ");
+            value = value.Replace("<", "&lt;");
+            value = value.Replace(">", "&gt;");
             if (value.Length == 0 || value == " ") return "<para></para>";
             value += "<br/>";
             return value;
