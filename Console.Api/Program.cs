@@ -50,6 +50,11 @@ public class Program
         var nextId = await client.Storage.FungibleAssets.NextAssetId();
         Console.WriteLine($"nextId:\n{Stringify(nextId)}");
 
+        var evs = await client.Events.At();
+
+        Console.WriteLine($"Events: {Stringify(evs.EventRecords)}");
+        Console.WriteLine($"Events: {evs.EventRecords}");
+
     }
 
     static string Stringify(Codec? value, Formatting formatting = Formatting.Indented)

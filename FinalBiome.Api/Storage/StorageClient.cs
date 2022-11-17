@@ -42,5 +42,23 @@ public partial class StorageClient
         result.Init(raw);
         return result;
     }
+
+    /// <summary>
+    /// Fetch up to `count` keys for a storage map in lexicographic order.
+    ///
+    /// Supports pagination by passing a value to `start_key`.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="count"></param>
+    /// <param name="startKey"></param>
+    /// <param name="hash"></param>
+    /// <returns></returns>
+    public async Task<Vec<Vec<U8>>> FetchKeys(List<byte> key, uint count, List<byte>? startKey, IEnumerable<byte>? hash)
+    {
+        Hash? decodedHash = new Hash();
+        if (hash is not null) decodedHash.Init(hash.ToArray());
+        else decodedHash = null;
+        return await client.Rpc.StorageKeysPaged(key, count, startKey, decodedHash);
+    }
 }
 

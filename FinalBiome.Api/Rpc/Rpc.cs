@@ -49,7 +49,7 @@ public class Rpc
     /// <param name="startKey"></param>
     /// <param name="hash"></param>
     /// <returns></returns>
-    public async Task<Vec<StorageKey>> StorageKeysPaged(List<byte> key, uint count, Array<U8>? startKey, Hash? hash)
+    public async Task<Vec<StorageKey>> StorageKeysPaged(List<byte> key, uint count, List<byte>? startKey, Hash? hash)
     {
         return await client.Request<Vec<StorageKey>>("state_getKeysPaged", RpcClient.RpcParams(key.ToHex(), count, startKey?.ToHex(), hash?.ToHex()));
     }

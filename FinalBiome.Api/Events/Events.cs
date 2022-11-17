@@ -3,13 +3,17 @@ namespace FinalBiome.Api.Events;
 
 using Hash = FinalBiome.Api.Types.PrimitiveTypes.H256;
 
+/// <summary>
+/// A collection of events obtained from a block, bundled with the necessary
+/// information needed to decode and iterate over them.
+/// </summary>
 public class Events
 {
     Hash blockHash;
-    FinalBiome.Api.Types.FrameSystem.VecEventRecord eventRecords;
+    FinalBiome.Api.Types.FrameSystem.VecEventRecord? eventRecords;
     public Events(
         Hash blockHash,
-        FinalBiome.Api.Types.FrameSystem.VecEventRecord eventRecords
+        FinalBiome.Api.Types.FrameSystem.VecEventRecord? eventRecords
     )
     {
         this.blockHash = blockHash;
@@ -19,7 +23,7 @@ public class Events
     /// <summary>
     /// The number of events
     /// </summary>
-    public int Length => this.eventRecords.Value.Length;
+    public int Length => this.eventRecords is null ? 0 : this.eventRecords.Value.Length;
 
     /// <summary>
     /// Are there no events in this block?
@@ -34,6 +38,6 @@ public class Events
     /// <summary>
     /// Return all of the events
     /// </summary>
-    public FinalBiome.Api.Types.FrameSystem.VecEventRecord EventRecords => this.eventRecords;
+    public FinalBiome.Api.Types.FrameSystem.VecEventRecord? EventRecords => this.eventRecords;
 }
 
