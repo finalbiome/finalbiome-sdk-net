@@ -11,7 +11,7 @@ public class Digest : Codec
     private int _size;
     public override int TypeSize => _size;
 
-    public Vec<DigestItem> Logs;
+    public Vec<DigestItem>? Logs;
 
     public override byte[] Encode()
     {
@@ -35,7 +35,7 @@ public class Digest : Codec
         Array.Copy(byteArray, start, Bytes, 0, TypeSize);
     }
 
-    public void Create(DigestItem[] digestItems)
+    public void Init(DigestItem[] digestItems)
     {
         var logs = new Vec<DigestItem>();
         logs.Init(digestItems);
@@ -167,7 +167,7 @@ public class ConsensusEngineId : Codec
         Value = array;
     }
 
-    public void Create(U8[] array)
+    public void Init(U8[] array)
     {
         Value = array;
         Bytes = Encode();

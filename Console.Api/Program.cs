@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Diagnostics;
 using FinalBiome.Api;
+using FinalBiome.Api.Rpc;
 using FinalBiome.Api.Types;
 using FinalBiome.Api.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 
 namespace ConsoleApi;
+using Hash = FinalBiome.Api.Types.PrimitiveTypes.H256;
 
 public class Program
 {
@@ -50,10 +54,35 @@ public class Program
         var nextId = await client.Storage.FungibleAssets.NextAssetId();
         Console.WriteLine($"nextId:\n{Stringify(nextId)}");
 
-        var evs = await client.Events.At();
+        #region Checking calculation of the block hash
 
-        Console.WriteLine($"Events: {Stringify(evs.EventRecords)}");
-        Console.WriteLine($"Events: {evs.EventRecords}");
+        Hash lastFinalizedBlockHash = await client.Rpc.FinalizedHead();
+        Header lastFinalizedBlockHeader = await client.Rpc.Header(lastFinalizedBlockHash);
+
+        Debug.Assert(Enumerable.SequenceEqual(lastFinalizedBlockHash.Bytes, lastFinalizedBlockHeader.Hash().Bytes));
+
+        //Console.WriteLine($"Block 1: {lastFinalizedBlockHash.ToHex()}");
+        //Console.WriteLine($"Block 2: {lastFinalizedBlockHeader.Hash().ToHex()}");
+        #endregion
+
+        // Subscribe to (in this case, finalized) blocks.
+        var sub = client.Blocks.SubscribeFinalized(cancellationToken);
+
+        await foreach (var block in sub)
+        {
+            Console.WriteLine($"Fin block: {block.Hash.ToHex()}\n");
+            // Ask for the events for this block.
+            var events = await block.Events();
+            if (events.EventRecords is not null)
+            {
+                Console.WriteLine($"Events in the block: {block.Hash.ToHex()}\n");
+
+                foreach (var ev in events.EventRecords.Value)
+                {
+                    Console.WriteLine($"Event: {Stringify(ev, Formatting.None)}");
+                }
+            }
+        }
 
     }
 

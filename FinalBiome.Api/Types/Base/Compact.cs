@@ -6,13 +6,13 @@ using FinalBiome.Api.Utils;
 
 namespace FinalBiome.Api.Types
 {
-    public abstract class Compact<T>: Codec where T : Codec, new()
+    public class Compact<T>: Codec where T : Codec, new()
     {
         protected BigInteger _value;
         public T Value { get; internal set; }
         public override string TypeName() => $"Compact<{new T().TypeName()}>";
-        public override int TypeSize { get => Value.TypeSize; }
-        public override byte[] Bytes { get => Value.Bytes; }
+        public override int TypeSize { get => new T().TypeSize; }
+        public override byte[] Bytes { get => Encode(); }
 
         public override byte[] Encode() => CompactNum.CompactTo(_value);
         public override void Decode(byte[] bytes, ref int pos)

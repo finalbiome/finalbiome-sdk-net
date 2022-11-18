@@ -3,7 +3,7 @@ using FinalBiome.Api.Types.PrimitiveTypes;
 using FinalBiome.Api.Types.Primitive;
 using FinalBiome.Api.Types;
 using FinalBiome.Api.Utils;
-using FinalBiome.Api.Rpc.Types;
+using FinalBiome.Api.Rpc;
 
 namespace FinalBiome.Api.Rpc;
 
@@ -242,7 +242,7 @@ public class Rpc
     /// Subscribe to all new best block headers.
     /// </summary>
     /// <returns></returns>
-    public async Task<Subscription<Header>> SubscribeBestBlockHeaders()
+    public async Task<Subscription<Header>> SubscribeBestBlockHeaders(CancellationToken? cancellationToken = null)
     {
         return await client.Subscribe<Header>(
             // Despite the name, this returns a stream of all new blocks
@@ -250,7 +250,8 @@ public class Rpc
             // (ie all best blocks).
             "chain_subscribeNewHeads",
             RpcClient.RpcParams(),
-            "chain_unsubscribeNewHeads"
+            "chain_unsubscribeNewHeads",
+            cancellationToken
             );
     }
 
@@ -258,7 +259,7 @@ public class Rpc
     /// Subscribe to all new block headers.
     /// </summary>
     /// <returns></returns>
-    public async Task<Subscription<Header>> SubscribeAllBlockHeaders()
+    public async Task<Subscription<Header>> SubscribeAllBlockHeaders(CancellationToken? cancellationToken = null)
     {
         return await client.Subscribe<Header>(
             // Despite the name, this returns a stream of all new blocks
@@ -266,7 +267,8 @@ public class Rpc
             // (ie all best blocks).
             "chain_subscribeAllHeads",
             RpcClient.RpcParams(),
-            "chain_unsubscribeAllHeads"
+            "chain_unsubscribeAllHeads",
+            cancellationToken
             );
     }
 
@@ -279,12 +281,13 @@ public class Rpc
     /// gaps for us.
     /// </summary>
     /// <returns></returns>
-    public async Task<Subscription<Header>> SubscribeFinalizedBlockHeaders()
+    public async Task<Subscription<Header>> SubscribeFinalizedBlockHeaders(CancellationToken? cancellationToken = null)
     {
         return await client.Subscribe<Header>(
             "chain_subscribeFinalizedHeads",
             RpcClient.RpcParams(),
-            "chain_unsubscribeFinalizedHeads"
+            "chain_unsubscribeFinalizedHeads",
+            cancellationToken
             );
     }
 
@@ -292,12 +295,13 @@ public class Rpc
     /// Subscribe to runtime version updates that produce changes in the metadata.
     /// </summary>
     /// <returns></returns>
-    public async Task<Subscription<RuntimeVersion>> SubscribeRuntimeVersion()
+    public async Task<Subscription<RuntimeVersion>> SubscribeRuntimeVersion(CancellationToken? cancellationToken = null)
     {
         return await client.Subscribe<RuntimeVersion>(
             "state_subscribeRuntimeVersion",
             RpcClient.RpcParams(),
-            "state_unsubscribeRuntimeVersion"
+            "state_unsubscribeRuntimeVersion",
+            cancellationToken
             );
     }
 
@@ -320,13 +324,14 @@ public class Rpc
     /// <param name="extrinsic"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public async Task<Subscription<T>> WatchExtrinsic<X, T>(T extrinsic) where T : Codec where X : Codec
+    public async Task<Subscription<T>> WatchExtrinsic<X, T>(T extrinsic, CancellationToken? cancellationToken = null) where T : Codec where X : Codec
     {
         throw new NotImplementedException();
         return await client.Subscribe<T>(
             "author_submitAndWatchExtrinsic",
             RpcClient.RpcParams(extrinsic.ToHex()),
-            "author_unwatchExtrinsic"
+            "author_unwatchExtrinsic",
+            cancellationToken
             );
     }
 
@@ -395,7 +400,10 @@ public class Rpc
         return await client.Request<T>("system_dryRun", RpcClient.RpcParams(encodedSigned.ToHex(), at?.ToHex()));
     }
 
-
+    public async Task Unsubscribe<TResult>(Subscription<TResult> subscription)
+    {
+        await client.Unsubscribe(subscription);
+    }
 
 
 }

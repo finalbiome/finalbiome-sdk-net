@@ -13,7 +13,7 @@ namespace FinalBiome.Api.Types
         public bool IsSome { get; set; }
         [JsonIgnore]
         public bool IsNone => !IsSome;
-        public T Value { get; internal set; }
+        public T? Value { get; internal set; }
 
         public override byte[] Encode()
         {
@@ -21,7 +21,7 @@ namespace FinalBiome.Api.Types
             if (IsSome)
             {
                 bytes.Add(1);
-                bytes.AddRange(Value.Encode());
+                bytes.AddRange(Value!.Encode());
             }
             else
             {
@@ -54,6 +54,14 @@ namespace FinalBiome.Api.Types
 
             Bytes = innerBytes;
             Value = t == null ? default : t;
+        }
+
+        public void Init(T? value)
+        {
+            IsSome = value != null;
+            Value = value;
+            Bytes = Encode();
+            TypeSize = Bytes.Length;
         }
     }
 }

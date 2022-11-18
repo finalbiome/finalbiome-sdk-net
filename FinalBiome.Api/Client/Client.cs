@@ -68,7 +68,7 @@ public class Client
         Events = new EventsClient(this);
         Storage = new StorageClient(this);
         Constants = new ConstantsClient();
-        Blocks = new BlocksClient();
+        Blocks = new BlocksClient(this);
     }
 
     /// <summary>

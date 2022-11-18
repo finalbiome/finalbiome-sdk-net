@@ -10,7 +10,7 @@ namespace FinalBiome.Api.Types.Primitive
 
         public override void InitFromHex(string hexString)
         {
-            var bytes = HexUtils.HexToBytes(hexString, true);
+            var bytes = HexUtils.HexToBytes(hexString, false);
             Array.Reverse(bytes);
             var result = new byte[TypeSize];
             bytes.CopyTo(result, 0);

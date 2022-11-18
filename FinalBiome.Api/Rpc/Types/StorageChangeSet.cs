@@ -2,12 +2,11 @@
 using FinalBiome.Api.Types;
 using FinalBiome.Api.Types.Primitive;
 
-namespace FinalBiome.Api.Rpc.Types;
+namespace FinalBiome.Api.Rpc;
 
 using Hash = FinalBiome.Api.Types.PrimitiveTypes.H256;
 using StorageKey = Vec<U8>;
 using StorageData = Vec<U8>;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 /// <summary>
 /// Storage change set
@@ -45,8 +44,8 @@ public class StorageChangeSet : Codec
     {
         var bytes = new List<byte>();
 
-        bytes.AddRange(Block.Bytes);
-        bytes.AddRange(Changes.Bytes);
+        bytes.AddRange(Block.Encode());
+        bytes.AddRange(Changes.Encode());
 
         return bytes.ToArray();
     }

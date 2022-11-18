@@ -397,7 +397,7 @@ namespace HelloWorld
             Debug.Assert(Enumerable.SequenceEqual(lastFinalizedBlockHash.Bytes, lastFinalizedBlockHeader.Hash().Bytes));
 
             if (false)
-            {
+            { //done
 
                 Header h = new Header();
                 var p = new Hash();
@@ -451,7 +451,7 @@ namespace HelloWorld
 
 
             if (false)
-            {
+            { // done
                 /// checking encoding of the digest
                 var d2 = new Digest();
 

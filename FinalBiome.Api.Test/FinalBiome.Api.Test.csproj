@@ -23,6 +23,7 @@
     <None Remove="Utils\" />
     <None Remove="Rpc\" />
     <None Remove="Rpc\JsonConverters\" />
+    <None Remove="Rpc\Types\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Types\" />
@@ -31,6 +32,7 @@
     <Folder Include="Utils\" />
     <Folder Include="Rpc\" />
     <Folder Include="Rpc\JsonConverters\" />
+    <Folder Include="Rpc\Types\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FinalBiome.Api\FinalBiome.Api.csproj" />

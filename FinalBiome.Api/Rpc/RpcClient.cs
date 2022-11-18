@@ -19,7 +19,7 @@ public class RpcClient
     {
         this.ws = ws;
         this.rpc = rpc;
-        this.subscriptionTarget = new RpcSubscriptionTarget();
+        this.subscriptionTarget = subscriptionTarget;
     }
 
     /// <summary>
@@ -45,6 +45,9 @@ public class RpcClient
         messageFormatter.JsonSerializer.Converters.Add(new PrimitiveCodecTypeConverter<U32>());
         messageFormatter.JsonSerializer.Converters.Add(new PrimitiveCodecTypeConverter<U64>());
         messageFormatter.JsonSerializer.Converters.Add(new PrimitiveCodecTypeConverter<Hash>());
+        messageFormatter.JsonSerializer.Converters.Add(new HeaderJsonConverter());
+        messageFormatter.JsonSerializer.Converters.Add(new ChainBlockResponseJsonConverter());
+        messageFormatter.JsonSerializer.Converters.Add(new ChainBlockJsonConverter());
 
         return messageFormatter;
     }
