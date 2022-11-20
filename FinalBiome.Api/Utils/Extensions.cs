@@ -1,8 +1,9 @@
 ﻿using FinalBiome.Api.Utils;
 using Newtonsoft.Json.Linq;
+using System.Numerics;
 using System.Text;
 
-namespace FinalBiome.Api;
+namespace FinalBiome.Api.Extensions;
 
 public static class Extensions
 {
@@ -38,3 +39,92 @@ public static class Extensions
     }
 }
 
+/// <summary>
+/// The Encode extension is used for encoding of data into the SCALE format.
+/// <see cref="https://github.com/paritytech/parity-scale-codec#encode"/>
+/// </summary>
+public static class EncodeExtensions
+{
+    /// <summary>
+    /// Convert self to a slice and append it to the destination.
+    /// </summary>
+    /// <param name="that"></param>
+    /// <param name="bytes"></param>
+    public static void EncodeTo(this IEnumerable<byte> that, ref List<byte> bytes)
+    {
+        bytes.AddRange(that);
+    }
+
+    /// <summary>
+    /// Encodes the value
+    /// </summary>
+    /// <param name="that"></param>
+    public static byte[] Encode(this byte that)
+    {
+        return new byte[] { that };
+    }
+
+    /// <summary>
+    /// Encodes the value and appends it to a destination buffer.
+    /// </summary>
+    /// <param name="that"></param>
+    /// <param name="bytes"></param>
+    public static void EncodeTo(this byte that, ref List<byte> bytes)
+    {
+        bytes.Add(that);
+    }
+
+    /// <summary>
+    /// Encodes the value
+    /// </summary>
+    /// <param name="that"></param>
+    public static byte[] Encode(this uint that)
+    {
+        return BitConverter.GetBytes(that);
+    }
+
+    /// <summary>
+    /// Encodes the value and appends it to a destination buffer.
+    /// </summary>
+    /// <param name="that"></param>
+    /// <param name="bytes"></param>
+    public static void EncodeTo(this uint that, ref List<byte> bytes)
+    {
+        bytes.AddRange(that.Encode());
+    }
+
+    /// <summary>
+    /// Encodes the value
+    /// </summary>
+    /// <param name="that"></param>
+    public static byte[] Encode(this ulong that)
+    {
+        return BitConverter.GetBytes(that);
+    }
+    /// <summary>
+    /// Encodes the value and appends it to a destination buffer.
+    /// </summary>
+    /// <param name="that"></param>
+    /// <param name="bytes"></param>
+    public static void EncodeTo(this ulong that, ref List<byte> bytes)
+    {
+        bytes.AddRange(that.Encode());
+    }
+    /// <summary>
+    /// Encodes the value
+    /// </summary>
+    /// <param name="that"></param>
+    public static byte[] Encode(this UInt128 that)
+    {
+        return ((BigInteger)that).ToByteArray();
+    }
+    /// <summary>
+    /// Encodes the value and appends it to a destination buffer.
+    /// </summary>
+    /// <param name="that"></param>
+    /// <param name="bytes"></param>
+    public static void EncodeTo(this UInt128 that, ref List<byte> bytes)
+    {
+        bytes.AddRange(that.Encode());
+    }
+}

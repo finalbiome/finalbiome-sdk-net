@@ -52,6 +52,14 @@ namespace FinalBiome.Api.Types
             return HexUtils.Bytes2HexString(this.Encode());
         }
 
+        /// <summary>
+        /// Convert self to a slice and append it to the destination.
+        /// </summary>
+        /// <param name="bytes"></param>
+        public void EncodeTo(ref List<byte> bytes)
+        {
+            bytes.AddRange(Encode());
+        }
     }
 }
 

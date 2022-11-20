@@ -6,10 +6,10 @@ namespace FinalBiome.Api.Utils
 {
     public class ArrayUtils
     {
-        public static byte[] SizePrefixedByteArray(byte[] list)
+        public static byte[] SizePrefixedByteArray(IEnumerable<byte> list)
         {
             var result = new List<byte>();
-            result.AddRange(CompactNum.CompactTo(list.Length));
+            result.AddRange(CompactNum.CompactTo(list.Count()));
             result.AddRange(list);
             return result.ToArray();
         }

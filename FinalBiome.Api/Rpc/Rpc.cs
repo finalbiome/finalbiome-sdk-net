@@ -4,6 +4,8 @@ using FinalBiome.Api.Types.Primitive;
 using FinalBiome.Api.Types;
 using FinalBiome.Api.Utils;
 using FinalBiome.Api.Rpc;
+using FinalBiome.Api.Rpc.Types;
+using FinalBiome.Api.Extensions;
 
 namespace FinalBiome.Api.Rpc;
 
@@ -153,9 +155,9 @@ public class Rpc
     /// </summary>
     /// <param name="account"></param>
     /// <returns></returns>
-    public async Task<Index> SystemAccountNextIndex(AccountId account)
+    public async Task<ulong> SystemAccountNextIndex(AccountId account)
     {
-        return await client.Request<Index>("system_accountNextIndex", RpcClient.RpcParams(account.ToHex()));
+        return await client.Request<ulong>("system_accountNextIndex", RpcClient.RpcParams(AddressUtils.GetAddressFrom(account.Encode())));
     }
 
     /// <summary>
@@ -311,7 +313,7 @@ public class Rpc
     /// <typeparam name="T"></typeparam>
     /// <param name="extrinsic"></param>
     /// <returns></returns>
-    public async Task<Hash> SubmitExtrinsic<T>(T extrinsic) where T : Codec
+    public async Task<Hash> SubmitExtrinsic(IEnumerable<byte> extrinsic)
     {
         return await client.Request<Hash>("author_submitExtrinsic", RpcClient.RpcParams(extrinsic.ToHex()));
     }
@@ -323,11 +325,9 @@ public class Rpc
     /// <typeparam name="T"></typeparam>
     /// <param name="extrinsic"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public async Task<Subscription<T>> WatchExtrinsic<X, T>(T extrinsic, CancellationToken? cancellationToken = null) where T : Codec where X : Codec
+    public async Task<Subscription<SubstrateTxStatus>> WatchExtrinsic(IEnumerable<byte> extrinsic, CancellationToken? cancellationToken = null)
     {
-        throw new NotImplementedException();
-        return await client.Subscribe<T>(
+        return await client.Subscribe<SubstrateTxStatus>(
             "author_submitAndWatchExtrinsic",
             RpcClient.RpcParams(extrinsic.ToHex()),
             "author_unwatchExtrinsic",
@@ -393,11 +393,9 @@ public class Rpc
     /// <param name="encodedSigned"></param>
     /// <param name="at"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public async Task<T> DryRun<T>(IEnumerable<byte> encodedSigned, Hash? at) where T : Codec
+    public async Task<ApplyExtrinsicResult> DryRun(IEnumerable<byte> encodedSigned, Hash? at)
     {
-        throw new NotImplementedException();
-        return await client.Request<T>("system_dryRun", RpcClient.RpcParams(encodedSigned.ToHex(), at?.ToHex()));
+        return await client.Request<ApplyExtrinsicResult>("system_dryRun", RpcClient.RpcParams(encodedSigned.ToHex(), at?.ToHex()));
     }
 
     public async Task Unsubscribe<TResult>(Subscription<TResult> subscription)

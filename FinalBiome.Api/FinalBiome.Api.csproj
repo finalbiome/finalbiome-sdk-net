@@ -28,6 +28,11 @@
     <!--<None Remove="Storage\StorageClient.Generated" />-->
     <!--<None Remove="Storage\FungibleAssets.Assets" />-->
     <None Remove="SimpleBase" />
+    <None Remove="Rpc\Errors\" />
+    <None Remove="Tx\Errors\" />
+    <None Remove="Tx\Types\" />
+    <None Remove="Schnorrkel" />
+    <None Remove="Chaos.NaCl.Standard" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Types\" />
@@ -43,6 +48,9 @@
     <Folder Include="Blocks\" />
     <Folder Include="Rpc\JsonConverters\" />
     <Folder Include="Rpc\Types\" />
+    <Folder Include="Rpc\Errors\" />
+    <Folder Include="Tx\Errors\" />
+    <Folder Include="Tx\Types\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
@@ -50,6 +58,8 @@
     <PackageReference Include="SauceControl.Blake2Fast" Version="2.0.0" />
     <PackageReference Include="Standart.Hash.xxHash" Version="4.0.5" />
     <PackageReference Include="SimpleBase" Version="4.0.0" />
+    <PackageReference Include="Schnorrkel" Version="1.1.3" />
+    <PackageReference Include="Chaos.NaCl.Standard" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Types\Base\Tuple.tt">

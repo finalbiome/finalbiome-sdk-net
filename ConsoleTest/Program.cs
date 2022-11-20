@@ -37,11 +37,11 @@ namespace HelloWorld
                 cts.Cancel();
                 e.Cancel = true;
             };
-            //await MainAsync();
-            
+            await MainAsync();
+
             try
             {
-                await SubscribeTst(cts.Token);
+                //await SubscribeTst(cts.Token);
             } catch (TaskCanceledException) { }
 
             if (!cts.IsCancellationRequested)
@@ -230,7 +230,7 @@ namespace HelloWorld
 
             #region Exec Extrinsic Create NFA
 
-            if (false)
+            if (true)
             {
 
                 FinalBiome.Sdk.SpRuntime.Multiaddress.InnerMultiAddress addressType = FinalBiome.Sdk.SpRuntime.Multiaddress.InnerMultiAddress.Id;

@@ -63,5 +63,63 @@ public class AddressUtils
 
         return new string(addrCh);
     }
+
+    public static byte[] GetPublicKeyFrom(string address)
+    {
+        return GetPublicKeyFrom(address, out _);
+    }
+
+    public static byte[] GetPublicKeyFrom(string address, out short network)
+    {
+        network = 42;
+        var PUBLIC_KEY_LENGTH = 32;
+        var PREFIX_SIZE = 0;
+        var pubkByteList = new List<byte>();
+
+        var bs58decoded = Base58.Bitcoin.Decode(address).ToArray();
+        var len = bs58decoded.Length;
+
+        byte[] ssPrefixed = { 0x53, 0x53, 0x35, 0x38, 0x50, 0x52, 0x45 };
+
+        // 00000000b..=00111111b (0..=63 inclusive): Simple account/address/network identifier.
+        if (len == 35)
+        {
+            PREFIX_SIZE = 1;
+            // set network
+            network = bs58decoded[0];
+        }
+        else
+        // 01000000b..=01111111b (64..=127 inclusive)
+        if (len == 36)
+        {
+            PREFIX_SIZE = 2;
+            // set network
+            byte b2up = (byte)((bs58decoded[0] << 2) & 0b1111_1100);
+            byte b2lo = (byte)((bs58decoded[1] >> 6) & 0b0000_0011);
+            byte b2 = (byte)(b2up | b2lo);
+            byte b1 = (byte)(bs58decoded[1] & 0b0011_1111);
+            network = (short)BitConverter.ToInt16(
+                new byte[] { b2, b1 }, 0); // big endian, for BitConverter
+        }
+
+        else
+        {
+            throw new ApplicationException("Unsupported address size.");
+        }
+
+        pubkByteList.AddRange(ssPrefixed);
+        pubkByteList.AddRange(bs58decoded.Take(PUBLIC_KEY_LENGTH + PREFIX_SIZE));
+
+        var blake2bHashed = Hasher.BlakeTwo(pubkByteList.ToArray(), 64);
+        if (bs58decoded[PUBLIC_KEY_LENGTH + PREFIX_SIZE] != blake2bHashed[0] ||
+            bs58decoded[PUBLIC_KEY_LENGTH + PREFIX_SIZE + 1] != blake2bHashed[1])
+        {
+            throw new ApplicationException("Address checksum is wrong.");
+        }
+
+        return bs58decoded.Skip(PREFIX_SIZE).Take(PUBLIC_KEY_LENGTH).ToArray();
+
+    }
+
 }
 

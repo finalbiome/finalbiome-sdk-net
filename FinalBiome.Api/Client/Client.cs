@@ -64,7 +64,7 @@ public class Client
 
         Rpc = rpc;
 
-        Tx = new TxClient();
+        Tx = new TxClient(this);
         Events = new EventsClient(this);
         Storage = new StorageClient(this);
         Constants = new ConstantsClient();

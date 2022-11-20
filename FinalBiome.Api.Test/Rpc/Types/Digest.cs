@@ -6,6 +6,7 @@ using FinalBiome.Api.Utils;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Text;
+using FinalBiome.Api.Extensions;
 
 namespace FinalBiome.Api.Test.Rpc.Types;
 

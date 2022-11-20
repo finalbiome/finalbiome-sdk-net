@@ -1,4 +1,5 @@
-﻿
+﻿using FinalBiome.Api.Extensions;
+
 namespace FinalBiome.Api.Blocks;
 
 using Hash = FinalBiome.Api.Types.PrimitiveTypes.H256;
