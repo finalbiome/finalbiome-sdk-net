@@ -111,7 +111,7 @@ public class TxProgress
                     break;
             }
         }
-        sub = null;
+        sub = null; // it is never called. need to refact
     }
 
     /// <summary>

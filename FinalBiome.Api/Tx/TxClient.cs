@@ -154,7 +154,8 @@ public class TxClient
         Signer signer
         )
     {
-        return await SignAndSubmitThenWatch(call, signer, default);
+        BaseExtrinsicParamsBuilder<PlainTip> otherParams = BaseExtrinsicParamsBuilder<PlainTip>.Default();
+        return await SignAndSubmitThenWatch(call, signer, otherParams);
     }
 
     /// <summary>

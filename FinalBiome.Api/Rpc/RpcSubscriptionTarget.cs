@@ -1,4 +1,5 @@
 ﻿using System;
+using FinalBiome.Api.Rpc.Types;
 using FinalBiome.Api.Types;
 using StreamJsonRpc;
 
@@ -77,6 +78,18 @@ namespace FinalBiome.Api.Rpc
         public async Task OnFinalizedBlock(string subscription, Header result)
         {
             await NotifySubscriber<Header>(subscription, result);
+        }
+        /// <summary>
+        /// Response as Subscription for extrinsic updates
+        /// <see cref="https://github.com/w3f/PSPs/blob/master/PSPs/drafts/psp-6.md#189-author_submitandwatchextrinsic-pubsub"/>
+        /// </summary>
+        /// <param name="subscription"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        [JsonRpcMethod("author_extrinsicUpdate")]
+        public async Task OnExtrinsicUpdate(string subscription, SubstrateTxStatus result)
+        {
+            await NotifySubscriber<SubstrateTxStatus>(subscription, result);
         }
     }
 }

@@ -5,9 +5,16 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <RootNamespace>ConsoleApi</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FinalBiome.Api\FinalBiome.Api.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Examples\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Examples\" />
   </ItemGroup>
 </Project>

@@ -222,7 +222,7 @@ public class TxInBlock : Codec
         var block = await client.Rpc.Block(blockHash);
         int extrinsicIdx = Array.FindIndex(
             block.Block.Extrinsics.Value,
-            v => Hasher.BlakeTwo256(v.Bytes) == extHash.Bytes
+            v => Enumerable.SequenceEqual(Hasher.BlakeTwo256(v.Bytes), extHash.Bytes)
         );
         // If we successfully obtain the block hash we think contains our
         // extrinsic, the extrinsic should be in there somewhere..
@@ -238,7 +238,12 @@ public class TxInBlock : Codec
 
     public override byte[] Encode()
     {
-        throw new NotImplementedException();
+        var bytes = new List<byte>();
+
+        bytes.AddRange(BlockHash.Encode());
+        bytes.AddRange(ExtrinsicHash.Encode());
+
+        return bytes.ToArray();
     }
 
     public override void Decode(byte[] bytes, ref int pos)

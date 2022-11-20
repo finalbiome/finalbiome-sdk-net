@@ -61,7 +61,7 @@ public class SubmittableExtrinsic
     public async Task<TxProgress> SubmitAndWatch()
     {
         // Get a hash of the extrinsic (we'll need this later).
-        var extHash = Hasher.BlakeTwo128(encoded.ToArray());
+        var extHash = Hasher.BlakeTwo256(encoded.ToArray());
         // Submit and watch for transaction progress.
         var sub = await client.Rpc.WatchExtrinsic(encoded);
 

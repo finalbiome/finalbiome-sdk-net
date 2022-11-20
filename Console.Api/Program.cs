@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using ConsoleApi.Examples;
 using FinalBiome.Api;
 using FinalBiome.Api.Extensions;
 using FinalBiome.Api.Rpc;
@@ -90,30 +91,32 @@ public class Program
 
         #region Create NFA
         // Init signer account
-        Account ferdie = Account.FromSeed(FinalBiome.Api.Types.SpRuntime.InnerMultiSignature.Sr25519,
-                                          HexUtils.HexToBytes("0x42438b7883391c05512a938e36c2df0131e088b3756d6aa7a755fbff19d2f842"));
+        //Account ferdie = Account.FromSeed(FinalBiome.Api.Types.SpRuntime.InnerMultiSignature.Sr25519,
+        //                                  HexUtils.HexToBytes("0x42438b7883391c05512a938e36c2df0131e088b3756d6aa7a755fbff19d2f842"));
 
-        // Init NFA name
-        FinalBiome.Api.Types.Vec<U8> nfaName = new FinalBiome.Api.Types.Vec<U8>();
-        nfaName.Init(ArrayUtils.SizePrefixedByteArray("test5".AsBytes()));
-        // Init Organization address
-        FinalBiome.Api.Types.SpRuntime.Multiaddress.MultiAddress organizationId = new FinalBiome.Api.Types.SpRuntime.Multiaddress.MultiAddress();
-        FinalBiome.Api.Types.SpCore.Crypto.AccountId32 accountId32 = new FinalBiome.Api.Types.SpCore.Crypto.AccountId32();
-        accountId32.Init(AddressUtils.GetPublicKeyFrom("5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw"));
-        organizationId.Init(FinalBiome.Api.Types.SpRuntime.Multiaddress.InnerMultiAddress.Id,
-                            accountId32);
-        // Construct call payload
-        byte palletIsx = 11;
-        byte callIsx = 0;
-        List<byte> callData = new List<byte>();
-        organizationId.EncodeTo(ref callData);
-        nfaName.EncodeTo(ref callData);
-        StaticTxPayload call = new StaticTxPayload(palletIsx, callIsx, callData);
-        PairSigner signer = new PairSigner(ferdie);
-        Hash h = await client.Tx.SignAndSubmitDefault(call, signer);
-        Console.WriteLine($"Ext hash: {h.ToHex()}");
+        //// Init NFA name
+        //FinalBiome.Api.Types.Vec<U8> nfaName = new FinalBiome.Api.Types.Vec<U8>();
+        //nfaName.Init(ArrayUtils.SizePrefixedByteArray("test5".AsBytes()));
+        //// Init Organization address
+        //FinalBiome.Api.Types.SpRuntime.Multiaddress.MultiAddress organizationId = new FinalBiome.Api.Types.SpRuntime.Multiaddress.MultiAddress();
+        //FinalBiome.Api.Types.SpCore.Crypto.AccountId32 accountId32 = new FinalBiome.Api.Types.SpCore.Crypto.AccountId32();
+        //accountId32.Init(AddressUtils.GetPublicKeyFrom("5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw"));
+        //organizationId.Init(FinalBiome.Api.Types.SpRuntime.Multiaddress.InnerMultiAddress.Id,
+        //                    accountId32);
+        //// Construct call payload
+        //byte palletIsx = 11;
+        //byte callIsx = 0;
+        //List<byte> callData = new List<byte>();
+        //organizationId.EncodeTo(ref callData);
+        //nfaName.EncodeTo(ref callData);
+        //StaticTxPayload call = new StaticTxPayload(palletIsx, callIsx, callData);
+        //PairSigner signer = new PairSigner(ferdie);
+        //Hash h = await client.Tx.SignAndSubmitDefault(call, signer);
+        //Console.WriteLine($"Ext hash: {h.ToHex()}");
 
         #endregion
+
+        await SubmitAndWatch.SimpleCreate();
     }
 
     static string Stringify(Codec? value, Formatting formatting = Formatting.Indented)
