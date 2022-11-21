@@ -49,6 +49,7 @@ public class RpcClient
         messageFormatter.JsonSerializer.Converters.Add(new ChainBlockResponseJsonConverter());
         messageFormatter.JsonSerializer.Converters.Add(new ChainBlockJsonConverter());
         messageFormatter.JsonSerializer.Converters.Add(new SubstrateTxStatusJsonConverter());
+        messageFormatter.JsonSerializer.Converters.Add(new StorageChangeSetJsonConverter());
 
         return messageFormatter;
     }

@@ -11,43 +11,46 @@ using StorageData = Vec<U8>;
 /// <summary>
 /// Storage change set
 /// </summary>
-public class StorageChangeSet : Codec
+public class StorageChangeSet
 {
-    public override string TypeName() => "StorageChangeSet";
-
     /// <summary>
     /// Block hash
     /// </summary>
-    Hash Block { get; set; }
+    public Hash Block { get; set; }
 
     /// <summary>
     /// A list of changes
     /// </summary>
-    Vec<FinalBiome.Api.Types.Tuple<StorageKey, Option<StorageData>>> Changes { get; set; }
+    public List<StorageChange> Changes { get; internal set; }
 
-    public override void Decode(byte[] bytes, ref int pos)
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    public StorageChangeSet()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
-        var start = pos;
-
-        Block = new Hash();
-        Block.Decode(bytes, ref pos);
-
-        Changes = new Vec<FinalBiome.Api.Types.Tuple<StorageKey, Option<StorageData>>>();
-        Changes.Decode(bytes, ref pos);
-
-        TypeSize = pos - start;
-        Bytes = new byte[TypeSize];
-        Array.Copy(bytes, start, Bytes, 0, TypeSize);
+        Changes = new List<StorageChange>();
     }
 
-    public override byte[] Encode()
+    public void AddStorageChange(StorageChange storageChange)
     {
-        var bytes = new List<byte>();
+        Changes.Add(storageChange);
+    }
+}
 
-        bytes.AddRange(Block.Encode());
-        bytes.AddRange(Changes.Encode());
+public class StorageChange
+{
+    /// <summary>
+    /// The storage key
+    /// </summary>
+    public List<byte> StorageKey { get; internal set; }
+    /// <summary>
+    /// The new storage value
+    /// </summary>
+    public string StorageValue { get; internal set; }
 
-        return bytes.ToArray();
+    public StorageChange(List<byte> storageKey, string storageValue)
+    {
+        StorageKey = storageKey;
+        StorageValue = storageValue;
     }
 }
 

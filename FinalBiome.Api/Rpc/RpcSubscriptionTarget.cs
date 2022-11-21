@@ -91,6 +91,18 @@ namespace FinalBiome.Api.Rpc
         {
             await NotifySubscriber<SubstrateTxStatus>(subscription, result);
         }
+        /// <summary>
+        /// Response as Subscription for each block which changes the specified storage keys. If none are specified, then it creates a message for every block.
+        /// <see cref="https://github.com/w3f/PSPs/blob/master/PSPs/drafts/psp-6.md#11115-state_subscribestorage-pubsub"/>
+        /// </summary>
+        /// <param name="subscription"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        [JsonRpcMethod("state_storage")]
+        public async Task OnStorageChange(string subscription, StorageChangeSet result)
+        {
+            await NotifySubscriber<StorageChangeSet>(subscription, result);
+        }
     }
 }
 

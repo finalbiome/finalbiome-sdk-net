@@ -6,6 +6,7 @@ using FinalBiome.Api.Utils;
 using FinalBiome.Api.Rpc;
 using FinalBiome.Api.Rpc.Types;
 using FinalBiome.Api.Extensions;
+using Newtonsoft.Json.Linq;
 
 namespace FinalBiome.Api.Rpc;
 
@@ -51,9 +52,9 @@ public class Rpc
     /// <param name="startKey"></param>
     /// <param name="hash"></param>
     /// <returns></returns>
-    public async Task<Vec<StorageKey>> StorageKeysPaged(List<byte> key, uint count, List<byte>? startKey, Hash? hash)
+    public async Task<List<StorageKey>> StorageKeysPaged(List<byte> key, uint count, List<byte>? startKey, Hash? hash)
     {
-        return await client.Request<Vec<StorageKey>>("state_getKeysPaged", RpcClient.RpcParams(key.ToHex(), count, startKey?.ToHex(), hash?.ToHex()));
+        return await client.Request<List<StorageKey>>("state_getKeysPaged", RpcClient.RpcParams(key.ToHex(), count, startKey?.ToHex(), hash?.ToHex()));
     }
 
     /// <summary>
@@ -63,10 +64,10 @@ public class Rpc
     /// <param name="from"></param>
     /// <param name="to"></param>
     /// <returns></returns>
-    public async Task<Vec<StorageChangeSet>> QueryStorage(List<List<byte>> keys, Hash from, Hash? to)
+    public async Task<List<StorageChangeSet>> QueryStorage(List<List<byte>> keys, Hash from, Hash? to)
     {
         List<string> keysHashes = keys.Select(k => k.ToHex()!).ToList();
-        return await client.Request<Vec<StorageChangeSet>>("state_queryStorage", RpcClient.RpcParams(keysHashes, from.ToHex(), to?.ToHex()));
+        return await client.Request<List<StorageChangeSet>>("state_queryStorage", RpcClient.RpcParams(keysHashes, from.ToHex(), to?.ToHex()));
     }
 
     /// <summary>
@@ -75,10 +76,32 @@ public class Rpc
     /// <param name="keys"></param>
     /// <param name="at"></param>
     /// <returns></returns>
-    public async Task<Vec<StorageChangeSet>> QueryStorageAt(List<List<byte>> keys, Hash? at)
+    public async Task<List<StorageChangeSet>> QueryStorageAt(List<List<byte>> keys, Hash? at)
     {
         List<string> keysHashes = keys.Select(k => k.ToHex()!).ToList();
-        return await client.Request<Vec<StorageChangeSet>>("state_queryStorageAt", RpcClient.RpcParams(keysHashes, at?.ToHex()));
+        return await client.Request<List<StorageChangeSet>>("state_queryStorageAt", RpcClient.RpcParams(keysHashes, at?.ToHex()));
+    }
+
+    /// <summary>
+    /// Storage subscription.
+    /// If storage keys are specified, it creates a message for each block which changes the specified storage keys.
+    /// If none are specified, then it creates a message for every block
+    /// </summary>
+    /// <param name="storageKeys"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public async Task<Subscription<StorageChangeSet>> SubscribeStorage(IEnumerable<List<byte>>? storageKeys, CancellationToken? cancellationToken = null)
+    {
+        var parameters = storageKeys?.Select(k => k.ToHex()).ToArray();
+
+#pragma warning disable CS8601 // Possible null reference assignment.
+        return await client.Subscribe<StorageChangeSet>(
+            "state_subscribeStorage",
+            new object[] { parameters },
+            "state_unsubscribeStorage",
+            cancellationToken
+            );
+#pragma warning restore CS8601 // Possible null reference assignment.
     }
 
     /// <summary>

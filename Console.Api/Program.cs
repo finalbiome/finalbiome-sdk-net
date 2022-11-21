@@ -117,7 +117,9 @@ public class Program
 
         #endregion
 
-        await SubmitAndWatch.HandleTransferEvents();
+        //await SubmitAndWatch.HandleTransferEvents();
+        //await GetStorageData.SimpleGet();
+        await GetStorageData.GetAndWatch(cancellationToken);
     }
 
     static string Stringify(Codec? value, Formatting formatting = Formatting.Indented)
