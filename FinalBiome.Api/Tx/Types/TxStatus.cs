@@ -1,6 +1,7 @@
 ﻿using System;
 using FinalBiome.Api.Blocks;
 using FinalBiome.Api.Events;
+using FinalBiome.Api.Tx.Errors;
 using FinalBiome.Api.Types;
 using FinalBiome.Api.Types.Primitive;
 using FinalBiome.Api.Utils;
@@ -186,6 +187,7 @@ public class TxInBlock : Codec
     /// from them.
     /// </summary>
     /// <returns></returns>
+    /// <exception cref="ExtrinsicFailedException"></exception>
     public async Task<ExtrinsicEvents> WaitForSuccess()
     {
         var events = await FetchEvents();
@@ -200,7 +202,7 @@ public class TxInBlock : Codec
                 {
                     FinalBiome.Api.Types.FrameSystem.Pallet.EventExtrinsicFailed fieldData = (FinalBiome.Api.Types.FrameSystem.Pallet.EventExtrinsicFailed)eventData.Value2;
                     var dispatchError = fieldData.DispatchError;
-                    throw new Exception($"An extrinsic failed."); // TODO: create DispatchError exception
+                    throw new ExtrinsicFailedException(this.extHash, dispatchError);
                 }
             }
         }

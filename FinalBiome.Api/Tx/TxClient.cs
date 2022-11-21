@@ -12,15 +12,8 @@ using Signature = FinalBiome.Api.Types.SpRuntime.MultiSignature;
 /// <summary>
 /// A client for working with transactions.
 /// </summary>
-public class TxClient
+public partial class TxClient
 {
-    Client client;
-
-    public TxClient(Client client)
-    {
-        this.client = client;
-    }
-
     /// <summary>
     /// Return the SCALE encoded bytes representing the call data of the transaction.
     /// </summary>

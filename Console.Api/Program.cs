@@ -47,16 +47,17 @@ public class Program
         Client client = await Client.New();
 
         Console.WriteLine($"GenesisHash: {client.GenesisHash.ToHex()}");
-        Console.WriteLine($"RuntimeVersion: {client.RuntimeVersion}");
+        Console.WriteLine("");
 
-        // get NFA
-        FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.FungibleAssetId assetId = new FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.FungibleAssetId();
-        assetId.Init(1);
-        var faDetails = await client.Storage.FungibleAssets.Assets(assetId);
-        Console.WriteLine($"faDetails:\n{Stringify(faDetails)}");
+        #region get NFA
+        //FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.FungibleAssetId assetId = new FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.FungibleAssetId();
+        //assetId.Init(1);
+        //var faDetails = await client.Storage.FungibleAssets.Assets(assetId);
+        //Console.WriteLine($"faDetails:\n{Stringify(faDetails)}");
 
-        var nextId = await client.Storage.FungibleAssets.NextAssetId();
-        Console.WriteLine($"nextId:\n{Stringify(nextId)}");
+        //var nextId = await client.Storage.FungibleAssets.NextAssetId();
+        //Console.WriteLine($"nextId:\n{Stringify(nextId)}");
+        #endregion
 
         #region Checking calculation of the block hash
 
@@ -116,7 +117,7 @@ public class Program
 
         #endregion
 
-        await SubmitAndWatch.SimpleCreate();
+        await SubmitAndWatch.HandleTransferEvents();
     }
 
     static string Stringify(Codec? value, Formatting formatting = Formatting.Indented)

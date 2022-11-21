@@ -2,6 +2,8 @@
 using Chaos.NaCl;
 using FinalBiome.Api.Types;
 using FinalBiome.Api.Types.SpRuntime;
+using FinalBiome.Api.Types.SpRuntime.Multiaddress;
+using FinalBiome.Api.Utils;
 using Schnorrkel;
 using Schnorrkel.Keys;
 
@@ -58,6 +60,20 @@ public class Account : Pair
         MultiSignature signature = new MultiSignature();
         signature.Init(signatureType, signatureData);
         return signature;
+    }
+
+    public MultiAddress ToAddress()
+    {
+        FinalBiome.Api.Types.SpRuntime.Multiaddress.MultiAddress address = new FinalBiome.Api.Types.SpRuntime.Multiaddress.MultiAddress();
+        FinalBiome.Api.Types.SpCore.Crypto.AccountId32 accountId32 = new FinalBiome.Api.Types.SpCore.Crypto.AccountId32();
+        accountId32.Init(PublicKey());
+        address.Init(FinalBiome.Api.Types.SpRuntime.Multiaddress.InnerMultiAddress.Id, accountId32);
+        return address;
+    }
+
+    public string ToSS58Address()
+    {
+        return AddressUtils.GetAddressFrom(PublicKey());
     }
 }
 

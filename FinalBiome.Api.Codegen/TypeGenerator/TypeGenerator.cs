@@ -9,7 +9,7 @@ namespace FinalBiome.Api.Codegen
         public static string RootNamespace = "FinalBiome.Api";
         public static string TypesNamespacePrefix = "Types";
         public static string StorageNamespacePrefix = "Storage";
-        public static string TransactionsNamespacePrefix = "Transactions";
+        public static string TransactionsNamespacePrefix = "Tx";
         public static string[] banner =
         {
             "///",
@@ -51,7 +51,7 @@ namespace FinalBiome.Api.Codegen
         {
             typeParser.Save(outputDir + "/Types");
             storageParser.Save(outputDir);
-            //callParser.Save(outputDir);
+            callParser.Save(outputDir);
         }
 
         /// <summary>
