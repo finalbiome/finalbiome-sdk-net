@@ -28,16 +28,11 @@ public static class SubmitAndWatch
         // Init Organization address
         var organizationId = AccountKeyring.Eve().ToAddress();
         // Init NFA name
-        FinalBiome.Api.Types.Vec<U8> nfaName = new FinalBiome.Api.Types.Vec<U8>();
+        FinalBiome.Api.Types.VecU8 nfaName = new FinalBiome.Api.Types.VecU8();
         nfaName.Init(ArrayUtils.SizePrefixedByteArray("test5".AsBytes()));
 
         // Construct call payload
-        byte palletIsx = 11;
-        byte callIsx = 0;
-        List<byte> callData = new List<byte>();
-        organizationId.EncodeTo(ref callData);
-        nfaName.EncodeTo(ref callData);
-        StaticTxPayload callTx = new StaticTxPayload(palletIsx, callIsx, callData);
+        var callTx = api.Tx.NonFungibleAssets.Create(organizationId, nfaName);
 
         var createNfa = await api.Tx.SignAndSubmitThenWatchDefault(callTx, signer);
         var events = await createNfa.WaitForFinalizedSuccess();
@@ -63,16 +58,11 @@ public static class SubmitAndWatch
         // Init Organization address
         var organizationId = AccountKeyring.Eve().ToAddress();
         // Init NFA name
-        FinalBiome.Api.Types.Vec<U8> nfaName = new FinalBiome.Api.Types.Vec<U8>();
+        FinalBiome.Api.Types.VecU8 nfaName = new FinalBiome.Api.Types.VecU8();
         nfaName.Init(ArrayUtils.SizePrefixedByteArray("test5".AsBytes()));
 
         // Construct call payload
-        byte palletIsx = 11;
-        byte callIsx = 0;
-        List<byte> callData = new List<byte>();
-        organizationId.EncodeTo(ref callData);
-        nfaName.EncodeTo(ref callData);
-        StaticTxPayload callTx = new StaticTxPayload(palletIsx, callIsx, callData);
+        var callTx = api.Tx.NonFungibleAssets.Create(organizationId, nfaName);
 
         var createNfaProc = await api.Tx.SignAndSubmitThenWatchDefault(callTx, signer);
         var createNfa = await createNfaProc.WaitForFinalized();
@@ -112,12 +102,6 @@ public static class SubmitAndWatch
 
         // Construct call payload
         var callTx = api.Tx.NonFungibleAssets.Create(organizationId, nfaName);
-        //byte palletIsx = 11;
-        //byte callIsx = 0;
-        //List<byte> callData = new List<byte>();
-        //organizationId.EncodeTo(ref callData);
-        //nfaName.EncodeTo(ref callData);
-        //StaticTxPayload callTx = new StaticTxPayload(palletIsx, callIsx, callData);
 
         var createNfaProc = await api.Tx.SignAndSubmitThenWatchDefault(callTx, signer);
 
