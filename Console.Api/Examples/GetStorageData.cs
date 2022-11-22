@@ -31,17 +31,11 @@ public static class GetStorageData
     public static async Task GetAndWatch(CancellationToken? cancellationToken = null)
     {
         Client api = await Client.New();
-        FinalBiome.Api.Types.SpCore.Crypto.AccountId32 accountId32 = (FinalBiome.Api.Types.SpCore.Crypto.AccountId32)AccountKeyring.Dave().ToAddress().Value2;
-        FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.FungibleAssetId fungibleAssetId = new FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.FungibleAssetId();
+        var accountId32 = (FinalBiome.Api.Types.SpCore.Crypto.AccountId32)AccountKeyring.Dave().ToAddress().Value2;
+        var fungibleAssetId = new FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.FungibleAssetId();
         fungibleAssetId.Init(1);
 
-        List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();
-        storageEntryKeys.Add(new StorageMapKey(accountId32, FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat));
-        storageEntryKeys.Add(new StorageMapKey(fungibleAssetId, FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat));
-
-        StaticStorageAddress address = new StaticStorageAddress("FungibleAssets", "Accounts", storageEntryKeys);
-
-        var sub = api.Storage.SubscribeStorage<FinalBiome.Api.Types.PalletFungibleAssets.Types.AssetAccount>(address, cancellationToken);
+        var sub = api.Storage.FungibleAssets.AccountsSubscribe(accountId32, fungibleAssetId, cancellationToken);
         await foreach (var item in sub)
         {
             Console.WriteLine($"Dave has: {item?.Balance.ToHuman()} of FA {fungibleAssetId.ToHuman()}");

@@ -16,5 +16,22 @@ public partial class Timestamp
 
         return await client.Storage.Fetch<FinalBiome.Api.Types.Primitive.U64>(address, hash);
     }
+
+    /// <summary>
+    /// Subscribe to the changes of
+    ///  Current time for the current block.<br/>
+    /// </summary>
+    public async IAsyncEnumerable<FinalBiome.Api.Types.Primitive.U64?> NowSubscribe(CancellationToken? cancellationToken = null)
+    {
+        List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();
+
+        StaticStorageAddress address = new StaticStorageAddress("Timestamp", "Now", storageEntryKeys);
+
+        var sub = client.Storage.SubscribeStorage<FinalBiome.Api.Types.Primitive.U64>(address, cancellationToken);
+        await foreach (var item in sub)
+        {
+            yield return item;
+        }
+    }
 }
 

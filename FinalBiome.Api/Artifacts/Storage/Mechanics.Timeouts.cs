@@ -19,5 +19,25 @@ public partial class Mechanics
 
         return await client.Storage.Fetch<FinalBiome.Api.Types.Tuple_Empty>(address, hash);
     }
+
+    /// <summary>
+    /// Subscribe to the changes of
+    ///  Schedule when mechanics time out<br/>
+    /// </summary>
+    public async IAsyncEnumerable<FinalBiome.Api.Types.Tuple_Empty?> TimeoutsSubscribe(FinalBiome.Api.Types.Primitive.U32 u32, FinalBiome.Api.Types.SpCore.Crypto.AccountId32 accountId32, FinalBiome.Api.Types.Primitive.U32 u320, CancellationToken? cancellationToken = null)
+    {
+        List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();
+        storageEntryKeys.Add(new StorageMapKey(u32, FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat));
+        storageEntryKeys.Add(new StorageMapKey(accountId32, FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat));
+        storageEntryKeys.Add(new StorageMapKey(u320, FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat));
+
+        StaticStorageAddress address = new StaticStorageAddress("Mechanics", "Timeouts", storageEntryKeys);
+
+        var sub = client.Storage.SubscribeStorage<FinalBiome.Api.Types.Tuple_Empty>(address, cancellationToken);
+        await foreach (var item in sub)
+        {
+            yield return item;
+        }
+    }
 }
 

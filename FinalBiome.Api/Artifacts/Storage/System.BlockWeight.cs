@@ -16,5 +16,22 @@ public partial class System
 
         return await client.Storage.Fetch<FinalBiome.Api.Types.FrameSupport.Weights.PerDispatchClass>(address, hash);
     }
+
+    /// <summary>
+    /// Subscribe to the changes of
+    ///  The current weight for the block.<br/>
+    /// </summary>
+    public async IAsyncEnumerable<FinalBiome.Api.Types.FrameSupport.Weights.PerDispatchClass?> BlockWeightSubscribe(CancellationToken? cancellationToken = null)
+    {
+        List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();
+
+        StaticStorageAddress address = new StaticStorageAddress("System", "BlockWeight", storageEntryKeys);
+
+        var sub = client.Storage.SubscribeStorage<FinalBiome.Api.Types.FrameSupport.Weights.PerDispatchClass>(address, cancellationToken);
+        await foreach (var item in sub)
+        {
+            yield return item;
+        }
+    }
 }
 

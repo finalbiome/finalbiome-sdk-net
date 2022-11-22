@@ -199,6 +199,33 @@ namespace FinalBiome.Api.Codegen
             file.Add($"");
             file.Add($"        return await client.Storage.Fetch<{ps.OutputType}>(address, hash);");
             file.Add($"    }}");
+            file.Add($"");
+            if (ps.Docs is not null && ps.Docs.Count > 0)
+            {
+                file.Add($"    /// <summary>");
+                file.Add($"    /// Subscribe to the changes of");
+                foreach (var s in ps.Docs)
+                {
+                    file.Add($"    /// {s}");
+                }
+                file.Add($"    /// </summary>");
+            }
+            file.Add($"    public async IAsyncEnumerable<{ps.OutputType}?> {methodName}Subscribe({inputParams}CancellationToken? cancellationToken = null)");
+            file.Add($"    {{");
+            file.Add($"        List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();");
+            foreach (var h in ps.Hashers.Zip(inputParamNamesList))
+            {
+                file.Add($"        storageEntryKeys.Add(new StorageMapKey({h.Second}, FinalBiome.Api.Storage.StorageHasher.{HasherConverter(h.First).ToString()}));");
+            }
+            file.Add($"");
+            file.Add($"        StaticStorageAddress address = new StaticStorageAddress(\"{ps.Module}\", \"{ps.Storage}\", storageEntryKeys);");
+            file.Add($"");
+            file.Add($"        var sub = client.Storage.SubscribeStorage<{ps.OutputType}>(address, cancellationToken);");
+            file.Add($"        await foreach (var item in sub)");
+            file.Add($"        {{");
+            file.Add($"            yield return item;");
+            file.Add($"        }}");
+            file.Add($"    }}");
             file.Add($"}}");
             file.Add($"");
 

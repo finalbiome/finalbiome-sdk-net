@@ -16,5 +16,22 @@ public partial class Grandpa
 
         return await client.Storage.Fetch<FinalBiome.Api.Types.PalletGrandpa.StoredState>(address, hash);
     }
+
+    /// <summary>
+    /// Subscribe to the changes of
+    ///  State of the current authority set.<br/>
+    /// </summary>
+    public async IAsyncEnumerable<FinalBiome.Api.Types.PalletGrandpa.StoredState?> StateSubscribe(CancellationToken? cancellationToken = null)
+    {
+        List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();
+
+        StaticStorageAddress address = new StaticStorageAddress("Grandpa", "State", storageEntryKeys);
+
+        var sub = client.Storage.SubscribeStorage<FinalBiome.Api.Types.PalletGrandpa.StoredState>(address, cancellationToken);
+        await foreach (var item in sub)
+        {
+            yield return item;
+        }
+    }
 }
 

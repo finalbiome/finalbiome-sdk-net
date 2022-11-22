@@ -16,5 +16,22 @@ public partial class System
 
         return await client.Storage.Fetch<FinalBiome.Api.Types.Primitive.U32>(address, hash);
     }
+
+    /// <summary>
+    /// Subscribe to the changes of
+    ///  Total extrinsics count for the current block.<br/>
+    /// </summary>
+    public async IAsyncEnumerable<FinalBiome.Api.Types.Primitive.U32?> ExtrinsicCountSubscribe(CancellationToken? cancellationToken = null)
+    {
+        List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();
+
+        StaticStorageAddress address = new StaticStorageAddress("System", "ExtrinsicCount", storageEntryKeys);
+
+        var sub = client.Storage.SubscribeStorage<FinalBiome.Api.Types.Primitive.U32>(address, cancellationToken);
+        await foreach (var item in sub)
+        {
+            yield return item;
+        }
+    }
 }
 

@@ -17,5 +17,23 @@ public partial class NonFungibleAssets
 
         return await client.Storage.Fetch<FinalBiome.Api.Types.PalletSupport.TypesNfa.ClassDetails>(address, hash);
     }
+
+    /// <summary>
+    /// Subscribe to the changes of
+    ///  Details of asset classes.<br/>
+    /// </summary>
+    public async IAsyncEnumerable<FinalBiome.Api.Types.PalletSupport.TypesNfa.ClassDetails?> ClassesSubscribe(FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId nonFungibleClassId, CancellationToken? cancellationToken = null)
+    {
+        List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();
+        storageEntryKeys.Add(new StorageMapKey(nonFungibleClassId, FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat));
+
+        StaticStorageAddress address = new StaticStorageAddress("NonFungibleAssets", "Classes", storageEntryKeys);
+
+        var sub = client.Storage.SubscribeStorage<FinalBiome.Api.Types.PalletSupport.TypesNfa.ClassDetails>(address, cancellationToken);
+        await foreach (var item in sub)
+        {
+            yield return item;
+        }
+    }
 }
 

@@ -17,5 +17,23 @@ public partial class OrganizationIdentity
 
         return await client.Storage.Fetch<FinalBiome.Api.Types.Primitive.U8>(address, hash);
     }
+
+    /// <summary>
+    /// Subscribe to the changes of
+    ///  Counts of members in organization.<br/>
+    /// </summary>
+    public async IAsyncEnumerable<FinalBiome.Api.Types.Primitive.U8?> MemberCountSubscribe(FinalBiome.Api.Types.SpCore.Crypto.AccountId32 accountId32, CancellationToken? cancellationToken = null)
+    {
+        List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();
+        storageEntryKeys.Add(new StorageMapKey(accountId32, FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat));
+
+        StaticStorageAddress address = new StaticStorageAddress("OrganizationIdentity", "MemberCount", storageEntryKeys);
+
+        var sub = client.Storage.SubscribeStorage<FinalBiome.Api.Types.Primitive.U8>(address, cancellationToken);
+        await foreach (var item in sub)
+        {
+            yield return item;
+        }
+    }
 }
 
