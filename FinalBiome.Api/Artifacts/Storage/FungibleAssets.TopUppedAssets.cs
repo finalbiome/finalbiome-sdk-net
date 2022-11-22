@@ -2,36 +2,20 @@
 /// This file is generated automatically
 /// DO NOT CHANGE THE CONTENT OF THE FILE!
 ///
-namespace FinalBiome.Api.Storage;
-public partial class FungibleAssets
+using FinalBiome.Api.Storage;
+namespace FinalBiome.Api.Storage.FungibleAssetsEntries;
+public class TopUppedAssets : StorageEntry<FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.WeakBoundedVecFungibleAssetId>
 {
     /// <summary>
     ///  Storing assets which marked as Top Upped<br/>
     /// </summary>
-    public async Task<FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.WeakBoundedVecFungibleAssetId?> TopUppedAssets(IEnumerable<byte>? hash = null)
+    public TopUppedAssets(Client client) :
+        base(client, "FungibleAssets", "TopUppedAssets")
     {
         List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();
 
-        StaticStorageAddress address = new StaticStorageAddress("FungibleAssets", "TopUppedAssets", storageEntryKeys);
-
-        return await client.Storage.Fetch<FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.WeakBoundedVecFungibleAssetId>(address, hash);
+        this.Address = new StaticStorageAddress(palletName, entryName, storageEntryKeys);
     }
 
-    /// <summary>
-    /// Subscribe to the changes of
-    ///  Storing assets which marked as Top Upped<br/>
-    /// </summary>
-    public async IAsyncEnumerable<FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.WeakBoundedVecFungibleAssetId?> TopUppedAssetsSubscribe(CancellationToken? cancellationToken = null)
-    {
-        List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();
-
-        StaticStorageAddress address = new StaticStorageAddress("FungibleAssets", "TopUppedAssets", storageEntryKeys);
-
-        var sub = client.Storage.SubscribeStorage<FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.WeakBoundedVecFungibleAssetId>(address, cancellationToken);
-        await foreach (var item in sub)
-        {
-            yield return item;
-        }
-    }
 }
 

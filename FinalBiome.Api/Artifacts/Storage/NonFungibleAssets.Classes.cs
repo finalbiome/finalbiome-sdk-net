@@ -2,38 +2,21 @@
 /// This file is generated automatically
 /// DO NOT CHANGE THE CONTENT OF THE FILE!
 ///
-namespace FinalBiome.Api.Storage;
-public partial class NonFungibleAssets
+using FinalBiome.Api.Storage;
+namespace FinalBiome.Api.Storage.NonFungibleAssetsEntries;
+public class Classes : StorageEntry<FinalBiome.Api.Types.PalletSupport.TypesNfa.ClassDetails>
 {
     /// <summary>
     ///  Details of asset classes.<br/>
     /// </summary>
-    public async Task<FinalBiome.Api.Types.PalletSupport.TypesNfa.ClassDetails?> Classes(FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId nonFungibleClassId, IEnumerable<byte>? hash = null)
+    public Classes(Client client, FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId nonFungibleClassId) :
+        base(client, "NonFungibleAssets", "Classes")
     {
         List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();
         storageEntryKeys.Add(new StorageMapKey(nonFungibleClassId, FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat));
 
-        StaticStorageAddress address = new StaticStorageAddress("NonFungibleAssets", "Classes", storageEntryKeys);
-
-        return await client.Storage.Fetch<FinalBiome.Api.Types.PalletSupport.TypesNfa.ClassDetails>(address, hash);
+        this.Address = new StaticStorageAddress(palletName, entryName, storageEntryKeys);
     }
 
-    /// <summary>
-    /// Subscribe to the changes of
-    ///  Details of asset classes.<br/>
-    /// </summary>
-    public async IAsyncEnumerable<FinalBiome.Api.Types.PalletSupport.TypesNfa.ClassDetails?> ClassesSubscribe(FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId nonFungibleClassId, CancellationToken? cancellationToken = null)
-    {
-        List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();
-        storageEntryKeys.Add(new StorageMapKey(nonFungibleClassId, FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat));
-
-        StaticStorageAddress address = new StaticStorageAddress("NonFungibleAssets", "Classes", storageEntryKeys);
-
-        var sub = client.Storage.SubscribeStorage<FinalBiome.Api.Types.PalletSupport.TypesNfa.ClassDetails>(address, cancellationToken);
-        await foreach (var item in sub)
-        {
-            yield return item;
-        }
-    }
 }
 

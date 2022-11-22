@@ -13,12 +13,11 @@ public static class GetStorageData
     public static async Task SimpleGet()
     {
         Client api = await Client.New();
-        //FinalBiome.Api.Types.SpCore.Crypto.AccountId32 accountId32 = new FinalBiome.Api.Types.SpCore.Crypto.AccountId32();
         FinalBiome.Api.Types.SpCore.Crypto.AccountId32 accountId32 = (FinalBiome.Api.Types.SpCore.Crypto.AccountId32)AccountKeyring.Dave().ToAddress().Value2;
         FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.FungibleAssetId fungibleAssetId = new FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.FungibleAssetId();
         fungibleAssetId.Init(1);
 
-        var value = await api.Storage.FungibleAssets.Accounts(accountId32, fungibleAssetId);
+        var value = await api.Storage.FungibleAssets.Accounts(accountId32, fungibleAssetId).Fetch();
 
         Console.WriteLine($"Account {accountId32.ToHuman()} has {value?.Balance.ToHuman()} of FA with id {fungibleAssetId.ToHuman()}");
     }
@@ -35,7 +34,9 @@ public static class GetStorageData
         var fungibleAssetId = new FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.FungibleAssetId();
         fungibleAssetId.Init(1);
 
-        var sub = api.Storage.FungibleAssets.AccountsSubscribe(accountId32, fungibleAssetId, cancellationToken);
+        var sub = api.Storage.FungibleAssets.Accounts(accountId32, fungibleAssetId).Subscribe();
+
+        //var sub = api.Storage.FungibleAssets.AccountsSubscribe(accountId32, fungibleAssetId, cancellationToken);
         await foreach (var item in sub)
         {
             Console.WriteLine($"Dave has: {item?.Balance.ToHuman()} of FA {fungibleAssetId.ToHuman()}");

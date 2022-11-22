@@ -38,7 +38,7 @@ public class EventsClient
             hash = await client.Rpc.BlockHash(null);
         }
 
-        var events = await client.Storage.System.Events(hash.Encode());
+        var events = await client.Storage.System.Events().Fetch(hash.Encode());
 
         return new Events(hash, events);
     }

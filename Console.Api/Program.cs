@@ -117,8 +117,8 @@ public class Program
 
         #endregion
 
-        //await SubmitAndWatch.HandleTransferEvents();
-        //await GetStorageData.SimpleGet();
+        await SubmitAndWatch.HandleTransferEvents();
+        await GetStorageData.SimpleGet();
         await GetStorageData.GetAndWatch(cancellationToken);
     }
 

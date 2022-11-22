@@ -2,40 +2,22 @@
 /// This file is generated automatically
 /// DO NOT CHANGE THE CONTENT OF THE FILE!
 ///
-namespace FinalBiome.Api.Storage;
-public partial class NonFungibleAssets
+using FinalBiome.Api.Storage;
+namespace FinalBiome.Api.Storage.NonFungibleAssetsEntries;
+public class Assets : StorageEntry<FinalBiome.Api.Types.PalletSupport.TypesNfa.AssetDetails>
 {
     /// <summary>
     ///  Details of assets.<br/>
     /// </summary>
-    public async Task<FinalBiome.Api.Types.PalletSupport.TypesNfa.AssetDetails?> Assets(FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId nonFungibleClassId, FinalBiome.Api.Types.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId nonFungibleAssetId, IEnumerable<byte>? hash = null)
+    public Assets(Client client, FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId nonFungibleClassId, FinalBiome.Api.Types.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId nonFungibleAssetId) :
+        base(client, "NonFungibleAssets", "Assets")
     {
         List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();
         storageEntryKeys.Add(new StorageMapKey(nonFungibleClassId, FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat));
         storageEntryKeys.Add(new StorageMapKey(nonFungibleAssetId, FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat));
 
-        StaticStorageAddress address = new StaticStorageAddress("NonFungibleAssets", "Assets", storageEntryKeys);
-
-        return await client.Storage.Fetch<FinalBiome.Api.Types.PalletSupport.TypesNfa.AssetDetails>(address, hash);
+        this.Address = new StaticStorageAddress(palletName, entryName, storageEntryKeys);
     }
 
-    /// <summary>
-    /// Subscribe to the changes of
-    ///  Details of assets.<br/>
-    /// </summary>
-    public async IAsyncEnumerable<FinalBiome.Api.Types.PalletSupport.TypesNfa.AssetDetails?> AssetsSubscribe(FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId nonFungibleClassId, FinalBiome.Api.Types.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId nonFungibleAssetId, CancellationToken? cancellationToken = null)
-    {
-        List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();
-        storageEntryKeys.Add(new StorageMapKey(nonFungibleClassId, FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat));
-        storageEntryKeys.Add(new StorageMapKey(nonFungibleAssetId, FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat));
-
-        StaticStorageAddress address = new StaticStorageAddress("NonFungibleAssets", "Assets", storageEntryKeys);
-
-        var sub = client.Storage.SubscribeStorage<FinalBiome.Api.Types.PalletSupport.TypesNfa.AssetDetails>(address, cancellationToken);
-        await foreach (var item in sub)
-        {
-            yield return item;
-        }
-    }
 }
 

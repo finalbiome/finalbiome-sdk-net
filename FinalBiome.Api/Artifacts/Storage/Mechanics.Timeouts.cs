@@ -2,42 +2,23 @@
 /// This file is generated automatically
 /// DO NOT CHANGE THE CONTENT OF THE FILE!
 ///
-namespace FinalBiome.Api.Storage;
-public partial class Mechanics
+using FinalBiome.Api.Storage;
+namespace FinalBiome.Api.Storage.MechanicsEntries;
+public class Timeouts : StorageEntry<FinalBiome.Api.Types.Tuple_Empty>
 {
     /// <summary>
     ///  Schedule when mechanics time out<br/>
     /// </summary>
-    public async Task<FinalBiome.Api.Types.Tuple_Empty?> Timeouts(FinalBiome.Api.Types.Primitive.U32 u32, FinalBiome.Api.Types.SpCore.Crypto.AccountId32 accountId32, FinalBiome.Api.Types.Primitive.U32 u320, IEnumerable<byte>? hash = null)
+    public Timeouts(Client client, FinalBiome.Api.Types.Primitive.U32 u32, FinalBiome.Api.Types.SpCore.Crypto.AccountId32 accountId32, FinalBiome.Api.Types.Primitive.U32 u320) :
+        base(client, "Mechanics", "Timeouts")
     {
         List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();
         storageEntryKeys.Add(new StorageMapKey(u32, FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat));
         storageEntryKeys.Add(new StorageMapKey(accountId32, FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat));
         storageEntryKeys.Add(new StorageMapKey(u320, FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat));
 
-        StaticStorageAddress address = new StaticStorageAddress("Mechanics", "Timeouts", storageEntryKeys);
-
-        return await client.Storage.Fetch<FinalBiome.Api.Types.Tuple_Empty>(address, hash);
+        this.Address = new StaticStorageAddress(palletName, entryName, storageEntryKeys);
     }
 
-    /// <summary>
-    /// Subscribe to the changes of
-    ///  Schedule when mechanics time out<br/>
-    /// </summary>
-    public async IAsyncEnumerable<FinalBiome.Api.Types.Tuple_Empty?> TimeoutsSubscribe(FinalBiome.Api.Types.Primitive.U32 u32, FinalBiome.Api.Types.SpCore.Crypto.AccountId32 accountId32, FinalBiome.Api.Types.Primitive.U32 u320, CancellationToken? cancellationToken = null)
-    {
-        List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();
-        storageEntryKeys.Add(new StorageMapKey(u32, FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat));
-        storageEntryKeys.Add(new StorageMapKey(accountId32, FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat));
-        storageEntryKeys.Add(new StorageMapKey(u320, FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat));
-
-        StaticStorageAddress address = new StaticStorageAddress("Mechanics", "Timeouts", storageEntryKeys);
-
-        var sub = client.Storage.SubscribeStorage<FinalBiome.Api.Types.Tuple_Empty>(address, cancellationToken);
-        await foreach (var item in sub)
-        {
-            yield return item;
-        }
-    }
 }
 

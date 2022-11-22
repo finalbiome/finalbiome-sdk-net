@@ -2,36 +2,20 @@
 /// This file is generated automatically
 /// DO NOT CHANGE THE CONTENT OF THE FILE!
 ///
-namespace FinalBiome.Api.Storage;
-public partial class Balances
+using FinalBiome.Api.Storage;
+namespace FinalBiome.Api.Storage.BalancesEntries;
+public class TotalIssuance : StorageEntry<FinalBiome.Api.Types.Primitive.U128>
 {
     /// <summary>
     ///  The total units issued in the system.<br/>
     /// </summary>
-    public async Task<FinalBiome.Api.Types.Primitive.U128?> TotalIssuance(IEnumerable<byte>? hash = null)
+    public TotalIssuance(Client client) :
+        base(client, "Balances", "TotalIssuance")
     {
         List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();
 
-        StaticStorageAddress address = new StaticStorageAddress("Balances", "TotalIssuance", storageEntryKeys);
-
-        return await client.Storage.Fetch<FinalBiome.Api.Types.Primitive.U128>(address, hash);
+        this.Address = new StaticStorageAddress(palletName, entryName, storageEntryKeys);
     }
 
-    /// <summary>
-    /// Subscribe to the changes of
-    ///  The total units issued in the system.<br/>
-    /// </summary>
-    public async IAsyncEnumerable<FinalBiome.Api.Types.Primitive.U128?> TotalIssuanceSubscribe(CancellationToken? cancellationToken = null)
-    {
-        List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();
-
-        StaticStorageAddress address = new StaticStorageAddress("Balances", "TotalIssuance", storageEntryKeys);
-
-        var sub = client.Storage.SubscribeStorage<FinalBiome.Api.Types.Primitive.U128>(address, cancellationToken);
-        await foreach (var item in sub)
-        {
-            yield return item;
-        }
-    }
 }
 

@@ -46,6 +46,16 @@ public static class AccountKeyring
         return Account.FromSeed(FinalBiome.Api.Types.SpRuntime.InnerMultiSignature.Sr25519,
                                 HexUtils.HexToBytes("0x786ad0e2df456fe43dd1f91ebca22e235bc162e0bb8d53c633e8c85b2af68b7a"));
     }
+    public static Account Oscar()
+    {
+        return Account.FromSeed(FinalBiome.Api.Types.SpRuntime.InnerMultiSignature.Sr25519,
+                                HexUtils.HexToBytes("0xc3b679c3ddfe58e98373b762ef53b0e350bce45ae6a5352453c42591af354d41"));
+    }
+    public static Account Mike()
+    {
+        return Account.FromSeed(FinalBiome.Api.Types.SpRuntime.InnerMultiSignature.Sr25519,
+                                HexUtils.HexToBytes("0x38b1bd20895d5187c4944a101787bd2552fb7091e72ec0d6c8015b2a7f42d29a"));
+    }
 }
 
 public static class StringifyExtension

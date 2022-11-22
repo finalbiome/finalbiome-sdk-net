@@ -2,36 +2,20 @@
 /// This file is generated automatically
 /// DO NOT CHANGE THE CONTENT OF THE FILE!
 ///
-namespace FinalBiome.Api.Storage;
-public partial class NonFungibleAssets
+using FinalBiome.Api.Storage;
+namespace FinalBiome.Api.Storage.NonFungibleAssetsEntries;
+public class NextAssetId : StorageEntry<FinalBiome.Api.Types.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId>
 {
     /// <summary>
     ///  Storing the next asset id<br/>
     /// </summary>
-    public async Task<FinalBiome.Api.Types.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId?> NextAssetId(IEnumerable<byte>? hash = null)
+    public NextAssetId(Client client) :
+        base(client, "NonFungibleAssets", "NextAssetId")
     {
         List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();
 
-        StaticStorageAddress address = new StaticStorageAddress("NonFungibleAssets", "NextAssetId", storageEntryKeys);
-
-        return await client.Storage.Fetch<FinalBiome.Api.Types.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId>(address, hash);
+        this.Address = new StaticStorageAddress(palletName, entryName, storageEntryKeys);
     }
 
-    /// <summary>
-    /// Subscribe to the changes of
-    ///  Storing the next asset id<br/>
-    /// </summary>
-    public async IAsyncEnumerable<FinalBiome.Api.Types.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId?> NextAssetIdSubscribe(CancellationToken? cancellationToken = null)
-    {
-        List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();
-
-        StaticStorageAddress address = new StaticStorageAddress("NonFungibleAssets", "NextAssetId", storageEntryKeys);
-
-        var sub = client.Storage.SubscribeStorage<FinalBiome.Api.Types.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId>(address, cancellationToken);
-        await foreach (var item in sub)
-        {
-            yield return item;
-        }
-    }
 }
 
