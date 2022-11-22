@@ -34,7 +34,7 @@ public static class GetStorageData
         var fungibleAssetId = new FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.FungibleAssetId();
         fungibleAssetId.Init(1);
 
-        var sub = api.Storage.FungibleAssets.Accounts(accountId32, fungibleAssetId).Subscribe();
+        var sub = api.Storage.FungibleAssets.Accounts(accountId32, fungibleAssetId).Subscribe(cancellationToken);
 
         //var sub = api.Storage.FungibleAssets.AccountsSubscribe(accountId32, fungibleAssetId, cancellationToken);
         await foreach (var item in sub)
