@@ -1,8 +1,7 @@
 ﻿using System;
-using Ajuna.NetApi.Model.Meta;
+using FinalBiome.Api.Codegen.Metadata;
 using System.Diagnostics;
 using System.Globalization;
-using Ajuna.NetApi.Model.Types.Primitive;
 
 namespace FinalBiome.Api.Codegen
 {
@@ -1090,7 +1089,7 @@ namespace FinalBiome.Api.Codegen
                 return textInfo.ToTitleCase(value.Replace("_", " ")).Replace(" ", "");
             } else
             {
-                return Char.ToUpperInvariant(value[0]) + value.Substring(1);
+                return System.Char.ToUpperInvariant(value[0]) + value.Substring(1);
             }
         }
         /// <summary>
@@ -1101,7 +1100,7 @@ namespace FinalBiome.Api.Codegen
         public static string SnakeCaseToCamel(string value)
         {
             value = SnakeCaseToTitle(value);
-            return Char.ToLowerInvariant(value[0]) + value.Substring(1);
+            return System.Char.ToLowerInvariant(value[0]) + value.Substring(1);
         }
 
         /// <summary>

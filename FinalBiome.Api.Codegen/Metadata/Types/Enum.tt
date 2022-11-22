@@ -1,0 +1,107 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#
+    int numberGeneratedTypes = 257;
+    List<string> typeNames = new List<string>();
+    for(int i = 0; i <= numberGeneratedTypes; i++) typeNames.Add($"T{i}");
+
+    string typesByComma(int num) {
+        string res = String.Join(", ", typeNames.GetRange(0, num + 1));
+        return res;
+    }
+
+    string genericTypes(int num) {
+        string res = "<";
+        res += typesByComma(num);
+        res += ">";
+        return res;
+    }
+
+    string genericWhere(int num) {
+        if (num == 0) return "";
+        return String.Join("", typeNames.GetRange(1, num).Select(t => $" where {t} : Codec, new()"));
+    }
+#>
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+namespace FinalBiome.Api.Codegen.Metadata;
+public abstract class EnumBase<T0> : Codec where T0 : System.Enum
+{
+    public override string TypeName() => typeof(T0).Name;
+    public override byte[] Encode() => Bytes;
+
+#pragma warning disable CS8618
+    [JsonConverter(typeof(StringEnumConverter))]
+    public T0 Value { get; set; }
+    public Codec Value2 { get; set; }
+#pragma warning restore CS8618
+
+    protected abstract Codec DecodeInner(byte value, byte[] byteArray, ref int p);
+
+    public override void Decode(byte[] bytes, ref int pos)
+    {
+        var start = pos;
+        var enumByte = bytes[pos];
+
+        Value = (T0)System.Enum.Parse(typeof(T0), enumByte.ToString(), true);
+        pos += 1;
+
+        Value2 = DecodeInner(enumByte, bytes, ref pos);
+
+        TypeSize = pos - start;
+
+        Bytes = new byte[TypeSize];
+        Array.Copy(bytes, start, Bytes, 0, TypeSize);
+    }
+
+    public void Init(T0 value, Codec value2)
+    {
+        List<byte> bytes = new List<byte>();
+        bytes.Add(Convert.ToByte(value));
+        bytes.AddRange(value2.Encode());
+        Bytes = bytes.ToArray();
+        TypeSize = Bytes.Length;
+        Value = value;
+        Value2 = value2;
+    }
+}
+<#
+for(int i = 0; i < numberGeneratedTypes; i++)
+{
+#>
+public class Enum<#= genericTypes(i) #> : EnumBase<T0> where T0 : System.Enum <#= genericWhere(i) #>
+{
+    protected override Codec DecodeInner(byte value, byte[] bytes, ref int p)
+    {
+        Codec result;
+        switch (value)
+        {
+<#
+foreach (var t in typeNames.GetRange(1, i).Select((value, i) => new { i, value }))
+{
+#>
+            case 0x<#= t.i.ToString("X2") #>: result = new <#= t.value #>(); break;
+<#
+}
+#>
+#pragma warning disable CS8603 // Possible null reference return.
+            default: return null;
+#pragma warning restore CS8603 // Possible null reference return.
+        }
+
+#pragma warning disable CS8603 // Possible null reference return.
+#pragma warning disable CS0162 // Unreachable code detected
+        if (result.GetType().Name == "Void") return null;
+#pragma warning restore CS0162 // Unreachable code detected
+#pragma warning restore CS8603 // Possible null reference return.
+        result.Decode(bytes, ref p);
+        return result;
+    }
+}
+<#
+}
+#>

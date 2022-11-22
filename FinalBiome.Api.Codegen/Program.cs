@@ -1,8 +1,6 @@
 ﻿using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
-using Ajuna.NetApi;
-using Ajuna.NetApi.Model.Extrinsics;
 
 namespace FinalBiome.Api.Codegen;
 
@@ -35,26 +33,10 @@ class Program
 
     internal static async Task Generate(DirectoryInfo outputDir, string url)
     {
-        //string url = "ws://127.0.0.1:9944";
-        SubstrateClient client = new SubstrateClient(new Uri(url), ChargeTransactionPayment.Default());
+        var client1 = await FinalBiome.Api.Codegen.MetadataNs.Client.FromUrl(url);
 
-        try
-        {
-            Console.WriteLine("Connecting to node...");
-            await client.ConnectAsync();
-            if (client.IsConnected)
-            {
-                Console.WriteLine($"Client connected to node {url}");
-            }
+        var meta = await client1.Metadata();
 
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Caught Exception: {ex.Message}");
-            return;
-        }
-
-        var meta = client.MetaData;
         TypeGenerator generator = new TypeGenerator(meta);
         List<ParsedType> primitives = new List<ParsedType>
             {
@@ -80,6 +62,9 @@ class Program
 
         generator.Save(outputDir.FullName);
 
+        // Save serialized metadata
+        string m = meta.Serialize();
+        File.WriteAllText(outputDir.FullName + "/metadata.json", m);
 
         Console.WriteLine($"=== Statistics ===");
         Console.WriteLine($"Generated {generator.CountParsedTypes()} types");

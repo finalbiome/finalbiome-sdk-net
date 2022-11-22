@@ -1,4 +1,4 @@
-{
+{ // old
   "Origin": "ws://127.0.0.1:9944",
   "Magic": "0x6D657461",
   "Version": 14,
@@ -1244,8 +1244,7 @@
         "TypeDef": "Variant"
       },
       "37": {
-        "TypeIds": [
-        ],
+        "TypeIds": [],
         "TypeDef": "Tuple"
       },
       "38": {
@@ -9296,8 +9295,7 @@
         },
         "Calls": null,
         "Events": null,
-        "Constants": [
-        ],
+        "Constants": [],
         "Errors": null,
         "Index": 1
       },
@@ -9391,8 +9389,7 @@
         },
         "Calls": null,
         "Events": null,
-        "Constants": [
-        ],
+        "Constants": [],
         "Errors": null,
         "Index": 3
       },
@@ -9680,8 +9677,7 @@
                 "Item2": null
               },
               "Default": "AABkp7O24A0AAAAAAAAAAA==",
-              "Docs": [
-              ]
+              "Docs": []
             },
             {
               "Name": "StorageVersion",
@@ -9692,8 +9688,7 @@
                 "Item2": null
               },
               "Default": "AA==",
-              "Docs": [
-              ]
+              "Docs": []
             }
           ]
         },
@@ -9760,8 +9755,7 @@
         "Events": {
           "TypeId": 35
         },
-        "Constants": [
-        ],
+        "Constants": [],
         "Errors": {
           "TypeId": 167
         },
@@ -9781,8 +9775,7 @@
                 "Item2": null
               },
               "Default": "AA==",
-              "Docs": [
-              ]
+              "Docs": []
             }
           ]
         },
@@ -9792,8 +9785,7 @@
         "Events": {
           "TypeId": 39
         },
-        "Constants": [
-        ],
+        "Constants": [],
         "Errors": {
           "TypeId": 168
         },
@@ -10235,8 +10227,7 @@
         "Events": {
           "TypeId": 44
         },
-        "Constants": [
-        ],
+        "Constants": [],
         "Errors": {
           "TypeId": 189
         },

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Xml.Linq;
-using Ajuna.NetApi.Model.Meta;
+using FinalBiome.Api.Codegen.Metadata;
+
 
 namespace FinalBiome.Api.Codegen
 {
@@ -101,10 +102,10 @@ namespace FinalBiome.Api.Codegen
                 ps.Type = storage.StorageType.ToString();
                 switch (storage.StorageType)
                 {
-                    case Ajuna.NetApi.Model.Meta.Storage.Type.Plain:
+                    case FinalBiome.Api.Codegen.Metadata.Storage.Type.Plain:
                         ps.OutputType = typeParser.parsedTypes[storage.TypeMap.Item1].FullCanonicalName;
                         break;
-                    case Ajuna.NetApi.Model.Meta.Storage.Type.Map:
+                    case FinalBiome.Api.Codegen.Metadata.Storage.Type.Map:
                         ps.OutputType = typeParser.parsedTypes[storage.TypeMap.Item2.Value].FullCanonicalName;
                         if (storage.TypeMap.Item2.Hashers.Length == 1)
                         {
@@ -161,7 +162,7 @@ namespace FinalBiome.Api.Codegen
             foreach (var t in ps.InputTypes)
             {
                 string paramName = t.Split(".").Last();
-                paramName = Char.ToLowerInvariant(paramName[0]) + paramName.Substring(1);
+                paramName = System.Char.ToLowerInvariant(paramName[0]) + paramName.Substring(1);
                 paramName = getUniqueParamName(inputParamNamesList, paramName);
 
                 inputParamNamesList.Add(paramName);
@@ -248,7 +249,7 @@ namespace FinalBiome.Api.Codegen
                 foreach (var t in storage.InputTypes)
                 {
                     string paramName = t.Split(".").Last();
-                    paramName = Char.ToLowerInvariant(paramName[0]) + paramName.Substring(1);
+                    paramName = System.Char.ToLowerInvariant(paramName[0]) + paramName.Substring(1);
                     paramName = getUniqueParamName(inputParamNamesList, paramName);
 
                     inputParamNamesList.Add(paramName);
@@ -330,29 +331,62 @@ namespace FinalBiome.Api.Codegen
             File.WriteAllLines(pathQueryFileName, TypeGenerator.banner.Concat(queryClassSource));
         }
 
-        FinalBiome.Api.Storage.StorageHasher HasherConverter(string ajHasher)
+        StorageHasher HasherConverter(string ajHasher)
         {
             switch (ajHasher)
             {
                 case "Twox64Concat":
-                    return FinalBiome.Api.Storage.StorageHasher.Twox64Concat;
+                    return StorageHasher.Twox64Concat;
                 case "Twox128":
-                    return FinalBiome.Api.Storage.StorageHasher.Twox128;
+                    return StorageHasher.Twox128;
                 case "Twox256":
-                    return FinalBiome.Api.Storage.StorageHasher.Twox256;
+                    return StorageHasher.Twox256;
                 case "BlakeTwo128":
-                    return FinalBiome.Api.Storage.StorageHasher.Blake2_128;
+                    return StorageHasher.Blake2_128;
                 case "BlakeTwo128Concat":
-                    return FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat;
+                    return StorageHasher.Blake2_128Concat;
                 case "BlakeTwo256":
-                    return FinalBiome.Api.Storage.StorageHasher.Blake2_256;
+                    return StorageHasher.Blake2_256;
                 case "Identity":
-                    return FinalBiome.Api.Storage.StorageHasher.Identity;
+                    return StorageHasher.Identity;
 
                 default:
                     throw new Exception($"Hasher {ajHasher} is not impemented");
             }
         }
+    }
+
+    // from FinalBiome.Api.Storage
+    public enum StorageHasher
+    {
+        /// <summary>
+        /// 128-bit Blake2 hash.
+        /// </summary>
+        Blake2_128,
+        /// <summary>
+        /// 256-bit Blake2 hash.
+        /// </summary>
+        Blake2_256,
+        /// <summary>
+        /// Multiple 128-bit Blake2 hashes concatenated.
+        /// </summary>
+        Blake2_128Concat,
+        /// <summary>
+        /// 128-bit XX hash.
+        /// </summary>
+        Twox128,
+        /// <summary>
+        /// 256-bit XX hash.
+        /// </summary>
+        Twox256,
+        /// <summary>
+        /// Multiple 64-bit XX hashes concatenated.
+        /// </summary>
+        Twox64Concat,
+        /// <summary>
+        /// Identity hashing (no hashing).
+        /// </summary>
+        Identity,
     }
 }
 

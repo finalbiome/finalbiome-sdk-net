@@ -1,5 +1,5 @@
-﻿using Ajuna.NetApi.Model.Meta;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
+using FinalBiome.Api.Codegen.Metadata;
 
 namespace FinalBiome.Api.Codegen
 {
@@ -17,7 +17,7 @@ namespace FinalBiome.Api.Codegen
             "/// DO NOT CHANGE THE CONTENT OF THE FILE!",
             "///",
         };
-        MetaData metaData;
+        MetaDataV14 metaData;
 
         List<ParsedType> existedTypes = new List<ParsedType>();
 
@@ -25,7 +25,7 @@ namespace FinalBiome.Api.Codegen
         StorageParserV2 storageParser;
         CallParser callParser;
 
-        public TypeGenerator(MetaData metaData)
+        public TypeGenerator(MetaDataV14 metaData)
         {
             this.metaData = metaData;
 

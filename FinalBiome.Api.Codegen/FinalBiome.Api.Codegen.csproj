@@ -14,16 +14,29 @@
     <None Remove="System.CommandLine" />
     <None Remove="TypeGenerator\" />
     <None Remove="Newtonsoft.Json" />
+    <None Remove="Metadata\" />
+    <None Remove="Metadata\Types\" />
+    <None Remove="StreamJsonRpc" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="StreamJsonRpc" Version="2.13.33" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="TypeGenerator\" />
+    <Folder Include="Metadata\" />
+    <Folder Include="Metadata\Types\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FinalBiome.Api\FinalBiome.Api.csproj" />
-    <ProjectReference Include="..\Ajuna.NetApi\Ajuna.NetApi\Ajuna.NetApi.csproj" />
+    <None Update="Metadata\Types\Enum.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Enum.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Metadata\Types\Enum.cs">
+      <DependentUpon>Enum.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

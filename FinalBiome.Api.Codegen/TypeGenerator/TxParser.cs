@@ -1,7 +1,6 @@
 ﻿
-using Ajuna.NetApi.Model.Meta;
 using Newtonsoft.Json.Linq;
-
+using FinalBiome.Api.Codegen.Metadata;
 namespace FinalBiome.Api.Codegen;
 
 public class ParsedCallsParams
