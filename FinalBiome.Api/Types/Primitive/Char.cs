@@ -32,6 +32,9 @@ namespace FinalBiome.Api.Types.Primitive
             val.Init(value);
             return val;
         }
+
+        public static implicit operator char(Char v) => v.Value;
+        public static explicit operator Char(char v) => From(v);
     }
 }
 

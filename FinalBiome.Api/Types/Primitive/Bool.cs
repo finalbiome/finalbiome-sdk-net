@@ -27,6 +27,9 @@ namespace FinalBiome.Api.Types.Primitive
             val.Init(value);
             return val;
         }
+
+        public static implicit operator bool(Bool b) => b.Value;
+        public static explicit operator Bool(bool b) => From(b);
     }
 }
 

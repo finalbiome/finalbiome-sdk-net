@@ -17,7 +17,7 @@ using Hash = FinalBiome.Api.Types.PrimitiveTypes.H256;
 
 public class Program
 {
-    static async Task Main(string[] args)
+    static async Task Main()
     {
         var cts = new CancellationTokenSource();
         Console.CancelKeyPress += (s, e) =>

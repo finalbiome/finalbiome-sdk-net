@@ -36,6 +36,9 @@ namespace FinalBiome.Api.Types.Primitive
             Bytes = bytes;
             Value = BitConverter.ToUInt32(bytes, 0);
         }
+
+        public static implicit operator uint(U32 v) => v.Value;
+        public static explicit operator U32(uint v) => From(v);
     }
 }
 

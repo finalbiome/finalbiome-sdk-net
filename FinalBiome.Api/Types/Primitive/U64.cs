@@ -35,6 +35,9 @@ namespace FinalBiome.Api.Types.Primitive
             val.Init(value);
             return val;
         }
+
+        public static implicit operator ulong(U64 v) => v.Value;
+        public static explicit operator U64(ulong v) => From(v);
     }
 }
 

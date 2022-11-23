@@ -35,6 +35,9 @@ namespace FinalBiome.Api.Types.Primitive
             val.Init(value);
             return val;
         }
+
+        public static implicit operator short(I16 v) => v.Value;
+        public static explicit operator I16(short v) => From(v);
     }
 }
 

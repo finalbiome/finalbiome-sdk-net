@@ -49,6 +49,8 @@ namespace FinalBiome.Api.Types.Primitive
             return val;
         }
 
+        public static implicit operator string(Str v) => v.Value;
+        public static explicit operator Str(string v) => From(v);
 
     }
 }

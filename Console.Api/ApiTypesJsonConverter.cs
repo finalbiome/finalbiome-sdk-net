@@ -10,8 +10,7 @@ namespace ConsoleApi;
 using AccountId32 = FinalBiome.Api.Types.SpCore.Crypto.AccountId32;
 public class ApiTypesJsonConverter : JsonConverter
 {
-
-    Type[] _types =
+  readonly Type[] _types =
         {
             typeof(Bool),
             typeof(U8),
@@ -19,7 +18,6 @@ public class ApiTypesJsonConverter : JsonConverter
             typeof(U32),
             typeof(U64),
             typeof(U128),
-            typeof(U256),
             typeof(Str),
             typeof(FinalBiome.Api.Types.Primitive.Char),
             typeof(AccountId32),
@@ -75,9 +73,6 @@ public class ApiTypesJsonConverter : JsonConverter
                 case U128 v:
                     writer.WriteValue(v.Value);
                     break;
-                case U256 v:
-                    writer.WriteValue(v.Value);
-                    break;
                 case Str v:
                     writer.WriteValue(v.Value);
                     break;
@@ -85,14 +80,14 @@ public class ApiTypesJsonConverter : JsonConverter
                     writer.WriteValue(v.Value);
                     break;
                 case AccountId32 v:
-                    List<byte> b = new List<byte>();
+                    List<byte> b = new();
                     foreach (var i in v.Value) b.Add(i.Value);
                     string e = AddressUtils.GetAddressFrom(b.ToArray());
                     writer.WriteValue(e);
                     break;
                 //case VecU8:
                 case BoundedVecU8 v:
-                    List<byte> b1 = new List<byte>();
+                    List<byte> b1 = new();
                     foreach (var i in v.Value) b1.Add(i.Value);
 
                     string a = System.Text.Encoding.UTF8.GetString(b1.ToArray());

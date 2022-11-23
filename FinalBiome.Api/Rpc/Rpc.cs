@@ -133,7 +133,7 @@ public class Rpc
     /// </summary>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public async Task System_Properties()
+    public async Task SystemProperties()
     {
         throw new NotImplementedException();
     }

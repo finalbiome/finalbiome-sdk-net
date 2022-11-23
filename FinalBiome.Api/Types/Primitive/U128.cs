@@ -54,6 +54,9 @@ namespace FinalBiome.Api.Types.Primitive
             val.Init(value);
             return val;
         }
+
+        public static implicit operator BigInteger(U128 v) => v.Value;
+        public static explicit operator U128(BigInteger v) => From(v);
     }
 }
 
