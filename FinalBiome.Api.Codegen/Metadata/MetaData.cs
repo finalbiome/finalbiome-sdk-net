@@ -6,6 +6,9 @@ using System.Linq;
 
 namespace FinalBiome.Api.Codegen.Metadata;
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8601 // Possible null reference assignment.
+
 public class MetaDataV14
 {
     public MetaDataV14(RuntimeMetadata rtmd, string origin = "unknown")
@@ -322,4 +325,7 @@ public class MetaDataV14
             }).ToArray()
         };
     }
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8601 // Possible null reference assignment.
+
 }

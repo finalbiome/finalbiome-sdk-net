@@ -1,6 +1,8 @@
 ﻿using System;
 namespace FinalBiome.Api.Codegen.Metadata;
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
 public class RuntimeMetadataV14 : Codec
 {
     public override byte[] Encode()
@@ -405,4 +407,5 @@ public class SignedExtensionMetadataStruct : Codec
     public TType AddSignedExtType { get; private set; }
 }
 
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
