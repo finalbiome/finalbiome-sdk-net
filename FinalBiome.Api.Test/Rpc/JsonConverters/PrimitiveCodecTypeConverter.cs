@@ -60,18 +60,20 @@ public class CodecTypeConverterTests
 
     [Test]
     public void VecU8Test()
-    {
-        string json = "\"0x200101020304050607\"";
+  {
+    string json = "\"0x200101020304050607\"";
         Vec<U8>? val = JsonConvert.DeserializeObject<Vec<U8>>(json, new PrimitiveCodecTypeConverter<Vec<U8>>());
-
-        Assert.That(val?.Value[0].Value, Is.EqualTo(1));
-        Assert.That(val?.Value[1].Value, Is.EqualTo(1));
-        Assert.That(val?.Value[2].Value, Is.EqualTo(2));
-        Assert.That(val?.Value[3].Value, Is.EqualTo(3));
-        Assert.That(val?.Value[4].Value, Is.EqualTo(4));
-        Assert.That(val?.Value[5].Value, Is.EqualTo(5));
-        Assert.That(val?.Value[6].Value, Is.EqualTo(6));
-        Assert.That(val?.Value[7].Value, Is.EqualTo(7));
-    }
+    Assert.Multiple(() =>
+    {
+      Assert.That(val?.Value[0].Value, Is.EqualTo(1));
+      Assert.That(val?.Value[1].Value, Is.EqualTo(1));
+      Assert.That(val?.Value[2].Value, Is.EqualTo(2));
+      Assert.That(val?.Value[3].Value, Is.EqualTo(3));
+      Assert.That(val?.Value[4].Value, Is.EqualTo(4));
+      Assert.That(val?.Value[5].Value, Is.EqualTo(5));
+      Assert.That(val?.Value[6].Value, Is.EqualTo(6));
+      Assert.That(val?.Value[7].Value, Is.EqualTo(7));
+    });
+  }
 }
 

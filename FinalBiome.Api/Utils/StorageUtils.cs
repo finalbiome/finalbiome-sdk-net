@@ -19,7 +19,7 @@ namespace FinalBiome.Api.Utils
         /// <exception cref="NotImplementedException"></exception>
         internal static List<byte> StorageAddressRootBytes(StorageAddress addr)
         {
-            List<byte> bytes = new List<byte>();
+            List<byte> bytes = new();
             WriteStorageAddressRootBytes(addr, ref bytes);
             return bytes;
         }

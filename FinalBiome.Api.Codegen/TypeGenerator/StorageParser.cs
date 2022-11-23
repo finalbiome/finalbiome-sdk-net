@@ -212,9 +212,9 @@ namespace FinalBiome.Api.Codegen
             file.Add($"    public async IAsyncEnumerable<{ps.OutputType}?> {methodName}Subscribe({inputParams}CancellationToken? cancellationToken = null)");
             file.Add($"    {{");
             file.Add($"        List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();");
-            foreach (var h in ps.Hashers.Zip(inputParamNamesList))
+            foreach (var (First, Second) in ps.Hashers.Zip(inputParamNamesList))
             {
-                file.Add($"        storageEntryKeys.Add(new StorageMapKey({h.Second}, FinalBiome.Api.Storage.StorageHasher.{HasherConverter(h.First).ToString()}));");
+                file.Add($"        storageEntryKeys.Add(new StorageMapKey({Second}, FinalBiome.Api.Storage.StorageHasher.{HasherConverter(First)}));");
             }
             file.Add($"");
             file.Add($"        StaticStorageAddress address = new StaticStorageAddress(\"{ps.Module}\", \"{ps.Storage}\", storageEntryKeys);");

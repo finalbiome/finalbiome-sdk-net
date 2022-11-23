@@ -54,10 +54,10 @@ namespace FinalBiome.Api.Utils
                         for (var i = 0; i < 3; ++i)
                         {
                             number += bytes[pos++] * multiplier;
-                            multiplier = multiplier << 8;
+                            multiplier <<= 8;
                         }
 
-                        number = number >> 2;
+                        number >>= 2;
                         break;
                     }
 
