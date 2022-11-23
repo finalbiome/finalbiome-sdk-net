@@ -1,6 +1,6 @@
 # FinalBiome Api Codegen
 
-The console application for automatically generating types and methods from node metadata for the [FinalBiome.Api](../FinalBiome.Api/README.md)
+The console application for automatically generating types and methods from node metadata for the [FinalBiome.Api](../FinalBiome.Api/)
 
 ## Usage
 There are two options to using app:
