@@ -53,7 +53,7 @@ public partial class StorageClient
     /// <param name="startKey"></param>
     /// <param name="hash"></param>
     /// <returns></returns>
-    public async Task<List<Vec<U8>>> FetchKeys(List<byte> key, uint count, List<byte>? startKey, IEnumerable<byte>? hash)
+    public async Task<List<List<byte>>> FetchKeys(List<byte> key, uint count, List<byte>? startKey, IEnumerable<byte>? hash)
     {
         Hash? decodedHash = new Hash();
         if (hash is not null) decodedHash.Init(hash.ToArray());

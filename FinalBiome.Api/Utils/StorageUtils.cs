@@ -43,7 +43,7 @@ namespace FinalBiome.Api.Utils
         /// <returns></returns>
         internal static List<byte> StorageAddressBytes(StorageAddress addr)
         {
-            List<byte> bytes = new List<byte>();
+            List<byte> bytes = new();
             WriteStorageAddressRootBytes(addr, ref bytes);
             addr.AppendEntryBytes(ref bytes);
             return bytes;
