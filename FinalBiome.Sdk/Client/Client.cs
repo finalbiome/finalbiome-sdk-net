@@ -1,0 +1,80 @@
+namespace FinalBiome.Sdk;
+
+/// <summary>
+/// A FinalBiome App is a container-like object that stores common configuration and shares authentication across FinalBiome services.
+/// After you initialize a Firebase App object in your code, you can start using FinalBiome services.
+/// </summary>
+public class Client
+{
+    public readonly ClientConfig config;
+
+    /// <summary>
+    /// The lowlevel api client for comunication with network
+    /// </summary>
+    public readonly Api.Client api;
+
+    public GameClient Game { get; internal set; }
+    public FaClient Fa { get; internal set; }
+    public NfaClient Nfa { get; internal set; }
+    public AuthClient Auth { get; internal set; }
+
+    Client(ClientConfig config, Api.Client api)
+    {
+        this.config = config;
+        this.api = api;
+    }
+
+    public static async Task<Client> Create(ClientConfig config)
+    {
+
+        Api.Client api = await Api.Client.FromUrl(config.Endpoint);
+        Client client = new(config, api);
+        
+        AuthClient auth = new(client);
+        client.Auth = auth;
+        // subscribe to the user state changes
+        client.Auth.StateChangedEvent += client.HandleUserStateChangedEvent;
+
+        var gameClientTask = GameClient.Create(client);
+        var faClientTask = FaClient.Create(client);
+        var NfaClientTask = NfaClient.Create(client);
+
+        await Task.WhenAll(gameClientTask, faClientTask, NfaClientTask);
+
+        var gameClient = await gameClientTask;
+        var faClient = await faClientTask;
+        var nfaClient = await NfaClientTask;
+
+        client.Game = gameClient;
+        client.Fa = faClient;
+        client.Nfa = nfaClient;
+
+        return client;
+    }
+
+    /// <summary>
+    /// If user status has been changed, we need fetch user data from the network or clean existed data.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    void HandleUserStateChangedEvent(object? sender, EventArgs e)
+    {
+        if (this.Auth.UserIsSet)
+        {
+            // user sign in
+            // here we need fetch and subscribe to Game state
+            // here we need fetch and subscribe to FA state
+            _ = Task.Run(Fa.StartSubscriber);
+            // here we need fetch and subscribe to NFA state
+        }
+        else
+        {
+            // user sign out
+            // here we need clean and unsubscribe from Game state
+            // here we need clean and unsubscribe from FA state
+            _ = Task.Run(Fa.StopSubscriber);
+            // here we need clean and unsubscribe from NFA state
+
+        }
+    }
+}

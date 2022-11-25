@@ -78,11 +78,11 @@ public class RpcClient
     /// <returns></returns>
     public async Task<Subscription<TResult>> Subscribe<TResult>(string sub, object[] parameters, string unsub, CancellationToken? cancellationToken = null) // where TResult : Codec
     {
-        if (cancellationToken is null) cancellationToken = CancellationToken.None;
+        cancellationToken ??= CancellationToken.None;
         // Subscribe on events
         string subId = await Request<string>(sub, parameters);
         // Create subscription instance
-        Subscription<TResult> subscription = new Subscription<TResult>(subId, sub, parameters, unsub, (CancellationToken)cancellationToken);
+        Subscription<TResult> subscription = new(subId, sub, parameters, unsub, (CancellationToken)cancellationToken);
         // Add to list
         this.subscriptionTarget.AddSubscription(subscription);
 

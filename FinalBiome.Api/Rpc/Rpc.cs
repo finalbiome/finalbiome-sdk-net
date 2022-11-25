@@ -91,7 +91,7 @@ public class Rpc
     /// <param name="storageKeys"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<Subscription<StorageChangeSet>> SubscribeStorage(IEnumerable<List<byte>>? storageKeys, CancellationToken? cancellationToken = null)
+    public async Task<Subscription<StorageChangeSet>> SubscribeStorage(IEnumerable<StorageKey>? storageKeys, CancellationToken? cancellationToken = null)
     {
         var parameters = storageKeys?.Select(k => k.ToHex()).ToArray();
 

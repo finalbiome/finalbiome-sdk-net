@@ -20,7 +20,7 @@ public partial class StorageClient
     /// <returns></returns>
     public async Task<string?> FetchRaw(List<byte> key, IEnumerable<byte>? hash)
     {
-        Hash? decodedHash = new Hash();
+        Hash? decodedHash = new();
         if (hash is not null) decodedHash.Init(hash.ToArray());
         else decodedHash = null;
         return await client.Rpc.Storage<string>(key, decodedHash);
@@ -38,7 +38,7 @@ public partial class StorageClient
         var lookupBytes = StorageUtils.StorageAddressBytes(address);
         var raw = await client.Storage.FetchRaw(lookupBytes, hash);
         if (raw is null || raw.Length == 0) return null;
-        TResult result = new TResult();
+        TResult result = new();
         result.Init(raw);
         return result;
     }
@@ -55,7 +55,7 @@ public partial class StorageClient
     /// <returns></returns>
     public async Task<List<List<byte>>> FetchKeys(List<byte> key, uint count, List<byte>? startKey, IEnumerable<byte>? hash)
     {
-        Hash? decodedHash = new Hash();
+        Hash? decodedHash = new();
         if (hash is not null) decodedHash.Init(hash.ToArray());
         else decodedHash = null;
         return await client.Rpc.StorageKeysPaged(key, count, startKey, decodedHash);
@@ -80,7 +80,7 @@ public partial class StorageClient
             {
                 if (!Enumerable.SequenceEqual(change.StorageKey, lookupBytes))
                     throw new Exception("Unexpected key found in the storage change set ");
-                TResult value = new TResult();
+                TResult value = new();
                 value.InitFromHex(change.StorageValue);
                 yield return value;
             }

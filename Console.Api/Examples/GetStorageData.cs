@@ -64,7 +64,7 @@ public static class GetStorageData
         Client api = await Client.New();
         var accountId32 = (FinalBiome.Api.Types.SpCore.Crypto.AccountId32)AccountKeyring.Eve().ToAddress().Value2;
 
-        // Cerate a stogre address with empty entry keys for obtaining the root bytes key of the storage
+        // Cerate a storage address with empty entry keys for obtaining the root bytes key of the storage
         var addr = new StaticStorageAddress("FungibleAssets", "AssetsOf", new());
         // Obtain the root bytes
         var queryKey = addr.ToRootBytes();

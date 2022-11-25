@@ -29,9 +29,9 @@ public class StorageChangeSetJsonConverter : JsonConverter<StorageChangeSet>
                         string data = (string)reader.Value;
                         StorageChange storageChange = new StorageChange(HexUtils.HexToBytes(key).ToList(), data);
                         storageChangeSet.AddStorageChange(storageChange);
-                        reader.Read(); // exit from inner array
+                        reader.Read(); // read end inner array
+                        reader.Read(); // go to next value
                     }
-                    reader.Read(); // exit from changes arrays
                     break;
                 default:
                     throw new JsonReaderException();
