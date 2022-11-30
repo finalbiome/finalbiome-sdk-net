@@ -99,7 +99,8 @@ public class RpcClient
     /// <returns></returns>
     internal async Task Unsubscribe<TResult>(Subscription<TResult> subscription)
     {
-        string subId = await Request<string>(subscription.Unsub, new object[] { });
+        string subId = subscription.Id;
+        string _ = await Request<string>(subscription.Unsub, new object[] { subId });
         subscription.Unsubscribe();
         this.subscriptionTarget.RemoveSubscription(subscription);
     }
