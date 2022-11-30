@@ -47,8 +47,14 @@ public class FaClient
     /// <returns></returns>
     public ConcurrentDictionary<FaAssetId, FaAssetBalance> Balances { get; internal set; } = new();
 
-
+    /// <summary>
+    /// Task which listen a subscription on FA changes and updates asset states.
+    /// </summary>
     Task? subscriberTask;
+    /// <summary>
+    /// Cancellation token for subscriberTask
+    /// </summary>
+    /// <returns></returns>
     CancellationTokenSource subscriberCancellationTokenSource = new();
 
     /// <summary>
@@ -69,7 +75,7 @@ public class FaClient
     {
         FaClient faClient = new(client: client);
 
-        return faClient;
+        return await Task.FromResult(faClient);
     }
 
     /// <summary>
@@ -105,31 +111,36 @@ public class FaClient
     {
         // create subscription for all FA storage keys
         var sub = await client.api.Rpc.SubscribeStorage(storageKeys, cancellationToken);
-        await foreach (var changeSet in sub.data())
+        try
         {
-            foreach (var change in changeSet.Changes)
+            await foreach (var changeSet in sub.data(cancellationToken))
             {
-                var key = change.StorageKey;
-                var valueEncoded = change.StorageValue;
+                foreach (var change in changeSet.Changes)
+                {
+                    var key = change.StorageKey;
+                    var valueEncoded = change.StorageValue;
 
-                // get asset id
-                var assetId = AssetIdFromStorageKey(key);
-                // decode value
-                Api.Types.PalletFungibleAssets.Types.AssetAccount asset = new();
-                asset.Init(valueEncoded);
-                FaAssetBalance balance = (FaAssetBalance)asset.Balance.Value;
-                // save data
-                Balances.TryAdd(assetId, balance);
-                // emit the event
-                OnFaBalanceChangedEvent(new FaBalanceChangedEventArgs(assetId, balance));
+                    // get asset id
+                    var assetId = AssetIdFromStorageKey(key);
+                    // decode value
+                    Api.Types.PalletFungibleAssets.Types.AssetAccount asset = new();
+                    asset.Init(valueEncoded);
+                    FaAssetBalance balance = (FaAssetBalance)asset.Balance.Value;
+                    // save data
+                    Balances.TryAdd(assetId, balance);
+                    // emit the event
+                    OnFaBalanceChangedEvent(new FaBalanceChangedEventArgs(assetId, balance));
+                }
             }
         }
-
-        if (cancellationToken.IsCancellationRequested)
+        catch (OperationCanceledException)
         {
-            // clean stored balances
-            Balances.Clear();
+        //
         }
+        // unsubscribe from subscription on the network
+        await client.api.Rpc.Unsubscribe(sub);
+        // clean stored balances
+        Balances.Clear();
     }
 
     /// <summary>
@@ -180,6 +191,7 @@ public class FaClient
             // create new token source
             subscriberCancellationTokenSource = new();
         }
+        Balances.Clear();
     }
 
     /// <summary>

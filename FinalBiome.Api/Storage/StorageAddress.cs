@@ -27,6 +27,11 @@ namespace FinalBiome.Api.Storage
         /// we are expecting.
         /// </summary>
         Array<U8>? validation_hash => null;
+        /// <summary>
+        /// Return bytes representing this storage entry.
+        /// </summary>
+        /// <returns></returns>
+        List<byte> ToBytes();
     }
 
     /// <summary>

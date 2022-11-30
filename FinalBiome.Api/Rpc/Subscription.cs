@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
@@ -47,12 +48,12 @@ public class Subscription<TResult> : ISubscription
     /// Returns data enumerator
     /// </summary>
     /// <returns></returns>
-    public async IAsyncEnumerable<TResult> data()
+    public async IAsyncEnumerable<TResult> data([EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         //while (!buffer.Completion.IsCompleted)
-        while (await buffer.OutputAvailableAsync(cancellationToken))
+        while (await buffer.OutputAvailableAsync(this.cancellationToken))
         {
-            yield return await buffer.ReceiveAsync<TResult>(cancellationToken);
+            yield return await buffer.ReceiveAsync<TResult>(this.cancellationToken);
         }
     }
 
