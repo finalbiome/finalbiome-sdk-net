@@ -123,8 +123,6 @@ public class SubscribeAggregatorTests
 
         await s.Subscribe(saDaveFa3);
 
-        
-        cts.Cancel();
         ev = null;
         Thread.Sleep(5_000);
         Assert.That(ev, Is.Null);

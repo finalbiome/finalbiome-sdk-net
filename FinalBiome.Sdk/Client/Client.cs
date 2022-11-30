@@ -4,7 +4,7 @@ namespace FinalBiome.Sdk;
 /// A FinalBiome App is a container-like object that stores common configuration and shares authentication across FinalBiome services.
 /// After you initialize a Firebase App object in your code, you can start using FinalBiome services.
 /// </summary>
-public class Client
+public class Client : IDisposable
 {
     public readonly ClientConfig config;
 
@@ -76,5 +76,12 @@ public class Client
             // here we need clean and unsubscribe from NFA state
 
         }
+    }
+
+    public void Dispose()
+    {
+        Fa?.Dispose();
+        Nfa?.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

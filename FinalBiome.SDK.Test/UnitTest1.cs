@@ -24,7 +24,7 @@ public class Tests
         });
 
         await client.Auth.SignInWithEmailAndPassword("username", "password");
-        Thread.Sleep(5_000);
+        Thread.Sleep(2_000);
         Assert.Multiple(() =>
         {
             // user is set here

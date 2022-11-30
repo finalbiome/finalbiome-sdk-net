@@ -11,7 +11,7 @@ using FaAssetBalance = UInt128;
 /// <summary>
 /// Client for access to fungible assets on network for the given game.
 /// </summary>
-public class FaClient
+public class FaClient : IDisposable
 {
     readonly Client client;
 
@@ -187,9 +187,9 @@ public class FaClient
             finally
             {
                 subscriberCancellationTokenSource.Dispose();
+                // create new token source
+                subscriberCancellationTokenSource = new();
             }
-            // create new token source
-            subscriberCancellationTokenSource = new();
         }
         Balances.Clear();
     }
@@ -215,5 +215,12 @@ public class FaClient
     void OnFaBalanceChangedEvent(FaBalanceChangedEventArgs e)
     {
         FaBalanceChanged?.Invoke(this, e);
+    }
+
+    public void Dispose()
+    {
+        if (subscriberCancellationTokenSource.Token.CanBeCanceled) subscriberCancellationTokenSource.Cancel();
+        subscriberCancellationTokenSource?.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

@@ -13,7 +13,7 @@ using StorageKey = List<byte>;
 /// </summary>
 /// 
 /// There is a need to subscribe to multiple storage keys.
-/// In this case, the set of keys changes at runtime.
+/// In this case, the set of keys changes over time.
 /// This class provides aggregation of subscriptions as the set of keys changes.
 /// When adding a new key, a new task is created with a subscription to this key.
 /// If the number of active tasks exceeds the set threshold, they are aggregated
@@ -247,6 +247,7 @@ internal class SubscribeAggregator<TResult> : IDisposable where TResult : Codec,
 
     public void Dispose()
     {
+        if (linkedCancellationTokenSource is not null && linkedCancellationTokenSource.Token.CanBeCanceled) linkedCancellationTokenSource.Cancel();
         linkedCancellationTokenSource?.Dispose();
         reSubscriberCancellationTokenSource?.Dispose();
     }
