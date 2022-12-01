@@ -8,6 +8,8 @@ namespace ConsoleApi.Examples;
 
 using FinalBiome.Api.Extensions;
 using FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId;
+using FinalBiome.Api.Types.PalletSupport.Types.NonFungibleAssetId;
+using FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId;
 
 public static class GetStorageData
 {
@@ -64,7 +66,7 @@ public static class GetStorageData
         Client api = await Client.New();
         var accountId32 = (FinalBiome.Api.Types.SpCore.Crypto.AccountId32)AccountKeyring.Eve().ToAddress().Value2;
 
-        // Cerate a storage address with empty entry keys for obtaining the root bytes key of the storage
+        // Create a storage address with empty entry keys for obtaining the root bytes key of the storage
         var addr = new StaticStorageAddress("FungibleAssets", "AssetsOf", new());
         // Obtain the root bytes
         var queryKey = addr.ToRootBytes();
@@ -103,7 +105,7 @@ public static class GetStorageData
             // we know what the last part of key is FungibleAssetId with Blake2_128Concat hash.
             // So, cut the root key and 16 bytes more: 16 - it's bytes of hash Blake2_128Concat.
             // Note: we can use this approach when the store uses concatenating hashers or Identity hasher.
-            var assetIdEncoded = key.ToArray()[(queryKey.Count + 16) ..]; // TODO: remove hadr code by auto generaging FromBytes static methods for all storages.
+            var assetIdEncoded = key.ToArray()[(queryKey.Count + 16) ..]; // TODO: remove hard code by auto generaging FromBytes static methods for all storages.
             Console.WriteLine($"Hex: {assetIdEncoded.ToHex()}");
 
             var assetId = new FungibleAssetId();
@@ -114,4 +116,66 @@ public static class GetStorageData
             Console.WriteLine($"Key: {assetId.ToHuman()}");
         }
     }
+
+    public static async Task GetOwnedNfaAssetsIds(CancellationToken? cancellationToken = null)
+    {
+        cancellationToken ??= CancellationToken.None;
+
+        Client api = await Client.New();
+        var accountId32 = (FinalBiome.Api.Types.SpCore.Crypto.AccountId32)AccountKeyring.Dave();
+
+        // Create a storage address with empty entry keys for obtaining the root bytes key of the storage
+        var addr = new StaticStorageAddress("NonFungibleAssets", "Accounts", new());
+        // Obtain the root bytes
+        var queryKey = addr.ToRootBytes();
+        // We know that the first key is a AccountId32 (the owner account) and it hashed by Blake2_128Concat.
+        // We can build a `StorageMapKey` that replicates that, and append those bytes to the above.
+        var smKey = new StorageMapKey(accountId32, StorageHasher.Blake2_128Concat);
+        smKey.ToBytes(ref queryKey);
+
+        // Next, we make loop by all keys with page of 10 and agregate it in `allKeys`.
+        // Of course, an iterator is preferable in production.
+        List<List<byte>> allKeys = new();
+        List<byte>? startKey = null;
+        List<List<byte>>? keys;
+        do
+        {
+            keys = await api.Storage.FetchKeys(queryKey, 10, startKey, null);
+
+            if (keys is not null && keys.Count != 0)
+            {
+                startKey = keys.Last();
+                allKeys.AddRange(keys);
+            }
+            if (((CancellationToken)cancellationToken).IsCancellationRequested) keys = null;
+        } while (keys is not null && keys.Count != 0);
+
+        Console.WriteLine("Obtained keys:");
+
+        foreach (var key in allKeys)
+        {
+            Console.WriteLine($"  Key: {key.ToHex()}");
+        }
+
+        // now we can decode the last value of the key
+        Console.WriteLine("Decoded keys:");
+        foreach (var key in allKeys)
+        {
+            // we know what the last part of key are NonFungibleClassId and NonFungibleAssetId with Blake2_128Concat hashes.
+            // So, cut the root key and 16 bytes more: 16 - it's bytes of hash Blake2_128Concat.
+            // Note: we can use this approach when the store uses concatenating hashers or Identity hasher.
+            var assetIdEncoded = key.ToArray()[(queryKey.Count + 16) ..]; // TODO: remove hard code by auto generaging FromBytes static methods for all storages.
+
+            NonFungibleClassId classId = new();
+            int pos = 0;
+            classId.Decode(assetIdEncoded, ref pos);
+            // skip the hash of asset id value
+            pos += 16;
+            NonFungibleAssetId assetId = new();
+            assetId.Decode(assetIdEncoded, ref pos);
+            Console.WriteLine($"  Key: {classId.ToHuman()}, {assetId.ToHuman()}");
+        }
+    }
+
+
 }
