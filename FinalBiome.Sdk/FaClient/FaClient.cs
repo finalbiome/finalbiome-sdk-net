@@ -120,12 +120,16 @@ public class FaClient : IDisposable
                     var key = change.StorageKey;
                     var valueEncoded = change.StorageValue;
 
+                    FaAssetBalance balance = 0;
                     // get asset id
                     var assetId = AssetIdFromStorageKey(key);
-                    // decode value
-                    Api.Types.PalletFungibleAssets.Types.AssetAccount asset = new();
-                    asset.Init(valueEncoded);
-                    FaAssetBalance balance = (FaAssetBalance)asset.Balance.Value;
+                    if (valueEncoded is not null)
+                    {
+                        // decode value
+                        Api.Types.PalletFungibleAssets.Types.AssetAccount asset = new();
+                        asset.Init(valueEncoded);
+                        balance = (FaAssetBalance)asset.Balance.Value;
+                    }
                     // save data
                     Balances.TryAdd(assetId, balance);
                     // emit the event

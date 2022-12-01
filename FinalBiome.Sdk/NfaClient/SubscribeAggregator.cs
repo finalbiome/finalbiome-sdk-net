@@ -172,14 +172,22 @@ internal class SubscribeAggregator<TResult> : IDisposable where TResult : Codec,
                 {
                     var key = change.StorageKey;
                     // if the key still exists in the active keys, then send event about changes
-                    if (activeStorageKeys.ContainsKey(key.ToHex()) && change.StorageValue is not null)
+                    if (activeStorageKeys.ContainsKey(key.ToHex()))
                     {
-                        var valueEncoded = change.StorageValue;
-                        // decodes value
-                        TResult value = new();
-                        value.Init(valueEncoded);
-                        // raise the event about changes
-                        OnStorageChangedEvent(new StorageChangedEventArgs<TResult>(key, value));
+                        if (change.StorageValue is not null)
+                        {
+                            var valueEncoded = change.StorageValue;
+                            // decodes value
+                            TResult value = new();
+                            value.Init(valueEncoded);
+                            // raise the event about changes
+                            OnStorageChangedEvent(new StorageChangedEventArgs<TResult>(key, value));
+                        }
+                        else
+                        {
+                            // the asset doesn't exist and/or has been destroyed
+                            OnStorageChangedEvent(new StorageChangedEventArgs<TResult>(key, null));
+                        }
                     }
                 }
             }
@@ -265,11 +273,12 @@ public class StorageChangedEventArgs<TResult> : EventArgs where TResult : Codec,
     public StorageKey Key { get; internal set; }
     /// <summary>
     /// New value form storage.
+    /// If it's null, the asset doesn't exist and/or has been destroyed.
     /// </summary>
     /// <value></value>
-    public TResult Value { get; internal set; }
+    public TResult? Value { get; internal set; }
 
-    public StorageChangedEventArgs(StorageKey key, TResult value)
+    public StorageChangedEventArgs(StorageKey key, TResult? value)
     {
         Key = key;
         Value = value;

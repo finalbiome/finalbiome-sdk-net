@@ -52,7 +52,7 @@ public class Client
     /// Work with blocks.
     public BlocksClient Blocks { get; internal set; }
 
-    public Client(Hash genesisHash,
+    internal Client(Hash genesisHash,
         FinalBiome.Api.Rpc.RuntimeVersion runtimeVersion,
         string metadata,
         Api.Rpc.Rpc rpc

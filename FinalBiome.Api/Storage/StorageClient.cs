@@ -53,12 +53,12 @@ public partial class StorageClient
     /// <param name="startKey"></param>
     /// <param name="hash"></param>
     /// <returns></returns>
-    public async Task<List<List<byte>>> FetchKeys(List<byte> key, uint count, List<byte>? startKey, IEnumerable<byte>? hash)
+    public async Task<List<List<byte>>> FetchKeys(List<byte> queryKey, uint count, List<byte>? startKey, IEnumerable<byte>? hash)
     {
         Hash? decodedHash = new();
         if (hash is not null) decodedHash.Init(hash.ToArray());
         else decodedHash = null;
-        return await client.Rpc.StorageKeysPaged(key, count, startKey, decodedHash);
+        return await client.Rpc.StorageKeysPaged(queryKey, count, startKey, decodedHash);
     }
 
     /// <summary>
