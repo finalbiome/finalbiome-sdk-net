@@ -60,13 +60,10 @@ static public class NetworkHelpers
         Api.Types.PalletSupport.Attribute attr = new();
         BoundedVecU8 attrKey = new();
         attrKey.Init(ArrayUtils.SizePrefixedByteArray(attributeName.AsBytes()));
-        Api.Types.PalletSupport.AttributeValue attrValue = new()
-        {
-            Value = Api.Types.PalletSupport.InnerAttributeValue.Text
-        };
+        Api.Types.PalletSupport.AttributeValue attrValue = new();
         BoundedVecU8 attrTextVal = new();
         attrTextVal.Init(ArrayUtils.SizePrefixedByteArray(attributeValue.AsBytes()));
-        attrValue.Value2 = attrTextVal;
+        attrValue.Init(Api.Types.PalletSupport.InnerAttributeValue.Text, attrTextVal);
         attr.Decode(attrKey.Encode().Concat(attrValue.Encode()).ToArray());
         NonFungibleClassId nfaId = new();
         nfaId.Init(classId);

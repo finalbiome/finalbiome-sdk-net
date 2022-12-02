@@ -196,7 +196,7 @@ internal class SubscribeAggregator<TResult> : IDisposable where TResult : Codec,
         {
             //
         }
-        // form listen loop we exit only if cancellation occurs
+        // from listen loop we exit only if cancellation occurs
         // unsubscribe from subscription on the network
         await client.api.Rpc.Unsubscribe(sub);
     }
