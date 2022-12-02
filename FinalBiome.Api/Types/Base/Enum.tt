@@ -36,8 +36,8 @@ public abstract class EnumBase<T0> : Codec where T0 : System.Enum
 
 #pragma warning disable CS8618
     [JsonConverter(typeof(StringEnumConverter))]
-    public T0 Value { get; set; }
-    public Codec Value2 { get; set; }
+    public T0 Value { get; internal set; }
+    public Codec Value2 { get; internal set; }
 #pragma warning restore CS8618
 
     protected abstract Codec DecodeInner(byte value, byte[] byteArray, ref int p);
