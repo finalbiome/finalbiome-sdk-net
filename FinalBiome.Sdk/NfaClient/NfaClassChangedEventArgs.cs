@@ -1,7 +1,6 @@
 namespace FinalBiome.Sdk;
 
 using NfaClassId = UInt32;
-using NfaInstanceId = UInt32;
 using NfaClassDetails = Api.Types.PalletSupport.TypesNfa.ClassDetails;
 
 /// <summary>
