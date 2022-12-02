@@ -99,10 +99,13 @@ public class RpcClient
     /// <returns></returns>
     internal async Task Unsubscribe<TResult>(Subscription<TResult> subscription)
     {
-        string subId = subscription.Id;
-        string _ = await Request<string>(subscription.Unsub, new object[] { subId });
-        subscription.Unsubscribe();
-        this.subscriptionTarget.RemoveSubscription(subscription);
+        if (subscriptionTarget.SubscriptionExists(subscription))
+        {
+            string subId = subscription.Id;
+            string _ = await Request<string>(subscription.Unsub, new object[] { subId });
+            subscription.Unsubscribe();
+            this.subscriptionTarget.RemoveSubscription(subscription);
+        }
     }
 
 #pragma warning disable CS8601 // Possible null reference assignment.

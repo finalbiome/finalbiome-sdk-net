@@ -23,12 +23,22 @@ namespace FinalBiome.Api.Rpc
         }
 
         /// <summary>
-        /// Drop subscroption from listener
+        /// Drop subscription from listener
         /// </summary>
         /// <param name="subscription"></param>
         public void RemoveSubscription(ISubscription subscription)
         {
             this.subscriptions.Remove(subscription.Id);
+        }
+
+        /// <summary>
+        /// Determines whether the listener contains the specified subscription.
+        /// </summary>
+        /// <param name="subscription"></param>
+        /// <returns></returns>
+        public bool SubscriptionExists(ISubscription subscription)
+        {
+            return this.subscriptions.ContainsKey(subscription.Id);
         }
 
         /// <summary>
