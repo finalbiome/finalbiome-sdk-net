@@ -74,16 +74,33 @@ public partial class StorageClient
     {
         List<byte> lookupBytes = StorageUtils.StorageAddressBytes(address);
         var sub = await client.Rpc.SubscribeStorage(new List<byte>[] { lookupBytes }, cancellationToken);
-        await foreach (var changeSet in sub.data())
+        CancellationToken ct = cancellationToken ?? default;
+        try
         {
-            foreach (var change in changeSet.Changes)
+            await foreach (var changeSet in sub.data(ct))
             {
-                if (!Enumerable.SequenceEqual(change.StorageKey, lookupBytes))
-                    throw new Exception("Unexpected key found in the storage change set ");
-                TResult value = new();
-                value.InitFromHex(change.StorageValue);
-                yield return value;
+                foreach (var change in changeSet.Changes)
+                {
+                    if (!Enumerable.SequenceEqual(change.StorageKey, lookupBytes))
+                        throw new Exception("Unexpected key found in the storage change set ");
+                    if (change.StorageValue is not null)
+                    {
+                        TResult value = new();
+                        value.InitFromHex(hexString: change.StorageValue);
+                        yield return value;
+                    }
+                    else
+                    {
+                        yield return null;
+                    }
+                }
             }
+        }
+        finally
+        {
+            // from listen loop we exit only if cancellation occurs
+            // unsubscribe from subscription on the network
+            await client.Rpc.Unsubscribe(sub);
         }
     }
 }
