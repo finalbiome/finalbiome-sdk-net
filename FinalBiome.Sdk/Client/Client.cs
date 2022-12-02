@@ -33,7 +33,7 @@ public class Client : IDisposable
         AuthClient auth = new(client);
         client.Auth = auth;
         // subscribe to the user state changes
-        client.Auth.StateChangedEvent += client.HandleUserStateChangedEvent;
+        client.Auth.StateChanged += client.HandleUserStateChangedEvent;
 
         var gameClientTask = GameClient.Create(client);
         var faClientTask = FaClient.Create(client);
@@ -57,14 +57,14 @@ public class Client : IDisposable
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    void HandleUserStateChangedEvent(object? sender, EventArgs e)
+    async Task HandleUserStateChangedEvent(bool logedIn)
     {
-        if (this.Auth.UserIsSet)
+        if (logedIn)
         {
             // user sign in
             // here we need fetch and subscribe to Game state
             // here we need fetch and subscribe to FA state
-            _ = Task.Run(Fa.StartSubscriber);
+            // await Fa.StartSubscriber();
             // here we need fetch and subscribe to NFA state
         }
         else
@@ -72,7 +72,7 @@ public class Client : IDisposable
             // user sign out
             // here we need clean and unsubscribe from Game state
             // here we need clean and unsubscribe from FA state
-            _ = Task.Run(Fa.StopSubscriber);
+            // await Fa.StopSubscriber();
             // here we need clean and unsubscribe from NFA state
 
         }

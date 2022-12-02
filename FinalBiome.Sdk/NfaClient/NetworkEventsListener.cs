@@ -20,7 +20,7 @@ internal class NetworkEventsListener : IDisposable
     /// <returns></returns>
     CancellationTokenSource subscriberCancellationTokenSource;
     /// <summary>
-    /// A delegat type that will invoke when a new Nfa asset has been issued to the user.
+    /// A delegate type that will invoke when a new Nfa asset has been issued to the user.
     /// </summary>
     /// <param name="classId"></param>
     /// <param name="instanceId"></param>
@@ -35,6 +35,8 @@ internal class NetworkEventsListener : IDisposable
     {
         this.client = client;
         this.subscriberCancellationTokenSource = new();
+
+        this.client.Auth.StateChanged += HandleUserStateChangedEvent;
     }
 
     /// <summary>
@@ -83,7 +85,7 @@ internal class NetworkEventsListener : IDisposable
     public async Task StartNetworkEventsListener()
     {
         if (client.Auth.UserAddress is null) throw new Exception("User not set");
-        if (subscriberCancellationTokenSource.Token.IsCancellationRequested) return;
+        if (subscriberCancellationTokenSource.IsCancellationRequested) return;
         await StopNetworkEventsListener();
         CancellationToken cancellationToken = subscriberCancellationTokenSource.Token;
         subscriberTask = Task.Run(async () => await SubscribeToEvents(cancellationToken), cancellationToken);
@@ -95,7 +97,7 @@ internal class NetworkEventsListener : IDisposable
     /// <returns></returns>
     public async Task StopNetworkEventsListener()
     {
-        if (subscriberCancellationTokenSource.Token.IsCancellationRequested) return;
+        if (subscriberCancellationTokenSource.IsCancellationRequested) return;
         if (subscriberTask is not null) 
         {
             // cancel previous subscriber task
@@ -114,6 +116,25 @@ internal class NetworkEventsListener : IDisposable
             }
         }
     }
+
+    /// <summary>
+    /// Handler to changes of the user state for subscribing to network events.
+    /// </summary>
+    /// <param name="isLogged"></param>
+    /// <returns></returns>
+    async Task HandleUserStateChangedEvent(bool isLogged)
+    {
+        if (isLogged) {
+            // here we need fetch and subscribe to network events
+            await StartNetworkEventsListener();
+        }
+        else
+        {
+            // here we need clean and unsubscribe from network events
+            await StopNetworkEventsListener();
+        }
+    }
+
 
     public void Dispose()
     {

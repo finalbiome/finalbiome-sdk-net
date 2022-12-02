@@ -9,7 +9,7 @@ public class NetworkEventsListenerTests
     {
         string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
         ClientConfig config = new(eveGame);
-        var client = await Client.Create(config);
+        using Client client = await Client.Create(config);
 
         using CancellationTokenSource cts = new();
         using NetworkEventsListener l = new(client);

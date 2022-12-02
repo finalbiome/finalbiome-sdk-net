@@ -15,7 +15,7 @@ public class SubscribeAggregatorTests
     {
         string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
         ClientConfig config = new(eveGame);
-        var client = await Client.Create(config);
+        using Client client = await Client.Create(config);
         
         using CancellationTokenSource cts = new();
         using SubscribeAggregator<Api.Types.PalletFungibleAssets.Types.AssetAccount> s = new(client, 2, cts.Token);
@@ -50,7 +50,7 @@ public class SubscribeAggregatorTests
     {
         string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
         ClientConfig config = new(eveGame);
-        var client = await Client.Create(config);
+        using Client client = await Client.Create(config);
 
         using CancellationTokenSource cts = new();
         using SubscribeAggregator<Api.Types.PalletFungibleAssets.Types.AssetAccount> s = new(client, 2, cts.Token);
@@ -85,7 +85,7 @@ public class SubscribeAggregatorTests
     {
         string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
         ClientConfig config = new(eveGame);
-        var client = await Client.Create(config);
+        using Client client = await Client.Create(config);
 
         using CancellationTokenSource cts = new();
         using SubscribeAggregator<Api.Types.PalletFungibleAssets.Types.AssetAccount> s = new(client, 2, cts.Token);
@@ -115,16 +115,16 @@ public class SubscribeAggregatorTests
 
         await s.Subscribe(saDaveFa1);
 
-        Thread.Sleep(3_000);
+        Thread.Sleep(2_000);
         Assert.That(ev?.Key, Is.EqualTo(saDaveFa1.ToBytes()));
 
         await s.Subscribe(saDaveFa2);
-        Thread.Sleep(3_000);
+        Thread.Sleep(2_000);
 
         await s.Subscribe(saDaveFa3);
+        Thread.Sleep(2_000);
 
         ev = null;
-        Thread.Sleep(5_000);
         Assert.That(ev, Is.Null);
     }
 }

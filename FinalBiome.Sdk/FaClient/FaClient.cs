@@ -64,6 +64,7 @@ public class FaClient : IDisposable
     public FaClient(Client client)
     {
         this.client = client;
+        this.client.Auth.StateChanged += HandleUserStateChangedEvent;
     }
 
     /// <summary>
@@ -214,6 +215,24 @@ public class FaClient : IDisposable
         var assetId = new FungibleAssetId();
         assetId.Decode(assetIdEncoded);
         return assetId;
+    }
+
+    /// <summary>
+    /// Handler to changes of the user state for subscribing 
+    /// </summary>
+    /// <param name="isLogged"></param>
+    /// <returns></returns>
+    async Task HandleUserStateChangedEvent(bool isLogged)
+    {
+        if (isLogged) {
+            // here we need fetch and subscribe to FA state
+            await StartSubscriber();
+        }
+        else
+        {
+            // here we need clean and unsubscribe from FA state
+            await StopSubscriber();
+        }
     }
 
     void OnFaBalanceChangedEvent(FaBalanceChangedEventArgs e)

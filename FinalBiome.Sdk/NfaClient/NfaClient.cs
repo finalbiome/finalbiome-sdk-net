@@ -47,6 +47,7 @@ public class NfaClient : IDisposable
     /// <param name="instanceId)>"></param>
     /// <returns></returns>
     readonly ConcurrentDictionary<(NfaClassId classId, NfaInstanceId instanceId), NfaAssetDetails> nfaInstances = new();
+
     /// <summary>
     /// Collection of classes of all users owned Nfa assets and details about them.<br/>
     /// Value doesn't exist,the data wasn't fetched from the network.
@@ -59,29 +60,36 @@ public class NfaClient : IDisposable
     /// Subscriber to classes details
     /// </summary>
     readonly SubscribeAggregator<NfaClassDetails> subscriberToClasses;
+
     /// <summary>
     /// Subscriber to instances details
     /// </summary>
     readonly SubscribeAggregator<NfaAssetDetails> subscriberToInstances;
 
+    readonly NetworkEventsListener networkEventsListener;
+
     /// <summary>
     /// Event emitted when details of some Nfa class has been changed.
     /// </summary>
     public event EventHandler<NfaClassChangedEventArgs>? NfaClassChanged;
+
     /// <summary>
     /// Event emitted when details of some Nfa instance has been changed.
     /// </summary>
     public event EventHandler<NfaInstanceChangedEventArgs>? NfaInstanceChanged;
 
-
     public NfaClient(Client client)
     {
         this.client = client;
         subscriberCancellationTokenSource = new();
+
         subscriberToClasses = new(this.client, 5, subscriberCancellationTokenSource.Token);
-        subscriberToClasses.StorageChanged += subscriberToClassDetailsHandled;
+        subscriberToClasses.StorageChanged += SubscriberToClassDetailsHander;
         subscriberToInstances = new(this.client, 5, subscriberCancellationTokenSource.Token);
-        subscriberToInstances.StorageChanged += subscriberToInstanceDetailsHandled;
+        subscriberToInstances.StorageChanged += SubscriberToInstanceDetailsHandler;
+
+        networkEventsListener = new(this.client);
+        networkEventsListener.NfaIssued += NfaIssuedEventHandler;
     }
 
     public static async Task<NfaClient> Create(Client client)
@@ -97,6 +105,7 @@ public class NfaClient : IDisposable
         subscriberCancellationTokenSource.Dispose();
         subscriberToClasses.Dispose();
         subscriberToInstances.Dispose();
+        networkEventsListener.Dispose();
         GC.SuppressFinalize(this);
     }
 
@@ -198,6 +207,7 @@ public class NfaClient : IDisposable
     /// <returns></returns>
     public async Task<AttributeValue> GetClassAttribute(NfaClassId classId, string attributeName)
     {
+        await Task.Yield();
         throw new NotImplementedException();
     }
 
@@ -210,10 +220,11 @@ public class NfaClient : IDisposable
     /// <returns></returns>
     public async Task<AttributeValue> GetInstanceAttribute(NfaClassId classId, NfaInstanceId instanceId, string attributeName)
     {
+        await Task.Yield();
         throw new NotImplementedException();
     }
 
-    void subscriberToClassDetailsHandled(object? o, StorageChangedEventArgs<NfaClassDetails> eventArgs)
+    void SubscriberToClassDetailsHander(object? o, StorageChangedEventArgs<NfaClassDetails> eventArgs)
     {
         // parse key into nfa class id
         // TODO: cache the size of the root key
@@ -241,7 +252,7 @@ public class NfaClient : IDisposable
         OnNfaClassChangedEvent(new NfaClassChangedEventArgs(classId, eventArgs.Value));
     }
 
-    void subscriberToInstanceDetailsHandled(object? o, StorageChangedEventArgs<NfaAssetDetails> eventArgs)
+    void SubscriberToInstanceDetailsHandler(object? o, StorageChangedEventArgs<NfaAssetDetails> eventArgs)
     {
         // parse key into nfa class id
         // TODO: cache the size of the root key
@@ -271,6 +282,23 @@ public class NfaClient : IDisposable
         }
         // emit event
         OnNfaInstanceChangedEvent(new NfaInstanceChangedEventArgs(classId, instanceId, eventArgs.Value));
+    }
+
+    /// <summary>
+    /// Handler of network events about new issued assets.
+    /// </summary>
+    /// <param name="classId"></param>
+    /// <param name="instanceId"></param>
+    async Task NfaIssuedEventHandler(NfaClassId classId, NfaInstanceId instanceId)
+    {
+        // if user has been owned a new asset, we should subscribe on it changes.
+        NonFungibleClassId nonFungibleClassId = new();
+        nonFungibleClassId.Init(classId);
+        NonFungibleAssetId nonFungibleAssetId = new();
+        nonFungibleAssetId.Init(instanceId);
+        var detailsEntity = client.api.Storage.NonFungibleAssets.Assets(nonFungibleClassId, nonFungibleAssetId);
+
+        await subscriberToInstances.Subscribe(detailsEntity.Address);
     }
 
     /// <summary>

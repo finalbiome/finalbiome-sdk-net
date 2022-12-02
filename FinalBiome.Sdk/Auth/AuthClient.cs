@@ -3,19 +3,14 @@ namespace FinalBiome.Sdk;
 public class AuthClient
 {
     readonly Client client;
-    FinalBiome.Api.Tx.Account? _user;
+    Api.Tx.Account? _user;
     /// <summary>
     /// Current FinalBiome user.
     /// </summary>
     Api.Tx.Account? user
     {
         get => _user;
-        set
-        {
-            _user = value;
-            // if user has bee changed, raise the error
-            OnStateChangedEvent();
-        }
+        set => _user = value;
     }
 
     /// <summary>
@@ -37,9 +32,16 @@ public class AuthClient
     public bool UserIsSet => user is not null;
 
     /// <summary>
+    /// A delegate type that will invoke when state of the user has been changed
+    /// </summary>
+    /// <param name="loggedIn">true - logged in</param>
+    /// <returns></returns>
+    public delegate Task OnStateChanged(bool loggedIn);
+    /// <summary>
     /// This event gets called whenever the user's account changes.
     /// </summary>
-    public event EventHandler? StateChangedEvent;
+    public OnStateChanged? StateChanged;
+
 
     public AuthClient(Client client)
     {
@@ -61,15 +63,15 @@ public class AuthClient
         var user = FinalBiome.Api.Tx.Account.FromSeed(FinalBiome.Api.Types.SpRuntime.InnerMultiSignature.Sr25519,
             FinalBiome.Api.Utils.HexUtils.HexToBytes("0x868020ae0687dda7d57565093a69090211449845a7e11453612800b663307246"));
         this.user = user;
+
+        if (StateChanged is not null)
+            await StateChanged(true);
     }
 
     public async Task SignOut()
     {
-        this.user = null;
-    }
-
-    void OnStateChangedEvent()
-    {
-        StateChangedEvent?.Invoke(this, EventArgs.Empty);
+        user = null;
+        if (StateChanged is not null)
+            await StateChanged(false);
     }
 }

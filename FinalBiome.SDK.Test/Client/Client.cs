@@ -1,7 +1,7 @@
 ﻿using FinalBiome.Sdk;
 namespace FinalBiome.Sdk.Test;
 
-public class Tests
+public class ClientTests
 {
     [SetUp]
     public void Setup()
@@ -13,7 +13,7 @@ public class Tests
     {
         string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
         ClientConfig config = new(eveGame);
-        var client = await FinalBiome.Sdk.Client.Create(config);
+        using Client client = await FinalBiome.Sdk.Client.Create(config);
         
         Assert.Multiple(() =>
         {
@@ -45,10 +45,13 @@ public class Tests
     {
         string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
         ClientConfig config = new(eveGame);
-        var client = await Client.Create(config);
+        using Client client = await Client.Create(config);
 
         var wasCalled = false;
-        client.Auth.StateChangedEvent += (o,e) => wasCalled = true;
+        client.Auth.StateChanged += async (a) => {
+            wasCalled = true;
+            await Task.Yield();
+        };
 
         // login
         await client.Auth.SignInWithEmailAndPassword("username", "password");
