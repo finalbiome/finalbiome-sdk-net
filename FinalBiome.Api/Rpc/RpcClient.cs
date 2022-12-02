@@ -27,10 +27,10 @@ public class RpcClient
     /// </summary>
     internal static async Task<RpcClient> Build(Uri url)
     {
-        ClientWebSocket ws = new ClientWebSocket();
+        ClientWebSocket ws = new();
         await ws.ConnectAsync(url, CancellationToken.None);
-        JsonRpc rpc = new JsonRpc(new WebSocketMessageHandler(ws, messageFormatter()));
-        RpcSubscriptionTarget subscriptionTarget = new RpcSubscriptionTarget();
+        JsonRpc rpc = new(new WebSocketMessageHandler(ws, messageFormatter()));
+        RpcSubscriptionTarget subscriptionTarget = new();
         rpc.AddLocalRpcTarget(subscriptionTarget, new JsonRpcTargetOptions { AllowNonPublicInvocation = false });
         rpc.StartListening();
         return new RpcClient(ws, rpc, subscriptionTarget);

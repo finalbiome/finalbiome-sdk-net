@@ -10,9 +10,9 @@ public class AddressUtils
 
         var SR25519_PUBLIC_SIZE = 32;
         var PUBLIC_KEY_LENGTH = 32;
-        var KEY_SIZE = 0;
+        int KEY_SIZE;
 
-        byte[] plainAddr = new byte[0];
+        byte[] plainAddr;
         // 00000000b..=00111111b (0..=63 inclusive): Simple account/address/network identifier.
         // The byte can be interpreted directly as such an identifier.
         if (ss58Prefix < 64)
@@ -48,7 +48,7 @@ public class AddressUtils
         }
 
         var ssPrefixed = new byte[SR25519_PUBLIC_SIZE + 7 + KEY_SIZE];
-        var ssPrefixed1 = new byte[] { 0x53, 0x53, 0x35, 0x38, 0x50, 0x52, 0x45 };
+        var ssPrefixed1 = "SS58PRE"u8.ToArray();
         ssPrefixed1.CopyTo(ssPrefixed, 0);
         plainAddr.AsSpan(0, SR25519_PUBLIC_SIZE + KEY_SIZE).CopyTo(ssPrefixed.AsSpan(7));
 
@@ -73,7 +73,7 @@ public class AddressUtils
     {
         network = 42;
         var PUBLIC_KEY_LENGTH = 32;
-        var PREFIX_SIZE = 0;
+        int PREFIX_SIZE;
         var pubkByteList = new List<byte>();
 
         var bs58decoded = Base58.Bitcoin.Decode(address).ToArray();

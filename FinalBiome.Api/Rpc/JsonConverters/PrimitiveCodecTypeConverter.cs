@@ -9,7 +9,7 @@ public class PrimitiveCodecTypeConverter<T> : JsonConverter<T> where T : Codec, 
     {
         if (reader.Value is null) return null;
         string hexString = (string) reader.Value;
-        T value = new T();
+        T value = new();
         value.InitFromHex(hexString);
         return value;
     }

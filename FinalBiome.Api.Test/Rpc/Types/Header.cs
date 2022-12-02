@@ -15,7 +15,7 @@ public class HeaderTests
     public void HeaderTest()
     {
         /// checking encoding of the digest
-        Header h = new Header();
+        Header h = new();
         var p = new Hash();
         p.Init(Hasher.BlakeTwo256(Encoding.UTF8.GetBytes("1000")));
         h.ParentHash = p;
@@ -34,7 +34,7 @@ public class HeaderTests
         var log0 = new DigestItem();
 
         var t = new Vec<U8>();
-        List<U8> b0 = new List<U8>();
+        List<U8> b0 = new();
         foreach (var b01 in Encoding.UTF8.GetBytes("5000"))
         {
             var a = new U8();

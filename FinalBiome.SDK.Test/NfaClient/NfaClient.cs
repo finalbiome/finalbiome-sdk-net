@@ -118,34 +118,6 @@ public class NfaClientTests
         Assert.That(eventEmittedCount, Is.EqualTo(3));
     }
 
-    // [Test] // TODO: finish test after the ability to delete assets
-    public async Task InstanceRemovedEventTest()
-    {
-        // by new nfa
-        // (NfaClassId classId, NfaInstanceId instanceId) = await NetworkHelpers.ExecBuyNfaMechanic();
-        
-        // string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
-        // ClientConfig config = new(eveGame);
-        // Client cl = await Client.Create(config);
-        // NfaClient client = new(cl);
-
-        // var details = await client.GetInstanceDetails(classId, instanceId);
-        // Thread.Sleep(2_000);
-        
-        // int eventEmittedCount = 0;
-        // client.NfaInstanceChanged += (o, e) =>
-        // {
-        //     eventEmittedCount++;
-        //     // if (eventEmittedCount != 1) return;
-        //     Assert.Multiple(() =>
-        //     {
-        //         Assert.That(e.classId, Is.EqualTo(classId));
-        //         Assert.That(e.details, Is.Null);
-        //     });
-        // };
-        // Assert.That(eventEmittedCount, Is.EqualTo(1));
-    }
-
     [Test]
     public async Task NewAssetsSubscriptionTest()
     {
@@ -181,7 +153,7 @@ public class NfaClientTests
         Assert.That(eventEmittedCount, expression: Is.EqualTo(0));
         // by new nfa
         (NfaClassId classIdExpected, NfaInstanceId instanceIdExpected) = await NetworkHelpers.ExecBuyNfaMechanic();
-        Thread.Sleep(10_000);
+        Thread.Sleep(20_000);
         Assert.Multiple(() =>
         {
             Assert.That(eventEmittedCount, Is.EqualTo(1));

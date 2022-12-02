@@ -17,15 +17,15 @@ namespace FinalBiome.Api.Codegen
         /// </summary>
         public string OutputType;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public List<string> Hashers = new List<string>();
+        public List<string> Hashers = new();
         /// <summary>
         /// Full canonical names of types
         /// </summary>
-        public List<string> InputTypes = new List<string>();
+        public List<string> InputTypes = new();
         public List<string>? Docs;
 
         public bool Parsed = false;
-        public List<string> GeneratedCode = new List<string>();
+        public List<string> GeneratedCode = new();
 
         public string FileSuffix = "";
 
@@ -49,7 +49,7 @@ namespace FinalBiome.Api.Codegen
         /// <summary>
         /// Filename dir generates as TypeGenerator.StorageNamespacePrefix
         /// </summary>
-        public string FileNameDir
+        public static string FileNameDir
         {
             get
             {
@@ -60,15 +60,15 @@ namespace FinalBiome.Api.Codegen
 
     public class StorageParserV2
     {
-        Dictionary<uint, PalletModule> modules;
+        readonly Dictionary<uint, PalletModule> modules;
         internal List<ParsedStorageV2> parsedStorages;
         /// <summary>
         /// Holds code of module classes.
         /// Key - the module name
         /// </summary>
-        internal Dictionary<string, ParsedStorageV2> parsedModules = new Dictionary<string, ParsedStorageV2>();
-        List<string> queryClassSource = new List<string>();
-        TypeParser typeParser;
+        internal Dictionary<string, ParsedStorageV2> parsedModules = new();
+        List<string> queryClassSource = new();
+        readonly TypeParser typeParser;
 
         public StorageParserV2(Dictionary<uint, PalletModule> modules, TypeParser typeParser)
         {
@@ -96,10 +96,12 @@ namespace FinalBiome.Api.Codegen
         {
             foreach (var storage in module.Storage.Entries)
             {
-                ParsedStorageV2 ps = new ParsedStorageV2();
-                ps.Module = module.Name;
-                ps.Storage = storage.Name;
-                ps.Type = storage.StorageType.ToString();
+                ParsedStorageV2 ps = new()
+                {
+                    Module = module.Name,
+                    Storage = storage.Name,
+                    Type = storage.StorageType.ToString()
+                };
                 switch (storage.StorageType)
                 {
                     case FinalBiome.Api.Codegen.Metadata.Storage.Type.Plain:
@@ -146,9 +148,9 @@ namespace FinalBiome.Api.Codegen
             }
         }
 
-        void GenerateStorageEntry(ParsedStorageV2 ps)
+        static void GenerateStorageEntry(ParsedStorageV2 ps)
         {
-            string getUniqueParamName(List<string> parameters, string newParameterName, int? suffix = null) {
+            static string getUniqueParamName(List<string> parameters, string newParameterName, int? suffix = null) {
                 if (parameters.Contains(newParameterName + suffix))
                 {
                     suffix = suffix is null ? 0 : suffix + 1;
@@ -157,12 +159,12 @@ namespace FinalBiome.Api.Codegen
                 else return newParameterName + suffix;
             }
 
-            List<string> inputParamNamesList = new List<string>();
-            List<string> inputParamsList = new List<string>();
+            List<string> inputParamNamesList = new();
+            List<string> inputParamsList = new();
             foreach (var t in ps.InputTypes)
             {
                 string paramName = t.Split(".").Last();
-                paramName = System.Char.ToLowerInvariant(paramName[0]) + paramName.Substring(1);
+                paramName = System.Char.ToLowerInvariant(paramName[0]) + paramName[1..];
                 paramName = getUniqueParamName(inputParamNamesList, paramName);
 
                 inputParamNamesList.Add(paramName);
@@ -174,7 +176,7 @@ namespace FinalBiome.Api.Codegen
             // stupid Compiler Error CS0542
             string className = (ps.Module != ps.Storage) ? ps.Storage : ps.Storage + "Get";
 
-            List<string> file = new List<string>();
+            List<string> file = new();
 
             file.Add($"using FinalBiome.Api.Storage;");
             file.Add($"namespace {ps.CanonicalName.Item1}.{ps.Module}Entries;");
@@ -195,7 +197,7 @@ namespace FinalBiome.Api.Codegen
             file.Add($"        List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();");
             foreach (var h in ps.Hashers.Zip(inputParamNamesList))
             {
-                file.Add($"        storageEntryKeys.Add(new StorageMapKey({h.Second}, FinalBiome.Api.Storage.StorageHasher.{HasherConverter(h.First).ToString()}));");
+                file.Add($"        storageEntryKeys.Add(new StorageMapKey({h.Second}, FinalBiome.Api.Storage.StorageHasher.{HasherConverter(h.First)}));");
             }
             file.Add($"");
             file.Add($"        this.Address = new StaticStorageAddress(palletName, entryName, storageEntryKeys);");
@@ -213,7 +215,7 @@ namespace FinalBiome.Api.Codegen
         {
             if (parsedModules.ContainsKey(ps.Module)) return;
 
-            string getUniqueParamName(List<string> parameters, string newParameterName, int? suffix = null)
+            static string getUniqueParamName(List<string> parameters, string newParameterName, int? suffix = null)
             {
                 if (parameters.Contains(newParameterName + suffix))
                 {
@@ -226,12 +228,14 @@ namespace FinalBiome.Api.Codegen
             /// all storages for given module
             List<ParsedStorageV2> storages = parsedStorages.FindAll(s => s.Module == ps.Module);
 
-            ParsedStorageV2 psm = new ParsedStorageV2();
-            psm.Module = ps.Module;
-            psm.Storage = ps.Storage;
+            ParsedStorageV2 psm = new()
+            {
+                Module = ps.Module,
+                Storage = ps.Storage
+            };
 
 
-            List<string> file = new List<string>();
+            List<string> file = new();
 
             file.Add($"namespace {ps.CanonicalName.Item1};");
             file.Add($"using {ps.CanonicalName.Item1}.{ps.Module}Entries;");
@@ -244,12 +248,12 @@ namespace FinalBiome.Api.Codegen
             file.Add($"    }}");
             foreach(var storage in storages)
             {
-                List<string> inputParamNamesList = new List<string>();
-                List<string> inputParamsList = new List<string>();
+                List<string> inputParamNamesList = new();
+                List<string> inputParamsList = new();
                 foreach (var t in storage.InputTypes)
                 {
                     string paramName = t.Split(".").Last();
-                    paramName = System.Char.ToLowerInvariant(paramName[0]) + paramName.Substring(1);
+                    paramName = System.Char.ToLowerInvariant(paramName[0]) + paramName[1..];
                     paramName = getUniqueParamName(inputParamNamesList, paramName);
 
                     inputParamNamesList.Add(paramName);
@@ -288,7 +292,7 @@ namespace FinalBiome.Api.Codegen
 
         void GenerateStorageClientPartialClass()
         {
-            List<string> file = new List<string>();
+            List<string> file = new();
 
             file.Add($"namespace {TypeGenerator.RootNamespace}.{TypeGenerator.StorageNamespacePrefix};");
             file.Add($"public partial class StorageClient");
@@ -319,7 +323,7 @@ namespace FinalBiome.Api.Codegen
                     Console.WriteLine($"Type {s.Module}.{s.Storage} doesn't parsed. Skip");
                     continue;
                 }
-                string path = $"{outputDir}/{s.FileNameDir}";
+                string path = $"{outputDir}/{ParsedStorageV2.FileNameDir}";
                 string pathFileName = $"{path}/{s.FileName}";
                 Directory.CreateDirectory(path);
                 Console.WriteLine($"Write file {pathFileName}");
@@ -331,28 +335,19 @@ namespace FinalBiome.Api.Codegen
             File.WriteAllLines(pathQueryFileName, TypeGenerator.banner.Concat(queryClassSource));
         }
 
-        StorageHasher HasherConverter(string ajHasher)
+        static StorageHasher HasherConverter(string ajHasher)
         {
-            switch (ajHasher)
+            return ajHasher switch
             {
-                case "Twox64Concat":
-                    return StorageHasher.Twox64Concat;
-                case "Twox128":
-                    return StorageHasher.Twox128;
-                case "Twox256":
-                    return StorageHasher.Twox256;
-                case "BlakeTwo128":
-                    return StorageHasher.Blake2_128;
-                case "BlakeTwo128Concat":
-                    return StorageHasher.Blake2_128Concat;
-                case "BlakeTwo256":
-                    return StorageHasher.Blake2_256;
-                case "Identity":
-                    return StorageHasher.Identity;
-
-                default:
-                    throw new Exception($"Hasher {ajHasher} is not impemented");
-            }
+                "Twox64Concat" => StorageHasher.Twox64Concat,
+                "Twox128" => StorageHasher.Twox128,
+                "Twox256" => StorageHasher.Twox256,
+                "BlakeTwo128" => StorageHasher.Blake2_128,
+                "BlakeTwo128Concat" => StorageHasher.Blake2_128Concat,
+                "BlakeTwo256" => StorageHasher.Blake2_256,
+                "Identity" => StorageHasher.Identity,
+                _ => throw new Exception($"Hasher {ajHasher} is not impemented"),
+            };
         }
     }
 

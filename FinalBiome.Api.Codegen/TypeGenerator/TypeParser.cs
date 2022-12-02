@@ -7,7 +7,7 @@ namespace FinalBiome.Api.Codegen
 {
     public class TypeParser
     {
-        static string[] reservedPropertyNames =
+        static readonly string[] reservedPropertyNames =
         {
             "New",
         };
@@ -18,25 +18,24 @@ namespace FinalBiome.Api.Codegen
         /// <param name="val"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        string numberPrimitiveToNative(string val)
+        static string NumberPrimitiveToNative(string val)
         {
-            switch (val)
+            return val switch
             {
-                case "U8": return "byte";
-                case "U16": return "ushort";
-                case "U32": return "uint";
-                case "U64": return "ulong";
-                case "U128": return "BigInteger";
-                case "U256": return "BigInteger";
-                case "I8": return "sbyte";
-                case "I16": return "short";
-                case "I32": return "int";
-                case "I64": return "long";
-                case "I128": return "BigInteger";
-                case "I256": return "BigInteger";
-                default:
-                    throw new Exception("Type is not found");
-            }
+                "U8" => "byte",
+                "U16" => "ushort",
+                "U32" => "uint",
+                "U64" => "ulong",
+                "U128" => "BigInteger",
+                "U256" => "BigInteger",
+                "I8" => "sbyte",
+                "I16" => "short",
+                "I32" => "int",
+                "I64" => "long",
+                "I128" => "BigInteger",
+                "I256" => "BigInteger",
+                _ => throw new Exception("Type is not found"),
+            };
         }
 
         /// <summary>
@@ -50,7 +49,7 @@ namespace FinalBiome.Api.Codegen
             NodeType nt = (NodeType)Types[typeId];
             if (IsPrimitive(nt)) return typeId;
 
-            if (!(nt is NodeTypeComposite)) throw new Exception($"Can't resolve. Type with id {typeId} is not composite");
+            if (nt is not NodeTypeComposite) throw new Exception($"Can't resolve. Type with id {typeId} is not composite");
             if (((NodeTypeComposite)nt).TypeFields.Length != 1) throw new Exception($"Can't resolve. Type with id {typeId} has not one field");
             var innerId = ((NodeTypeComposite)nt).TypeFields[0].TypeId;
             if (IsPrimitive(Types[innerId])) return innerId;
@@ -69,14 +68,13 @@ namespace FinalBiome.Api.Codegen
         /// </summary>
         public Dictionary<(uint, int), ParsedType> parsedVariantsTypes;
 
-        List<ParsedType> existedTypes = new List<ParsedType>();
+        List<ParsedType> existedTypes = new();
 
         /// <summary>
         /// Storage for new types which don't present in the meta. For generic types
         /// </summary>
         public Dictionary<uint, ParsedType> newTypes;
-
-        Dictionary<uint, NodeType> Types;
+        readonly Dictionary<uint, NodeType> Types;
 
         public TypeParser(Dictionary<uint, NodeType> types)
         {
@@ -131,14 +129,14 @@ namespace FinalBiome.Api.Codegen
             if (parsedTypes.ContainsKey(value.Id)) return;
             //if (foundedTypes.ContainsKey(GetTypeNameFormMeta(value))) return;
 
-            if (value is NodeTypePrimitive) ParseTypePrimitive((NodeTypePrimitive)value);
-            else if (value is NodeTypeComposite) ParseTypeComposite((NodeTypeComposite)value);
-            else if (value is NodeTypeArray) ParseTypeArray((NodeTypeArray)value);
-            else if (value is NodeTypeSequence) ParseTypeSequence((NodeTypeSequence)value);
-            else if (value is NodeTypeCompact) ParseTypeCompact((NodeTypeCompact)value);
-            else if (value is NodeTypeTuple) ParseTypeTuple((NodeTypeTuple)value);
-            else if (value is NodeTypeBitSequence) ParseTypeBitSequence((NodeTypeBitSequence)value);
-            else if (value is NodeTypeVariant) ParseTypeVariant((NodeTypeVariant)value);
+            if (value is NodeTypePrimitive primitive) ParseTypePrimitive(primitive);
+            else if (value is NodeTypeComposite composite) ParseTypeComposite(composite);
+            else if (value is NodeTypeArray array) ParseTypeArray(array);
+            else if (value is NodeTypeSequence sequence) ParseTypeSequence(sequence);
+            else if (value is NodeTypeCompact compact) ParseTypeCompact(compact);
+            else if (value is NodeTypeTuple tuple) ParseTypeTuple(tuple);
+            else if (value is NodeTypeBitSequence sequence1) ParseTypeBitSequence(sequence1);
+            else if (value is NodeTypeVariant variant) ParseTypeVariant(variant);
             else throw new Exception($"Found unhandled type by id {value.Id}");
         }
 
@@ -171,7 +169,7 @@ namespace FinalBiome.Api.Codegen
                     ParseFieldType(fieldType);
                 }
 
-            ParsedType pt = new ParsedType(typeName);
+            ParsedType pt = new(typeName);
             parsedTypes[val.Id] = pt;
 
             if (IsBoundedVec(val) || IsWeakBoundedVec(val))
@@ -194,7 +192,7 @@ namespace FinalBiome.Api.Codegen
             ParseType(Types[val.TypeId]);
 
             string typeName = GetTypeNameFormMeta(val);
-            ParsedType pt = new ParsedType(typeName);
+            ParsedType pt = new(typeName);
             parsedTypes[val.Id] = pt;
 
             GerenateArrayType(val.Id);
@@ -204,7 +202,7 @@ namespace FinalBiome.Api.Codegen
         {
             // Vec
             string typeName = GetTypeNameFormMeta(val);
-            ParsedType pt = new ParsedType(typeName);
+            ParsedType pt = new(typeName);
             parsedTypes[val.Id] = pt;
 
             NodeType type = Types[val.TypeId];
@@ -218,7 +216,7 @@ namespace FinalBiome.Api.Codegen
             // Compact
             ParseType(Types[val.TypeId]);
             string typeName = GetTypeNameFormMeta(val);
-            ParsedType pt = new ParsedType(typeName);
+            ParsedType pt = new(typeName);
             parsedTypes[val.Id] = pt;
 
             GenerateCompactType(val.Id);
@@ -231,7 +229,7 @@ namespace FinalBiome.Api.Codegen
                 ParseType(Types[f]);
             }
             string typeName = GetTypeNameFormMeta(val);
-            ParsedType pt = new ParsedType(typeName);
+            ParsedType pt = new(typeName);
             parsedTypes[val.Id] = pt;
             GenerateTupleType(val.Id);
         }
@@ -240,7 +238,7 @@ namespace FinalBiome.Api.Codegen
         {
             string typeName = GetTypeNameFormMeta(val);
             Console.WriteLine($"Parsed NodeTypeBitSequence({val.Id}): {typeName}");
-            ParsedType pt = new ParsedType(typeName);
+            ParsedType pt = new(typeName);
             parsedTypes[val.Id] = pt;
 
             // TODO Generate BitSequence ?
@@ -252,7 +250,7 @@ namespace FinalBiome.Api.Codegen
             // Option or Enum
             string typeName = GetTypeNameFormMeta(val);
 
-            ParsedType pt = new ParsedType(typeName);
+            ParsedType pt = new(typeName);
             parsedTypes[val.Id] = pt;
 
             if (val.Variants is not null)
@@ -302,16 +300,16 @@ namespace FinalBiome.Api.Codegen
             GenerateEnumType(val.Id);
         }
 
-        bool IsPrimitive(NodeType value)
+        static bool IsPrimitive(NodeType value)
         {
             return (value is NodeTypePrimitive);
         }
 
         string GetTypeNameFormMeta(NodeType type)
         {
-            if (parsedTypes.ContainsKey(type.Id)) return parsedTypes[type.Id].TypeName;
+            if (parsedTypes.TryGetValue(type.Id, out ParsedType? value)) return value.TypeName;
 
-            if (type is NodeTypePrimitive) return ((NodeTypePrimitive)type).Primitive.ToString();
+            if (type is NodeTypePrimitive primitive) return primitive.Primitive.ToString();
             else if (type is NodeTypeComposite)
             {
                 string name = PathToCamelCase(type.Path);
@@ -332,12 +330,11 @@ namespace FinalBiome.Api.Codegen
                     return $"{innerTypeParts.Item1}{name}{innerTypeParts.Item2}";
                 }
 
-                string parameters = "";
-                if (!(type.TypeParams is null))
+                if (type.TypeParams is not null)
                 {
                     // set type params as names of the types
                     // 
-                    List<string> pr = new List<string>();
+                    List<string> pr = new();
                     foreach (var p in type.TypeParams)
                     {
                         if (p.TypeId is not null)
@@ -349,43 +346,42 @@ namespace FinalBiome.Api.Codegen
                             pr.Add(p.Name);
                         }
                     }
-                    parameters = $"<{String.Join(", ", pr)}>";
                 }
 
                 return name;
             }
-            else if (type is NodeTypeArray)
+            else if (type is NodeTypeArray array)
             {
                 string name = "Array";
-                string innerTypeName = GetTypeNameFormMeta(Types[((NodeTypeArray)type).TypeId]);
+                string innerTypeName = GetTypeNameFormMeta(Types[array.TypeId]);
                 var innerTypeParts = TypeNameToParts(innerTypeName);
                 if (innerTypeParts.Item1 != "") innerTypeParts.Item1 += ".";
-                string size = ((NodeTypeArray)type).Length.ToString();
+                string size = array.Length.ToString();
                 // like Array32U8
                 return $"{name}{size}{innerTypeParts.Item2}";
             }
-            else if (type is NodeTypeSequence)
+            else if (type is NodeTypeSequence sequence)
             {
-                string innerTypeName = GetTypeNameFormMeta(Types[((NodeTypeSequence)type).TypeId]);
+                string innerTypeName = GetTypeNameFormMeta(Types[sequence.TypeId]);
                 var innerTypeParts = TypeNameToParts(innerTypeName);
                 if (innerTypeParts.Item1 != "") innerTypeParts.Item1 += ".";
                 // like VecU32
                 return $"{innerTypeParts.Item1}Vec{innerTypeParts.Item2}";
             }
-            else if (type is NodeTypeCompact)
+            else if (type is NodeTypeCompact compact)
             {
-                string refTypeName = GetTypeNameFormMeta(Types[((NodeTypeCompact)type).TypeId]);
+                string refTypeName = GetTypeNameFormMeta(Types[compact.TypeId]);
                 // move up the namespace of the inner type
                 var innerTypeParts = TypeNameToParts(refTypeName);
                 if (innerTypeParts.Item1 != "") innerTypeParts.Item1 += ".";
 
                 return $"{innerTypeParts.Item1}Compact{innerTypeParts.Item2}";
             }
-            else if (type is NodeTypeTuple)
+            else if (type is NodeTypeTuple tuple)
             {
                 string name = "Tuple";
-                List<string> refTypeNames = new List<string>();
-                foreach (uint typeId in ((NodeTypeTuple)type).TypeIds)
+                List<string> refTypeNames = new();
+                foreach (uint typeId in tuple.TypeIds)
                 {
                     // ignore namespaces for parameters names
                     refTypeNames.Add(TypeNameToParts(GetTypeNameFormMeta(Types[typeId])).Item2);
@@ -398,14 +394,13 @@ namespace FinalBiome.Api.Codegen
             {
                 throw new NotImplementedException("Parsing of NodeTypeBitSequence is not implemented");
             }
-            else if (type is NodeTypeVariant) // enum or option
+            else if (type is NodeTypeVariant variant) // enum or option
             {
-                string name = PathToCamelCase(((NodeTypeVariant)type).Path);
-                string parameters = "";
+                string name = PathToCamelCase(variant.Path);
                 if (IsOption(type))
                 {
-                    NodeTypeParam[] pr = ((NodeTypeVariant)type).TypeParams;
-                    if (pr.Length != 1 || pr[0].TypeId is null) throw new NotImplementedException($"Option type params doesnt equal 1: {((NodeTypeVariant)type).Id}");
+                    NodeTypeParam[] pr = variant.TypeParams;
+                    if (pr.Length != 1 || pr[0].TypeId is null) throw new NotImplementedException($"Option type params doesnt equal 1: {variant.Id}");
                     // like OptionU64
                     // namespace gets from the inner type
 #pragma warning disable CS8629 // Nullable value type may be null.
@@ -417,15 +412,15 @@ namespace FinalBiome.Api.Codegen
                 }
                 else if (IsResult(type))
                 {
-                    NodeTypeParam[] pr = ((NodeTypeVariant)type).TypeParams;
-                    if (pr.Length != 2 || pr[0].TypeId is null || pr[1].TypeId is null) throw new NotImplementedException($"Option type params doesnt equal 1: {((NodeTypeVariant)type).Id}");
+                    NodeTypeParam[] pr = variant.TypeParams;
+                    if (pr.Length != 2 || pr[0].TypeId is null || pr[1].TypeId is null) throw new NotImplementedException($"Option type params doesnt equal 1: {variant.Id}");
                     // like ResultU32_Error
                     // ignore namespace
 #pragma warning disable CS8629 // Nullable value type may be null.
                     string fullname1 = GetTypeNameFormMeta(Types[(uint)pr[0].TypeId]);
                     string fullname2 = GetTypeNameFormMeta(Types[(uint)pr[1].TypeId]);
 #pragma warning restore CS8629 // Nullable value type may be null.
-                    parameters = $"{TypeNameToParts(fullname1).Item2}_{TypeNameToParts(fullname2).Item2}";
+                    string parameters = $"{TypeNameToParts(fullname1).Item2}_{TypeNameToParts(fullname2).Item2}";
 
                     return $"{name}{parameters}";
                 }
@@ -443,7 +438,7 @@ namespace FinalBiome.Api.Codegen
         /// </summary>
         /// <param name="name"></param>
         /// <returns>(namespaceName, typeName)</returns>
-        (string, string) TypeNameToParts(string name)
+        static (string, string) TypeNameToParts(string name)
         {
             string[] p = name.Split(".");
             if (p.Length == 1) return ("", p[0]);
@@ -453,10 +448,10 @@ namespace FinalBiome.Api.Codegen
 
         }
 
-        string PathToCamelCase(string[]? path)
+        static string PathToCamelCase(string[]? path)
         {
             if (path is null || path.Length == 0) return "";
-            List<string> steps = new List<string>();
+            List<string> steps = new();
             foreach (string p in path)
             {
                 TextInfo ti = new CultureInfo("en-US", false).TextInfo;
@@ -502,7 +497,7 @@ namespace FinalBiome.Api.Codegen
                 ParseFieldType(fieldType);
             }
 
-            ParsedType pt = new ParsedType(typeName);
+            ParsedType pt = new(typeName);
             parsedVariantsTypes[(val.Id, variandId)] = pt;
 
             GenerateVariantFieldClass(val.Id, variandId);
@@ -530,7 +525,7 @@ namespace FinalBiome.Api.Codegen
             var canonical_name = pt.CanonicalName;
 
 
-            List<string> file = new List<string>();
+            List<string> file = new();
             file.Add("using System.Numerics;");
             file.Add("using FinalBiome.Api.Types.Primitive;");
             file.Add("using FinalBiome.Api.Types;");
@@ -590,7 +585,7 @@ namespace FinalBiome.Api.Codegen
                     }
                     else
                     {
-                        List<string> innerTypes = new List<string>();
+                        List<string> innerTypes = new();
 
                         foreach (var t in v.TypeFields)
                         {
@@ -612,7 +607,7 @@ namespace FinalBiome.Api.Codegen
                 }
             }
 
-            List<string> file = new List<string>();
+            List<string> file = new();
 
             file.Add("using System.Numerics;");
             file.Add("using FinalBiome.Api.Types.Primitive;");
@@ -701,7 +696,7 @@ namespace FinalBiome.Api.Codegen
             var canonicalName = pt.CanonicalName;
             var fields = nt.TypeFields;
 
-            List<string> file = new List<string>();
+            List<string> file = new();
 
 
             file.Add($"using System;");
@@ -788,7 +783,7 @@ namespace FinalBiome.Api.Codegen
             var canonicalName = pt.CanonicalName;
             var fields = vt.Variants[variandId].TypeFields;
 
-            List<string> file = new List<string>();
+            List<string> file = new();
 
 
             file.Add($"using System;");
@@ -871,7 +866,7 @@ namespace FinalBiome.Api.Codegen
             if (pt.Parsed) return;
             NodeTypeTuple nt = (NodeTypeTuple)Types[typeId];
 
-            List<string> innerTypes = new List<string>();
+            List<string> innerTypes = new();
 
             foreach (uint tId in nt.TypeIds)
             {
@@ -900,12 +895,11 @@ namespace FinalBiome.Api.Codegen
             NodeTypeArray nt = (NodeTypeArray)Types[typeId];
             uint innerTypeId = (uint)nt.TypeId;
             ParsedType innerType = parsedTypes[innerTypeId];
-            var innerСanonicalName = innerType.CanonicalName;
-            var innerFullСanonicalName = innerType.FullCanonicalName;
+            var innerFullCanonicalName = innerType.FullCanonicalName;
 
             uint size = nt.Length;
 
-            List<string> file = new List<string>();
+            List<string> file = new();
 
             file.Add($"using System;");
             file.Add($"using FinalBiome.Api.Types;");
@@ -918,9 +912,9 @@ namespace FinalBiome.Api.Codegen
             file.Add($"    {{");
             file.Add($"        public override int TypeSize => {size};");
             file.Add($"#pragma warning disable CS8618");
-            file.Add($"        public {innerFullСanonicalName}[] Value  {{ get; internal set; }}");
+            file.Add($"        public {innerFullCanonicalName}[] Value  {{ get; internal set; }}");
             file.Add($"#pragma warning restore CS8618");
-            file.Add($"        public override string TypeName() => $\"[{{new {innerFullСanonicalName}().TypeName()}}; {{this.TypeSize}}]\";");
+            file.Add($"        public override string TypeName() => $\"[{{new {innerFullCanonicalName}().TypeName()}}; {{this.TypeSize}}]\";");
             file.Add($"");
             file.Add($"        public override byte[] Encode()");
             file.Add($"        {{");
@@ -932,15 +926,15 @@ namespace FinalBiome.Api.Codegen
             file.Add($"        public override void Decode(byte[] byteArray, ref int pos)");
             file.Add($"        {{");
             file.Add($"            var start = pos;");
-            file.Add($"            var array = new {innerFullСanonicalName}[TypeSize];");
-            file.Add($"            for (var i = 0; i < array.Length; i++) {{ var t = new {innerFullСanonicalName}(); t.Decode(byteArray, ref pos); array[i] = t; }};");
+            file.Add($"            var array = new {innerFullCanonicalName}[TypeSize];");
+            file.Add($"            for (var i = 0; i < array.Length; i++) {{ var t = new {innerFullCanonicalName}(); t.Decode(byteArray, ref pos); array[i] = t; }};");
             file.Add($"            var bytesLength = pos - start;");
             file.Add($"            Bytes = new byte[bytesLength];");
             file.Add($"            System.Array.Copy(byteArray, start, Bytes, 0, bytesLength);");
             file.Add($"            Value = array;");
             file.Add($"        }}");
             file.Add($"");
-            file.Add($"        public void Init({innerFullСanonicalName}[] array)");
+            file.Add($"        public void Init({innerFullCanonicalName}[] array)");
             file.Add($"        {{");
             file.Add($"            Value = array;");
             file.Add($"            Bytes = Encode();");
@@ -991,9 +985,9 @@ namespace FinalBiome.Api.Codegen
 
             uint primitiveTypeId = resolvePrimitive(innerTypeId);
             ParsedType primitiveType = parsedTypes[primitiveTypeId];
-            string nativeType = numberPrimitiveToNative(primitiveType.CanonicalName.Item2);
+            string nativeType = NumberPrimitiveToNative(primitiveType.CanonicalName.Item2);
 
-            List<string> file = new List<string>();
+            List<string> file = new();
             file.Add($"using System;");
             file.Add($"using System.Numerics;");
             file.Add($"using FinalBiome.Api.Types;");
@@ -1044,34 +1038,39 @@ namespace FinalBiome.Api.Codegen
             GenerateWrappedType(typeId, $"{baseType}");
         }
 
-        bool IsOption(NodeType val)
+        static bool IsOption(NodeType val)
         {
             return val.Path is not null &&
                 val.Path.Length == 1 &&
                 val.Path[0] == "Option";
         }
-        bool IsResult(NodeType val)
+
+        static bool IsResult(NodeType val)
         {
             return val.Path is not null &&
                 val.Path.Length == 1 &&
                 val.Path[0] == "Result";
         }
-        bool IsBoundedVec(NodeType val)
+
+        static bool IsBoundedVec(NodeType val)
         {
             return val.Path is not null &&
                 val.Path.Last() == "BoundedVec";
         }
-        bool IsWeakBoundedVec(NodeType val)
+
+        static bool IsWeakBoundedVec(NodeType val)
         {
             return val.Path is not null &&
                 val.Path.Last() == "WeakBoundedVec";
         }
-        bool IsNewType(NodeTypeComposite val)
+
+        static bool IsNewType(NodeTypeComposite val)
         {
             return val.TypeFields is null || (val.TypeFields.Length == 1 &&
                 val.TypeFields[0].Name is null);
         }
-        bool IsVoidType(NodeTypeVariant val)
+
+        static bool IsVoidType(NodeTypeVariant val)
         {
             return val.Variants is null || val.Variants.Length == 0;
         }
@@ -1083,13 +1082,13 @@ namespace FinalBiome.Api.Codegen
         /// <returns></returns>
         public static string SnakeCaseToTitle(string value)
         {
-            if (value.Contains("_"))
+            if (value.Contains('_'))
             {
                 TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
                 return textInfo.ToTitleCase(value.Replace("_", " ")).Replace(" ", "");
             } else
             {
-                return System.Char.ToUpperInvariant(value[0]) + value.Substring(1);
+                return System.Char.ToUpperInvariant(value[0]) + value[1..];
             }
         }
         /// <summary>
@@ -1100,7 +1099,7 @@ namespace FinalBiome.Api.Codegen
         public static string SnakeCaseToCamel(string value)
         {
             value = SnakeCaseToTitle(value);
-            return System.Char.ToLowerInvariant(value[0]) + value.Substring(1);
+            return System.Char.ToLowerInvariant(value[0]) + value[1..];
         }
 
         /// <summary>
@@ -1110,7 +1109,7 @@ namespace FinalBiome.Api.Codegen
         /// <returns></returns>
         List<string> DocumentationForType(uint typeId, int? variandId = null)
         {
-            List<string> docs = new List<string>();
+            List<string> docs = new();
             docs.Add("    /// <summary>");
 
             string[] typeDocs = variandId is null ? Types[typeId].Docs : ((NodeTypeVariant)Types[typeId]).Variants[(int)variandId].Docs;
@@ -1135,9 +1134,9 @@ namespace FinalBiome.Api.Codegen
         /// </summary>
         /// <param name="docs"></param>
         /// <returns></returns>
-        List<string> DocumentationForField(string[] str)
+        static List<string> DocumentationForField(string[] str)
         {
-            List<string> docs = new List<string>();
+            List<string> docs = new();
             docs.Add("    /// <summary>");
             foreach (var item in str)
             {
@@ -1254,7 +1253,7 @@ namespace FinalBiome.Api.Codegen
         {
             if (Types[typeId] is not NodeTypeTuple) throw new Exception($"Expected Tuple, found {String.Join(",", Types[typeId].Path)}. Id: {typeId}");
 
-            List<string> innerTypes = new List<string>();
+            List<string> innerTypes = new();
 
             foreach(var f in ((NodeTypeTuple)Types[typeId]).TypeIds)
             {

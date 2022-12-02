@@ -10,7 +10,7 @@ namespace FinalBiome.Api.Codegen.Metadata
             if (evenCheck && hexString.Length % 2 == 1)
                 throw new Exception("The string must contain an even number of digits");
 
-            if (hexString.StartsWith("0x")) hexString = hexString.Substring(2);
+            if (hexString.StartsWith("0x")) hexString = hexString[2..];
 
             if (!evenCheck && hexString.Length % 2 != 0) hexString = hexString.PadLeft(hexString.Length + 1, '0');
 
@@ -42,17 +42,13 @@ namespace FinalBiome.Api.Codegen.Metadata
 
         public static string Bytes2HexString(byte[] bytes, HexStringFormat format = HexStringFormat.Prefixed)
         {
-            switch (format)
+            return format switch
             {
-                case HexStringFormat.Pure:
-                    return Convert.ToHexString(bytes);
-                case HexStringFormat.Dash:
-                    return BitConverter.ToString(bytes);
-                case HexStringFormat.Prefixed:
-                    return $"0x{Convert.ToHexString(bytes)}";
-                default:
-                    throw new Exception($"Unimplemented hex string format '{format}'");
-            }
+                HexStringFormat.Pure => Convert.ToHexString(bytes),
+                HexStringFormat.Dash => BitConverter.ToString(bytes),
+                HexStringFormat.Prefixed => $"0x{Convert.ToHexString(bytes)}",
+                _ => throw new Exception($"Unimplemented hex string format '{format}'"),
+            };
         }
     }
 }

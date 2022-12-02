@@ -11,7 +11,7 @@ namespace FinalBiome.Api.Rpc
         /// Hold all active subscriptions
         /// </summary>
         /// 
-        readonly Dictionary<string, ISubscription> subscriptions = new Dictionary<string, ISubscription>();
+        readonly Dictionary<string, ISubscription> subscriptions = new();
 
         /// <summary>
         /// Store subscription for future call

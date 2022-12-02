@@ -32,9 +32,9 @@ public interface TxPayload
 /// </summary>
 public class StaticTxPayload : TxPayload
 {
-    byte palletIndex;
-    byte callIndex;
-    List<byte> callData;
+    readonly byte palletIndex;
+    readonly byte callIndex;
+    readonly List<byte> callData;
 
     public StaticTxPayload(byte palletIndex, byte callIndex, List<byte> callData)
     {

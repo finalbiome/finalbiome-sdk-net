@@ -123,19 +123,4 @@ public class Program
         await GetStorageData.GetOwnedNfaAssetsIds(cancellationToken);
     }
 
-    static string Stringify(Codec? value, Formatting formatting = Formatting.Indented)
-    {
-        if (value is null) return "null";
-        var sOpt = new JsonSerializerSettings
-        {
-            //NullValueHandling = NullValueHandling.Ignore,
-            Converters = {
-                    new ApiTypesJsonConverter(),
-                    new StringEnumConverter(),
-                }
-        };
-
-        return JsonConvert.SerializeObject(value, formatting, sOpt);
-    }
-
 }

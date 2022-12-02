@@ -20,7 +20,7 @@ using StorageKey = List<byte>;
 /// </summary>
 public class Rpc
 {
-    RpcClient client;
+    readonly RpcClient client;
     /// <summary>
     /// Create a new [`Rpc`]
     /// </summary>
@@ -136,6 +136,7 @@ public class Rpc
     /// <exception cref="NotImplementedException"></exception>
     public async Task SystemProperties()
     {
+        await Task.Yield();
         throw new NotImplementedException();
     }
 
@@ -146,6 +147,7 @@ public class Rpc
     /// <exception cref="NotImplementedException"></exception>
     public async Task SystemHealth()
     {
+        await Task.Yield();
         throw new NotImplementedException();
     }
 

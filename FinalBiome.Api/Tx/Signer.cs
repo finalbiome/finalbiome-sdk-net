@@ -41,8 +41,8 @@ public interface Signer
 /// </summary>
 public class PairSigner : Signer
 {
-    AccountId accountId;
-    Pair signer;
+    readonly AccountId accountId;
+    readonly Pair signer;
 
     public PairSigner(Pair signer)
     {

@@ -41,9 +41,9 @@ namespace FinalBiome.Api.Codegen.MetadataNs
 
         internal static async Task<Client> Build(Uri url)
         {
-            ClientWebSocket ws = new ClientWebSocket();
+            ClientWebSocket ws = new();
             await ws.ConnectAsync(url, CancellationToken.None);
-            JsonRpc rpc = new JsonRpc(new WebSocketMessageHandler(ws));
+            JsonRpc rpc = new(new WebSocketMessageHandler(ws));
             rpc.StartListening();
             return new Client(rpc, url);
         }

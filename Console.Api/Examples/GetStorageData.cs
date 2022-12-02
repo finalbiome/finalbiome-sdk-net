@@ -22,7 +22,7 @@ public static class GetStorageData
     {
         Client api = await Client.New();
         FinalBiome.Api.Types.SpCore.Crypto.AccountId32 accountId32 = (FinalBiome.Api.Types.SpCore.Crypto.AccountId32)AccountKeyring.Dave().ToAddress().Value2;
-        FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.FungibleAssetId fungibleAssetId = new FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.FungibleAssetId();
+        FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.FungibleAssetId fungibleAssetId = new();
         fungibleAssetId.Init(1);
 
         var value = await api.Storage.FungibleAssets.Accounts(accountId32, fungibleAssetId).Fetch();

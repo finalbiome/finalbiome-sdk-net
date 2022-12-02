@@ -17,13 +17,11 @@ namespace FinalBiome.Api.Codegen
             "/// DO NOT CHANGE THE CONTENT OF THE FILE!",
             "///",
         };
-        MetaDataV14 metaData;
-
-        List<ParsedType> existedTypes = new List<ParsedType>();
-
-        TypeParser typeParser;
-        StorageParserV2 storageParser;
-        CallParser callParser;
+        readonly MetaDataV14 metaData;
+        readonly List<ParsedType> existedTypes = new();
+        readonly TypeParser typeParser;
+        readonly StorageParserV2 storageParser;
+        readonly CallParser callParser;
 
         public TypeGenerator(MetaDataV14 metaData)
         {
@@ -83,7 +81,7 @@ namespace FinalBiome.Api.Codegen
         /// <summary>
         /// Regex for replacing whitespaces
         /// </summary>
-        public static readonly Regex rCleanDocs = new Regex(@"[\r\n\t\f\v]+");
+        public static readonly Regex rCleanDocs = new(@"[\r\n\t\f\v]+");
 
         public static string CleanDocString(string value)
         {

@@ -142,7 +142,7 @@ public class BaseExtrinsicParamsBuilder<Tip> where Tip : Encode, new()
 
     public static BaseExtrinsicParamsBuilder<Tip> Default()
     {
-        Era era = new Era();
+        Era era = new();
         era.Init(InnerEra.Immortal, new BaseVoid());
         return new BaseExtrinsicParamsBuilder<Tip>(
             era,

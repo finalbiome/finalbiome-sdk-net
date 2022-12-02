@@ -9,8 +9,8 @@ using Hash = FinalBiome.Api.Types.PrimitiveTypes.H256;
 /// </summary>
 public class SubmittableExtrinsic
 {
-    Client client;
-    List<byte> encoded;
+    readonly Client client;
+    readonly List<byte> encoded;
 
     SubmittableExtrinsic(Client client, List<byte> txBytes)
     {

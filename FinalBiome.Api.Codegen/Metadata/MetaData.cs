@@ -226,12 +226,11 @@ public class MetaDataV14
             if (module.PalletStorage.IsSome)
             {
                 var storage = module.PalletStorage.Value;
-                palletModule.Storage = new PalletStorage()
+                palletModule.Storage = new PalletStorage
                 {
                     Prefix = storage.Prefix.Value,
+                    Entries = new Entry[storage.Entries.Value.Length]
                 };
-
-                palletModule.Storage.Entries = new Entry[storage.Entries.Value.Length];
                 for (int i = 0; i < storage.Entries.Value.Length; i++)
                 {
                     var entry = storage.Entries.Value[i];
