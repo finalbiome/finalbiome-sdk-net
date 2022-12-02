@@ -20,9 +20,16 @@ internal class NetworkEventsListener : IDisposable
     /// <returns></returns>
     CancellationTokenSource subscriberCancellationTokenSource;
     /// <summary>
-    /// An event that occurs when a new nFa asset has been issued to the user.
+    /// A delegat type that will invoke when a new Nfa asset has been issued to the user.
     /// </summary>
-    public event EventHandler<NfaInstanceIssuedEventArgs>? NfaIssued;
+    /// <param name="classId"></param>
+    /// <param name="instanceId"></param>
+    /// <returns></returns>
+    public delegate Task OnIssuedAsset(NfaClassId classId, NfaInstanceId instanceId);
+    /// <summary>
+    /// An event that occurs when a new Nfa asset has been issued to the user.
+    /// </summary>
+    public OnIssuedAsset? NfaIssued;
 
     public NetworkEventsListener(Client client)
     {
@@ -56,19 +63,16 @@ internal class NetworkEventsListener : IDisposable
                         // get a nfa issued only for the current user.
                         if (issuedData is not null && Enumerable.SequenceEqual(issuedData.Owner.Bytes,  client.Auth.UserAddress.Bytes))
                         {
-                            // send event about it
-                            OnNfaIssuedEvent(new NfaInstanceIssuedEventArgs(issuedData.ClassId, issuedData.AssetId));
+                                // send event about it
+                                // OnNfaIssuedEvent(new NfaInstanceIssuedEventArgs(issuedData.ClassId, issuedData.AssetId));
+                                if (NfaIssued is not null)
+                                    await NfaIssued(issuedData.ClassId, issuedData.AssetId);
                         }
                     }
                 }
                 #endregion
             }
         }
-    }
-
-    void OnNfaIssuedEvent(NfaInstanceIssuedEventArgs e)
-    {
-        NfaIssued?.Invoke(this, e);
     }
 
     /// <summary>
@@ -115,27 +119,5 @@ internal class NetworkEventsListener : IDisposable
     {
         if (subscriberCancellationTokenSource is not null && !subscriberCancellationTokenSource.IsCancellationRequested) subscriberCancellationTokenSource.Cancel();
         subscriberCancellationTokenSource?.Dispose();
-    }
-}
-
-/// <summary>
-/// Event args of issued Nfa instance
-/// </summary>
-internal class NfaInstanceIssuedEventArgs : EventArgs
-{
-    /// <summary>
-    /// The class Id of the issued Nfa asset.
-    /// </summary>
-    public NfaClassId classId;
-
-    /// <summary>
-    /// The instance Id of the issued Nfa asset.
-    /// </summary>
-    public NfaInstanceId instanceId;
-
-    public NfaInstanceIssuedEventArgs(uint classId, uint instanceId)
-    {
-        this.classId = classId;
-        this.instanceId = instanceId;
     }
 }

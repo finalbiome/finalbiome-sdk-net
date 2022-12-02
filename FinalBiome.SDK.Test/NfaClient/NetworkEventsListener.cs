@@ -20,10 +20,11 @@ public class NetworkEventsListenerTests
         uint classId = 999;
         uint instanceId = 999;
         int eventEmittedCount = 0;
-        l.NfaIssued += (o, e) => {
+        l.NfaIssued += async (c, i) => {
             eventEmittedCount++;
-            classId = e.classId;
-            instanceId = e.instanceId;
+            classId = c;
+            instanceId = i;
+            await Task.Yield();
         };
 
         await l.StartNetworkEventsListener();
