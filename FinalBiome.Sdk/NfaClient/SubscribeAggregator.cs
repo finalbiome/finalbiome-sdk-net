@@ -88,25 +88,24 @@ internal class SubscribeAggregator<TResult> : IDisposable where TResult : Codec,
         this.reSubscriberCancellationTokenSource = new();
         this.linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(reSubscriberCancellationTokenSource.Token, this.externalCancellationToken);
     }
-
     /// <summary>
     /// Subscribe to changes at given address.
     /// </summary>
-    /// <param name="address"></param>
+    /// <param name="storageKey"></param>
     /// <returns></returns>
-    public async Task Subscribe(StorageAddress address)
+    public async Task Subscribe(StorageKey storageKey)
     {
-        await Subscribe(new StorageAddress[] { address });
+        await Subscribe(new StorageKey[] { storageKey });
     }
     /// <summary>
-    /// Subscribe on given addresses.
+    /// Subscribe to changes at given addresses.
     /// </summary>
-    /// <param name="address"></param>
+    /// <param name="storageKeys"></param>
     /// <returns></returns>
-    public async Task Subscribe(IEnumerable<StorageAddress> addresses)
+    public async Task Subscribe(IEnumerable<StorageKey> storageKeys)
     {
         // filter already subscripted keys
-        var keys = AddressesToStorageKeys(addresses).Where(key => !activeStorageKeys.ContainsKey(key.ToHex())).ToList();
+        var keys = storageKeys.Where(key => !activeStorageKeys.ContainsKey(key.ToHex())).ToList();
         // nothing to do if no new keys
         if (!keys.Any()) return;
         // add new keys to the active keys
@@ -123,6 +122,24 @@ internal class SubscribeAggregator<TResult> : IDisposable where TResult : Codec,
             // aggregate subscriptions into the one
             await ReSubscribe();
         }
+    }
+    /// <summary>
+    /// Subscribe to changes at given address.
+    /// </summary>
+    /// <param name="address"></param>
+    /// <returns></returns>
+    public async Task Subscribe(StorageAddress address)
+    {
+        await Subscribe(new StorageAddress[] { address });
+    }
+    /// <summary>
+    /// Subscribe on given addresses.
+    /// </summary>
+    /// <param name="address"></param>
+    /// <returns></returns>
+    public async Task Subscribe(IEnumerable<StorageAddress> addresses)
+    {
+        await Subscribe(AddressesToStorageKeys(addresses));
     }
     /// <summary>
     /// Unsubscribe from changes at given address.

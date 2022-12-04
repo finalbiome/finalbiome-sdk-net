@@ -34,6 +34,11 @@ public class NfaClient : IDisposable
     readonly Client client;
 
     /// <summary>
+    /// All Nfa classes ids of the current game.
+    /// </summary>
+    readonly List<NfaClassId> gameClasses;
+
+    /// <summary>
     /// Cancellation token for all subscriber tasks
     /// </summary>
     /// <returns></returns>
@@ -78,9 +83,10 @@ public class NfaClient : IDisposable
     /// </summary>
     public event EventHandler<NfaInstanceChangedEventArgs>? NfaInstanceChanged;
 
-    public NfaClient(Client client)
+    internal NfaClient(Client client, List<NfaClassId> gameClasses)
     {
         this.client = client;
+        this.gameClasses = gameClasses;
         subscriberCancellationTokenSource = new();
 
         subscriberToClasses = new(this.client, 5, subscriberCancellationTokenSource.Token);
@@ -90,13 +96,22 @@ public class NfaClient : IDisposable
 
         networkEventsListener = new(this.client);
         networkEventsListener.NfaIssued += NfaIssuedEventHandler;
+
+        client.Auth.StateChanged += HandleUserStateChangedEvent;
     }
 
     public static async Task<NfaClient> Create(Client client)
     {
-        NfaClient nfaClient = new(client);
+        // fetch all game classes and save
+        List<NfaClassId> gameClasses = new();
+        await foreach (NfaClassId classId in FetchGameNfaClasses(client))
+        {
+            gameClasses.Add(classId);
+        }
 
-        return await Task.FromResult(nfaClient);
+        NfaClient nfaClient = new(client, gameClasses);
+
+        return nfaClient;
     }
 
     public void Dispose()
@@ -110,15 +125,48 @@ public class NfaClient : IDisposable
     }
 
     /// <summary>
-    /// Get all assets ids owned by user from the network.
+    /// Get from the network all classes ids of the current game.
+    /// </summary>
+    /// <returns></returns>
+    static async IAsyncEnumerable<NfaClassId> FetchGameNfaClasses(Client client)
+    {
+        // create the partial storage key of all Nfa classes of this game
+        var addr = new StaticStorageAddress("NonFungibleAssets", "ClassAccounts", new());
+        var queryKey = addr.ToRootBytes();
+        var smKey = new StorageMapKey(client.Game.Address, StorageHasher.Blake2_128Concat);
+        smKey.ToBytes(ref queryKey);
+
+        var partialKeyLength = queryKey.Count;
+        
+        StorageKey? startKey = null;
+        List<StorageKey>? keys;
+        do
+        {
+            keys = await client.api.Storage.FetchKeys(queryKey, 10, startKey, null);
+
+            if (keys is not null && keys.Count != 0)
+            {
+                startKey = keys.Last();
+                foreach (var key in keys)
+                {
+                    var classId = ClassIdFromStorageKeyOfClasseAccounts(partialKeyLength, key);
+                    yield return classId;
+                }
+            }
+        } while (keys is not null && keys.Count != 0);
+    }
+
+    /// <summary>
+    /// Get from the network all assets ids owned by the user and related to this game.
     /// </summary>
     /// <returns></returns>
     async IAsyncEnumerable<(NfaClassId classId, NfaInstanceId instanceId)> FetchOwnedAssets()
     {
-        /// create the partial storage key of all FAs in the game
+        if (this.client.Auth.UserAddress is null) throw new Exception("User not set");
+        // create the partial storage key of all Nfa instances owned by user
         var addr = new StaticStorageAddress("NonFungibleAssets", "Accounts", new());
         var queryKey = addr.ToRootBytes();
-        var smKey = new StorageMapKey(this.client.Game.Address, StorageHasher.Blake2_128Concat);
+        var smKey = new StorageMapKey(this.client.Auth.UserAddress, StorageHasher.Blake2_128Concat);
         smKey.ToBytes(ref queryKey);
         
         var partialKeyLength = queryKey.Count;
@@ -134,8 +182,8 @@ public class NfaClient : IDisposable
                 startKey = keys.Last();
                 foreach (var key in keys)
                 {
-                    var assetId = AssetIdFromStorageKey(partialKeyLength, key);
-                    yield return assetId;
+                    var assetId = AssetIdFromStorageKeyOfAccounts(partialKeyLength, key);
+                    if (gameClasses.Contains(assetId.classId)) yield return assetId;
                 }
             }
         } while (keys is not null && keys.Count != 0);
@@ -149,6 +197,7 @@ public class NfaClient : IDisposable
     /// <returns></returns>
     public async Task<NfaAssetDetails> GetInstanceDetails(NfaClassId classId, NfaInstanceId instanceId)
     {
+        if (!gameClasses.Contains(classId)) throw new NfaInstanceNotFoundException(classId, instanceId);
         // try get from cache
         if (nfaInstances.TryGetValue((classId, instanceId), out var cachedDetails))
         {
@@ -179,6 +228,8 @@ public class NfaClient : IDisposable
     /// <returns></returns>
     public async Task<NfaClassDetails> GetClassDetails(NfaClassId classId)
     {
+        if (!gameClasses.Contains(classId)) throw new NfaClassNotFoundException(classId);
+
         // try get from cache
         if (nfaClasses.TryGetValue(classId, out var cachedDetails))
         {
@@ -207,6 +258,8 @@ public class NfaClient : IDisposable
     /// <returns></returns>
     public async Task<AttributeValue> GetClassAttribute(NfaClassId classId, string attributeName)
     {
+        if (!gameClasses.Contains(classId)) throw new NfaClassNotFoundException(classId);
+    
         await Task.Yield();
         throw new NotImplementedException();
     }
@@ -220,6 +273,8 @@ public class NfaClient : IDisposable
     /// <returns></returns>
     public async Task<AttributeValue> GetInstanceAttribute(NfaClassId classId, NfaInstanceId instanceId, string attributeName)
     {
+        if (!gameClasses.Contains(classId)) throw new NfaInstanceNotFoundException(classId, instanceId);
+
         await Task.Yield();
         throw new NotImplementedException();
     }
@@ -291,6 +346,8 @@ public class NfaClient : IDisposable
     /// <param name="instanceId"></param>
     async Task NfaIssuedEventHandler(NfaClassId classId, NfaInstanceId instanceId)
     {
+        // ignore issuing an asset from another game
+        if (!gameClasses.Contains(classId)) return;
         // if user has been owned a new asset, we should subscribe on it changes.
         NonFungibleClassId nonFungibleClassId = new();
         nonFungibleClassId.Init(classId);
@@ -302,28 +359,99 @@ public class NfaClient : IDisposable
     }
 
     /// <summary>
+    /// Handler to changes of the user state for subscribing to assets owned by user.
+    /// </summary>
+    /// <param name="isLogged"></param>
+    /// <returns></returns>
+    async Task HandleUserStateChangedEvent(bool isLogged)
+    {
+        if (isLogged) {
+            // subscribe to all owned assets
+            List<StorageAddress> ownedAssetsAdresses = new();
+            await foreach ((uint classId, uint instanceId) in FetchOwnedAssets())
+            {
+                NonFungibleClassId nonFungibleClassId = new();
+                nonFungibleClassId.Init(classId);
+                NonFungibleAssetId nonFungibleAssetId = new();
+                nonFungibleAssetId.Init(instanceId);
+                var assetAddress = client.api.Storage.NonFungibleAssets.Assets(nonFungibleClassId, nonFungibleAssetId).Address;
+                ownedAssetsAdresses.Add(assetAddress);
+            }
+            await this.subscriberToInstances.Subscribe(ownedAssetsAdresses);
+            // TODO: sub to attributes
+        }
+        else
+        {
+            // unsubscribe from assets details changes
+            List<StorageAddress> ownedAssetsAdresses = new();
+            foreach ((uint classId, uint instanceId) in nfaInstances.Keys)
+            {
+                NonFungibleClassId nonFungibleClassId = new();
+                nonFungibleClassId.Init(classId);
+                NonFungibleAssetId nonFungibleAssetId = new();
+                nonFungibleAssetId.Init(instanceId);
+                var assetAddress = client.api.Storage.NonFungibleAssets.Assets(nonFungibleClassId, nonFungibleAssetId).Address;
+                ownedAssetsAdresses.Add(assetAddress);
+            }
+            nfaInstances.Clear();
+            subscriberToInstances.Unsubscribe(ownedAssetsAdresses);
+            // unsubscribe from classes details changes
+            List<StorageAddress> ownedClassAdresses = new();
+            foreach (uint classId in nfaClasses.Keys)
+            {
+                NonFungibleClassId nonFungibleClassId = new();
+                nonFungibleClassId.Init(classId);
+                var classAddress = client.api.Storage.NonFungibleAssets.Classes(nonFungibleClassId).Address;
+                ownedClassAdresses.Add(classAddress);
+            }
+            nfaClasses.Clear();
+            subscriberToClasses.Unsubscribe(ownedClassAdresses);
+            // TODO: unsub from attributes
+        }
+    }
+
+    /// <summary>
     /// Convert storage key of Accounts storage in the NonFungibleAssets module to asset ids.
     /// </summary>
     /// <param name="classId"></param>
     /// <param name="partialKeyLength"></param>
     /// <param name="storageKey"></param>
     /// <returns></returns>
-    static (NfaClassId classId, NfaInstanceId instanceId) AssetIdFromStorageKey(int partialKeyLength, StorageKey storageKey)
+    static (NfaClassId classId, NfaInstanceId instanceId) AssetIdFromStorageKeyOfAccounts(int partialKeyLength, StorageKey storageKey)
     {
         // we know what the last part of key are NonFungibleClassId and NonFungibleAssetId with Blake2_128Concat hashes.
         var bytes = storageKey.ToArray();
         // skip root key
         int pos = partialKeyLength;
-        // skip hash of a class id
+        // skip hash of a class id (Blake2_128Concat)
         pos += 16;
         NonFungibleClassId classId = new();
         classId.Decode(bytes, ref pos);
-        // skip hash of a asset id
+        // skip hash of a asset id (Blake2_128Concat)
         pos += 16;
         NonFungibleAssetId instanceId = new();
         instanceId.Decode(bytes, ref pos);
 
         return (classId, instanceId);
+    }
+
+    /// <summary>
+    /// Convert a storage key of ClassAccounts storage in the NonFungibleAssets module to the class id.
+    /// </summary>
+    /// <param name="partialKeyLength"></param>
+    /// <param name="storageKey"></param>
+    /// <returns></returns>
+    static NfaClassId ClassIdFromStorageKeyOfClasseAccounts(int partialKeyLength, StorageKey storageKey)
+    {
+        // we know what the last part of key is NonFungibleClassId with Blake2_128Concat hash.
+        var bytes = storageKey.ToArray();
+        // skip root key
+        int pos = partialKeyLength;
+        // skip hash of a class id (Blake2_128Concat)
+        pos += 16;
+        NonFungibleClassId classId = new();
+        classId.Decode(bytes, ref pos);
+        return classId;
     }
 
     void OnNfaClassChangedEvent(NfaClassChangedEventArgs e)

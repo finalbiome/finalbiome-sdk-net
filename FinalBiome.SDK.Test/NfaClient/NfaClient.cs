@@ -13,12 +13,10 @@ public class NfaClientTests
     {
         string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
         ClientConfig config = new(eveGame);
-        using Client cl = await Client.Create(config);
-
-        using NfaClient client = new(cl);
+        using Client client = await Client.Create(config);
 
         var classId = 1u;
-        var details = await client.GetClassDetails(classId);
+        var details = await client.Nfa.GetClassDetails(classId);
         Assert.That(details, Is.Not.Null);
         Assert.That(details.Name.ToHuman(), Is.EqualTo("\"Stave\""));
     }
@@ -28,12 +26,10 @@ public class NfaClientTests
     {
         string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
         ClientConfig config = new(eveGame);
-        using Client cl = await Client.Create(config);
-
-        using NfaClient client = new(cl);
+        using Client client = await Client.Create(config);
 
         var classId = 9999u;
-        Assert.ThrowsAsync<NfaClassNotFoundException>(() => client.GetClassDetails(classId));
+        Assert.ThrowsAsync<NfaClassNotFoundException>(() => client.Nfa.GetClassDetails(classId));
     }
 
     [Test]
@@ -48,11 +44,9 @@ public class NfaClientTests
         
         string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
         ClientConfig config = new(eveGame);
-        using Client cl = await Client.Create(config);
+        using Client client = await Client.Create(config);
 
-        using NfaClient client = new(cl);
-
-        var details = await client.GetInstanceDetails(classId, instanceId);
+        var details = await client.Nfa.GetInstanceDetails(classId, instanceId);
         Assert.Multiple(() =>
         {
             Assert.That(details, Is.Not.Null);
@@ -66,13 +60,11 @@ public class NfaClientTests
     {
         string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
         ClientConfig config = new(eveGame);
-        using Client cl = await Client.Create(config);
+        using Client client = await Client.Create(config);
 
-        using NfaClient client = new(cl);
-
-        var classId = 9999u;
+        var classId = 0u;
         var instanceId = 9999u;
-        Assert.ThrowsAsync<NfaInstanceNotFoundException>(() => client.GetInstanceDetails(classId, instanceId));
+        Assert.ThrowsAsync<NfaInstanceNotFoundException>(() => client.Nfa.GetInstanceDetails(classId, instanceId));
     }
     
     [Test]
@@ -81,12 +73,11 @@ public class NfaClientTests
         // for test events about changes of nfs classes, we create a test attribute and listen changes on the nfa class.
         string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
         ClientConfig config = new(eveGame);
-        using Client cl = await Client.Create(config);
-        using NfaClient client = new(cl);
+        using Client client = await Client.Create(config);
 
         var classId = 1u;
         int eventEmittedCount = 0;
-        client.NfaClassChanged += (o, e) =>
+        client.Nfa.NfaClassChanged += (o, e) =>
         {
             eventEmittedCount++;
             if (eventEmittedCount != 2) return;
@@ -99,7 +90,7 @@ public class NfaClientTests
         };
 
         // get details. it subscribe the sdk to changes.
-        var details = await client.GetClassDetails(classId);
+        var details = await client.Nfa.GetClassDetails(classId);
         Thread.Sleep(2_000);
         Assert.Multiple(() =>
         {
@@ -149,14 +140,12 @@ public class NfaClientTests
         // login
         await client.Auth.SignInWithEmailAndPassword("Dave", "password");
         Thread.Sleep(2_000);
-        // no event should be
-        Assert.That(eventEmittedCount, expression: Is.EqualTo(0));
         // by new nfa
         (NfaClassId classIdExpected, NfaInstanceId instanceIdExpected) = await NetworkHelpers.ExecBuyNfaMechanic();
-        Thread.Sleep(20_000);
+        Thread.Sleep(5_000);
         Assert.Multiple(() =>
         {
-            Assert.That(eventEmittedCount, Is.EqualTo(1));
+            Assert.That(eventEmittedCount, Is.AtLeast(1));
             Assert.That(classId, Is.EqualTo(classIdExpected));
             Assert.That(instanceId, Is.EqualTo(instanceIdExpected));
         });

@@ -34,18 +34,18 @@ public class Client : IDisposable
         client.Auth = auth;
         // subscribe to the user state changes
         client.Auth.StateChanged += client.HandleUserStateChangedEvent;
+        // game client we must be init before other modules
+        var gameClient = await GameClient.Create(client);
+        client.Game = gameClient;
 
-        var gameClientTask = GameClient.Create(client);
         var faClientTask = FaClient.Create(client);
         var NfaClientTask = NfaClient.Create(client);
 
-        await Task.WhenAll(gameClientTask, faClientTask, NfaClientTask);
+        await Task.WhenAll(faClientTask, NfaClientTask);
 
-        var gameClient = await gameClientTask;
         var faClient = await faClientTask;
         var nfaClient = await NfaClientTask;
 
-        client.Game = gameClient;
         client.Fa = faClient;
         client.Nfa = nfaClient;
 
