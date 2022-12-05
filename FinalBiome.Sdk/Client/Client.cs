@@ -17,6 +17,7 @@ public class Client : IDisposable
     public FaClient Fa { get; internal set; }
     public NfaClient Nfa { get; internal set; }
     public AuthClient Auth { get; internal set; }
+    public MxClient Mx { get; internal set; }
 
     Client(ClientConfig config, Api.Client api)
     {
@@ -40,14 +41,17 @@ public class Client : IDisposable
 
         var faClientTask = FaClient.Create(client);
         var NfaClientTask = NfaClient.Create(client);
+        var MxClientTask = MxClient.Create(client);
 
-        await Task.WhenAll(faClientTask, NfaClientTask);
+        await Task.WhenAll(faClientTask, NfaClientTask, MxClientTask);
 
         var faClient = await faClientTask;
         var nfaClient = await NfaClientTask;
+        var mxClient = await MxClientTask;
 
         client.Fa = faClient;
         client.Nfa = nfaClient;
+        client.Mx = mxClient;
 
         return client;
     }
@@ -59,6 +63,7 @@ public class Client : IDisposable
     /// <param name="e"></param>
     async Task HandleUserStateChangedEvent(bool logedIn)
     {
+        await Task.Yield();
         if (logedIn)
         {
             // user sign in

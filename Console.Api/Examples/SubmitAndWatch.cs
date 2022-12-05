@@ -112,7 +112,7 @@ public static class SubmitAndWatch
                 // Made it into a block, but not finalized.
                 case InnerTxStatus.InBlock:
                     {
-                        var details = ((TxInBlock)txStatus.Value2);
+                        var details = (TxInBlock)txStatus.Value2;
                         Console.WriteLine($"Transaction {details.ExtrinsicHash.ToHex()} made it into block {details.BlockHash.ToHex()}");
                         try
                         {
@@ -127,7 +127,7 @@ public static class SubmitAndWatch
                     break;
                 case InnerTxStatus.Finalized:
                     {
-                        var details = ((TxInBlock)txStatus.Value2);
+                        var details = (TxInBlock)txStatus.Value2;
                         Console.WriteLine($"Transaction {details.ExtrinsicHash.ToHex()} is finalized in block {details.BlockHash.ToHex()}");
 
                     }

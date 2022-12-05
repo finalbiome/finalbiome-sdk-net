@@ -1,3 +1,5 @@
+using FinalBiome.Api.Tx;
+
 namespace FinalBiome.Sdk;
 
 public class AuthClient
@@ -7,10 +9,13 @@ public class AuthClient
     /// <summary>
     /// Current FinalBiome user.
     /// </summary>
-    Api.Tx.Account? user
+    internal Api.Tx.Account? user
     {
         get => _user;
-        set => _user = value;
+        set {
+            _user = value;
+            signer = value is null ? null : new PairSigner(value);
+        }
     }
 
     /// <summary>
@@ -24,6 +29,8 @@ public class AuthClient
             return user;
         }
     }
+
+    internal PairSigner? signer;
 
     /// <summary>
     /// Indicates whether a user account is set or not <br/>
