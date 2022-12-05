@@ -23,6 +23,8 @@ namespace FinalBiome.Api.Codegen
         readonly StorageParserV2 storageParser;
         readonly CallParser callParser;
 
+        readonly ErrorsMetaParser errorsMetaParser;
+
         public TypeGenerator(MetaDataV14 metaData)
         {
             this.metaData = metaData;
@@ -30,6 +32,7 @@ namespace FinalBiome.Api.Codegen
             typeParser = new TypeParser(metaData.NodeMetadata.Types);
             storageParser = new StorageParserV2(metaData.NodeMetadata.Modules, typeParser);
             callParser = new CallParser(metaData.NodeMetadata, typeParser);
+            errorsMetaParser = new(metaData.NodeMetadata.Modules, typeParser);
         }
 
         /// <summary>
@@ -50,6 +53,7 @@ namespace FinalBiome.Api.Codegen
             typeParser.Save(outputDir + "/Types");
             storageParser.Save(outputDir);
             callParser.Save(outputDir);
+            errorsMetaParser.Save(outputDir);
         }
 
         /// <summary>
@@ -60,6 +64,7 @@ namespace FinalBiome.Api.Codegen
             typeParser.Parse();
             storageParser.Parse();
             callParser.Parse();
+            errorsMetaParser.Parse();
         }
 
         public int CountParsedTypes()

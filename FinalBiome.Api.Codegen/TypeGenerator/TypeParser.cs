@@ -74,7 +74,7 @@ namespace FinalBiome.Api.Codegen
         /// Storage for new types which don't present in the meta. For generic types
         /// </summary>
         public Dictionary<uint, ParsedType> newTypes;
-        readonly Dictionary<uint, NodeType> Types;
+        internal readonly Dictionary<uint, NodeType> Types;
 
         public TypeParser(Dictionary<uint, NodeType> types)
         {

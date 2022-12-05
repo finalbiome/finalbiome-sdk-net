@@ -1,5 +1,6 @@
 ﻿using System;
 using FinalBiome.Api.Extensions;
+using FinalBiome.Api.Types;
 
 namespace FinalBiome.Api.Tx.Errors;
 
@@ -13,6 +14,11 @@ public class ExtrinsicFailedException : Exception
 {
     public DispatchError DispatchError { get; internal set; }
     public Hash ExtHash { get; internal set; }
+    public bool IsModule {
+        get {
+            return this.DispatchError.Value == Types.SpRuntime.InnerDispatchError.Module;
+        }
+    }
 
     public ExtrinsicFailedException(Hash extHash, DispatchError dispatchError) : base(MessageFactory(extHash, dispatchError))
     {
@@ -22,13 +28,14 @@ public class ExtrinsicFailedException : Exception
 
     static string MessageFactory(Hash extHash, DispatchError dispatchError)
     {
-        string errorDesc = "";
+        string errorDesc;
         switch (dispatchError.Value)
         {
             case Types.SpRuntime.InnerDispatchError.Module:
                 {
                     var err = (FinalBiome.Api.Types.SpRuntime.ModuleError)dispatchError.Value2;
-                    errorDesc = $"Index: {err.Index.Value}, Error: {err.Error.Value}";
+                    var modErr = ErrorsMetadata.FindMetaError(err.Index.Value, err.Error.Value[0]);
+                    errorDesc = $"{modErr.Module}.{modErr.Error}";
                 }
                 break;
             case Types.SpRuntime.InnerDispatchError.Token:
