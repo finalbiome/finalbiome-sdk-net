@@ -51,7 +51,7 @@ public class MetaDataV14
             var typeDefValue = type.Ty.TypeDef.Value;
             var docs = type.Ty.Docs == null || type.Ty.Docs.Value.Length == 0 ? null : type.Ty.Docs.Value.Select(p => p.Value).ToArray();
 
-            NodeType nodeType = null;
+            NodeType? nodeType = null;
             switch (typeDefValue)
             {
                 case TypeDefEnum.Composite:

@@ -1,4 +1,7 @@
-﻿using System;
+﻿#pragma warning disable IDE0028
+
+
+using System;
 using FinalBiome.Api.Codegen.Metadata;
 using System.Diagnostics;
 using System.Globalization;

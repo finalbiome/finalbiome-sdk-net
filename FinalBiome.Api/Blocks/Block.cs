@@ -10,11 +10,12 @@ using Hash = FinalBiome.Api.Types.PrimitiveTypes.H256;
 /// </summary>
 public class Block
 {
-    Header header;
-    Client client;
+    readonly Header header;
+    readonly Client client;
+
     // Since we obtain the same events for every extrinsic, let's
     // cache them so that we only ever do that once
-    CachedEvents cachedEvents;
+    readonly CachedEvents cachedEvents;
 
     // A cache for our events so we don't fetch them more than once when
     // iterating over events for extrinsics.

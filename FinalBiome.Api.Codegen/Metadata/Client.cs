@@ -50,7 +50,9 @@ namespace FinalBiome.Api.Codegen.MetadataNs
 
         private async Task<string> getMetadata()
         {
+#pragma warning disable CA1825
             return await rpc.InvokeWithParameterObjectAsync<string>("state_getMetadata", new object[] { });
+#pragma warning restore CA1825
         }
 
         public async Task<MetaDataV14> Metadata()

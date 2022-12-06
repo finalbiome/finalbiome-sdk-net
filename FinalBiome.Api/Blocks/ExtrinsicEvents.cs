@@ -17,15 +17,17 @@ public class ExtrinsicEvents : IEnumerable<EventRecord>
     /// basic flows, so it's the only place people can access it
     /// without complicating things for themselves).
     /// </summary>
-    Hash extHash;
+    readonly Hash extHash;
+
     /// <summary>
     /// The index of the extrinsic
     /// </summary>
-    int idx;
+    readonly int idx;
+
     /// <summary>
     /// All of the events in the block
     /// </summary>
-    Events.Events events;
+    readonly Events.Events events;
 
     public ExtrinsicEvents(Hash extHash,
                            int idx,

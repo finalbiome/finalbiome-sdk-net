@@ -1,4 +1,5 @@
-﻿using System;
+﻿#pragma warning disable CS8618
+using System;
 using FinalBiome.Api.Blocks;
 using FinalBiome.Api.Events;
 using FinalBiome.Api.Tx.Errors;

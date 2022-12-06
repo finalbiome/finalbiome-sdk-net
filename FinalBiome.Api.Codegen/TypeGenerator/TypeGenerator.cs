@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿#pragma warning disable CA2211
+
+using System.Text.RegularExpressions;
 using FinalBiome.Api.Codegen.Metadata;
 
 namespace FinalBiome.Api.Codegen
@@ -30,8 +32,6 @@ namespace FinalBiome.Api.Codegen
             "#pragma warning restore IDE0028",
             "#pragma warning restore IDE0052",
         };
-        readonly MetaDataV14 metaData;
-        readonly List<ParsedType> existedTypes = new();
         readonly TypeParser typeParser;
         readonly StorageParserV2 storageParser;
         readonly CallParser callParser;
@@ -40,7 +40,6 @@ namespace FinalBiome.Api.Codegen
 
         public TypeGenerator(MetaDataV14 metaData)
         {
-            this.metaData = metaData;
 
             typeParser = new TypeParser(metaData.NodeMetadata.Types);
             storageParser = new StorageParserV2(metaData.NodeMetadata.Modules, typeParser);

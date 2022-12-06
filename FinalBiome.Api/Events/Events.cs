@@ -9,8 +9,8 @@ using Hash = FinalBiome.Api.Types.PrimitiveTypes.H256;
 /// </summary>
 public class Events
 {
-    Hash blockHash;
-    FinalBiome.Api.Types.FrameSystem.VecEventRecord? eventRecords;
+    readonly Hash blockHash;
+    readonly FinalBiome.Api.Types.FrameSystem.VecEventRecord? eventRecords;
     public Events(
         Hash blockHash,
         FinalBiome.Api.Types.FrameSystem.VecEventRecord? eventRecords

@@ -9,8 +9,8 @@ namespace FinalBiome.Api.Storage;
 /// </summary>
 public class StorageMapKey
 {
-    byte[] value;
-    StorageHasher hasher;
+    readonly byte[] value;
+    readonly StorageHasher hasher;
 
     public StorageMapKey(
         Codec value,

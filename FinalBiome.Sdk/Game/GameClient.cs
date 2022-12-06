@@ -17,7 +17,9 @@ public class GameClient
     public GameData Data { get; internal set; }
 
     readonly Client client;
+#pragma warning disable CS8618
     GameClient(Client client)
+#pragma warning restore CS8618
     {
         this.client = client;
         this.Address = this.client.config.GameAccount;

@@ -1,4 +1,8 @@
-﻿using System;
+﻿#pragma warning disable IDE0028
+#pragma warning disable IDE0042
+
+
+using System;
 using System.Linq;
 using System.Xml.Linq;
 using FinalBiome.Api.Codegen.Metadata;

@@ -1,4 +1,7 @@
-﻿using System;
+﻿#pragma warning disable IDE0028
+#pragma warning disable IDE0042
+
+using System;
 using System.Linq;
 using System.Xml.Linq;
 using FinalBiome.Api.Codegen.Metadata;
@@ -146,7 +149,7 @@ namespace FinalBiome.Api.Codegen
             }
         }
 
-        void GenerateStorageClass(ParsedStorage ps)
+        private static void GenerateStorageClass(ParsedStorage ps)
         {
             static string getUniqueParamName(List<string> parameters, string newParameterName, int? suffix = null)
             {

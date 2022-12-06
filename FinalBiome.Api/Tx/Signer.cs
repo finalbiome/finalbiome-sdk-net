@@ -17,13 +17,13 @@ public interface Signer
     /// Return the "from" account ID.
     /// </summary>
     /// <returns></returns>
-    AccountId AccountId();
+    AccountId AccountId { get; }
 
     /// <summary>
     /// Return the "from" address.
     /// </summary>
     /// <returns></returns>
-    Address Address();
+    Address Address { get; }
 
     /// <summary>
     /// Takes a signer payload for an extrinsic, and returns a signature based on it.
@@ -57,11 +57,14 @@ public class PairSigner : Signer
     /// </summary>
     public Pair Signer => this.signer;
 
-    public Address Address()
+    public Address Address
     {
-        var addr = new Address();
-        addr.Init(Types.SpRuntime.Multiaddress.InnerMultiAddress.Id, accountId);
-        return addr;
+        get 
+        {
+            var addr = new Address();
+            addr.Init(Types.SpRuntime.Multiaddress.InnerMultiAddress.Id, accountId);
+            return addr;
+        }
     }
 
     public Signature Sign(byte[] signerPayload)
@@ -69,10 +72,7 @@ public class PairSigner : Signer
         return this.signer.Sign(signerPayload);
     }
 
-    public AccountId AccountId()
-    {
-        return accountId;
-    }
+    public AccountId AccountId => accountId;
 }
 
 public interface Pair

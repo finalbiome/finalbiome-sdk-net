@@ -146,7 +146,7 @@ public class Entry
     public Modifier Modifier { get; set; }
     [JsonConverter(typeof(StringEnumConverter))]
     public Storage.Type StorageType { get; set; }
-    public (uint, TypeMap) TypeMap { get; set; }
+    public (uint, TypeMap?) TypeMap { get; set; }
     public byte[] Default { get; set; }
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public string[] Docs { get; set; }

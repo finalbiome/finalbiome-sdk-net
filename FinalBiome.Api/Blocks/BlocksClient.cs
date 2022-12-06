@@ -7,7 +7,7 @@ using Hash = FinalBiome.Api.Types.PrimitiveTypes.H256;
 
 public class BlocksClient
 {
-    Client client;
+    readonly Client client;
 
     public BlocksClient(Client client)
     {

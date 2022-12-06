@@ -11,15 +11,15 @@ public class TupleTests
     {
         var t1 = new Types.Tuple<U16>();
         t1.Init("0x2a00");
-        Assert.That(t1.Value.Length, Is.EqualTo(1));
+        Assert.That(t1.Value, Has.Length.EqualTo(1));
 
         var t2 = new Types.Tuple<U16, U16>();
         t2.Init("0x2a002a00");
-        Assert.That(t2.Value.Length, Is.EqualTo(2));
+        Assert.That(t2.Value, Has.Length.EqualTo(2));
 
         var t3 = new Types.Tuple<U16, U16, U16>();
         t3.Init("0x2a002a002a00");
-        Assert.That(t3.Value.Length, Is.EqualTo(3));
+        Assert.That(t3.Value, Has.Length.EqualTo(3));
     }
 
     [Test]
@@ -38,9 +38,11 @@ public class TupleTests
 
         var tupleOfTwo_2 = new Types.Tuple<U16, U32>();
         tupleOfTwo_2.Init("0x2A00FFFFFF00");
-
-        Assert.That(((U16)tupleOfTwo_2.Value[0]).Value, Is.EqualTo(u16.Value));
-        Assert.That(((U32)tupleOfTwo_2.Value[1]).Value, Is.EqualTo(u32.Value));
+        Assert.Multiple(() =>
+        {
+            Assert.That(((U16)tupleOfTwo_2.Value[0]).Value, Is.EqualTo(u16.Value));
+            Assert.That(((U32)tupleOfTwo_2.Value[1]).Value, Is.EqualTo(u32.Value));
+        });
     }
 }
 

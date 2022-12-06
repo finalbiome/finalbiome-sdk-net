@@ -9,7 +9,9 @@ namespace FinalBiome.Api.Types
     public class Compact<T>: Codec where T : Codec, new()
     {
         protected BigInteger _value;
+#pragma warning disable CS8618
         public T Value { get; internal set; }
+#pragma warning restore CS8618
         public override string TypeName() => $"Compact<{new T().TypeName()}>";
         public override int TypeSize { get => new T().TypeSize; }
         public override byte[] Bytes { get => Encode(); }

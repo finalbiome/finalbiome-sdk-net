@@ -24,7 +24,10 @@ public class ClientConfig
     /// </summary>
     /// <param name="game">The game SS58 Address</param>
     /// <param name="endpoint">The endpoint for connection to the FinalBiome network</param>
+#pragma warning disable CS8618
     public ClientConfig(string game, string? endpoint = null)
+#pragma warning restore CS8618
+
     {
         Game = game;
         AccountId32 accountId32 = new();

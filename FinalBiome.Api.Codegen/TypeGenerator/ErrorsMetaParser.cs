@@ -1,3 +1,4 @@
+#pragma warning disable IDE0028
 using FinalBiome.Api.Codegen.Metadata;
 
 namespace FinalBiome.Api.Codegen;

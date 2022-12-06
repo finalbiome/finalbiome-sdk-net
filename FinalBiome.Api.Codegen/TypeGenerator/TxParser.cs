@@ -1,4 +1,5 @@
-﻿
+﻿#pragma warning disable IDE0028
+
 using Newtonsoft.Json.Linq;
 using FinalBiome.Api.Codegen.Metadata;
 namespace FinalBiome.Api.Codegen;

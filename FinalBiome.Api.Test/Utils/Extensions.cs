@@ -1,4 +1,7 @@
-﻿using System;
+﻿#pragma warning disable IDE0230
+
+
+using System;
 using FinalBiome.Api.Types;
 using FinalBiome.Api.Utils;
 using FinalBiome.Api.Extensions;

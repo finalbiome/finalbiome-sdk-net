@@ -109,6 +109,7 @@ public class RpcClient
     }
 
 #pragma warning disable CS8601 // Possible null reference assignment.
+#pragma warning disable CA1825
     internal static object[] RpcParams()
     {
         return new object[] { };
@@ -134,5 +135,6 @@ public class RpcClient
         return new object[] { t0, t1, t2, t3 };
     }
 #pragma warning restore CS8601 // Possible null reference assignment.
+#pragma warning restore CA1825
 }
 

@@ -94,7 +94,7 @@ public partial class TxClient
         // "is signed" + transaction protocol version (4)
         ((byte)(0b10000000 + 4)).EncodeTo(ref encodedInner);
         // from address for signature
-        signer.Address().EncodeTo(ref encodedInner);
+        signer.Address.EncodeTo(ref encodedInner);
         // the signature bytes
         signature.EncodeTo(ref encodedInner);
         // attach custom extra params
@@ -128,7 +128,7 @@ public partial class TxClient
         )
     {
         // Get nonce from the node.
-        var accountNonce = await client.Rpc.SystemAccountNextIndex(signer.AccountId());
+        var accountNonce = await client.Rpc.SystemAccountNextIndex(signer.AccountId);
         return CreateSignedWithNonce(call, signer, accountNonce, otherParams);
     }
 

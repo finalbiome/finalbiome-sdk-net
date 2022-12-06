@@ -1,4 +1,7 @@
-﻿namespace FinalBiome.Api.Test;
+﻿#pragma warning disable IDE0230
+
+
+namespace FinalBiome.Api.Test;
 
 using System.Globalization;
 using System.Numerics;
@@ -148,8 +151,11 @@ public class CompactNumTests
     {
         BigInteger bn = new BigInteger(123456);
         var bytes = CompactNum.CompactTo(bn);
-        Assert.That(bytes, Is.EqualTo(new byte[] { 2, 137, 7, 0 }));
-        Assert.That(bn.ToString(), Is.EqualTo("123456"));
+        Assert.Multiple(() =>
+        {
+            Assert.That(bytes, Is.EqualTo(new byte[] { 2, 137, 7, 0 }));
+            Assert.That(bn.ToString(), Is.EqualTo("123456"));
+        });
     }
 
     [Test]
