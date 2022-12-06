@@ -13,5 +13,11 @@ namespace FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetBalance
     public class FungibleAssetBalance : FinalBiome.Api.Types.Primitive.U128
     {
         public override string TypeName() => "FungibleAssetBalance";
+        public static implicit operator BigInteger(FungibleAssetBalance v) => v.Value;
+        public static implicit operator FungibleAssetBalance(BigInteger v) {
+            FungibleAssetBalance res = new();
+            res.Init(v);
+            return res;
+        }
     }
 }

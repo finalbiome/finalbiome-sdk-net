@@ -13,5 +13,11 @@ namespace FinalBiome.Api.Types.SpConsensusSlots
     public class Slot : FinalBiome.Api.Types.Primitive.U64
     {
         public override string TypeName() => "Slot";
+        public static implicit operator ulong(Slot v) => v.Value;
+        public static implicit operator Slot(ulong v) {
+            Slot res = new();
+            res.Init(v);
+            return res;
+        }
     }
 }

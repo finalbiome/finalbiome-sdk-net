@@ -34,7 +34,7 @@ namespace FinalBiome.Api.Codegen
                 "I64" => "long",
                 "I128" => "BigInteger",
                 "I256" => "BigInteger",
-                _ => throw new Exception("Type is not found"),
+                _ => throw new Exception($" For type {val} no native type"),
             };
         }
 
@@ -515,11 +515,27 @@ namespace FinalBiome.Api.Codegen
             ParsedType inheritedPt = parsedTypes[inheritedTypeId];
             var inheritedFullCanonicalName = inheritedPt.FullCanonicalName;
 
-            GenerateWrappedType(typeId, inheritedFullCanonicalName);
+            string? implicitConvTypeName = null;
+            try
+            {
+                // if inheritedPt can be convert to the native type, generate impicit conversion methods
+                // implicitConvTypeName = NumberPrimitiveToNative(inheritedPt.CanonicalName.Item2);
+                uint primitiveTypeId = resolvePrimitive(inheritedTypeId);
+                ParsedType primitiveType = parsedTypes[primitiveTypeId];
+                implicitConvTypeName = NumberPrimitiveToNative(primitiveType.CanonicalName.Item2);
+            }
+            catch (Exception) {}
+
+            GenerateWrappedType(typeId, inheritedFullCanonicalName, implicitConvTypeName);
         }
 
-        void GenerateWrappedType(uint typeId, string inheritedFullCanonicalName)
+        void GenerateWrappedType(uint typeId, string inheritedFullCanonicalName, string? implicitConvTypeName = null)
         {
+            // implicitConvTypeName used only for the `new types`. I.e. where only one data field (Value).
+            // implicitConvTypeName must NOT be the base class
+            if (inheritedFullCanonicalName == implicitConvTypeName)
+                throw new Exception("implicitConvTypeName must NOT be the base class; for both inheritedFullCanonicalName and implicitConvTypeName gives \"{inheritedFullCanonicalName}\"");
+
             ParsedType pt = parsedTypes[typeId];
             if (pt.Parsed) return;
             var canonical_name = pt.CanonicalName;
@@ -536,6 +552,16 @@ namespace FinalBiome.Api.Codegen
             file.Add($"    public class {canonical_name.Item2} : {inheritedFullCanonicalName}");
             file.Add("    {");
             file.Add($"        public override string TypeName() => \"{canonical_name.Item2}\";");
+            if (implicitConvTypeName is not null)
+            {
+                file.Add($"        public static implicit operator {implicitConvTypeName}({canonical_name.Item2} v) => v.Value;");
+                file.Add($"        public static implicit operator {canonical_name.Item2}({implicitConvTypeName} v) {{");
+                file.Add($"            {canonical_name.Item2} res = new();");
+                file.Add($"            res.Init(v);");
+                file.Add($"            return res;");
+                file.Add($"        }}");
+
+            }
             file.Add("    }");
             file.Add("}");
 

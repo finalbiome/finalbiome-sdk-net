@@ -13,5 +13,11 @@ namespace FinalBiome.Api.Types.SpArithmetic.FixedPoint
     public class FixedU128 : FinalBiome.Api.Types.Primitive.U128
     {
         public override string TypeName() => "FixedU128";
+        public static implicit operator BigInteger(FixedU128 v) => v.Value;
+        public static implicit operator FixedU128(BigInteger v) {
+            FixedU128 res = new();
+            res.Init(v);
+            return res;
+        }
     }
 }

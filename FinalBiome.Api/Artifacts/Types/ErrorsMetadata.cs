@@ -3,6 +3,7 @@
 /// DO NOT CHANGE THE CONTENT OF THE FILE!
 ///
 namespace FinalBiome.Api.Types;
+
 public class ErrorsMetadata
 {
     private ErrorsMetadata() { }

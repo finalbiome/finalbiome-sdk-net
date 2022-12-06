@@ -13,5 +13,11 @@ namespace FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId
     public class FungibleAssetId : FinalBiome.Api.Types.Primitive.U32
     {
         public override string TypeName() => "FungibleAssetId";
+        public static implicit operator uint(FungibleAssetId v) => v.Value;
+        public static implicit operator FungibleAssetId(uint v) {
+            FungibleAssetId res = new();
+            res.Init(v);
+            return res;
+        }
     }
 }

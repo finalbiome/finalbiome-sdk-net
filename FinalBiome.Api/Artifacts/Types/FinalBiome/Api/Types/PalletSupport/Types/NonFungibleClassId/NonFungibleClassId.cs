@@ -13,5 +13,11 @@ namespace FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId
     public class NonFungibleClassId : FinalBiome.Api.Types.Primitive.U32
     {
         public override string TypeName() => "NonFungibleClassId";
+        public static implicit operator uint(NonFungibleClassId v) => v.Value;
+        public static implicit operator NonFungibleClassId(uint v) {
+            NonFungibleClassId res = new();
+            res.Init(v);
+            return res;
+        }
     }
 }

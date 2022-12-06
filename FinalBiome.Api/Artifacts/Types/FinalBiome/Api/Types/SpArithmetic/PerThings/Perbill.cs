@@ -13,5 +13,11 @@ namespace FinalBiome.Api.Types.SpArithmetic.PerThings
     public class Perbill : FinalBiome.Api.Types.Primitive.U32
     {
         public override string TypeName() => "Perbill";
+        public static implicit operator uint(Perbill v) => v.Value;
+        public static implicit operator Perbill(uint v) {
+            Perbill res = new();
+            res.Init(v);
+            return res;
+        }
     }
 }
