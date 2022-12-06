@@ -155,7 +155,6 @@ public class FaClient : IDisposable
     /// <returns></returns>
     public async Task StartSubscriber()
     {
-        if (client.Auth.UserAddress is null) throw new Exception("User not set");
         if (subscriberCancellationTokenSource.Token.IsCancellationRequested) return;
         await StopSubscriber();
 

@@ -140,6 +140,7 @@ public class NfaClientTests
         // login
         await client.Auth.SignInWithEmailAndPassword("Dave", "password");
         Thread.Sleep(2_000);
+        await Task.Yield();
         // by new nfa
         (NfaClassId classIdExpected, NfaInstanceId instanceIdExpected) = await NetworkHelpers.ExecBuyNfaMechanic();
         Thread.Sleep(5_000);

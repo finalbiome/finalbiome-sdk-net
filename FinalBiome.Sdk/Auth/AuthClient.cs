@@ -5,32 +5,36 @@ namespace FinalBiome.Sdk;
 public class AuthClient
 {
     readonly Client client;
-    Api.Tx.Account? _user;
+
     /// <summary>
     /// Current FinalBiome user.
     /// </summary>
-    internal Api.Tx.Account? user
-    {
-        get => _user;
-        set {
-            _user = value;
-            signer = value is null ? null : new PairSigner(value);
-        }
-    }
+    internal Api.Tx.Account? user { get; set; }
 
     /// <summary>
     /// The user address in the network.
+    /// Throw error ErrorNotAuthenticatedException if user not set.
     /// </summary>
-    public Api.Types.SpCore.Crypto.AccountId32? UserAddress
+    /// <value></value>
+    public Api.Types.SpCore.Crypto.AccountId32 UserAddress
     {
         get
         {
-            if (user is null) return null;
+            if (user is null) throw new ErrorNotAuthenticatedException();
             return user;
         }
     }
 
-    internal PairSigner? signer;
+    PairSigner? _signer;
+    internal PairSigner signer
+    {
+        get
+        {
+            if (user is null) throw new ErrorNotAuthenticatedException();
+            _signer ??= new PairSigner(user);
+            return _signer;
+        }
+    }
 
     /// <summary>
     /// Indicates whether a user account is set or not <br/>

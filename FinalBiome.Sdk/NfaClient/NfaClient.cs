@@ -162,7 +162,6 @@ public class NfaClient : IDisposable
     /// <returns></returns>
     async IAsyncEnumerable<(NfaClassId classId, NfaInstanceId instanceId)> FetchOwnedAssets()
     {
-        if (this.client.Auth.UserAddress is null) throw new Exception("User not set");
         // create the partial storage key of all Nfa instances owned by user
         var addr = new StaticStorageAddress("NonFungibleAssets", "Accounts", new());
         var queryKey = addr.ToRootBytes();
@@ -204,11 +203,7 @@ public class NfaClient : IDisposable
             return cachedDetails;
         }
         // fetch from the network. The best option would be not to request the current value separately, but to return it from the subscription. But it is not clear how to implement this normally.
-        NonFungibleClassId nonFungibleClassId = new();
-        nonFungibleClassId.Init(value: classId);
-        NonFungibleAssetId nonFungibleAssetId = new();
-        nonFungibleAssetId.Init(instanceId);
-        var detailsEntity = client.api.Storage.NonFungibleAssets.Assets(nonFungibleClassId, nonFungibleAssetId);
+        var detailsEntity = client.api.Storage.NonFungibleAssets.Assets(classId, instanceId);
         var details = await detailsEntity.Fetch();
         // throw an exception if not exists
         if (details is null) throw new NfaInstanceNotFoundException(classId, instanceId);
@@ -237,9 +232,7 @@ public class NfaClient : IDisposable
         }
 
         // fetch from the network. The best option would be not to request the current value separately, but to return it from the subscription. But it is not clear how to implement this normally.
-        NonFungibleClassId nonFungibleClassId = new();
-        nonFungibleClassId.Init(classId);
-        var detailsEntity = client.api.Storage.NonFungibleAssets.Classes(nonFungibleClassId);
+        var detailsEntity = client.api.Storage.NonFungibleAssets.Classes(classId);
         var details = await detailsEntity.Fetch();
         // throw an exception if not exists
         if (details is null) throw new NfaClassNotFoundException(classId);
@@ -349,11 +342,7 @@ public class NfaClient : IDisposable
         // ignore issuing an asset from another game
         if (!gameClasses.Contains(classId)) return;
         // if user has been owned a new asset, we should subscribe on it changes.
-        NonFungibleClassId nonFungibleClassId = new();
-        nonFungibleClassId.Init(classId);
-        NonFungibleAssetId nonFungibleAssetId = new();
-        nonFungibleAssetId.Init(instanceId);
-        var detailsEntity = client.api.Storage.NonFungibleAssets.Assets(nonFungibleClassId, nonFungibleAssetId);
+        var detailsEntity = client.api.Storage.NonFungibleAssets.Assets(classId, instanceId);
 
         await subscriberToInstances.Subscribe(detailsEntity.Address);
     }
@@ -370,11 +359,7 @@ public class NfaClient : IDisposable
             List<StorageAddress> ownedAssetsAdresses = new();
             await foreach ((uint classId, uint instanceId) in FetchOwnedAssets())
             {
-                NonFungibleClassId nonFungibleClassId = new();
-                nonFungibleClassId.Init(classId);
-                NonFungibleAssetId nonFungibleAssetId = new();
-                nonFungibleAssetId.Init(instanceId);
-                var assetAddress = client.api.Storage.NonFungibleAssets.Assets(nonFungibleClassId, nonFungibleAssetId).Address;
+                var assetAddress = client.api.Storage.NonFungibleAssets.Assets(classId, instanceId).Address;
                 ownedAssetsAdresses.Add(assetAddress);
             }
             await this.subscriberToInstances.Subscribe(ownedAssetsAdresses);
@@ -386,11 +371,7 @@ public class NfaClient : IDisposable
             List<StorageAddress> ownedAssetsAdresses = new();
             foreach ((uint classId, uint instanceId) in nfaInstances.Keys)
             {
-                NonFungibleClassId nonFungibleClassId = new();
-                nonFungibleClassId.Init(classId);
-                NonFungibleAssetId nonFungibleAssetId = new();
-                nonFungibleAssetId.Init(instanceId);
-                var assetAddress = client.api.Storage.NonFungibleAssets.Assets(nonFungibleClassId, nonFungibleAssetId).Address;
+                var assetAddress = client.api.Storage.NonFungibleAssets.Assets(classId, instanceId).Address;
                 ownedAssetsAdresses.Add(assetAddress);
             }
             nfaInstances.Clear();
@@ -399,9 +380,7 @@ public class NfaClient : IDisposable
             List<StorageAddress> ownedClassAdresses = new();
             foreach (uint classId in nfaClasses.Keys)
             {
-                NonFungibleClassId nonFungibleClassId = new();
-                nonFungibleClassId.Init(classId);
-                var classAddress = client.api.Storage.NonFungibleAssets.Classes(nonFungibleClassId).Address;
+                var classAddress = client.api.Storage.NonFungibleAssets.Classes(classId).Address;
                 ownedClassAdresses.Add(classAddress);
             }
             nfaClasses.Clear();

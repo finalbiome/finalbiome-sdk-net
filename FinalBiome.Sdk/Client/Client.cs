@@ -17,9 +17,18 @@ public class Client : IDisposable
     public FaClient Fa { get; internal set; }
     public NfaClient Nfa { get; internal set; }
     public AuthClient Auth { get; internal set; }
-    public MxClient Mx { get; internal set; }
+    private MxClient? _mxClient;
+    public MxClient Mx {
+        get {
+            if (_mxClient is null) throw new ErrorNotAuthenticatedException();
+            return _mxClient;
+        }
+        internal set => _mxClient = value;
+    }
 
+#pragma warning disable CS8618
     Client(ClientConfig config, Api.Client api)
+#pragma warning restore CS8618
     {
         this.config = config;
         this.api = api;
@@ -41,17 +50,14 @@ public class Client : IDisposable
 
         var faClientTask = FaClient.Create(client);
         var NfaClientTask = NfaClient.Create(client);
-        var MxClientTask = MxClient.Create(client);
 
-        await Task.WhenAll(faClientTask, NfaClientTask, MxClientTask);
+        await Task.WhenAll(faClientTask, NfaClientTask);
 
         var faClient = await faClientTask;
         var nfaClient = await NfaClientTask;
-        var mxClient = await MxClientTask;
 
         client.Fa = faClient;
         client.Nfa = nfaClient;
-        client.Mx = mxClient;
 
         return client;
     }
@@ -63,23 +69,17 @@ public class Client : IDisposable
     /// <param name="e"></param>
     async Task HandleUserStateChangedEvent(bool logedIn)
     {
-        await Task.Yield();
         if (logedIn)
         {
-            // user sign in
-            // here we need fetch and subscribe to Game state
-            // here we need fetch and subscribe to FA state
-            // await Fa.StartSubscriber();
-            // here we need fetch and subscribe to NFA state
+            // init MxClient
+            // MxClient can work only when the user is signed in.
+            // So, we init MxClient after user has been signed in.
+            Mx = await MxClient.Create(this, Auth.signer!);
         }
         else
         {
-            // user sign out
-            // here we need clean and unsubscribe from Game state
-            // here we need clean and unsubscribe from FA state
-            // await Fa.StopSubscriber();
-            // here we need clean and unsubscribe from NFA state
-
+            _mxClient?.Dispose();
+            _mxClient = null;
         }
     }
 
@@ -87,6 +87,7 @@ public class Client : IDisposable
     {
         Fa?.Dispose();
         Nfa?.Dispose();
+        _mxClient?.Dispose();
         GC.SuppressFinalize(this);
     }
 }
