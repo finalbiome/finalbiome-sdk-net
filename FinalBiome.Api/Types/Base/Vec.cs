@@ -49,6 +49,21 @@ namespace FinalBiome.Api.Types
             TypeSize = Bytes.Length;
         }
         
+        public static implicit operator T[](Vec<T> v) => v.Value;
+        public static implicit operator List<T>(Vec<T> v) => v.Value.ToList();
+        public static implicit operator Vec<T>(T[] v) 
+        {
+            var res = new Vec<T>();
+            res.Init(v);
+            return res;
+        }
+        public static implicit operator Vec<T>(List<T> v) 
+        {
+            var res = new Vec<T>();
+            res.Init(v.ToArray());
+            return res;
+        }
+
     }
 }
 

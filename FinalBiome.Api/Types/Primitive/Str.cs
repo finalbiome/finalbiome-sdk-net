@@ -50,7 +50,7 @@ namespace FinalBiome.Api.Types.Primitive
         }
 
         public static implicit operator string(Str v) => v.Value;
-        public static explicit operator Str(string v) => From(v);
+        public static implicit operator Str(string v) => From(v);
 
     }
 }

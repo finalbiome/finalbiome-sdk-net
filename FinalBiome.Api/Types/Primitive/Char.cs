@@ -34,7 +34,7 @@ namespace FinalBiome.Api.Types.Primitive
         }
 
         public static implicit operator char(Char v) => v.Value;
-        public static explicit operator Char(char v) => From(v);
+        public static implicit operator Char(char v) => From(v);
     }
 }
 

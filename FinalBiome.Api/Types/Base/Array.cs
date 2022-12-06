@@ -86,5 +86,13 @@ public class Array<T> : Codec where T : Codec, new()
     {
         innerTypeSize = new T().TypeSize;
     }
+
+    public static implicit operator T[](Array<T> v) => v.Value;
+    public static implicit operator Array<T>(T[] v) {
+        var res = new Array<T>();
+        res.Init(v);
+        return res;
+    }
+    
 }
 

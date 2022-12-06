@@ -28,7 +28,7 @@ namespace FinalBiome.Api.Types.Primitive
         }
 
         public static implicit operator byte(U8 v) => v.Value;
-        public static explicit operator U8(byte v) => From(v);
+        public static implicit operator U8(byte v) => From(v);
     }
 }
 

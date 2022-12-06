@@ -37,7 +37,7 @@ namespace FinalBiome.Api.Types.Primitive
         }
 
         public static implicit operator int(I32 v) => v.Value;
-        public static explicit operator I32(int v) => From(v);
+        public static implicit operator I32(int v) => From(v);
     }
 }
 

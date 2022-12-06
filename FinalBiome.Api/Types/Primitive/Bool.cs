@@ -29,7 +29,7 @@ namespace FinalBiome.Api.Types.Primitive
         }
 
         public static implicit operator bool(Bool b) => b.Value;
-        public static explicit operator Bool(bool b) => From(b);
+        public static implicit operator Bool(bool b) => From(b);
     }
 }
 
