@@ -303,12 +303,12 @@ namespace FinalBiome.Api.Codegen
                 string pathFileName = $"{path}/{s.FileName}";
                 Directory.CreateDirectory(path);
                 Console.WriteLine($"Write file {pathFileName}");
-                File.WriteAllLines(pathFileName, TypeGenerator.banner.Concat(s.GeneratedCode));
+                File.WriteAllLines(pathFileName, TypeGenerator.StringsWithBanner(s.GeneratedCode));
             }
             // save StorageClient class
             string pathQueryFileName = $"{outputDir}/{TypeGenerator.StorageNamespacePrefix}/StorageClient.cs";
             Console.WriteLine($"Write file {pathQueryFileName}");
-            File.WriteAllLines(pathQueryFileName, TypeGenerator.banner.Concat(queryClassSource));
+            File.WriteAllLines(pathQueryFileName, TypeGenerator.StringsWithBanner(queryClassSource));
         }
 
         static StorageHasher HasherConverter(string ajHasher)

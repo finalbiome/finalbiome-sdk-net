@@ -85,6 +85,6 @@ internal class ErrorsMetaParser
     {
         string pathErrorsMetadataFileName = $"{outputDir}/{TypeGenerator.TypesNamespacePrefix}/ErrorsMetadata.cs";
         Console.WriteLine($"Write file {pathErrorsMetadataFileName}");
-        File.WriteAllLines(pathErrorsMetadataFileName, TypeGenerator.banner.Concat(GenerageErrorsMetadataClass()));
+        File.WriteAllLines(pathErrorsMetadataFileName, TypeGenerator.StringsWithBanner(GenerageErrorsMetadataClass()));
     }
 }

@@ -10,12 +10,25 @@ namespace FinalBiome.Api.Codegen
         public static string TypesNamespacePrefix = "Types";
         public static string StorageNamespacePrefix = "Storage";
         public static string TransactionsNamespacePrefix = "Tx";
-        public static string[] banner =
+        static readonly string[] banner =
         {
             "///",
             "/// This file is generated automatically",
             "/// DO NOT CHANGE THE CONTENT OF THE FILE!",
             "///",
+            "",
+            "#pragma warning disable IDE0090",
+            "#pragma warning disable CA1822",
+            "#pragma warning disable IDE0028",
+            "#pragma warning disable IDE0052",
+        };
+        static readonly string[] footer =
+        {
+            "",
+            "#pragma warning restore IDE0090",
+            "#pragma warning restore CA1822",
+            "#pragma warning restore IDE0028",
+            "#pragma warning restore IDE0052",
         };
         readonly MetaDataV14 metaData;
         readonly List<ParsedType> existedTypes = new();
@@ -78,6 +91,16 @@ namespace FinalBiome.Api.Codegen
         public int CountParsedTransactionTypes()
         {
             return callParser.parsedCalls.Where((t) => t.Parsed).Count() + callParser.parsedModules.Where((t) => t.Value.Parsed).Count() + 1;
+        }
+
+        /// <summary>
+        /// Rrames the data strings with a header and footer
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static IEnumerable<string> StringsWithBanner(IEnumerable<string> data)
+        {
+            return TypeGenerator.banner.Concat(data).Concat(TypeGenerator.footer);
         }
     }
 

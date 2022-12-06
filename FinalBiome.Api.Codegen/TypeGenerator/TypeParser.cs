@@ -107,7 +107,7 @@ namespace FinalBiome.Api.Codegen
                 string pathFileName = $"{path}/{t.FileName}";
                 Directory.CreateDirectory(path);
                 Console.WriteLine($"Write file {pathFileName}");
-                File.WriteAllLines(pathFileName, TypeGenerator.banner.Concat(t.GeneratedCode));
+                File.WriteAllLines(pathFileName, TypeGenerator.StringsWithBanner(t.GeneratedCode));
             }
         }
 

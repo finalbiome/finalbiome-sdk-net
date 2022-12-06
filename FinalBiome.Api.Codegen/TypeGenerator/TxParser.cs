@@ -391,12 +391,12 @@ public class CallParser
             string pathFileName = $"{path}/{s.FileName}";
             Directory.CreateDirectory(path);
             Console.WriteLine($"Write file {pathFileName}");
-            File.WriteAllLines(pathFileName, TypeGenerator.banner.Concat(s.GeneratedCode));
+            File.WriteAllLines(pathFileName, TypeGenerator.StringsWithBanner(s.GeneratedCode));
         }
         // save Query class
         string pathTxFileName = $"{outputDir}/{TypeGenerator.TransactionsNamespacePrefix}/TxClient.cs";
         Console.WriteLine($"Write file {pathTxFileName}");
-        File.WriteAllLines(pathTxFileName, TypeGenerator.banner.Concat(transactionsClassSource));
+        File.WriteAllLines(pathTxFileName, TypeGenerator.StringsWithBanner(transactionsClassSource));
     }
 }
 
