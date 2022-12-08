@@ -14,12 +14,12 @@ public class MechanicsGet : StorageEntry<FinalBiome.Api.Types.PalletMechanics.Ty
     /// <summary>
     ///  Store of the Mechanics.<br/>
     /// </summary>
-    public MechanicsGet(Client client, FinalBiome.Api.Types.SpCore.Crypto.AccountId32 accountId32, FinalBiome.Api.Types.Primitive.U32 u32) :
+    public MechanicsGet(Client client, FinalBiome.Api.Types.PalletSupport.GamerAccount gamerAccount, FinalBiome.Api.Types.Primitive.U32 u32) :
         base(client, "Mechanics", "Mechanics")
     {
         List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();
-        storageEntryKeys.Add(new StorageMapKey(accountId32, FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat));
-        storageEntryKeys.Add(new StorageMapKey(u32, FinalBiome.Api.Storage.StorageHasher.Blake2_128Concat));
+        storageEntryKeys.Add(new StorageMapKey(gamerAccount, FinalBiome.Api.Storage.StorageHasher.Twox64Concat));
+        storageEntryKeys.Add(new StorageMapKey(u32, FinalBiome.Api.Storage.StorageHasher.Twox64Concat));
 
         this.Address = new StaticStorageAddress(palletName, entryName, storageEntryKeys);
     }

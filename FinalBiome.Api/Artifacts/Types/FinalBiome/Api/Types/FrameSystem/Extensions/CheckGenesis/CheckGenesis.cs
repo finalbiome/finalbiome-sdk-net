@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.FrameSystem.Extensions.CheckGenesis
 {
     /// <summary>
-    /// Generated from meta with Type Id 209
+    /// Generated from meta with Type Id 210
     /// </summary>
     public class CheckGenesis : BaseVoid
     {

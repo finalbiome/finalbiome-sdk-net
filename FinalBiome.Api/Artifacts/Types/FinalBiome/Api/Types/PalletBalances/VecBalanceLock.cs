@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletBalances
 {
     /// <summary>
-    /// Generated from meta with Type Id 115
+    /// Generated from meta with Type Id 122
     /// </summary>
     public class VecBalanceLock : Vec<FinalBiome.Api.Types.PalletBalances.BalanceLock>
     {

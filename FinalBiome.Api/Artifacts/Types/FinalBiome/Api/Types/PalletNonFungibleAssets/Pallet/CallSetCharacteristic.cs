@@ -13,7 +13,7 @@ using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.PalletNonFungibleAssets.Pallet
 {
     /// <summary>
-    /// Generated from meta with Type Id 145, Variant Id 4
+    /// Generated from meta with Type Id 152, Variant Id 4
     /// </summary>
     public class CallSetCharacteristic : Codec
     {

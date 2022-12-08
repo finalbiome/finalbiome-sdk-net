@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletOrganizationIdentity.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 134
+    /// Generated from meta with Type Id 141
     /// </summary>
     public enum InnerAirDropAsset : byte
     {
@@ -21,7 +21,7 @@ namespace FinalBiome.Api.Types.PalletOrganizationIdentity.Types
         Nfa = 1,
     }
     /// <summary>
-    /// Generated from meta with Type Id 134
+    /// Generated from meta with Type Id 141
     /// </summary>
     public class AirDropAsset : Enum<InnerAirDropAsset, Tuple<FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.FungibleAssetId, FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetBalance.FungibleAssetBalance>, Tuple<FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId, FinalBiome.Api.Types.PalletSupport.BoundedVecAttribute>>
     {

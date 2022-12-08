@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.FrameSystem
 {
     /// <summary>
-    /// Generated from meta with Type Id 60
+    /// Generated from meta with Type Id 67
     /// </summary>
     public enum InnerPhase : byte
     {
@@ -22,7 +22,7 @@ namespace FinalBiome.Api.Types.FrameSystem
         Initialization = 2,
     }
     /// <summary>
-    /// Generated from meta with Type Id 60
+    /// Generated from meta with Type Id 67
     /// </summary>
     public class Phase : Enum<InnerPhase, FinalBiome.Api.Types.Primitive.U32, BaseVoid, BaseVoid>
     {

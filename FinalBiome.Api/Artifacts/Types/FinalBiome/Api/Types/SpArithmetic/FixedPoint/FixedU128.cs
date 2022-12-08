@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.SpArithmetic.FixedPoint
 {
     /// <summary>
-    /// Generated from meta with Type Id 126
+    /// Generated from meta with Type Id 133
     /// </summary>
     public class FixedU128 : FinalBiome.Api.Types.Primitive.U128
     {

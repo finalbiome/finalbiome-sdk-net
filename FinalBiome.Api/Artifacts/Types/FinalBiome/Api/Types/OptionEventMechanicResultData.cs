@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 53
+    /// Generated from meta with Type Id 54
     /// </summary>
     public class OptionEventMechanicResultData : Option<FinalBiome.Api.Types.PalletMechanics.Types.EventMechanicResultData>
     {

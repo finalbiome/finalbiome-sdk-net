@@ -28,6 +28,10 @@ namespace FinalBiome.Api.Types.PalletMechanics.Pallet
     /// Mechanics was stopped.<br/>
     /// </summary>
         Stopped = 1,
+    /// <summary>
+    /// Mechanics as dropped by typeout.<br/>
+    /// </summary>
+        DroppedByTimeout = 2,
     }
     /// <summary>
     ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>
@@ -35,7 +39,7 @@ namespace FinalBiome.Api.Types.PalletMechanics.Pallet
     ///
     /// Generated from meta with Type Id 52
     /// </summary>
-    public class Event : Enum<InnerEvent, FinalBiome.Api.Types.PalletMechanics.Pallet.EventFinished, FinalBiome.Api.Types.PalletMechanics.Pallet.EventStopped>
+    public class Event : Enum<InnerEvent, FinalBiome.Api.Types.PalletMechanics.Pallet.EventFinished, FinalBiome.Api.Types.PalletMechanics.Pallet.EventStopped, FinalBiome.Api.Types.PalletMechanics.Pallet.EventDroppedByTimeout>
     {
         public override string TypeName() => "Event";
     }

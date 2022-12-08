@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 76
+    /// Generated from meta with Type Id 83
     /// </summary>
     public class OptionU64 : Option<FinalBiome.Api.Types.Primitive.U64>
     {

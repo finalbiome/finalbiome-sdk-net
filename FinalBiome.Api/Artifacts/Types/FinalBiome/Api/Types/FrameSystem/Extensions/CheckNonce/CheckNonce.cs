@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.FrameSystem.Extensions.CheckNonce
 {
     /// <summary>
-    /// Generated from meta with Type Id 212
+    /// Generated from meta with Type Id 213
     /// </summary>
     public class CheckNonce : FinalBiome.Api.Types.CompactU32
     {

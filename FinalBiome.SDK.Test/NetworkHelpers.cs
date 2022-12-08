@@ -34,12 +34,13 @@ static public class NetworkHelpers
     {
         Client api = await Client.New();
         PairSigner signer = new(AccountKeyring.Dave());
+        var organizationId = AccountKeyring.Eve();
 
         NonFungibleClassId classId = new();
         classId.Init(1);
         U32 offerId = U32.From(0);
 
-        var callTx = api.Tx.Mechanics.ExecBuyNfa(classId, offerId);
+        var callTx = api.Tx.Mechanics.ExecBuyNfa(organizationId, classId, offerId);
         var buyNfa = await api.Tx.SignAndSubmitThenWatchDefault(callTx, signer);
         var events = await buyNfa.WaitForFinalizedSuccess();
         

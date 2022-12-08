@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletTransactionPayment
 {
     /// <summary>
-    /// Generated from meta with Type Id 214
+    /// Generated from meta with Type Id 215
     /// </summary>
     public class ChargeTransactionPayment : FinalBiome.Api.Types.CompactU128
     {

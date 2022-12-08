@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 140
+    /// Generated from meta with Type Id 147
     /// </summary>
     public class OptionTopUppedFA : Option<FinalBiome.Api.Types.PalletFungibleAssets.Types.TopUppedFA>
     {

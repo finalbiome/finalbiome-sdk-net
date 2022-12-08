@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletGrandpa.Pallet
     /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 98
+    /// Generated from meta with Type Id 105
     /// </summary>
     public enum InnerCall : byte
     {
@@ -59,7 +59,7 @@ namespace FinalBiome.Api.Types.PalletGrandpa.Pallet
     /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 98
+    /// Generated from meta with Type Id 105
     /// </summary>
     public class Call : Enum<InnerCall, FinalBiome.Api.Types.PalletGrandpa.Pallet.CallReportEquivocation, FinalBiome.Api.Types.PalletGrandpa.Pallet.CallReportEquivocationUnsigned, FinalBiome.Api.Types.PalletGrandpa.Pallet.CallNoteStalled>
     {

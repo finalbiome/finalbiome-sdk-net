@@ -13,11 +13,11 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 198
+    /// Generated from meta with Type Id 199
     /// </summary>
-    public class Tuple_U32_AccountId32_U32 : FinalBiome.Api.Types.Tuple<FinalBiome.Api.Types.Primitive.U32, FinalBiome.Api.Types.SpCore.Crypto.AccountId32, FinalBiome.Api.Types.Primitive.U32>
+    public class Tuple_U32_GamerAccount_U32 : FinalBiome.Api.Types.Tuple<FinalBiome.Api.Types.Primitive.U32, FinalBiome.Api.Types.PalletSupport.GamerAccount, FinalBiome.Api.Types.Primitive.U32>
     {
-        public override string TypeName() => "Tuple_U32_AccountId32_U32";
+        public override string TypeName() => "Tuple_U32_GamerAccount_U32";
     }
 }
 

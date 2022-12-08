@@ -10,43 +10,41 @@
 using System;
 using FinalBiome.Api.Types;
 using FinalBiome.Api.Types.Primitive;
-namespace FinalBiome.Api.Types.PalletBalances
+namespace FinalBiome.Api.Types.PalletMechanics.Pallet
 {
     /// <summary>
-    /// Generated from meta with Type Id 124
+    /// Mechanics as dropped by typeout.<br/>
+    ///
+    ///
+    /// Generated from meta with Type Id 52, Variant Id 2
     /// </summary>
-    public class ReserveData : Codec
+    public class EventDroppedByTimeout : Codec
     {
-        public override string TypeName() => "ReserveData";
+        public override string TypeName() => "EventDroppedByTimeout";
 
         private int _size;
         public override int TypeSize => _size;
 #pragma warning disable CS8618
-        public FinalBiome.Api.Types.Array8U8 Id { get; private set; }
-        public FinalBiome.Api.Types.Primitive.U128 Amount { get; private set; }
+        public FinalBiome.Api.Types.PalletSupport.GamerAccount Owner { get; private set; }
+        public FinalBiome.Api.Types.Primitive.U32 Id { get; private set; }
 #pragma warning restore CS8618
 
         public override byte[] Encode()
         {
-            var bytes = new List<byte>();
-            bytes.AddRange(Id.Encode());
-            bytes.AddRange(Amount.Encode());
-            return bytes.ToArray();
+            throw new NotImplementedException();
         }
 
         public override void Decode(byte[] byteArray, ref int p)
         {
             var start = p;
 
-            Id = new FinalBiome.Api.Types.Array8U8();
+            Owner = new FinalBiome.Api.Types.PalletSupport.GamerAccount();
+            Owner.Decode(byteArray, ref p);
+
+            Id = new FinalBiome.Api.Types.Primitive.U32();
             Id.Decode(byteArray, ref p);
 
-            Amount = new FinalBiome.Api.Types.Primitive.U128();
-            Amount.Decode(byteArray, ref p);
-
             _size = p - start;
-            Bytes = new byte[TypeSize];
-            Array.Copy(byteArray, start, Bytes, 0, TypeSize);
         }
     }
 }

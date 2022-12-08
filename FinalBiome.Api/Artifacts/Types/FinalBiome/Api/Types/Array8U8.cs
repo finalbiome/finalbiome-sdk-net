@@ -13,7 +13,7 @@ using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 84
+    /// Generated from meta with Type Id 91
     /// </summary>
     public class Array8U8 : Codec
     {

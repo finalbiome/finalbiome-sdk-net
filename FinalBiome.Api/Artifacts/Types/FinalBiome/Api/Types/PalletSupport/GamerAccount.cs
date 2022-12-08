@@ -10,27 +10,27 @@
 using System;
 using FinalBiome.Api.Types;
 using FinalBiome.Api.Types.Primitive;
-namespace FinalBiome.Api.Types.PalletBalances
+namespace FinalBiome.Api.Types.PalletSupport
 {
     /// <summary>
-    /// Generated from meta with Type Id 124
+    /// Generated from meta with Type Id 53
     /// </summary>
-    public class ReserveData : Codec
+    public class GamerAccount : Codec
     {
-        public override string TypeName() => "ReserveData";
+        public override string TypeName() => "GamerAccount";
 
         private int _size;
         public override int TypeSize => _size;
 #pragma warning disable CS8618
-        public FinalBiome.Api.Types.Array8U8 Id { get; private set; }
-        public FinalBiome.Api.Types.Primitive.U128 Amount { get; private set; }
+        public FinalBiome.Api.Types.SpCore.Crypto.AccountId32 AccountId { get; private set; }
+        public FinalBiome.Api.Types.SpCore.Crypto.AccountId32 OrganizationId { get; private set; }
 #pragma warning restore CS8618
 
         public override byte[] Encode()
         {
             var bytes = new List<byte>();
-            bytes.AddRange(Id.Encode());
-            bytes.AddRange(Amount.Encode());
+            bytes.AddRange(AccountId.Encode());
+            bytes.AddRange(OrganizationId.Encode());
             return bytes.ToArray();
         }
 
@@ -38,11 +38,11 @@ namespace FinalBiome.Api.Types.PalletBalances
         {
             var start = p;
 
-            Id = new FinalBiome.Api.Types.Array8U8();
-            Id.Decode(byteArray, ref p);
+            AccountId = new FinalBiome.Api.Types.SpCore.Crypto.AccountId32();
+            AccountId.Decode(byteArray, ref p);
 
-            Amount = new FinalBiome.Api.Types.Primitive.U128();
-            Amount.Decode(byteArray, ref p);
+            OrganizationId = new FinalBiome.Api.Types.SpCore.Crypto.AccountId32();
+            OrganizationId.Decode(byteArray, ref p);
 
             _size = p - start;
             Bytes = new byte[TypeSize];

@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.SpFinalityGrandpa.App
 {
     /// <summary>
-    /// Generated from meta with Type Id 103
+    /// Generated from meta with Type Id 110
     /// </summary>
     public class Signature : FinalBiome.Api.Types.SpCore.Ed25519.Signature
     {

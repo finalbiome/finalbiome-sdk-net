@@ -19,7 +19,7 @@ namespace FinalBiome.Api.Types.FrameSystem.Pallet
     /// the prefix we are removing to accurately calculate the weight of this function.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 68, Variant Id 7
+    /// Generated from meta with Type Id 75, Variant Id 7
     /// </summary>
     public class CallKillPrefix : Codec
     {

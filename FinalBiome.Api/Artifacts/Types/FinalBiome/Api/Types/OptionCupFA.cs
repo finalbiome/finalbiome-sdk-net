@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 142
+    /// Generated from meta with Type Id 149
     /// </summary>
     public class OptionCupFA : Option<FinalBiome.Api.Types.PalletFungibleAssets.Types.CupFA>
     {

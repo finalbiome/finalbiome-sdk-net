@@ -13,14 +13,14 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletMechanics.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 166
+    /// Generated from meta with Type Id 173
     /// </summary>
     public enum InnerMechanicUpgradePayload : byte
     {
         Bet = 0,
     }
     /// <summary>
-    /// Generated from meta with Type Id 166
+    /// Generated from meta with Type Id 173
     /// </summary>
     public class MechanicUpgradePayload : Enum<InnerMechanicUpgradePayload, BaseVoid>
     {

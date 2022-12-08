@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 71
+    /// Generated from meta with Type Id 78
     /// </summary>
     public class Tuple_VecU8_VecU8 : FinalBiome.Api.Types.Tuple<FinalBiome.Api.Types.VecU8, FinalBiome.Api.Types.VecU8>
     {

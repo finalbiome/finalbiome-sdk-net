@@ -13,16 +13,16 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletMechanics.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 59
+    /// Generated from meta with Type Id 60
     /// </summary>
     public enum InnerEventMechanicStopReason : byte
     {
         UpgradeNeeded = 0,
     }
     /// <summary>
-    /// Generated from meta with Type Id 59
+    /// Generated from meta with Type Id 60
     /// </summary>
-    public class EventMechanicStopReason : Enum<InnerEventMechanicStopReason, BaseVoid>
+    public class EventMechanicStopReason : Enum<InnerEventMechanicStopReason, FinalBiome.Api.Types.PalletMechanics.Types.MechanicDetails>
     {
         public override string TypeName() => "EventMechanicStopReason";
     }

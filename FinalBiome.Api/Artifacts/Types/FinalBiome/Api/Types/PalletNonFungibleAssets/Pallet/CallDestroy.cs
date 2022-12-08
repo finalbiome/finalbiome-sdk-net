@@ -18,7 +18,7 @@ namespace FinalBiome.Api.Types.PalletNonFungibleAssets.Pallet
     /// The origin must be Signed and must be a member of the organization<br/>
     ///
     ///
-    /// Generated from meta with Type Id 145, Variant Id 1
+    /// Generated from meta with Type Id 152, Variant Id 1
     /// </summary>
     public class CallDestroy : Codec
     {

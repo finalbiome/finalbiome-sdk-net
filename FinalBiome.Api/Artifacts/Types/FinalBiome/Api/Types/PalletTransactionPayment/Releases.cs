@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletTransactionPayment
 {
     /// <summary>
-    /// Generated from meta with Type Id 127
+    /// Generated from meta with Type Id 134
     /// </summary>
     public enum InnerReleases : byte
     {
@@ -21,7 +21,7 @@ namespace FinalBiome.Api.Types.PalletTransactionPayment
         V2 = 1,
     }
     /// <summary>
-    /// Generated from meta with Type Id 127
+    /// Generated from meta with Type Id 134
     /// </summary>
     public class Releases : Enum<InnerReleases, BaseVoid, BaseVoid>
     {

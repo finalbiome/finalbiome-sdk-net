@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types;
     /// <summary>
-    /// Generated from meta with Type Id 89
+    /// Generated from meta with Type Id 96
     /// </summary>
 public class CompactU64 : Compact<FinalBiome.Api.Types.Primitive.U64>
 {

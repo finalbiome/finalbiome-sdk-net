@@ -13,7 +13,7 @@ using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.PalletSupport.Characteristics.Bettor
 {
     /// <summary>
-    /// Generated from meta with Type Id 151
+    /// Generated from meta with Type Id 158
     /// </summary>
     public class BettorOutcome : Codec
     {

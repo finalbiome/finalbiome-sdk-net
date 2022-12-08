@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId;
     /// <summary>
-    /// Generated from meta with Type Id 144
+    /// Generated from meta with Type Id 151
     /// </summary>
 public class CompactFungibleAssetId : Compact<FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.FungibleAssetId>
 {

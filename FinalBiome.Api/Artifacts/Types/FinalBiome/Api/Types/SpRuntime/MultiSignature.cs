@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.SpRuntime
 {
     /// <summary>
-    /// Generated from meta with Type Id 201
+    /// Generated from meta with Type Id 202
     /// </summary>
     public enum InnerMultiSignature : byte
     {
@@ -22,7 +22,7 @@ namespace FinalBiome.Api.Types.SpRuntime
         Ecdsa = 2,
     }
     /// <summary>
-    /// Generated from meta with Type Id 201
+    /// Generated from meta with Type Id 202
     /// </summary>
     public class MultiSignature : Enum<InnerMultiSignature, FinalBiome.Api.Types.SpCore.Ed25519.Signature, FinalBiome.Api.Types.SpCore.Sr25519.Signature, FinalBiome.Api.Types.SpCore.Ecdsa.Signature>
     {

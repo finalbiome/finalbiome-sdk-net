@@ -13,7 +13,7 @@ using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.PalletMechanics.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 55
+    /// Generated from meta with Type Id 56
     /// </summary>
     public class EventMechanicResultDataBet : Codec
     {

@@ -13,7 +13,7 @@ using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.PalletMechanics.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 164
+    /// Generated from meta with Type Id 171
     /// </summary>
     public class MechanicUpgradeData : Codec
     {

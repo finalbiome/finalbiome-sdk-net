@@ -20,7 +20,7 @@ namespace FinalBiome.Api.Types.FrameSystem.Pallet
     /// # &lt;/weight&gt;<br/>
     ///
     ///
-    /// Generated from meta with Type Id 68, Variant Id 1
+    /// Generated from meta with Type Id 75, Variant Id 1
     /// </summary>
     public class CallRemark : Codec
     {

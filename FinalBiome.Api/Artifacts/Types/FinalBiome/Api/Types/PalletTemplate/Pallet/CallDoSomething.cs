@@ -17,7 +17,7 @@ namespace FinalBiome.Api.Types.PalletTemplate.Pallet
     /// storage and emits an event. This function must be dispatched by a signed extrinsic.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 130, Variant Id 0
+    /// Generated from meta with Type Id 137, Variant Id 0
     /// </summary>
     public class CallDoSomething : Codec
     {

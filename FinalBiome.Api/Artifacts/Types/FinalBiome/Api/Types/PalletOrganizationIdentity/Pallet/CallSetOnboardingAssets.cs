@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletOrganizationIdentity.Pallet
     /// Set assets which will be airdroped at game onboarding<br/>
     ///
     ///
-    /// Generated from meta with Type Id 131, Variant Id 3
+    /// Generated from meta with Type Id 138, Variant Id 3
     /// </summary>
     public class CallSetOnboardingAssets : Codec
     {

@@ -14,12 +14,13 @@ namespace FinalBiome.Api.Tx
         /// <summary>
         /// Upgrade mechanic<br/>
         /// </summary>
-        public StaticTxPayload Upgrade(FinalBiome.Api.Types.PalletMechanics.Types.MechanicUpgradeData upgrageData)
+        public StaticTxPayload Upgrade(FinalBiome.Api.Types.SpCore.Crypto.AccountId32 organizationId, FinalBiome.Api.Types.PalletMechanics.Types.MechanicUpgradeData upgrageData)
         {
             byte palletIsx = 12;
             byte callIsx = 2;
 
             List<byte> callData = new List<byte>();
+            organizationId.EncodeTo(ref callData);
             upgrageData.EncodeTo(ref callData);
 
             return new StaticTxPayload(palletIsx, callIsx, callData);

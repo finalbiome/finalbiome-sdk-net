@@ -13,7 +13,7 @@ using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.FrameSystem
 {
     /// <summary>
-    /// Generated from meta with Type Id 64
+    /// Generated from meta with Type Id 71
     /// </summary>
     public class LastRuntimeUpgradeInfo : Codec
     {

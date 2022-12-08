@@ -19,17 +19,17 @@ public class Mechanics
     /// <summary>
     ///  Store of the Mechanics.<br/>
     /// </summary>
-    public MechanicsGet MechanicsGet(FinalBiome.Api.Types.SpCore.Crypto.AccountId32 accountId32, FinalBiome.Api.Types.Primitive.U32 u32)
+    public MechanicsGet MechanicsGet(FinalBiome.Api.Types.PalletSupport.GamerAccount gamerAccount, FinalBiome.Api.Types.Primitive.U32 u32)
     {
-        return new MechanicsGet(client, accountId32, u32);
+        return new MechanicsGet(client, gamerAccount, u32);
     }
 
     /// <summary>
     ///  Schedule when mechanics time out<br/>
     /// </summary>
-    public Timeouts Timeouts(FinalBiome.Api.Types.Primitive.U32 u32, FinalBiome.Api.Types.SpCore.Crypto.AccountId32 accountId32, FinalBiome.Api.Types.Primitive.U32 u320)
+    public Timeouts Timeouts(FinalBiome.Api.Types.Primitive.U32 u32, FinalBiome.Api.Types.PalletSupport.GamerAccount gamerAccount, FinalBiome.Api.Types.Primitive.U32 u320)
     {
-        return new Timeouts(client, u32, accountId32, u320);
+        return new Timeouts(client, u32, gamerAccount, u320);
     }
 
 }

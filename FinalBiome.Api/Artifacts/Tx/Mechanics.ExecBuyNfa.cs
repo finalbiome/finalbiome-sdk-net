@@ -14,12 +14,13 @@ namespace FinalBiome.Api.Tx
         /// <summary>
         /// Execute mechanic `Buy NFA`<br/>
         /// </summary>
-        public StaticTxPayload ExecBuyNfa(FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId classId, FinalBiome.Api.Types.Primitive.U32 offerId)
+        public StaticTxPayload ExecBuyNfa(FinalBiome.Api.Types.SpCore.Crypto.AccountId32 organizationId, FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId classId, FinalBiome.Api.Types.Primitive.U32 offerId)
         {
             byte palletIsx = 12;
             byte callIsx = 0;
 
             List<byte> callData = new List<byte>();
+            organizationId.EncodeTo(ref callData);
             classId.EncodeTo(ref callData);
             offerId.EncodeTo(ref callData);
 

@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.FinalbiomeNodeRuntime
 {
     /// <summary>
-    /// Generated from meta with Type Id 215
+    /// Generated from meta with Type Id 216
     /// </summary>
     public class Runtime : BaseVoid
     {

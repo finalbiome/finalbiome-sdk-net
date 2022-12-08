@@ -13,7 +13,7 @@ using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.PalletSupport
 {
     /// <summary>
-    /// Generated from meta with Type Id 165
+    /// Generated from meta with Type Id 172
     /// </summary>
     public class MechanicId : Codec
     {
@@ -22,14 +22,14 @@ namespace FinalBiome.Api.Types.PalletSupport
         private int _size;
         public override int TypeSize => _size;
 #pragma warning disable CS8618
-        public FinalBiome.Api.Types.SpCore.Crypto.AccountId32 AccountId { get; private set; }
+        public FinalBiome.Api.Types.PalletSupport.GamerAccount GamerAccount { get; private set; }
         public FinalBiome.Api.Types.Primitive.U32 Nonce { get; private set; }
 #pragma warning restore CS8618
 
         public override byte[] Encode()
         {
             var bytes = new List<byte>();
-            bytes.AddRange(AccountId.Encode());
+            bytes.AddRange(GamerAccount.Encode());
             bytes.AddRange(Nonce.Encode());
             return bytes.ToArray();
         }
@@ -38,8 +38,8 @@ namespace FinalBiome.Api.Types.PalletSupport
         {
             var start = p;
 
-            AccountId = new FinalBiome.Api.Types.SpCore.Crypto.AccountId32();
-            AccountId.Decode(byteArray, ref p);
+            GamerAccount = new FinalBiome.Api.Types.PalletSupport.GamerAccount();
+            GamerAccount.Decode(byteArray, ref p);
 
             Nonce = new FinalBiome.Api.Types.Primitive.U32();
             Nonce.Decode(byteArray, ref p);

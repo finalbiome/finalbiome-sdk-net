@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.FrameSystem.Pallet
     /// Make some on-chain remark and emit event.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 68, Variant Id 8
+    /// Generated from meta with Type Id 75, Variant Id 8
     /// </summary>
     public class CallRemarkWithEvent : Codec
     {

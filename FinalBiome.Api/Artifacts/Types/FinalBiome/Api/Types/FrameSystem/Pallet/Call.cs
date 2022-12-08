@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.FrameSystem.Pallet
     /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 68
+    /// Generated from meta with Type Id 75
     /// </summary>
     public enum InnerCall : byte
     {
@@ -87,7 +87,7 @@ namespace FinalBiome.Api.Types.FrameSystem.Pallet
     /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 68
+    /// Generated from meta with Type Id 75
     /// </summary>
     public class Call : Enum<InnerCall, FinalBiome.Api.Types.FrameSystem.Pallet.CallFillBlock, FinalBiome.Api.Types.FrameSystem.Pallet.CallRemark, FinalBiome.Api.Types.FrameSystem.Pallet.CallSetHeapPages, FinalBiome.Api.Types.FrameSystem.Pallet.CallSetCode, FinalBiome.Api.Types.FrameSystem.Pallet.CallSetCodeWithoutChecks, FinalBiome.Api.Types.FrameSystem.Pallet.CallSetStorage, FinalBiome.Api.Types.FrameSystem.Pallet.CallKillStorage, FinalBiome.Api.Types.FrameSystem.Pallet.CallKillPrefix, FinalBiome.Api.Types.FrameSystem.Pallet.CallRemarkWithEvent>
     {

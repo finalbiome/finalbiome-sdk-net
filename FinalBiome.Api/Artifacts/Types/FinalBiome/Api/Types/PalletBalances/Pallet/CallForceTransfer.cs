@@ -21,7 +21,7 @@ namespace FinalBiome.Api.Types.PalletBalances.Pallet
     /// # &lt;/weight&gt;<br/>
     ///
     ///
-    /// Generated from meta with Type Id 120, Variant Id 2
+    /// Generated from meta with Type Id 127, Variant Id 2
     /// </summary>
     public class CallForceTransfer : Codec
     {

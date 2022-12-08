@@ -24,7 +24,7 @@ namespace FinalBiome.Api.Types.PalletOrganizationIdentity.Pallet
     /// * `AlreadyMember` if member already added<br/>
     ///
     ///
-    /// Generated from meta with Type Id 131, Variant Id 1
+    /// Generated from meta with Type Id 138, Variant Id 1
     /// </summary>
     public class CallAddMember : Codec
     {

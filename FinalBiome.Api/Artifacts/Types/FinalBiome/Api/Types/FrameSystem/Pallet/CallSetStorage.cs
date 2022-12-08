@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.FrameSystem.Pallet
     /// Set some items of storage.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 68, Variant Id 5
+    /// Generated from meta with Type Id 75, Variant Id 5
     /// </summary>
     public class CallSetStorage : Codec
     {

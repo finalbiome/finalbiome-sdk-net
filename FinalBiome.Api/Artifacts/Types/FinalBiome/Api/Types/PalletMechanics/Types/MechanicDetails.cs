@@ -13,7 +13,7 @@ using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.PalletMechanics.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 192
+    /// Generated from meta with Type Id 61
     /// </summary>
     public class MechanicDetails : Codec
     {
@@ -22,7 +22,7 @@ namespace FinalBiome.Api.Types.PalletMechanics.Types
         private int _size;
         public override int TypeSize => _size;
 #pragma warning disable CS8618
-        public FinalBiome.Api.Types.SpCore.Crypto.AccountId32 Owner { get; private set; }
+        public FinalBiome.Api.Types.PalletSupport.GamerAccount Owner { get; private set; }
         public FinalBiome.Api.Types.Primitive.U32 TimeoutId { get; private set; }
         public FinalBiome.Api.Types.PalletSupport.BoundedVecLockedAccet Locked { get; private set; }
         public FinalBiome.Api.Types.PalletMechanics.Types.MechanicData Data { get; private set; }
@@ -42,7 +42,7 @@ namespace FinalBiome.Api.Types.PalletMechanics.Types
         {
             var start = p;
 
-            Owner = new FinalBiome.Api.Types.SpCore.Crypto.AccountId32();
+            Owner = new FinalBiome.Api.Types.PalletSupport.GamerAccount();
             Owner.Decode(byteArray, ref p);
 
             TimeoutId = new FinalBiome.Api.Types.Primitive.U32();

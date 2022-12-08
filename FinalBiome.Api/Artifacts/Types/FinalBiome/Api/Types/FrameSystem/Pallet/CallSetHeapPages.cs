@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.FrameSystem.Pallet
     /// Set the number of pages in the WebAssembly environment's heap.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 68, Variant Id 2
+    /// Generated from meta with Type Id 75, Variant Id 2
     /// </summary>
     public class CallSetHeapPages : Codec
     {

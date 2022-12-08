@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletFungibleAssets.Pallet
     /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 139
+    /// Generated from meta with Type Id 146
     /// </summary>
     public enum InnerCall : byte
     {
@@ -45,7 +45,7 @@ namespace FinalBiome.Api.Types.PalletFungibleAssets.Pallet
     /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 139
+    /// Generated from meta with Type Id 146
     /// </summary>
     public class Call : Enum<InnerCall, FinalBiome.Api.Types.PalletFungibleAssets.Pallet.CallCreate, FinalBiome.Api.Types.PalletFungibleAssets.Pallet.CallDestroy>
     {

@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.SpRuntime.Generic.UncheckedExtrinsic
 {
     /// <summary>
-    /// Generated from meta with Type Id 200
+    /// Generated from meta with Type Id 201
     /// </summary>
     public class UncheckedExtrinsic : FinalBiome.Api.Types.VecU8
     {

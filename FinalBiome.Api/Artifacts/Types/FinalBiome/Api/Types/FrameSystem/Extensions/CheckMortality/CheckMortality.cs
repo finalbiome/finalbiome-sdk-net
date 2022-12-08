@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.FrameSystem.Extensions.CheckMortality
 {
     /// <summary>
-    /// Generated from meta with Type Id 210
+    /// Generated from meta with Type Id 211
     /// </summary>
     public class CheckMortality : FinalBiome.Api.Types.SpRuntime.Generic.Era.Era
     {

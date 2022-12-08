@@ -18,7 +18,7 @@ namespace FinalBiome.Api.Types.PalletNonFungibleAssets.Pallet
     /// and that organization must be a owner of the asset class.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 145, Variant Id 3
+    /// Generated from meta with Type Id 152, Variant Id 3
     /// </summary>
     public class CallRemoveAttribute : Codec
     {

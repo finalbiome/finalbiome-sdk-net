@@ -25,7 +25,7 @@ namespace FinalBiome.Api.Types.PalletSudo.Pallet
     /// # &lt;/weight&gt;<br/>
     ///
     ///
-    /// Generated from meta with Type Id 128, Variant Id 1
+    /// Generated from meta with Type Id 135, Variant Id 1
     /// </summary>
     public class CallSudoUncheckedWeight : Codec
     {

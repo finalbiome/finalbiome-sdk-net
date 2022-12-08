@@ -13,7 +13,7 @@ using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.FrameSupport.Weights
 {
     /// <summary>
-    /// Generated from meta with Type Id 79
+    /// Generated from meta with Type Id 86
     /// </summary>
     public class RuntimeDbWeight : Codec
     {

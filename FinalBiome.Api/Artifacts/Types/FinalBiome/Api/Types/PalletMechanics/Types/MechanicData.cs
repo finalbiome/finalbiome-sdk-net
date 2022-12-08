@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletMechanics.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 196
+    /// Generated from meta with Type Id 65
     /// </summary>
     public enum InnerMechanicData : byte
     {
@@ -21,7 +21,7 @@ namespace FinalBiome.Api.Types.PalletMechanics.Types
         Bet = 1,
     }
     /// <summary>
-    /// Generated from meta with Type Id 196
+    /// Generated from meta with Type Id 65
     /// </summary>
     public class MechanicData : Enum<InnerMechanicData, BaseVoid, FinalBiome.Api.Types.PalletMechanics.Types.MechanicDataBet>
     {

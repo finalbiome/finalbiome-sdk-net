@@ -25,7 +25,7 @@ namespace FinalBiome.Api.Types.PalletNonFungibleAssets.Pallet
     /// Emits `Created` event when successful.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 145, Variant Id 0
+    /// Generated from meta with Type Id 152, Variant Id 0
     /// </summary>
     public class CallCreate : Codec
     {

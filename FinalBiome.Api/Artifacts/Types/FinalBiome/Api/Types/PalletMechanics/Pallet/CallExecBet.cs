@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletMechanics.Pallet
     /// Execute mechanic `Bet`<br/>
     ///
     ///
-    /// Generated from meta with Type Id 163, Variant Id 1
+    /// Generated from meta with Type Id 170, Variant Id 1
     /// </summary>
     public class CallExecBet : Codec
     {
@@ -25,6 +25,7 @@ namespace FinalBiome.Api.Types.PalletMechanics.Pallet
         private int _size;
         public override int TypeSize => _size;
 #pragma warning disable CS8618
+        public FinalBiome.Api.Types.SpCore.Crypto.AccountId32 OrganizationId { get; private set; }
         public FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId ClassId { get; private set; }
         public FinalBiome.Api.Types.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId AssetId { get; private set; }
 #pragma warning restore CS8618
@@ -37,6 +38,9 @@ namespace FinalBiome.Api.Types.PalletMechanics.Pallet
         public override void Decode(byte[] byteArray, ref int p)
         {
             var start = p;
+
+            OrganizationId = new FinalBiome.Api.Types.SpCore.Crypto.AccountId32();
+            OrganizationId.Decode(byteArray, ref p);
 
             ClassId = new FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId();
             ClassId.Decode(byteArray, ref p);

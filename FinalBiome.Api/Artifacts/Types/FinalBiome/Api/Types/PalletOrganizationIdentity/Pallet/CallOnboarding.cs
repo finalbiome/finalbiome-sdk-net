@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletOrganizationIdentity.Pallet
     /// Onboirding to game<br/>
     ///
     ///
-    /// Generated from meta with Type Id 131, Variant Id 4
+    /// Generated from meta with Type Id 138, Variant Id 4
     /// </summary>
     public class CallOnboarding : Codec
     {

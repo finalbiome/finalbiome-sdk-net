@@ -21,7 +21,7 @@ namespace FinalBiome.Api.Types.PalletBalances.Pallet
     /// [`transfer`]: struct.Pallet.html#method.transfer<br/>
     ///
     ///
-    /// Generated from meta with Type Id 120, Variant Id 3
+    /// Generated from meta with Type Id 127, Variant Id 3
     /// </summary>
     public class CallTransferKeepAlive : Codec
     {

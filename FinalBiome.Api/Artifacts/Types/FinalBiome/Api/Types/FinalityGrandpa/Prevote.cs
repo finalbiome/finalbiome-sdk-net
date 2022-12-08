@@ -13,7 +13,7 @@ using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.FinalityGrandpa
 {
     /// <summary>
-    /// Generated from meta with Type Id 102
+    /// Generated from meta with Type Id 109
     /// </summary>
     public class Prevote : Codec
     {

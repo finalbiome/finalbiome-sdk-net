@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletSupport
 {
     /// <summary>
-    /// Generated from meta with Type Id 137
+    /// Generated from meta with Type Id 144
     /// </summary>
     public class VecAttribute : Vec<FinalBiome.Api.Types.PalletSupport.Attribute>
     {

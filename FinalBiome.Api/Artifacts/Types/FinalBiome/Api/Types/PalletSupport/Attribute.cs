@@ -13,7 +13,7 @@ using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.PalletSupport
 {
     /// <summary>
-    /// Generated from meta with Type Id 136
+    /// Generated from meta with Type Id 143
     /// </summary>
     public class Attribute : Codec
     {

@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.SpCore.Ecdsa
 {
     /// <summary>
-    /// Generated from meta with Type Id 203
+    /// Generated from meta with Type Id 204
     /// </summary>
     public class Signature : FinalBiome.Api.Types.Array65U8
     {

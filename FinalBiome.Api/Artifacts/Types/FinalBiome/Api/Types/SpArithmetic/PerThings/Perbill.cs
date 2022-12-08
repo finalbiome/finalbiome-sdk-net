@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.SpArithmetic.PerThings
 {
     /// <summary>
-    /// Generated from meta with Type Id 69
+    /// Generated from meta with Type Id 76
     /// </summary>
     public class Perbill : FinalBiome.Api.Types.Primitive.U32
     {

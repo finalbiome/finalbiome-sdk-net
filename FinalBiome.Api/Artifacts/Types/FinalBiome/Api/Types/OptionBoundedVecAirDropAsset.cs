@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 132
+    /// Generated from meta with Type Id 139
     /// </summary>
     public class OptionBoundedVecAirDropAsset : Option<FinalBiome.Api.Types.PalletOrganizationIdentity.Types.BoundedVecAirDropAsset>
     {

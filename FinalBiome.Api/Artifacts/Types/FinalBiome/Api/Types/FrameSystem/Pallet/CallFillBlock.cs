@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.FrameSystem.Pallet
     /// A dispatch that will fill the block weight up to the given ratio.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 68, Variant Id 0
+    /// Generated from meta with Type Id 75, Variant Id 0
     /// </summary>
     public class CallFillBlock : Codec
     {
