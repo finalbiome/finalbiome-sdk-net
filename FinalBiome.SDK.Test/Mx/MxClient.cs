@@ -62,6 +62,7 @@ public class MxClientTests
         await NetworkHelpers.SetCharacteristicBettor(classId, 1);
         await NetworkHelpers.SetCharacteristicPurchased(classId, 1, 3);
 
+        // init api
         string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
         ClientConfig config = new(eveGame);
         using Client client = await Client.Create(config);
@@ -77,5 +78,33 @@ public class MxClientTests
             Assert.That(resBet.Status, expression: Is.EqualTo(ResultStatus.Finished));
             Assert.That(resBet.Result.Outcomes, expression: Has.Count.AtLeast(1));
         });
+    }
+
+    [Test]
+    public async Task SuccessExecBetDoubleRounTest()
+    {
+        // create test nfa and set bettor for it and purchaes characteristic for the ability to buy instance.
+        var classId = await NetworkHelpers.CreateNfaClass("bettorNfa");
+        await NetworkHelpers.SetCharacteristicBettor(classId, 2);
+        await NetworkHelpers.SetCharacteristicPurchased(classId, 1, 3);
+
+        // init api
+        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
+        ClientConfig config = new(eveGame);
+        using Client client = await Client.Create(config);
+        await client.Auth.SignInWithEmailAndPassword("dave", "pass");
+
+        // buy nfa for bets
+        var resBuy = await client.Mx.ExecBuyNfa(classId, 0);
+        var instanceId = (NonFungibleAssetId)resBuy.ResultRaw!.Value2;
+
+        // first round
+        var resBet = await client.Mx.ExecBet(classId, instanceId);
+        Assert.Multiple(() =>
+        {
+            Assert.That(resBet.Status, expression: Is.EqualTo(ResultStatus.Stopped));
+            Assert.That(resBet.Reason.Data.Outcomes, expression: Has.Count.EqualTo(1));
+        });
+
     }
 }

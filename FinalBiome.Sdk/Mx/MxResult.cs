@@ -1,12 +1,14 @@
+using FinalBiome.Api.Types.PalletSupport.Types.NonFungibleAssetId;
+using FinalBiome.Api.Types.PalletMechanics.Types;
+using FinalBiome.Api.Types.PalletSupport;
 
 namespace FinalBiome.Sdk;
 
 using ResultRaw = Api.Types.PalletMechanics.Types.EventMechanicResultData;
-using Reason = Api.Types.PalletMechanics.Types.EventMechanicStopReason;
+using ReasonRaw = Api.Types.PalletMechanics.Types.EventMechanicStopReason;
 using AccountId = Api.Types.SpCore.Crypto.AccountId32;
-using FinalBiome.Api.Types.PalletMechanics.Types;
 using NfaInstanceId = UInt32;
-using FinalBiome.Api.Types.PalletSupport.Types.NonFungibleAssetId;
+using GamerAccount = FinalBiome.Api.Types.PalletSupport.GamerAccount;
 
 /// <summary>
 /// The result of the mechanics execution.
@@ -30,17 +32,41 @@ public class MxResult
             _resultRaw = value;
         }
     }
-    public Reason? Reason { get; internal set; }
+    ReasonRaw? _reasonRaw;
+
+    public ReasonRaw ReasonRaw
+    {
+        get
+        {
+            if (_reasonRaw is null) throw new Exception($"Result does not exist for status {Status}");
+            return _reasonRaw;
+        }
+        internal set
+        {
+            _reasonRaw = value;
+        }
+    }
+
+    public StopReason StopReason
+    {
+        get
+        {
+            return (StopReason)(byte)ReasonRaw.Value;
+        }
+    }
 }
 
+/// <summary>
+/// Id of the mechanics.
+/// </summary>
 public record struct MxId
 {
-    public readonly AccountId accountId;
+    public readonly GamerAccount gamerAccount;
     public readonly ulong nonce;
 
-    public MxId(AccountId accountId, ulong nonce)
+    public MxId(GamerAccount gamerAccount, ulong nonce)
     {
-        this.accountId = accountId;
+        this.gamerAccount = gamerAccount;
         this.nonce = nonce;
     }
 }
@@ -90,6 +116,31 @@ public class MxResultBet : MxResult
             return _result;
         }
     }
+
+    MechanicsDetails<MechanicDataBet>? _reason;
+    public MechanicsDetails<MechanicDataBet> Reason
+    {
+        get
+        {
+            if (_reason is null)
+            {
+                if (ReasonRaw.Value != InnerEventMechanicStopReason.UpgradeNeeded) throw new Exception($"Wrong type. Received {ReasonRaw.Value}, but Expected InnerEventMechanicStopReason.UpgradeNeeded");
+                var data = (FinalBiome.Api.Types.PalletMechanics.Types.MechanicDetails)ReasonRaw.Value2;
+
+                if (data.Data.Value != InnerMechanicData.Bet) throw new Exception($"Wrong type. Received {ReasonRaw.Value}, but Expected InnerMechanicData.Bet");
+                var betData = (FinalBiome.Api.Types.PalletMechanics.Types.MechanicDataBet)data.Data.Value2;
+                var outcomes = betData.Outcomes.Value.Select(v => (uint)v).ToList();
+
+                _reason = new(
+                    data.Owner,
+                    data.TimeoutId,
+                    data.Locked,
+                    new MechanicDataBet(outcomes)
+                );
+            }
+            return _reason;
+        }
+    }
 }
 
 public class ResultBuyNfa
@@ -101,14 +152,78 @@ public class ResultBuyNfa
     public NfaInstanceId InstanceId { get; internal set; }
 }
 
+/// <summary>
+/// Result of the Bet mechanics.
+/// There are Outcomes, as a list of results of finished rounds (in ids defined in Nfa Bettor characteristic)
+/// and 
+/// </summary>
 public class ResultBet
 {
+#pragma warning disable CS8618
     public List<uint> Outcomes { get; internal set; }
+#pragma warning restore CS8618
     public BetResult BetResult { get; internal set; }
 }
 
+/// <summary>
+/// Final result of the Bet mechanics.
+/// </summary>
 public enum BetResult : byte {
     Won = 0,
     Lost = 1,
     Draw = 2,
+}
+
+public enum StopReason : byte
+{
+    UpgradeNeeded = 0,
+}
+
+/// <summary>
+/// Represents the information about the mechanics.
+/// </summary>
+/// <typeparam name="TData">Type of the data of hte specific mechanics</typeparam>
+public class MechanicsDetails<TData>
+{
+    /// <summary>
+    /// Initiator of the mechanics
+    /// </summary>
+    public GamerAccount Owner { get; internal set; }
+    /// <summary>
+    /// Block number, when the mechanic will be dropped
+    /// </summary>
+    public uint Timeout { get; internal set; }
+    /// <summary>
+    /// List of assets which locked by thos mechanic
+    /// </summary>
+    public List<LockedAccet> LockedAccet { get; internal set; }
+    /// <summary>
+    /// The data of this mechanics.
+    /// </summary>
+    public TData Data { get; internal set; }
+
+    public MechanicsDetails(GamerAccount owner, uint timeout, List<LockedAccet> lockedAccet, TData data)
+    {
+        Owner = owner;
+        Timeout = timeout;
+        LockedAccet = lockedAccet;
+        Data = data;
+    }
+}
+
+/// <summary>
+/// Intermediate data of the Bet mechanics.
+/// </summary>
+public class MechanicDataBet
+{
+    /// <summary>
+    /// Current state of the bettor asset with rounds played.
+    /// </summary>
+    /// <value></value>
+    public List<uint> Outcomes { get; internal set; }
+
+    public MechanicDataBet(List<uint> outcomes)
+    {
+        Outcomes = outcomes;
+    }
 }

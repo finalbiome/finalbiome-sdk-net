@@ -2,6 +2,8 @@ using FinalBiome.Api.Tx;
 
 namespace FinalBiome.Sdk;
 
+using GamerAccount = FinalBiome.Api.Types.PalletSupport.GamerAccount;
+
 public class AuthClient
 {
     readonly Client client;
@@ -33,6 +35,25 @@ public class AuthClient
             if (user is null) throw new ErrorNotAuthenticatedException();
             _signer ??= new PairSigner(user);
             return _signer;
+        }
+    }
+
+    GamerAccount? _gamerAccount;
+    internal GamerAccount GamerAccount
+    {
+        get
+        {
+            if (user is null) throw new ErrorNotAuthenticatedException();
+            if (_gamerAccount is null)
+            {
+                _gamerAccount = new GamerAccount();
+                _gamerAccount.Init(
+                    UserAddress.Encode()
+                    .Concat(this.client.config.GameAccount.Encode())
+                    .ToArray()
+                );
+            }
+            return _gamerAccount;
         }
     }
 

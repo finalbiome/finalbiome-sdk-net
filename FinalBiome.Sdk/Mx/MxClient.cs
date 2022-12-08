@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 
 namespace FinalBiome.Sdk;
 
@@ -6,6 +7,8 @@ using FinalBiome.Api.Tx;
 using NfaClassId = UInt32;
 using NfaInstanceId = UInt32;
 using OfferId = UInt32;
+using MechanicsData = FinalBiome.Api.Types.PalletMechanics.Types.MechanicData;
+using GamerAccount = FinalBiome.Api.Types.PalletSupport.GamerAccount;
 
 /// <summary>
 /// Client for access mechanics execution and mechanics traction.
@@ -35,6 +38,12 @@ public class MxClient : IDisposable
     internal ulong accountNonce;
     readonly PairSigner signer;
 
+    /// <summary>
+    /// All current active mechanics.
+    /// If mechanics is not finished, it is here.
+    /// </summary>
+    readonly ConcurrentDictionary<MxId, MechanicsData> activeMechanics;
+
     private MxClient(Client client, PairSigner signer, ulong accountNonce)
     {
         this.client = client;
@@ -59,7 +68,8 @@ public class MxClient : IDisposable
     public async Task<MxResultBuyNfa> ExecBuyNfa(NfaClassId classId, OfferId offerId)
     {
         // Construct call payload
-        var callTx = client.api.Tx.Mechanics.ExecBuyNfa(classId, offerId);
+        var organizationId = client.Game.Address;
+        var callTx = client.api.Tx.Mechanics.ExecBuyNfa(organizationId, classId, offerId);
 
         return await SubmitMx<MxResultBuyNfa>(callTx);
     }
@@ -73,7 +83,8 @@ public class MxClient : IDisposable
     public async Task<MxResultBet> ExecBet(NfaClassId classId, NfaInstanceId instanceId)
     {
         // Construct call payload
-        var callTx = client.api.Tx.Mechanics.ExecBet(classId, instanceId);
+        var organizationId = client.Game.Address;
+        var callTx = client.api.Tx.Mechanics.ExecBet(organizationId, classId, instanceId);
         return await SubmitMx<MxResultBet>(callTx);
     }
 
@@ -96,7 +107,7 @@ public class MxClient : IDisposable
                         {
                             var data = (FinalBiome.Api.Types.PalletMechanics.Pallet.EventFinished)eventData.Value2;
                             // skip if the id of the mechanics isn't our
-                            if (!(data.Id.Value == mxId.nonce && Enumerable.SequenceEqual(data.Owner.Bytes, mxId.accountId.Bytes))) break;
+                            if (!(data.Id.Value == mxId.nonce && Enumerable.SequenceEqual(data.Owner.Bytes, mxId.gamerAccount.Bytes))) break;
                             return new TResult()
                             {
                                 Id = mxId,
@@ -108,12 +119,12 @@ public class MxClient : IDisposable
                         {
                             var data = (FinalBiome.Api.Types.PalletMechanics.Pallet.EventStopped)eventData.Value2;
                             // skip if the id of the mechanics isn't our
-                            if (!(data.Id == mxId.nonce && Enumerable.SequenceEqual(data.Owner.Bytes, mxId.accountId.Bytes))) break;
+                            if (!(data.Id == mxId.nonce && Enumerable.SequenceEqual(data.Owner.Bytes, mxId.gamerAccount.Bytes))) break;
                             return new TResult()
                             {
                                 Id = mxId,
                                 Status = ResultStatus.Stopped,
-                                Reason = data.Reason
+                                ReasonRaw = data.Reason
                             };
                         }
                     default:
@@ -152,7 +163,7 @@ public class MxClient : IDisposable
         var events = await txInBlock.WaitForSuccess();
         // init id of mechanic
         // this place of mx id initialization is not error. On the network, creation of id happends after increasing the nonce.
-        MxId mxId = new(signer.AccountId, accountNonce);
+        MxId mxId = new(this.client.Auth.GamerAccount, accountNonce);
 
         return MxResultFromEvents<TResult>(mxId, events);
     }
