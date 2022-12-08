@@ -1,10 +1,14 @@
 {
 	"folders": [
 		{
-			"path": "Ajuna.NetApi"
-		},
-		{
-			"path": "ConsoleCSTest"
+			"path": "."
 		}
-	]
+	],
+	"settings": {
+		"[csharp]": {
+			"editor.tabSize": 4
+		},
+		"omnisharp.enableAsyncCompletion": true,
+		"razor.disabled": false
+	}
 }
