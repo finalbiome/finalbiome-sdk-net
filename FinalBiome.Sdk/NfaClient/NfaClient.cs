@@ -149,7 +149,7 @@ public class NfaClient : IDisposable
                 startKey = keys.Last();
                 foreach (var key in keys)
                 {
-                    var classId = ClassIdFromStorageKeyOfClasseAccounts(partialKeyLength, key);
+                    var classId = ClassIdFromStorageKeyOfClassAccounts(partialKeyLength, key);
                     yield return classId;
                 }
             }
@@ -420,7 +420,7 @@ public class NfaClient : IDisposable
     /// <param name="partialKeyLength"></param>
     /// <param name="storageKey"></param>
     /// <returns></returns>
-    static NfaClassId ClassIdFromStorageKeyOfClasseAccounts(int partialKeyLength, StorageKey storageKey)
+    static NfaClassId ClassIdFromStorageKeyOfClassAccounts(int partialKeyLength, StorageKey storageKey)
     {
         // we know what the last part of key is NonFungibleClassId with Blake2_128Concat hash.
         var bytes = storageKey.ToArray();
