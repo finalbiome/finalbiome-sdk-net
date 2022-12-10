@@ -1,3 +1,4 @@
+using FinalBiome.Api.Types.PalletMechanics.Types;
 using FinalBiome.Api.Types.PalletSupport.Types.NonFungibleAssetId;
 
 namespace FinalBiome.Sdk.Test;
@@ -190,5 +191,55 @@ public class MxClientTests
         // buy second nfa by the client2
         var res2 = await client2.Mx.ExecBuyNfa(0, 0);
         Assert.That(res2.Status, expression: Is.EqualTo(ResultStatus.Finished));
+    }
+
+    [Test]
+    public async Task MechanicsChangedEventTest()
+    {
+        // create test nfa and set bettor for it and purchaes characteristic for the ability to buy instance.
+        var classId = await NetworkHelpers.CreateNfaClass("bettorNfa");
+        await NetworkHelpers.SetCharacteristicBettor(classId, 2);
+        await NetworkHelpers.SetCharacteristicPurchased(classId, 1, 3);
+        // init api
+        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
+        ClientConfig config = new(eveGame);
+        using Client client = await Client.Create(config);
+        await client.Auth.SignInWithEmailAndPassword("dave", "pass");
+        // buy nfa for bets
+        var resBuy = await client.Mx.ExecBuyNfa(classId, 0);
+        var instanceId = (NonFungibleAssetId)resBuy.ResultRaw!.Value2;
+
+        MxId? mxId = null;
+        MechanicDetails? details = null;
+        int eventEmittedCount = 0;
+        client.Mx.MechanicsChanged += (o, e) => {
+            eventEmittedCount++;
+            mxId = e.Id;
+            details = e.Details;
+        };
+
+        var res = await client.Mx.ExecBet(classId, instanceId);
+        MxId expectedMxId = res.Id;
+        var expectedDetails = res.Reason;
+        Assert.Multiple(() =>
+        {
+            Assert.That(eventEmittedCount, Is.EqualTo(1));
+            Assert.That(mxId?.nonce, Is.EqualTo(expectedMxId.nonce));
+            Assert.That(mxId?.gamerAccount.OrganizationId.Bytes, Is.EqualTo(expectedMxId.gamerAccount.OrganizationId.Bytes));
+            Assert.That(mxId?.gamerAccount.AccountId.Bytes, Is.EqualTo(expectedMxId.gamerAccount.AccountId.Bytes));
+            Assert.That(details, Is.Not.Null);
+        });
+
+        // last round
+        var fin = await client.Mx.UpgradeBet(expectedMxId);
+        Assert.Multiple(() =>
+        {
+            Assert.That(eventEmittedCount, Is.EqualTo(2));
+            Assert.That(mxId?.nonce, Is.EqualTo(expectedMxId.nonce));
+            Assert.That(mxId?.gamerAccount.OrganizationId.Bytes, Is.EqualTo(expectedMxId.gamerAccount.OrganizationId.Bytes));
+            Assert.That(mxId?.gamerAccount.AccountId.Bytes, Is.EqualTo(expectedMxId.gamerAccount.AccountId.Bytes));
+            Assert.That(details, Is.Null);
+        });
+
     }
 }
