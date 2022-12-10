@@ -1,6 +1,7 @@
 using FinalBiome.Api.Types.PalletSupport.Types.NonFungibleAssetId;
 using FinalBiome.Api.Types.PalletMechanics.Types;
 using FinalBiome.Api.Types.PalletSupport;
+using FinalBiome.Api.Types.Primitive;
 
 namespace FinalBiome.Sdk;
 
@@ -68,6 +69,22 @@ public record struct MxId
     {
         this.gamerAccount = gamerAccount;
         this.nonce = nonce;
+    }
+
+    public static implicit operator MechanicId(MxId v)
+    {
+        MechanicId res = new();
+        res.Init(
+            v.gamerAccount.Encode()
+            .Concat(U32.From((uint)v.nonce).Encode())
+            .ToArray()
+        );
+        return res;
+    }
+    public static implicit operator MxId(MechanicId v)
+    {
+        MxId res = new(v.GamerAccount, v.Nonce);
+        return res;
     }
 }
 

@@ -88,6 +88,7 @@ public class Client : IDisposable
         Fa?.Dispose();
         Nfa?.Dispose();
         _mxClient?.Dispose();
+        api.Dispose();
         GC.SuppressFinalize(this);
     }
 }
