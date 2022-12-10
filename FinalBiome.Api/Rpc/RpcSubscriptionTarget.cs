@@ -14,12 +14,25 @@ namespace FinalBiome.Api.Rpc
         readonly Dictionary<string, ISubscription> subscriptions = new();
 
         /// <summary>
+        /// Contains responses that are returned from the server, but the subscription with the given ID has not yet been initialized.
+        /// </summary>
+        /// <returns></returns>
+        readonly Dictionary<string, List<object>> pendingResponses = new();
+        /// <summary>
         /// Store subscription for future call
         /// </summary>
         /// <param name="subscription"></param>
-        public void AddSubscription(ISubscription subscription)
+        public async Task AddSubscription<TData>(ISubscription subscription)
         {
             this.subscriptions.Add(subscription.Id, subscription);
+            // checks if we have pending responses. If yes, sends data to subscribers.
+            if (pendingResponses.Remove(subscription.Id, out var responses))
+            {
+                foreach (var resp in responses)
+                {
+                    await ((Subscription<TData>)subscription).PostNewMessage((TData)resp);
+                }
+            }
         }
 
         /// <summary>
@@ -48,10 +61,28 @@ namespace FinalBiome.Api.Rpc
         /// <param name="subId"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        private async Task NotifySubscriber<TData>(string subId, TData data)
+        private async Task NotifySubscriber<TData>(string subId, TData data) where TData : notnull
         {
-            Subscription<TData> subscribtion = (Subscription<TData>)subscriptions[subId];
-            await subscribtion.PostNewMessage(data);
+            // Sometimes the response from the server is returned before the subscription is initialized.
+            // If the subscription is not in the list of subscriptions,
+            // we store the response in pendingResponses and send it to the subscribers
+            // after the subscription is initialized.
+            if (subscriptions.TryGetValue(subId, out ISubscription? value))
+            {
+                Subscription<TData> subscription = (Subscription<TData>)value;
+                await subscription.PostNewMessage(data);
+            }
+            else
+            {
+                if (!pendingResponses.ContainsKey(subId))
+                {
+                    pendingResponses.Add(subId, new());
+                }
+                if (pendingResponses.TryGetValue(subId, out List<object>? responses))
+                {
+                    responses.Add(data);
+                }
+            }
         }
         /// <summary>
         /// Response as subscription for all block headers (new blocks and finalized blocks).<br/>

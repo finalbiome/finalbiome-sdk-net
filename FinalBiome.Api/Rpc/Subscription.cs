@@ -50,11 +50,12 @@ public class Subscription<TResult> : ISubscription
     /// <returns></returns>
     public async IAsyncEnumerable<TResult> data([EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        //while (!buffer.Completion.IsCompleted)
-        while (await buffer.OutputAvailableAsync(this.cancellationToken))
-        {
-            yield return await buffer.ReceiveAsync<TResult>(this.cancellationToken);
-        }
+        try {
+            while (await buffer.OutputAvailableAsync(this.cancellationToken))
+            {
+                yield return await buffer.ReceiveAsync<TResult>(this.cancellationToken);
+            }
+        } finally {}
     }
 
     /// <summary>

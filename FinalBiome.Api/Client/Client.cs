@@ -17,7 +17,7 @@ using Hash = H256;
 /// <summary>
 /// A client that can be used to perform API calls.
 /// </summary>
-public class Client
+public class Client : IDisposable
 {
     /// <summary>
     /// Return the genesis hash.
@@ -120,10 +120,6 @@ public class Client
             );
 
     }
-    ~Client()
-    {
-        Console.WriteLine("Down..");
-    }
 
     /// <summary>
     /// Create an object which can be used to keep the runtime up to date
@@ -134,6 +130,10 @@ public class Client
         throw new NotImplementedException(); // TODO: SubscribeToUpdates
     }
 
-    
+    public void Dispose()
+    {
+        // Rpc.Dispose(); // if we dispose the RPC client, SubscribeStorage method in the StorageClient can't unsubscribing. Need to refct this.
+        GC.SuppressFinalize(this);
+    }
 }
 

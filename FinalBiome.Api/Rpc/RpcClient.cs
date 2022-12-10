@@ -9,7 +9,7 @@ namespace FinalBiome.Api.Rpc;
 
 using Hash = FinalBiome.Api.Types.PrimitiveTypes.H256;
 
-public class RpcClient
+public class RpcClient : IDisposable
 {
     readonly ClientWebSocket ws;
     readonly JsonRpc rpc;
@@ -84,7 +84,7 @@ public class RpcClient
         // Create subscription instance
         Subscription<TResult> subscription = new(subId, sub, parameters, unsub, (CancellationToken)cancellationToken);
         // Add to list
-        this.subscriptionTarget.AddSubscription(subscription);
+        await this.subscriptionTarget.AddSubscription<TResult>(subscription);
 
         return subscription;
     }
@@ -134,6 +134,14 @@ public class RpcClient
     {
         return new object[] { t0, t1, t2, t3 };
     }
+
+    public void Dispose()
+    {
+        rpc.Dispose();
+        ws.Dispose();
+        GC.SuppressFinalize(this);
+    }
+
 #pragma warning restore CS8601 // Possible null reference assignment.
 #pragma warning restore CA1825
 }

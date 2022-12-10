@@ -47,34 +47,38 @@ internal class NetworkEventsListener : IDisposable
     async Task SubscribeToEvents(CancellationToken cancellationToken)
     {
         var sub = client.api.Storage.System.Events().Subscribe(cancellationToken);
-        await foreach (var eventRecords in sub)
+        try
         {
-            if (eventRecords is not null && client.Auth.UserAddress is not null)
-            foreach (var eventRecord in eventRecords.Value)
+            await foreach (var eventRecords in sub)
             {
-                var ev = eventRecord.Event;
-
-                #region Events filtering
-                // find events about issuance of the nfa instance to user
-                if (ev.Value == Api.Types.FinalbiomeNodeRuntime.InnerEvent.NonFungibleAssets)
+                if (eventRecords is not null && client.Auth.UserAddress is not null)
+                foreach (var eventRecord in eventRecords.Value)
                 {
-                    var evData = ev.Value2 as Api.Types.PalletNonFungibleAssets.Pallet.Event;
-                    if (evData?.Value == Api.Types.PalletNonFungibleAssets.Pallet.InnerEvent.Issued)
+                    var ev = eventRecord.Event;
+
+                    #region Events filtering
+                    // find events about issuance of the nfa instance to user
+                    if (ev.Value == Api.Types.FinalbiomeNodeRuntime.InnerEvent.NonFungibleAssets)
                     {
-                        var issuedData = evData.Value2 as Api.Types.PalletNonFungibleAssets.Pallet.EventIssued;
-                        // get a nfa issued only for the current user.
-                        if (issuedData is not null && Enumerable.SequenceEqual(issuedData.Owner.Bytes,  client.Auth.UserAddress.Bytes))
+                        var evData = ev.Value2 as Api.Types.PalletNonFungibleAssets.Pallet.Event;
+                        if (evData?.Value == Api.Types.PalletNonFungibleAssets.Pallet.InnerEvent.Issued)
                         {
-                                // send event about it
-                                // OnNfaIssuedEvent(new NfaInstanceIssuedEventArgs(issuedData.ClassId, issuedData.AssetId));
-                                if (NfaIssued is not null)
-                                    await NfaIssued(issuedData.ClassId, issuedData.AssetId);
+                            var issuedData = evData.Value2 as Api.Types.PalletNonFungibleAssets.Pallet.EventIssued;
+                            // get a nfa issued only for the current user.
+                            if (issuedData is not null && Enumerable.SequenceEqual(issuedData.Owner.Bytes,  client.Auth.UserAddress.Bytes))
+                            {
+                                    // send event about it
+                                    // OnNfaIssuedEvent(new NfaInstanceIssuedEventArgs(issuedData.ClassId, issuedData.AssetId));
+                                    if (NfaIssued is not null)
+                                        await NfaIssued(issuedData.ClassId, issuedData.AssetId);
+                            }
                         }
                     }
+                    #endregion
                 }
-                #endregion
             }
         }
+        catch (TaskCanceledException) {}
     }
 
     /// <summary>

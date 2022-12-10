@@ -18,7 +18,7 @@ using StorageKey = List<byte>;
 /// <summary>
 /// Client for substrate rpc interfaces
 /// </summary>
-public class Rpc
+public class Rpc : IDisposable
 {
     readonly RpcClient client;
     /// <summary>
@@ -429,6 +429,10 @@ public class Rpc
         await client.Unsubscribe(subscription);
     }
 
-
+    public void Dispose()
+    {
+        client.Dispose();
+        GC.SuppressFinalize(this);
+    }
 }
 

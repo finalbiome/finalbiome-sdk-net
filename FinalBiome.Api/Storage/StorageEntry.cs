@@ -43,11 +43,15 @@ namespace FinalBiome.Api.Storage
         /// <returns></returns>
         public async IAsyncEnumerable<TResult?> Subscribe(CancellationToken? cancellationToken = null)
         {
-            var sub = client.Storage.SubscribeStorage<TResult>(Address, cancellationToken);
-            await foreach (var item in sub)
+            try
             {
-                yield return item;
+                var sub = client.Storage.SubscribeStorage<TResult>(Address, cancellationToken);
+                await foreach (var item in sub)
+                {
+                    yield return item;
+                }
             }
+            finally {}
         }
     }
 }
