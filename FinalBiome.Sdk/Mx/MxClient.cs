@@ -282,21 +282,39 @@ public class MxClient : IDisposable
     /// </summary>
     /// <param name="payload"></param>
     /// <returns></returns>
-    private async Task<TResult> SubmitMx<TResult>(TxPayload payload, MxId? mxId = null) where TResult : MxResult, new()
+    private async Task<TResult> SubmitMx<TResult>(TxPayload payload, MxId? mxId = null, uint? retries = null) where TResult : MxResult, new()
     {
         BaseExtrinsicParamsBuilder<PlainTip> otherParams = BaseExtrinsicParamsBuilder<PlainTip>.Default();
         var subExt = client.api.Tx.CreateSignedWithNonce(payload, signer, accountNonce, otherParams);
-        var txProgress = await subExt.SubmitAndWatch();
-        accountNonce++;
-        var txInBlock = await txProgress.WaitForInBlock();
-        // the next WaitForSuccess method can throw an ExtrinsicFailedException
-        // TODO: wrap into more convenient MechanicFailedException
-        var events = await txInBlock.WaitForSuccess();
-        // init id of mechanic if it doesn't exists.
-        // this place of mx id initialization is not error. On the network, creation of id happends after increasing the nonce.
-        mxId ??= new(client.Auth.GamerAccount, accountNonce);
-
-        return await MxResultFromEvents<TResult>((MxId)mxId, events);
+        try
+        {
+            var txProgress = await subExt.SubmitAndWatch();
+            accountNonce++;
+            var txInBlock = await txProgress.WaitForInBlock();
+            // the next WaitForSuccess method can throw an ExtrinsicFailedException
+            // TODO: wrap into more convenient MechanicFailedException
+            var events = await txInBlock.WaitForSuccess();
+            // init id of mechanic if it doesn't exists.
+            // this place of mx id initialization statement is not error. On the network, creation of id happends after increasing the nonce.
+            mxId ??= new(client.Auth.GamerAccount, accountNonce);
+            return await MxResultFromEvents<TResult>((MxId)mxId, events);
+        }
+        catch (StreamJsonRpc.RemoteInvocationException e)
+        {
+            if (e.ErrorData is not null && (string?)(Newtonsoft.Json.Linq.JToken)e.ErrorData == "Transaction is outdated")
+            {
+                // suppose this happens if the local account's nonce is stale
+                // refresh nonce from the network and repeat request 
+                if (retries > 2) throw; // prevent infinite loop
+                this.accountNonce = await FetchNonce(client);
+                retries = retries is null ? 1 : retries++;
+                return await SubmitMx<TResult>(payload, mxId, retries);
+            }
+            else
+            {
+                throw;
+            }
+        }
     }
 
     /// <summary>

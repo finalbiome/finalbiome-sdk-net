@@ -163,4 +163,32 @@ public class MxClientTests
             return m.Key.nonce == resBet.Id.nonce;
         }).ToList(), Has.Count.EqualTo(1));
     }
+
+    [Test]
+    public async Task MxClientMustHandleWrongNonce()
+    {
+        // init two clients, exec mx in the first client and try exec other mx in the second one.
+        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
+        ClientConfig config1 = new(eveGame);
+        using Client client1 = await Client.Create(config1);
+        await client1.Auth.SignInWithEmailAndPassword("dave", "pass");
+
+        ClientConfig config2 = new(eveGame);
+        using Client client2 = await Client.Create(config2);
+        await client2.Auth.SignInWithEmailAndPassword("dave", "pass");
+
+        Assert.That(client1.Mx.accountNonce, Is.EqualTo(client2.Mx.accountNonce));
+
+        // buy nfa by the client1
+        var res1 = await client1.Mx.ExecBuyNfa(0, 0);
+        Assert.Multiple(() =>
+        {
+            Assert.That(res1.Status, expression: Is.EqualTo(ResultStatus.Finished));
+            Assert.That(client1.Mx.accountNonce, Is.EqualTo(client2.Mx.accountNonce + 1));
+        });
+
+        // buy second nfa by the client2
+        var res2 = await client2.Mx.ExecBuyNfa(0, 0);
+        Assert.That(res2.Status, expression: Is.EqualTo(ResultStatus.Finished));
+    }
 }
