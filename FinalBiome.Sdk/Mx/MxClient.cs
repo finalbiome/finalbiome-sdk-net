@@ -69,6 +69,10 @@ public class MxClient : IDisposable
     /// Event emitted when details of some active mechanics has been changed.
     /// </summary>
     public event EventHandler<MechanicsChangedEventArgs>? MechanicsChanged;
+    /// <summary>
+    /// Event emitted when some active mechanics was droped by timeout.
+    /// </summary>
+    public event EventHandler<MechanicsDroppedEventArgs>? MechanicsDropped;
 
     private MxClient(
         Client client, 
@@ -86,6 +90,9 @@ public class MxClient : IDisposable
 
         this.subscriberToMechanics = subscriberToMechanics;
         this.subscriberToMechanics.StorageChanged += SubscriberToMechanicsDetailsHandler;
+
+        // listen network events about mechanics dropped by timeout
+        this.client.Nfa.networkEventsListener.MechanicsDropped += MechanicsDroppedHandler;
     }
 
     internal static async Task<MxClient> Create(Client client, PairSigner signer)
@@ -340,9 +347,29 @@ public class MxClient : IDisposable
         return id;
     }
 
+    /// <summary>
+    /// Handler of network events about mechanics dropped by timeout.
+    /// </summary>
+    /// <param name="gamerAccount"></param>
+    /// <param name="nonce"></param>
+    /// <returns></returns>
+    async Task MechanicsDroppedHandler(GamerAccount gamerAccount, Index nonce)
+    {
+        // if some mechanics was dropped, we need to remove it from active mechanics and notify subscribers about it
+        MxId mxId = new(gamerAccount, (uint)nonce);
+        this.activeMechanics.TryRemove(mxId, out var _);
+
+        OnMechanicsDroppedEvent(new (mxId));
+        await Task.Yield();
+    }
     void OnMechanicsChangedEvent(MechanicsChangedEventArgs e)
     {
         MechanicsChanged?.Invoke(this, e);
+    }
+
+    void OnMechanicsDroppedEvent(MechanicsDroppedEventArgs e)
+    {
+        MechanicsDropped?.Invoke(this, e);
     }
 
     public void Dispose()

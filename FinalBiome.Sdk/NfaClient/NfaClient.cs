@@ -71,7 +71,7 @@ public class NfaClient : IDisposable
     /// </summary>
     readonly SubscribeAggregator<NfaAssetDetails> subscriberToInstances;
 
-    readonly NetworkEventsListener networkEventsListener;
+    internal readonly NetworkEventsListener networkEventsListener;
 
     /// <summary>
     /// Event emitted when details of some Nfa class has been changed.

@@ -242,4 +242,41 @@ public class MxClientTests
         });
 
     }
+
+    [Test]
+    [Ignore("It's long test (5 min wait. Not necessary run it every time")]
+    public async Task DroppedByTimeutRaiseEvent()
+    {
+        // create test nfa and set bettor for it and purchaes characteristic for the ability to buy instance.
+        var classId = await NetworkHelpers.CreateNfaClass("bettorNfa");
+        await NetworkHelpers.SetCharacteristicBettor(classId, 2);
+        await NetworkHelpers.SetCharacteristicPurchased(classId, 1, 3);
+        // init api
+        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
+        ClientConfig config = new(eveGame);
+        using Client client = await Client.Create(config);
+        await client.Auth.SignInWithEmailAndPassword("dave", "pass");
+        // buy nfa for bets
+        var resBuy = await client.Mx.ExecBuyNfa(classId, 0);
+        var instanceId = (NonFungibleAssetId)resBuy.ResultRaw!.Value2;
+
+        MxId? mxId = null;
+        int eventEmittedCount = 0;
+        client.Mx.MechanicsDropped += (o, e) => {
+            eventEmittedCount++;
+            mxId = e.Id;
+        };
+        // exec first round and wait to timeont
+        var res = await client.Mx.ExecBet(classId, instanceId);
+        MxId expectedMxId = res.Id;
+
+        Thread.Sleep(300_000);
+        Assert.Multiple(() =>
+        {
+            Assert.That(eventEmittedCount, Is.EqualTo(1));
+            Assert.That(mxId?.nonce, Is.EqualTo(expectedMxId.nonce));
+            Assert.That(mxId?.gamerAccount.OrganizationId.Bytes, Is.EqualTo(expectedMxId.gamerAccount.OrganizationId.Bytes));
+            Assert.That(mxId?.gamerAccount.AccountId.Bytes, Is.EqualTo(expectedMxId.gamerAccount.AccountId.Bytes));
+        });
+    }
 }
