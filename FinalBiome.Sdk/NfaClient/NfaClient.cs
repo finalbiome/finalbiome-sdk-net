@@ -208,7 +208,7 @@ public class NfaClient : IDisposable
         // throw an exception if not exists
         if (details is null) throw new NfaInstanceNotFoundException(classId, instanceId);
         // storing in the cache
-        nfaInstances.TryAdd((classId, instanceId), details);
+        nfaInstances[(classId, instanceId)] = details;
         // subscribe to changes
         await subscriberToClasses.Subscribe(detailsEntity.Address);
         return details;
@@ -237,7 +237,7 @@ public class NfaClient : IDisposable
         // throw an exception if not exists
         if (details is null) throw new NfaClassNotFoundException(classId);
         // storing in the cache
-        nfaClasses.TryAdd(classId, details);
+        nfaClasses[classId] = details;
         // subscribe to changes
         await subscriberToClasses.Subscribe(detailsEntity.Address);
         return details;
@@ -288,7 +288,7 @@ public class NfaClient : IDisposable
         
         if (eventArgs.Value is not null)
         {
-            nfaClasses.TryAdd(classId, eventArgs.Value);
+            nfaClasses[classId] = eventArgs.Value;
         }
         else
         {
@@ -320,7 +320,7 @@ public class NfaClient : IDisposable
         
         if (eventArgs.Value is not null)
         {
-            nfaInstances.TryAdd((classId, instanceId), eventArgs.Value);
+            nfaInstances[(classId, instanceId)] = eventArgs.Value;
         }
         else
         {

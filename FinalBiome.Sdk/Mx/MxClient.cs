@@ -121,7 +121,7 @@ public class MxClient : IDisposable
 
         if (eventArgs.Value is not null)
         {
-            activeMechanics.TryAdd(mxId, eventArgs.Value);
+            activeMechanics[mxId] = eventArgs.Value;
         }
         else
         {
