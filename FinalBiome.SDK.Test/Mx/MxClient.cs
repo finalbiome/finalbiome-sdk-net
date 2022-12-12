@@ -178,6 +178,8 @@ public class MxClientTests
         using Client client2 = await Client.Create(config2);
         await client2.Auth.SignInWithEmailAndPassword("dave", "pass");
 
+        Thread.Sleep(100); // need to check why
+
         Assert.That(client1.Mx.accountNonce, Is.EqualTo(client2.Mx.accountNonce));
 
         // buy nfa by the client1

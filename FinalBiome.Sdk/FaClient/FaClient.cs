@@ -6,7 +6,8 @@ namespace FinalBiome.Sdk;
 
 using StorageKey = List<byte>;
 using FaAssetId = UInt32;
-using FaAssetBalance = UInt128;
+using FaAssetBalance = System.Numerics.BigInteger;
+
 
 /// <summary>
 /// Client for access to fungible assets on network for the given game.
@@ -104,7 +105,7 @@ public class FaClient : IDisposable
 
     /// <summary>
     /// Subscribe to change on all existed in the game funginble assets. <br/>
-    /// We know about all existed FA and we cant subscribe to all of them.
+    /// We know about all existed FA and we can subscribe to all of them.
     /// When the balance of the user of any of them is changed, the client will know about it.
     /// </summary>
     /// <returns></returns>
@@ -132,7 +133,7 @@ public class FaClient : IDisposable
                         balance = (FaAssetBalance)asset.Balance.Value;
                     }
                     // save data
-                    Balances.TryAdd(assetId, balance);
+                    Balances[assetId] = balance;
                     // emit the event
                     OnFaBalanceChangedEvent(new FaBalanceChangedEventArgs(assetId, balance));
                 }
@@ -184,7 +185,11 @@ public class FaClient : IDisposable
             subscriberCancellationTokenSource.Cancel();
             try
             {
+                #if NETSTANDARD2_1
+                subscriberTask.Wait(TimeSpan.FromSeconds(10));
+                #else
                 await subscriberTask.WaitAsync(TimeSpan.FromSeconds(10));
+                #endif
             }
             catch (OperationCanceledException)
             {}
@@ -208,7 +213,7 @@ public class FaClient : IDisposable
         // we know what the last part of key is FungibleAssetId with Blake2_128Concat hash.
         // So, cut the root key and 16 bytes more: 16 - it's bytes of hash Blake2_128Concat.
         // Note: we can use this approach when the store uses concatenating hashers or Identity hasher.
-        var lengthOfHash = 16; // TODO: remove hadr code by auto generaging FromBytes static methods for all storages in th API.
+        var lengthOfHash = 16; // TODO: remove hard code by auto generaging FromBytes static methods for all storages in th API.
         var assetIdEncoded = storageKey.ToArray()[(StorageKeyFAs.Count + lengthOfHash)..];
 
         var assetId = new FungibleAssetId();

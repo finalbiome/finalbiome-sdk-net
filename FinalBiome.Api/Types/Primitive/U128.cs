@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace FinalBiome.Api.Types.Primitive
 {
-    public class U128 : Number<BigInteger>, IFromNative<U128, BigInteger>
+    public class U128 : Number<BigInteger>
     {
         public override int TypeSize => 16;
         public override string TypeName() => "u128";

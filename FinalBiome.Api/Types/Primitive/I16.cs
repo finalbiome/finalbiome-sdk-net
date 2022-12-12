@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace FinalBiome.Api.Types.Primitive
 {
-    public class I16 : Number<short>, IFromNative<I16, short>
+    public class I16 : Number<short>
     {
         public override int TypeSize => 2;
         public override string TypeName() => "i16";

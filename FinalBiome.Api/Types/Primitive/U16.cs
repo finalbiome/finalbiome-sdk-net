@@ -4,7 +4,7 @@ using FinalBiome.Api.Utils;
 
 namespace FinalBiome.Api.Types.Primitive
 {
-    public class U16 : Number<ushort>, IFromNative<U16, ushort>
+    public class U16 : Number<ushort>
     {
         public override int TypeSize => 2;
         public override string TypeName() => "u16";

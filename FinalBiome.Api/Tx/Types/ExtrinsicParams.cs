@@ -4,6 +4,7 @@ using FinalBiome.Api.Types;
 using FinalBiome.Api.Types.SpRuntime.Generic.Era;
 using FinalBiome.Api.Utils;
 using FinalBiome.Api.Types.Primitive;
+using System.Numerics;
 
 namespace FinalBiome.Api.Tx;
 
@@ -179,14 +180,14 @@ public class PolkadotExtrinsicParamsBuilder : BaseExtrinsicParamsBuilder<PlainTi
 /// </summary>
 public class PlainTip: Encode
 {
-    readonly UInt128 tip;
+    readonly BigInteger tip;
 
     public PlainTip()
     {
         this.tip = 0;
     }
 
-    public PlainTip(UInt128 tip)
+    public PlainTip(BigInteger tip)
     {
         this.tip = tip;
     }
@@ -201,7 +202,7 @@ public class PlainTip: Encode
 /// </summary>
 public class AssetTip : Encode
 {
-    readonly UInt128 tip;
+    readonly BigInteger tip;
     uint? asset;
 
     public AssetTip()
@@ -213,7 +214,7 @@ public class AssetTip : Encode
     /// Create a new tip of the amount provided.
     /// </summary>
     /// <param name="tip"></param>
-    public AssetTip(UInt128 tip)
+    public AssetTip(BigInteger tip)
     {
         this.tip = tip;
         this.asset = null;

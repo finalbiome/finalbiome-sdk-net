@@ -166,7 +166,11 @@ internal class NetworkEventsListener : IDisposable
             subscriberCancellationTokenSource.Cancel();
             try
             {
+                #if NETSTANDARD2_1
+                subscriberTask.Wait(TimeSpan.FromSeconds(10));
+                #else
                 await subscriberTask.WaitAsync(TimeSpan.FromSeconds(10));
+                #endif
             }
             catch (OperationCanceledException)
             {}

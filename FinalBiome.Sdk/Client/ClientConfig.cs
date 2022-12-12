@@ -33,8 +33,7 @@ public class ClientConfig
         AccountId32 accountId32 = new();
         accountId32.Init(AddressUtils.GetPublicKeyFrom(game));
         GameAccount = accountId32;
-        if (endpoint is null)
-            Endpoint = endpoint is null ? "ws://127.0.0.1:9944" : endpoint;
+        Endpoint = endpoint is null ? "ws://127.0.0.1:9944" : endpoint;
     }
 }
 

@@ -1,5 +1,4 @@
-﻿using Standart.Hash.xxHash;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using Extensions.Data;
 
 namespace FinalBiome.Api.Utils;
 public class Hasher
@@ -31,22 +30,22 @@ public class Hasher
 
     internal static byte[] Twox128(byte[] bytes)
     {
-        return          BitConverter.GetBytes(xxHash64.ComputeHash(bytes, bytes.Length, seed: 0))
-                .Concat(BitConverter.GetBytes(xxHash64.ComputeHash(bytes, bytes.Length, seed: 1)))
+        return          BitConverter.GetBytes(XXHash.XXH64(bytes, seed: 0))
+                .Concat(BitConverter.GetBytes(XXHash.XXH64(bytes, seed: 1)))
                 .ToArray();
     }
 
     internal static byte[] Twox256(byte[] bytes)
     {
-        return          BitConverter.GetBytes(xxHash64.ComputeHash(bytes, bytes.Length, seed: 0))
-                .Concat(BitConverter.GetBytes(xxHash64.ComputeHash(bytes, bytes.Length, seed: 1)))
-                .Concat(BitConverter.GetBytes(xxHash64.ComputeHash(bytes, bytes.Length, seed: 2)))
-                .Concat(BitConverter.GetBytes(xxHash64.ComputeHash(bytes, bytes.Length, seed: 3)))
+        return          BitConverter.GetBytes(XXHash.XXH64(bytes, seed: 0))
+                .Concat(BitConverter.GetBytes(XXHash.XXH64(bytes, seed: 1)))
+                .Concat(BitConverter.GetBytes(XXHash.XXH64(bytes, seed: 2)))
+                .Concat(BitConverter.GetBytes(XXHash.XXH64(bytes, seed: 3)))
                 .ToArray();
     }
 
     internal static byte[] Twox64Concat(byte[] bytes)
     {
-        return BitConverter.GetBytes(xxHash64.ComputeHash(bytes, bytes.Length)).Concat(bytes).ToArray();
+        return BitConverter.GetBytes(XXHash.XXH64(bytes)).Concat(bytes).ToArray();
     }
 }

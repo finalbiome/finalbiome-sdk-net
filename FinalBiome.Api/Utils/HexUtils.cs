@@ -44,9 +44,14 @@ namespace FinalBiome.Api.Utils
         {
             return format switch
             {
+                #if NETSTANDARD2_1
+                HexStringFormat.Pure => BitConverter.ToString(bytes).Replace("-", string.Empty),
+                HexStringFormat.Prefixed => $"0x{BitConverter.ToString(bytes).Replace("-", string.Empty)}",
+                #else
                 HexStringFormat.Pure => Convert.ToHexString(bytes),
-                HexStringFormat.Dash => BitConverter.ToString(bytes),
                 HexStringFormat.Prefixed => $"0x{Convert.ToHexString(bytes)}",
+                #endif
+                HexStringFormat.Dash => BitConverter.ToString(bytes),
                 _ => throw new Exception($"Unimplemented hex string format '{format}'"),
             };
         }

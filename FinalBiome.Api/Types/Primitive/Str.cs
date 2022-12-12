@@ -3,7 +3,7 @@ using FinalBiome.Api.Utils;
 
 namespace FinalBiome.Api.Types.Primitive
 {
-    public class Str : Primitive<string>, IFromNative<Str, string>
+    public class Str : Primitive<string>
     {
         public override string TypeName() => "str";
 

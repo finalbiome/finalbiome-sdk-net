@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FinalBiome.Api.Types.Primitive
 {
-    public class Char : Primitive<char>, IFromNative<Char, char>
+    public class Char : Primitive<char>
     {
         public override string TypeName() => "char";
         public override int TypeSize => 1;

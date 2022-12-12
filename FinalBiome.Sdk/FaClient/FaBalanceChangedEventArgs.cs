@@ -1,7 +1,7 @@
 namespace FinalBiome.Sdk;
 
 using FaAssetId = UInt32;
-using FaAssetBalance = UInt128;
+using FaAssetBalance = System.Numerics.BigInteger;
 
 /// <summary>
 /// Event args of changing balance of some fungible asset
