@@ -2,16 +2,32 @@
 /// This file is generated automatically
 /// DO NOT CHANGE THE CONTENT OF THE FILE!
 ///
+
+#pragma warning disable IDE0090
+#pragma warning disable CA1822
+#pragma warning disable IDE0028
+#pragma warning disable IDE0052
 using System.Numerics;
 using FinalBiome.Api.Types.Primitive;
 using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.SpArithmetic.FixedPoint
 {
     /// <summary>
-    /// Generated from meta with Type Id 126
+    /// Generated from meta with Type Id 133
     /// </summary>
     public class FixedU128 : FinalBiome.Api.Types.Primitive.U128
     {
         public override string TypeName() => "FixedU128";
+        public static implicit operator BigInteger(FixedU128 v) => v.Value;
+        public static implicit operator FixedU128(BigInteger v) {
+            FixedU128 res = new();
+            res.Init(v);
+            return res;
+        }
     }
 }
+
+#pragma warning restore IDE0090
+#pragma warning restore CA1822
+#pragma warning restore IDE0028
+#pragma warning restore IDE0052

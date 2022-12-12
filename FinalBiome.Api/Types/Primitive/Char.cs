@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FinalBiome.Api.Types.Primitive
 {
-    public class Char : Primitive<char>, IFromNative<Char, char>
+    public class Char : Primitive<char>
     {
         public override string TypeName() => "char";
         public override int TypeSize => 1;
@@ -34,7 +34,7 @@ namespace FinalBiome.Api.Types.Primitive
         }
 
         public static implicit operator char(Char v) => v.Value;
-        public static explicit operator Char(char v) => From(v);
+        public static implicit operator Char(char v) => From(v);
     }
 }
 

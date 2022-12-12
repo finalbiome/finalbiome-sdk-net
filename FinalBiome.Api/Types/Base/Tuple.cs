@@ -23,8 +23,9 @@ namespace FinalBiome.Api.Types
         public override void Decode(byte[] bytes, ref int pos)
         {
             var start = pos;
-
+#pragma warning disable CA1825
             Value = new Codec[0];
+#pragma warning restore CA1825
 
             TypeSize = pos - start;
 
@@ -36,8 +37,9 @@ namespace FinalBiome.Api.Types
         {
             var bytes = new List<byte>();
             bytes.ToArray();
-
+#pragma warning disable CA1825
             Value = new Codec[0];
+#pragma warning restore CA1825
 
             TypeSize = bytes.Count;
             Bytes = bytes.ToArray();

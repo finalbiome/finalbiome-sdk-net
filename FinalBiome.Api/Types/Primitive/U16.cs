@@ -4,7 +4,7 @@ using FinalBiome.Api.Utils;
 
 namespace FinalBiome.Api.Types.Primitive
 {
-    public class U16 : Number<ushort>, IFromNative<U16, ushort>
+    public class U16 : Number<ushort>
     {
         public override int TypeSize => 2;
         public override string TypeName() => "u16";
@@ -38,7 +38,7 @@ namespace FinalBiome.Api.Types.Primitive
         }
 
         public static implicit operator ushort(U16 v) => v.Value;
-        public static explicit operator U16(ushort v) => From(v);
+        public static implicit operator U16(ushort v) => From(v);
     }
 }
 

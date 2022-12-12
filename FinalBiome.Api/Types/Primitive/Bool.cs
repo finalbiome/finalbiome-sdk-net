@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace FinalBiome.Api.Types.Primitive
 {
-    public class Bool : Primitive<bool>, IFromNative<Bool, bool>
+    public class Bool : Primitive<bool>
     {
         public override int TypeSize => 1;
         public override string TypeName() => "bool";
@@ -29,7 +29,7 @@ namespace FinalBiome.Api.Types.Primitive
         }
 
         public static implicit operator bool(Bool b) => b.Value;
-        public static explicit operator Bool(bool b) => From(b);
+        public static implicit operator Bool(bool b) => From(b);
     }
 }
 

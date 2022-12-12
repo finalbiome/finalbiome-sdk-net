@@ -8,7 +8,7 @@ public class StorageChangeSetJsonConverter : JsonConverter<StorageChangeSet>
 {
     public override StorageChangeSet? ReadJson(JsonReader reader, Type objectType, StorageChangeSet? existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
-        StorageChangeSet storageChangeSet = new StorageChangeSet();
+        StorageChangeSet storageChangeSet = new();
         reader.Read();
         while (reader.TokenType != JsonToken.EndObject)
         {
@@ -27,11 +27,11 @@ public class StorageChangeSetJsonConverter : JsonConverter<StorageChangeSet>
                         string key = (string)reader.Value;
                         reader.Read(); // second value
                         string data = (string)reader.Value;
-                        StorageChange storageChange = new StorageChange(HexUtils.HexToBytes(key).ToList(), data);
+                        StorageChange storageChange = new(HexUtils.HexToBytes(key).ToList(), data);
                         storageChangeSet.AddStorageChange(storageChange);
-                        reader.Read(); // exit from inner array
+                        reader.Read(); // read end inner array
+                        reader.Read(); // go to next value
                     }
-                    reader.Read(); // exit from changes arrays
                     break;
                 default:
                     throw new JsonReaderException();

@@ -2,6 +2,11 @@
 /// This file is generated automatically
 /// DO NOT CHANGE THE CONTENT OF THE FILE!
 ///
+
+#pragma warning disable IDE0090
+#pragma warning disable CA1822
+#pragma warning disable IDE0028
+#pragma warning disable IDE0052
 using System;
 using FinalBiome.Api.Types;
 using FinalBiome.Api.Types.Primitive;
@@ -21,7 +26,7 @@ namespace FinalBiome.Api.Types.PalletFungibleAssets.Pallet
     /// Emits `Created` event when successful.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 139, Variant Id 0
+    /// Generated from meta with Type Id 146, Variant Id 0
     /// </summary>
     public class CallCreate : Codec
     {
@@ -65,3 +70,8 @@ namespace FinalBiome.Api.Types.PalletFungibleAssets.Pallet
         }
     }
 }
+
+#pragma warning restore IDE0090
+#pragma warning restore CA1822
+#pragma warning restore IDE0028
+#pragma warning restore IDE0052

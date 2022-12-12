@@ -1,4 +1,7 @@
-﻿using System;
+﻿#pragma warning disable IDE0028
+#pragma warning disable IDE0042
+
+using System;
 using System.Linq;
 using System.Xml.Linq;
 using FinalBiome.Api.Codegen.Metadata;
@@ -15,15 +18,15 @@ namespace FinalBiome.Api.Codegen
         /// </summary>
         public string OutputType;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public List<string> Hashers = new List<string>();
+        public List<string> Hashers = new();
         /// <summary>
         /// Full canonical names of types
         /// </summary>
-        public List<string> InputTypes = new List<string>();
+        public List<string> InputTypes = new();
         public List<string>? Docs;
 
         public bool Parsed = false;
-        public List<string> GeneratedCode = new List<string>();
+        public List<string> GeneratedCode = new();
 
         public string FileSuffix = "";
 
@@ -47,7 +50,7 @@ namespace FinalBiome.Api.Codegen
         /// <summary>
         /// Filename dir generates as TypeGenerator.StorageNamespacePrefix
         /// </summary>
-        public string FileNameDir
+        public static string FileNameDir
         {
             get
             {
@@ -58,15 +61,15 @@ namespace FinalBiome.Api.Codegen
 
     public class StorageParser
     {
-        Dictionary<uint, PalletModule> modules;
+        readonly Dictionary<uint, PalletModule> modules;
         internal List<ParsedStorage> parsedStorages;
         /// <summary>
         /// Holds code of module classes.
         /// Key - the module name
         /// </summary>
-        internal Dictionary<string, ParsedStorage> parsedModules = new Dictionary<string, ParsedStorage>();
-        List<string> queryClassSource = new List<string>();
-        TypeParser typeParser;
+        internal Dictionary<string, ParsedStorage> parsedModules = new();
+        List<string> queryClassSource = new();
+        readonly TypeParser typeParser;
 
         public StorageParser(Dictionary<uint, PalletModule> modules, TypeParser typeParser)
         {
@@ -94,10 +97,12 @@ namespace FinalBiome.Api.Codegen
         {
             foreach (var storage in module.Storage.Entries)
             {
-                ParsedStorage ps = new ParsedStorage();
-                ps.Module = module.Name;
-                ps.Storage = storage.Name;
-                ps.Type = storage.StorageType.ToString();
+                ParsedStorage ps = new()
+                {
+                    Module = module.Name,
+                    Storage = storage.Name,
+                    Type = storage.StorageType.ToString()
+                };
                 switch (storage.StorageType)
                 {
                     case FinalBiome.Api.Codegen.Metadata.Storage.Type.Plain:
@@ -144,9 +149,10 @@ namespace FinalBiome.Api.Codegen
             }
         }
 
-        void GenerateStorageClass(ParsedStorage ps)
+        private static void GenerateStorageClass(ParsedStorage ps)
         {
-            string getUniqueParamName(List<string> parameters, string newParameterName, int? suffix = null) {
+            static string getUniqueParamName(List<string> parameters, string newParameterName, int? suffix = null)
+            {
                 if (parameters.Contains(newParameterName + suffix))
                 {
                     suffix = suffix is null ? 0 : suffix + 1;
@@ -155,12 +161,12 @@ namespace FinalBiome.Api.Codegen
                 else return newParameterName + suffix;
             }
 
-            List<string> inputParamNamesList = new List<string>();
-            List<string> inputParamsList = new List<string>();
+            List<string> inputParamNamesList = new();
+            List<string> inputParamsList = new();
             foreach (var t in ps.InputTypes)
             {
                 string paramName = t.Split(".").Last();
-                paramName = System.Char.ToLowerInvariant(paramName[0]) + paramName.Substring(1);
+                paramName = System.Char.ToLowerInvariant(paramName[0]) + paramName[1..];
                 paramName = getUniqueParamName(inputParamNamesList, paramName);
 
                 inputParamNamesList.Add(paramName);
@@ -172,7 +178,7 @@ namespace FinalBiome.Api.Codegen
             // stupid Compiler Error CS0542
             string methodName = (ps.Module != ps.Storage) ? ps.Storage : ps.Storage + "Get";
 
-            List<string> file = new List<string>();
+            List<string> file = new();
 
             file.Add($"namespace {ps.CanonicalName.Item1};");
             file.Add($"public partial class {ps.Module}");
@@ -191,7 +197,7 @@ namespace FinalBiome.Api.Codegen
             file.Add($"        List<StorageMapKey> storageEntryKeys = new List<StorageMapKey>();");
             foreach (var h in ps.Hashers.Zip(inputParamNamesList))
             {
-                file.Add($"        storageEntryKeys.Add(new StorageMapKey({h.Second}, FinalBiome.Api.Storage.StorageHasher.{HasherConverter(h.First).ToString()}));");
+                file.Add($"        storageEntryKeys.Add(new StorageMapKey({h.Second}, FinalBiome.Api.Storage.StorageHasher.{HasherConverter(h.First)}));");
             }
             file.Add($"");
             file.Add($"        StaticStorageAddress address = new StaticStorageAddress(\"{ps.Module}\", \"{ps.Storage}\", storageEntryKeys);");
@@ -237,12 +243,14 @@ namespace FinalBiome.Api.Codegen
         {
             if (parsedModules.ContainsKey(ps.Module)) return;
 
-            ParsedStorage psm = new ParsedStorage();
-            psm.Module = ps.Module;
-            psm.Storage = ps.Storage;
+            ParsedStorage psm = new()
+            {
+                Module = ps.Module,
+                Storage = ps.Storage
+            };
 
 
-            List<string> file = new List<string>();
+            List<string> file = new();
 
             file.Add($"namespace {ps.CanonicalName.Item1};");
             file.Add($"public partial class {ps.Module}");
@@ -263,7 +271,7 @@ namespace FinalBiome.Api.Codegen
 
         void GenerateStorageClientPartialClass()
         {
-            List<string> file = new List<string>();
+            List<string> file = new();
 
             file.Add($"namespace {TypeGenerator.RootNamespace}.{TypeGenerator.StorageNamespacePrefix};");
             file.Add($"public partial class StorageClient");
@@ -294,40 +302,31 @@ namespace FinalBiome.Api.Codegen
                     Console.WriteLine($"Type {s.Module}.{s.Storage} doesn't parsed. Skip");
                     continue;
                 }
-                string path = $"{outputDir}/{s.FileNameDir}";
+                string path = $"{outputDir}/{ParsedStorage.FileNameDir}";
                 string pathFileName = $"{path}/{s.FileName}";
                 Directory.CreateDirectory(path);
                 Console.WriteLine($"Write file {pathFileName}");
-                File.WriteAllLines(pathFileName, TypeGenerator.banner.Concat(s.GeneratedCode));
+                File.WriteAllLines(pathFileName, TypeGenerator.StringsWithBanner(s.GeneratedCode));
             }
             // save StorageClient class
             string pathQueryFileName = $"{outputDir}/{TypeGenerator.StorageNamespacePrefix}/StorageClient.cs";
             Console.WriteLine($"Write file {pathQueryFileName}");
-            File.WriteAllLines(pathQueryFileName, TypeGenerator.banner.Concat(queryClassSource));
+            File.WriteAllLines(pathQueryFileName, TypeGenerator.StringsWithBanner(queryClassSource));
         }
 
-        StorageHasher HasherConverter(string ajHasher)
+        static StorageHasher HasherConverter(string ajHasher)
         {
-            switch (ajHasher)
+            return ajHasher switch
             {
-                case "Twox64Concat":
-                    return StorageHasher.Twox64Concat;
-                case "Twox128":
-                    return StorageHasher.Twox128;
-                case "Twox256":
-                    return StorageHasher.Twox256;
-                case "BlakeTwo128":
-                    return StorageHasher.Blake2_128;
-                case "BlakeTwo128Concat":
-                    return StorageHasher.Blake2_128Concat;
-                case "BlakeTwo256":
-                    return StorageHasher.Blake2_256;
-                case "Identity":
-                    return StorageHasher.Identity;
-
-                default:
-                    throw new Exception($"Hasher {ajHasher} is not impemented");
-            }
+                "Twox64Concat" => StorageHasher.Twox64Concat,
+                "Twox128" => StorageHasher.Twox128,
+                "Twox256" => StorageHasher.Twox256,
+                "BlakeTwo128" => StorageHasher.Blake2_128,
+                "BlakeTwo128Concat" => StorageHasher.Blake2_128Concat,
+                "BlakeTwo256" => StorageHasher.Blake2_256,
+                "Identity" => StorageHasher.Identity,
+                _ => throw new Exception($"Hasher {ajHasher} is not impemented"),
+            };
         }
     }
 }

@@ -2,13 +2,18 @@
 /// This file is generated automatically
 /// DO NOT CHANGE THE CONTENT OF THE FILE!
 ///
+
+#pragma warning disable IDE0090
+#pragma warning disable CA1822
+#pragma warning disable IDE0028
+#pragma warning disable IDE0052
 using System;
 using FinalBiome.Api.Types;
 using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.PalletMechanics.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 192
+    /// Generated from meta with Type Id 61
     /// </summary>
     public class MechanicDetails : Codec
     {
@@ -17,7 +22,7 @@ namespace FinalBiome.Api.Types.PalletMechanics.Types
         private int _size;
         public override int TypeSize => _size;
 #pragma warning disable CS8618
-        public FinalBiome.Api.Types.SpCore.Crypto.AccountId32 Owner { get; private set; }
+        public FinalBiome.Api.Types.PalletSupport.GamerAccount Owner { get; private set; }
         public FinalBiome.Api.Types.Primitive.U32 TimeoutId { get; private set; }
         public FinalBiome.Api.Types.PalletSupport.BoundedVecLockedAccet Locked { get; private set; }
         public FinalBiome.Api.Types.PalletMechanics.Types.MechanicData Data { get; private set; }
@@ -37,7 +42,7 @@ namespace FinalBiome.Api.Types.PalletMechanics.Types
         {
             var start = p;
 
-            Owner = new FinalBiome.Api.Types.SpCore.Crypto.AccountId32();
+            Owner = new FinalBiome.Api.Types.PalletSupport.GamerAccount();
             Owner.Decode(byteArray, ref p);
 
             TimeoutId = new FinalBiome.Api.Types.Primitive.U32();
@@ -55,3 +60,8 @@ namespace FinalBiome.Api.Types.PalletMechanics.Types
         }
     }
 }
+
+#pragma warning restore IDE0090
+#pragma warning restore CA1822
+#pragma warning restore IDE0028
+#pragma warning restore IDE0052

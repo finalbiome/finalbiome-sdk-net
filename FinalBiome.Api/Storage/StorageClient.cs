@@ -20,7 +20,7 @@ public partial class StorageClient
     /// <returns></returns>
     public async Task<string?> FetchRaw(List<byte> key, IEnumerable<byte>? hash)
     {
-        Hash? decodedHash = new Hash();
+        Hash? decodedHash = new();
         if (hash is not null) decodedHash.Init(hash.ToArray());
         else decodedHash = null;
         return await client.Rpc.Storage<string>(key, decodedHash);
@@ -38,7 +38,7 @@ public partial class StorageClient
         var lookupBytes = StorageUtils.StorageAddressBytes(address);
         var raw = await client.Storage.FetchRaw(lookupBytes, hash);
         if (raw is null || raw.Length == 0) return null;
-        TResult result = new TResult();
+        TResult result = new();
         result.Init(raw);
         return result;
     }
@@ -53,12 +53,12 @@ public partial class StorageClient
     /// <param name="startKey"></param>
     /// <param name="hash"></param>
     /// <returns></returns>
-    public async Task<List<Vec<U8>>> FetchKeys(List<byte> key, uint count, List<byte>? startKey, IEnumerable<byte>? hash)
+    public async Task<List<List<byte>>> FetchKeys(List<byte> queryKey, uint count, List<byte>? startKey, IEnumerable<byte>? hash)
     {
-        Hash? decodedHash = new Hash();
+        Hash? decodedHash = new();
         if (hash is not null) decodedHash.Init(hash.ToArray());
         else decodedHash = null;
-        return await client.Rpc.StorageKeysPaged(key, count, startKey, decodedHash);
+        return await client.Rpc.StorageKeysPaged(queryKey, count, startKey, decodedHash);
     }
 
     /// <summary>
@@ -74,16 +74,33 @@ public partial class StorageClient
     {
         List<byte> lookupBytes = StorageUtils.StorageAddressBytes(address);
         var sub = await client.Rpc.SubscribeStorage(new List<byte>[] { lookupBytes }, cancellationToken);
-        await foreach (var changeSet in sub.data())
+        CancellationToken ct = cancellationToken ?? default;
+        try
         {
-            foreach (var change in changeSet.Changes)
+            await foreach (var changeSet in sub.data(ct))
             {
-                if (!Enumerable.SequenceEqual(change.StorageKey, lookupBytes))
-                    throw new Exception("Unexpected key found in the storage change set ");
-                TResult value = new TResult();
-                value.InitFromHex(change.StorageValue);
-                yield return value;
+                foreach (var change in changeSet.Changes)
+                {
+                    if (!Enumerable.SequenceEqual(change.StorageKey, lookupBytes))
+                        throw new Exception("Unexpected key found in the storage change set ");
+                    if (change.StorageValue is not null)
+                    {
+                        TResult value = new();
+                        value.InitFromHex(hexString: change.StorageValue);
+                        yield return value;
+                    }
+                    else
+                    {
+                        yield return null;
+                    }
+                }
             }
+        }
+        finally
+        {
+            // from listen loop we exit only if cancellation occurs
+            // unsubscribe from subscription on the network
+            await client.Rpc.Unsubscribe(sub);
         }
     }
 }

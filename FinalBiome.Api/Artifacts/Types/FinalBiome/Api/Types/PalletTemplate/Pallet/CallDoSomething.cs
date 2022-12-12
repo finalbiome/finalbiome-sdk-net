@@ -2,6 +2,11 @@
 /// This file is generated automatically
 /// DO NOT CHANGE THE CONTENT OF THE FILE!
 ///
+
+#pragma warning disable IDE0090
+#pragma warning disable CA1822
+#pragma warning disable IDE0028
+#pragma warning disable IDE0052
 using System;
 using FinalBiome.Api.Types;
 using FinalBiome.Api.Types.Primitive;
@@ -12,7 +17,7 @@ namespace FinalBiome.Api.Types.PalletTemplate.Pallet
     /// storage and emits an event. This function must be dispatched by a signed extrinsic.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 130, Variant Id 0
+    /// Generated from meta with Type Id 137, Variant Id 0
     /// </summary>
     public class CallDoSomething : Codec
     {
@@ -40,3 +45,8 @@ namespace FinalBiome.Api.Types.PalletTemplate.Pallet
         }
     }
 }
+
+#pragma warning restore IDE0090
+#pragma warning restore CA1822
+#pragma warning restore IDE0028
+#pragma warning restore IDE0052

@@ -35,7 +35,7 @@ public static class Extensions
     /// <returns></returns>
     public static string ToHex(this IEnumerable<byte> bytes)
     {
-        return $"0x{Convert.ToHexString(bytes.ToArray())}";
+        return HexUtils.Bytes2HexString(bytes.ToArray());
     }
 }
 
@@ -114,7 +114,7 @@ public static class EncodeExtensions
     /// Encodes the value
     /// </summary>
     /// <param name="that"></param>
-    public static byte[] Encode(this UInt128 that)
+    public static byte[] Encode(this BigInteger that)
     {
         return ((BigInteger)that).ToByteArray();
     }
@@ -123,7 +123,7 @@ public static class EncodeExtensions
     /// </summary>
     /// <param name="that"></param>
     /// <param name="bytes"></param>
-    public static void EncodeTo(this UInt128 that, ref List<byte> bytes)
+    public static void EncodeTo(this BigInteger that, ref List<byte> bytes)
     {
         bytes.AddRange(that.Encode());
     }

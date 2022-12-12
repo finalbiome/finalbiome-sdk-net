@@ -53,7 +53,7 @@ namespace FinalBiome.Api.Types
             Array.Copy(bytes, start, innerBytes, 0, TypeSize);
 
             Bytes = innerBytes;
-            Value = t == null ? default : t;
+            Value = t ?? default;
         }
 
         public void Init(T? value)

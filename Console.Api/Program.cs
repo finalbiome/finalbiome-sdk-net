@@ -19,7 +19,7 @@ public class Program
 {
     static async Task Main()
     {
-        var cts = new CancellationTokenSource();
+        using var cts = new CancellationTokenSource();
         Console.CancelKeyPress += (s, e) =>
         {
             Console.WriteLine("\nCanceling...");
@@ -38,7 +38,6 @@ public class Program
         {
             Console.Write($"{Environment.NewLine}Press any key to exit...");
             Console.ReadKey(true);
-            cts.Dispose();
         }
     }
 
@@ -117,24 +116,11 @@ public class Program
 
         #endregion
 
-        await SubmitAndWatch.HandleTransferEvents();
-        await GetStorageData.SimpleGet();
-        await GetStorageData.GetAndWatch(cancellationToken);
-    }
-
-    static string Stringify(Codec? value, Formatting formatting = Formatting.Indented)
-    {
-        if (value is null) return "null";
-        var sOpt = new JsonSerializerSettings
-        {
-            //NullValueHandling = NullValueHandling.Ignore,
-            Converters = {
-                    new ApiTypesJsonConverter(),
-                    new StringEnumConverter(),
-                }
-        };
-
-        return JsonConvert.SerializeObject(value, formatting, sOpt);
+        // await SubmitAndWatch.HandleTransferEvents();
+        // await GetStorageData.SimpleGet();
+        // await GetStorageData.GetAndWatch(cancellationToken);
+        // await GetStorageData.GetKeysAndParseThem(cancellationToken);
+        await GetStorageData.GetOwnedNfaAssetsIds(cancellationToken);
     }
 
 }

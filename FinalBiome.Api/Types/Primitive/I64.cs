@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace FinalBiome.Api.Types.Primitive
 {
-    public class I64 : Number<long>, IFromNative<I64, long>
+    public class I64 : Number<long>
     {
         public override int TypeSize => 8;
         public override string TypeName() => "i64";
@@ -37,7 +37,7 @@ namespace FinalBiome.Api.Types.Primitive
         }
 
         public static implicit operator long(I64 v) => v.Value;
-        public static explicit operator I64(long v) => From(v);
+        public static implicit operator I64(long v) => From(v);
     }
 }
 

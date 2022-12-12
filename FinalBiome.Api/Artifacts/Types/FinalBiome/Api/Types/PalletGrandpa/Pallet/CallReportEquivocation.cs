@@ -2,6 +2,11 @@
 /// This file is generated automatically
 /// DO NOT CHANGE THE CONTENT OF THE FILE!
 ///
+
+#pragma warning disable IDE0090
+#pragma warning disable CA1822
+#pragma warning disable IDE0028
+#pragma warning disable IDE0052
 using System;
 using FinalBiome.Api.Types;
 using FinalBiome.Api.Types.Primitive;
@@ -14,7 +19,7 @@ namespace FinalBiome.Api.Types.PalletGrandpa.Pallet
     /// will be reported.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 98, Variant Id 0
+    /// Generated from meta with Type Id 105, Variant Id 0
     /// </summary>
     public class CallReportEquivocation : Codec
     {
@@ -46,3 +51,8 @@ namespace FinalBiome.Api.Types.PalletGrandpa.Pallet
         }
     }
 }
+
+#pragma warning restore IDE0090
+#pragma warning restore CA1822
+#pragma warning restore IDE0028
+#pragma warning restore IDE0052

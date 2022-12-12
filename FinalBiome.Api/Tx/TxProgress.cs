@@ -12,8 +12,8 @@ using Hash = FinalBiome.Api.Types.PrimitiveTypes.H256;
 public class TxProgress
 {
     Subscription<SubstrateTxStatus>? sub;
-    byte[] extHash;
-    Client client;
+    readonly byte[] extHash;
+    readonly Client client;
 
     public TxProgress(Subscription<SubstrateTxStatus> sub, Client client, byte[] extHash)
     {
@@ -56,7 +56,7 @@ public class TxProgress
                     break;
                 case InnerSubstrateTxStatus.InBlock:
                     var txs3 = new TxStatus();
-                    Hash extHash = new Hash();
+                    Hash extHash = new();
                     extHash.Init(this.extHash);
                     var inBlock = new TxInBlock((Hash)status.Value2, extHash, client);
                     txs3.Init(InnerTxStatus.InBlock, inBlock);
@@ -101,7 +101,7 @@ public class TxProgress
                 case InnerSubstrateTxStatus.Finalized:
                     sub!.Unsubscribe();
                     var txs9 = new TxStatus();
-                    Hash extHash1 = new Hash();
+                    Hash extHash1 = new();
                     extHash1.Init(this.extHash);
                     var inBlock1 = new TxInBlock((Hash)status.Value2, extHash1, client);
                     txs9.Init(InnerTxStatus.Finalized, inBlock1);

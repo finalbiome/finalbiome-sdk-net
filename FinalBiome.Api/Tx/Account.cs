@@ -1,6 +1,7 @@
 ﻿using System;
 using Chaos.NaCl;
 using FinalBiome.Api.Types;
+using FinalBiome.Api.Types.SpCore.Crypto;
 using FinalBiome.Api.Types.SpRuntime;
 using FinalBiome.Api.Types.SpRuntime.Multiaddress;
 using FinalBiome.Api.Utils;
@@ -35,7 +36,7 @@ public class Account : Pair
     public static Account FromSeed(SignatureType signatureType, byte[] seed)
     {
         if (signatureType != SignatureType.Sr25519) throw new NotImplementedException($"Signature type {signatureType} is not implemented");
-        MiniSecret ms = new MiniSecret(seed, ExpandMode.Ed25519);
+        MiniSecret ms = new(seed, ExpandMode.Ed25519);
         return new Account(SignatureType.Sr25519, ms.ExpandToSecret().ToBytes(), ms.GetPair().Public.Key);
     }
 
@@ -46,34 +47,41 @@ public class Account : Pair
         switch (signatureType)
         {
             case SignatureType.Ed25519:
-                signatureData = new FinalBiome.Api.Types.SpCore.Ed25519.Signature();
+                signatureData = new Types.SpCore.Ed25519.Signature();
                 signatureData.Init(Ed25519.Sign(payload, privateKey));
                 break;
             case SignatureType.Sr25519:
-                signatureData = new FinalBiome.Api.Types.SpCore.Sr25519.Signature();
+                signatureData = new Types.SpCore.Sr25519.Signature();
                 signatureData.Init(Sr25519v091.SignSimple(publicKey, privateKey, payload));
                 break;
             default:
                 throw new NotImplementedException($"Singature of {signatureType} type is not implemented");
         }
 
-        MultiSignature signature = new MultiSignature();
+        MultiSignature signature = new();
         signature.Init(signatureType, signatureData);
         return signature;
     }
 
     public MultiAddress ToAddress()
     {
-        FinalBiome.Api.Types.SpRuntime.Multiaddress.MultiAddress address = new FinalBiome.Api.Types.SpRuntime.Multiaddress.MultiAddress();
-        FinalBiome.Api.Types.SpCore.Crypto.AccountId32 accountId32 = new FinalBiome.Api.Types.SpCore.Crypto.AccountId32();
+        MultiAddress address = new();
+        AccountId32 accountId32 = new();
         accountId32.Init(PublicKey());
-        address.Init(FinalBiome.Api.Types.SpRuntime.Multiaddress.InnerMultiAddress.Id, accountId32);
+        address.Init(InnerMultiAddress.Id, accountId32);
         return address;
     }
 
     public string ToSS58Address()
     {
         return AddressUtils.GetAddressFrom(PublicKey());
+    }
+
+    public static implicit operator AccountId32(Account a)
+    {
+        AccountId32 accountId32 = new();
+        accountId32.Init(a.PublicKey());
+        return accountId32;
     }
 }
 

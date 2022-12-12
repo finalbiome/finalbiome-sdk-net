@@ -16,7 +16,7 @@ internal class HeaderJsonConverter : JsonConverter<Header>
     public override Header ReadJson(JsonReader reader, Type objectType, Header? existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         //	TokenType StartObject
-        Header header = new Header();
+        Header header = new();
         reader.Read();
         while (reader.TokenType != JsonToken.EndObject)
         {
@@ -52,11 +52,11 @@ internal class HeaderJsonConverter : JsonConverter<Header>
                         reader.Read(); // Log property
                         reader.Read(); // Log value
                         // array of logs
-                        List<DigestItem> dis = new List<DigestItem>();
+                        List<DigestItem> dis = new();
                         reader.Read(); // read first val
                         while (reader.TokenType != JsonToken.EndArray)
                         {
-                            DigestItem di = new DigestItem();
+                            DigestItem di = new();
                             di.InitFromHex((string) reader.Value);
                             dis.Add(di);
                             reader.Read();

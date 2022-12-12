@@ -12,11 +12,11 @@ using Hash = FinalBiome.Api.Types.PrimitiveTypes.H256;
 /// </summary>
 public class Extrinsic
 {
-    private int index;
-    private Vec<U8> extrinsic;
-    private Client client;
-    private Hash blockHash;
-    private CachedEvents cachedEvents;
+    private readonly int index;
+    private readonly Vec<U8> extrinsic;
+    private readonly Client client;
+    private readonly Hash blockHash;
+    private readonly CachedEvents cachedEvents;
 
     public Extrinsic(int index, Vec<U8> extrinsic, Client client, Hash blockHash, CachedEvents cachedEvents)
     {

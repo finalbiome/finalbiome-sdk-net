@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace FinalBiome.Api.Types.Primitive
 {
-    public class I32 : Number<int>, IFromNative<I32, int>
+    public class I32 : Number<int>
     {
         public override int TypeSize => 4;
         public override string TypeName() => "i32";
@@ -37,7 +37,7 @@ namespace FinalBiome.Api.Types.Primitive
         }
 
         public static implicit operator int(I32 v) => v.Value;
-        public static explicit operator I32(int v) => From(v);
+        public static implicit operator I32(int v) => From(v);
     }
 }
 

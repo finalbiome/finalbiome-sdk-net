@@ -23,10 +23,11 @@ public class U128Tests
         var val2 = new U128();
         val2.Init("0x35820000000000000000000000000000");
         U128.From(new BigInteger(33333));
-
-        Assert.That(new BigInteger(33333), Is.EqualTo(val2.Value));
-        Assert.That(val.Bytes, Is.EqualTo(val2.Bytes));
-
+        Assert.Multiple(() =>
+        {
+            Assert.That(new BigInteger(33333), Is.EqualTo(val2.Value));
+            Assert.That(val.Bytes, Is.EqualTo(val2.Bytes));
+        });
     }
 }
 

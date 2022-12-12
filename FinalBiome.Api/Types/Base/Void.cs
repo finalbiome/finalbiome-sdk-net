@@ -1,4 +1,7 @@
-﻿using System;
+﻿#pragma warning disable CA1825
+#pragma warning disable IDE0230
+
+using System;
 namespace FinalBiome.Api.Types
 {
     public class BaseVoid : Codec

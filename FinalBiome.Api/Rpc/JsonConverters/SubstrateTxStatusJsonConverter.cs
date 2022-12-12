@@ -32,8 +32,10 @@ public class SubstrateTxStatusJsonConverter : JsonConverter<SubstrateTxStatus>
                 // Broadcast status with List<string>
                 while (reader.TokenType != JsonToken.EndArray)
                 {
-                    peers = new List<string>();
-                    peers.Add((string)reader.Value!);
+                    peers = new List<string>
+                    {
+                        (string)reader.Value!
+                    };
                     reader.Read();
                 }
             }
@@ -43,11 +45,10 @@ public class SubstrateTxStatusJsonConverter : JsonConverter<SubstrateTxStatus>
             throw new JsonReaderException($"Found an unknown token: ({reader.TokenType}){reader.Value}");
         }
 
-        InnerSubstrateTxStatus status;
-        var r = Enum.TryParse(value, true, out status);
+        var r = Enum.TryParse(value, true, out InnerSubstrateTxStatus status);
         if (!r) throw new JsonReaderException($"Found an unknown response status: {value}");
 
-        SubstrateTxStatus result = new SubstrateTxStatus();
+        SubstrateTxStatus result = new();
         switch (status)
         {
             case InnerSubstrateTxStatus.Future:
@@ -58,41 +59,41 @@ public class SubstrateTxStatusJsonConverter : JsonConverter<SubstrateTxStatus>
                 return result;
             case InnerSubstrateTxStatus.Broadcast:
                 if (peers is null) throw new Exception("Something wrong");
-                List<Str> peersArr = new List<Str>();
+                List<Str> peersArr = new();
                 foreach (var peer in peers)
                 {
                     peersArr.Add(Str.From(peer));
                 }
-                Vec<Str> peersIds = new Vec<Str>();
+                Vec<Str> peersIds = new();
                 peersIds.Init(peersArr.ToArray());
                 result.Init(status, peersIds);
                 return result;
             case InnerSubstrateTxStatus.InBlock:
-                Hash hash = new Hash();
+                Hash hash = new();
                 if (data is null) throw new Exception("Something wrong");
                 hash.InitFromHex(data);
                 result.Init(status, hash);
                 return result;
             case InnerSubstrateTxStatus.Retracted:
-                Hash hash1 = new Hash();
+                Hash hash1 = new();
                 if (data is null) throw new Exception("Something wrong");
                 hash1.InitFromHex(data);
                 result.Init(status, hash1);
                 return result;
             case InnerSubstrateTxStatus.FinalityTimeout:
-                Hash hash2 = new Hash();
+                Hash hash2 = new();
                 if (data is null) throw new Exception("Something wrong");
                 hash2.InitFromHex(data);
                 result.Init(status, hash2);
                 return result;
             case InnerSubstrateTxStatus.Finalized:
-                Hash hash3 = new Hash();
+                Hash hash3 = new();
                 if (data is null) throw new Exception("Something wrong");
                 hash3.InitFromHex(data);
                 result.Init(status, hash3);
                 return result;
             case InnerSubstrateTxStatus.Usurped:
-                Hash hash4 = new Hash();
+                Hash hash4 = new();
                 if (data is null) throw new Exception("Something wrong");
                 hash4.InitFromHex(data);
                 result.Init(status, hash4);

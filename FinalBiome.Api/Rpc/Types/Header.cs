@@ -73,7 +73,7 @@ public class Header : Codec
     /// <returns></returns>
     public Hash Hash()
     {
-        Hash hash = new Hash();
+        Hash hash = new();
         hash.Init(Hasher.BlakeTwo256(this.Encode()));
         return hash;
     }

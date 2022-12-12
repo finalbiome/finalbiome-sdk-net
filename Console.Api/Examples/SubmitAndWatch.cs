@@ -23,12 +23,12 @@ public static class SubmitAndWatch
     {
         Client api = await Client.New();
 
-        PairSigner signer = new PairSigner(AccountKeyring.Ferdie());
+        PairSigner signer = new(AccountKeyring.Ferdie());
 
         // Init Organization address
         var organizationId = AccountKeyring.Eve().ToAddress();
         // Init NFA name
-        FinalBiome.Api.Types.VecU8 nfaName = new FinalBiome.Api.Types.VecU8();
+        FinalBiome.Api.Types.VecU8 nfaName = new();
         nfaName.Init(ArrayUtils.SizePrefixedByteArray("test5".AsBytes()));
 
         // Construct call payload
@@ -53,12 +53,12 @@ public static class SubmitAndWatch
     {
         Client api = await Client.New();
 
-        PairSigner signer = new PairSigner(AccountKeyring.Ferdie());
+        PairSigner signer = new(AccountKeyring.Ferdie());
 
         // Init Organization address
         var organizationId = AccountKeyring.Eve().ToAddress();
         // Init NFA name
-        FinalBiome.Api.Types.VecU8 nfaName = new FinalBiome.Api.Types.VecU8();
+        FinalBiome.Api.Types.VecU8 nfaName = new();
         nfaName.Init(ArrayUtils.SizePrefixedByteArray("test5".AsBytes()));
 
         // Construct call payload
@@ -70,7 +70,7 @@ public static class SubmitAndWatch
         // Now we know it's been finalized, we can get hold of a couple of
         // details, including events. Calling `wait_for_finalized_success` is
         // equivalent to calling `wait_for_finalized` and then `wait_for_success`:
-        var _events = await createNfa.WaitForSuccess();
+        var _ = await createNfa.WaitForSuccess();
 
         // Alternately, we could just `fetch_events`, which grabs all of the events like
         // the above, but does not check for success, and leaves it up to you:
@@ -92,12 +92,12 @@ public static class SubmitAndWatch
     {
         Client api = await Client.New();
 
-        PairSigner signer = new PairSigner(AccountKeyring.Ferdie());
+        PairSigner signer = new(AccountKeyring.Ferdie());
 
         // Organization address
         var organizationId = AccountKeyring.Eve().ToAddress();
         // NFA name
-        FinalBiome.Api.Types.VecU8 nfaName = new FinalBiome.Api.Types.VecU8();
+        FinalBiome.Api.Types.VecU8 nfaName = new();
         nfaName.Init(ArrayUtils.SizePrefixedByteArray("test5".AsBytes()));
 
         // Construct call payload
@@ -112,7 +112,7 @@ public static class SubmitAndWatch
                 // Made it into a block, but not finalized.
                 case InnerTxStatus.InBlock:
                     {
-                        var details = ((TxInBlock)txStatus.Value2);
+                        var details = (TxInBlock)txStatus.Value2;
                         Console.WriteLine($"Transaction {details.ExtrinsicHash.ToHex()} made it into block {details.BlockHash.ToHex()}");
                         try
                         {
@@ -127,7 +127,7 @@ public static class SubmitAndWatch
                     break;
                 case InnerTxStatus.Finalized:
                     {
-                        var details = ((TxInBlock)txStatus.Value2);
+                        var details = (TxInBlock)txStatus.Value2;
                         Console.WriteLine($"Transaction {details.ExtrinsicHash.ToHex()} is finalized in block {details.BlockHash.ToHex()}");
 
                     }

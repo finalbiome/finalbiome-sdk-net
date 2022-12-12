@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace FinalBiome.Api.Types.Primitive
 {
-    public class I16 : Number<short>, IFromNative<I16, short>
+    public class I16 : Number<short>
     {
         public override int TypeSize => 2;
         public override string TypeName() => "i16";
@@ -37,7 +37,7 @@ namespace FinalBiome.Api.Types.Primitive
         }
 
         public static implicit operator short(I16 v) => v.Value;
-        public static explicit operator I16(short v) => From(v);
+        public static implicit operator I16(short v) => From(v);
     }
 }
 

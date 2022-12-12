@@ -20,7 +20,7 @@ public class DigestTests
         var log0 = new DigestItem();
 
         var t = new Vec<U8>();
-        List<U8> b0 = new List<U8>();
+        List<U8> b0 = new();
         for (byte i = 1; i < 4; i++)
         {
             var a = new U8();
@@ -34,7 +34,7 @@ public class DigestTests
 
         var log1 = new DigestItem();
         var t0 = new Vec<U8>();
-        List<U8> b3 = new List<U8>();
+        List<U8> b3 = new();
         for (byte i = 1; i < 4; i++)
         {
             var a = new U8();
@@ -44,7 +44,7 @@ public class DigestTests
         t0.Init(b3.ToArray());
 
         var c = new ConsensusEngineId();
-        List<U8> b1 = new List<U8>();
+        List<U8> b1 = new();
         foreach (var i in Encoding.UTF8.GetBytes("test"))
         {
             var a = new U8();
@@ -59,7 +59,7 @@ public class DigestTests
 
         d2.Init(new DigestItem[] { log0, log1 });
 
-        Assert.That(d2.Logs.Encode().ToHex(), Is.EqualTo("0x08000C01020305746573740C010203"));
+        Assert.That(d2.Logs?.Encode().ToHex(), Is.EqualTo("0x08000C01020305746573740C010203"));
 
     }
 }

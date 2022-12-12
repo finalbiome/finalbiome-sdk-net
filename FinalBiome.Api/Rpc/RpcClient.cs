@@ -9,7 +9,7 @@ namespace FinalBiome.Api.Rpc;
 
 using Hash = FinalBiome.Api.Types.PrimitiveTypes.H256;
 
-public class RpcClient
+public class RpcClient : IDisposable
 {
     readonly ClientWebSocket ws;
     readonly JsonRpc rpc;
@@ -27,10 +27,10 @@ public class RpcClient
     /// </summary>
     internal static async Task<RpcClient> Build(Uri url)
     {
-        ClientWebSocket ws = new ClientWebSocket();
+        ClientWebSocket ws = new();
         await ws.ConnectAsync(url, CancellationToken.None);
-        JsonRpc rpc = new JsonRpc(new WebSocketMessageHandler(ws, messageFormatter()));
-        RpcSubscriptionTarget subscriptionTarget = new RpcSubscriptionTarget();
+        JsonRpc rpc = new(new WebSocketMessageHandler(ws, messageFormatter()));
+        RpcSubscriptionTarget subscriptionTarget = new();
         rpc.AddLocalRpcTarget(subscriptionTarget, new JsonRpcTargetOptions { AllowNonPublicInvocation = false });
         rpc.StartListening();
         return new RpcClient(ws, rpc, subscriptionTarget);
@@ -78,13 +78,13 @@ public class RpcClient
     /// <returns></returns>
     public async Task<Subscription<TResult>> Subscribe<TResult>(string sub, object[] parameters, string unsub, CancellationToken? cancellationToken = null) // where TResult : Codec
     {
-        if (cancellationToken is null) cancellationToken = CancellationToken.None;
+        cancellationToken ??= CancellationToken.None;
         // Subscribe on events
         string subId = await Request<string>(sub, parameters);
         // Create subscription instance
-        Subscription<TResult> subscription = new Subscription<TResult>(subId, sub, parameters, unsub, (CancellationToken)cancellationToken);
+        Subscription<TResult> subscription = new(subId, sub, parameters, unsub, (CancellationToken)cancellationToken);
         // Add to list
-        this.subscriptionTarget.AddSubscription(subscription);
+        await this.subscriptionTarget.AddSubscription<TResult>(subscription);
 
         return subscription;
     }
@@ -99,12 +99,17 @@ public class RpcClient
     /// <returns></returns>
     internal async Task Unsubscribe<TResult>(Subscription<TResult> subscription)
     {
-        string subId = await Request<string>(subscription.Unsub, new object[] { });
-        subscription.Unsubscribe();
-        this.subscriptionTarget.RemoveSubscription(subscription);
+        if (subscriptionTarget.SubscriptionExists(subscription))
+        {
+            string subId = subscription.Id;
+            string _ = await Request<string>(subscription.Unsub, new object[] { subId });
+            subscription.Unsubscribe();
+            this.subscriptionTarget.RemoveSubscription(subscription);
+        }
     }
 
 #pragma warning disable CS8601 // Possible null reference assignment.
+#pragma warning disable CA1825
     internal static object[] RpcParams()
     {
         return new object[] { };
@@ -129,6 +134,15 @@ public class RpcClient
     {
         return new object[] { t0, t1, t2, t3 };
     }
+
+    public void Dispose()
+    {
+        rpc.Dispose();
+        ws.Dispose();
+        GC.SuppressFinalize(this);
+    }
+
 #pragma warning restore CS8601 // Possible null reference assignment.
+#pragma warning restore CA1825
 }
 

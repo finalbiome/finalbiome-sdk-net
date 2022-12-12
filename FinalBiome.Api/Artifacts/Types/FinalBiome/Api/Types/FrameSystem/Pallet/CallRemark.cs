@@ -2,6 +2,11 @@
 /// This file is generated automatically
 /// DO NOT CHANGE THE CONTENT OF THE FILE!
 ///
+
+#pragma warning disable IDE0090
+#pragma warning disable CA1822
+#pragma warning disable IDE0028
+#pragma warning disable IDE0052
 using System;
 using FinalBiome.Api.Types;
 using FinalBiome.Api.Types.Primitive;
@@ -15,7 +20,7 @@ namespace FinalBiome.Api.Types.FrameSystem.Pallet
     /// # &lt;/weight&gt;<br/>
     ///
     ///
-    /// Generated from meta with Type Id 68, Variant Id 1
+    /// Generated from meta with Type Id 75, Variant Id 1
     /// </summary>
     public class CallRemark : Codec
     {
@@ -43,3 +48,8 @@ namespace FinalBiome.Api.Types.FrameSystem.Pallet
         }
     }
 }
+
+#pragma warning restore IDE0090
+#pragma warning restore CA1822
+#pragma warning restore IDE0028
+#pragma warning restore IDE0052

@@ -20,7 +20,7 @@ public class OptionTests
             Assert.That(optionU8One?.Value?.Value, Is.EqualTo(0));
 
             Assert.That(HexUtils.Bytes2HexString(optionU8Null.Bytes), Is.EqualTo("0x00"));
-            Assert.That(HexUtils.Bytes2HexString(optionU8One?.Bytes), Is.EqualTo("0x0100"));
+            Assert.That(HexUtils.Bytes2HexString(optionU8One!.Bytes), Is.EqualTo("0x0100"));
         });
     }
 }

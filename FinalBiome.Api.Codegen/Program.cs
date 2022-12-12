@@ -37,9 +37,9 @@ class Program
 
         var meta = await client1.Metadata();
 
-        TypeGenerator generator = new TypeGenerator(meta);
-        List<ParsedType> primitives = new List<ParsedType>
-            {
+        TypeGenerator generator = new (meta);
+        List<ParsedType> primitives = new()
+        {
                 new ParsedType("I8", "i8", false, Namespace: "FinalBiome.Api.Types.Primitive"),
                 new ParsedType("I16", "i16", false, Namespace: "FinalBiome.Api.Types.Primitive"),
                 new ParsedType("I32", "i32", false, Namespace: "FinalBiome.Api.Types.Primitive"),

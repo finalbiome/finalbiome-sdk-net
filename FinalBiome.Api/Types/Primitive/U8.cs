@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace FinalBiome.Api.Types.Primitive
 {
-    public class U8 : Number<byte>, IFromNative<U8, byte>
+    public class U8 : Number<byte>
     {
         public override int TypeSize => 1;
         public override string TypeName() => "u8";
@@ -28,7 +28,7 @@ namespace FinalBiome.Api.Types.Primitive
         }
 
         public static implicit operator byte(U8 v) => v.Value;
-        public static explicit operator U8(byte v) => From(v);
+        public static implicit operator U8(byte v) => From(v);
     }
 }
 

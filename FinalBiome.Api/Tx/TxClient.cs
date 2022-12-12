@@ -19,9 +19,9 @@ public partial class TxClient
     /// </summary>
     /// <param name="call"></param>
     /// <returns></returns>
-    public List<byte> CallData(TxPayload call)
+    public static List<byte> CallData(TxPayload call)
     {
-        List<byte> bytes = new List<byte>();
+        List<byte> bytes = new();
         call.EncodeCallDataTo(ref bytes);
         return bytes;
     }
@@ -34,7 +34,7 @@ public partial class TxClient
     public SubmittableExtrinsic CreateUnsigned(TxPayload call)
     {
         // Encode extrinsic
-        List<byte> encodedInner = new List<byte>();
+        List<byte> encodedInner = new();
         // transaction protocol version (4) (is not signed, so no 1 bit at the front).
         U8.From(4).EncodeTo(ref encodedInner);
         // encode call data after this byte.
@@ -43,7 +43,7 @@ public partial class TxClient
         var len = encodedInner.Count;
         var encodedLen = CompactNum.CompactTo(len);
 
-        List<byte> extrinsic = new List<byte>();
+        List<byte> extrinsic = new();
         extrinsic.AddRange(encodedLen);
         extrinsic.AddRange(encodedInner);
 
@@ -74,7 +74,7 @@ public partial class TxClient
         //    for SignedPayload (which is this payload of bytes that we'd like)
         //    to sign. See:
         //    https://github.com/paritytech/substrate/blob/9a6d706d8db00abb6ba183839ec98ecd9924b1f8/primitives/runtime/src/generic/unchecked_extrinsic.rs#L215)
-        List<byte> bytes = new List<byte>();
+        List<byte> bytes = new();
         callData.EncodeTo(ref bytes); // already encoded
         additionalAndExtraParams.EncodeExtraTo(ref bytes);
         additionalAndExtraParams.EncodeAdditionalTo(ref bytes);
@@ -90,11 +90,11 @@ public partial class TxClient
 
         // 4. Encode extrinsic, now that we have the parts we need. This is compatible
         //    with the Encode impl for UncheckedExtrinsic (protocol version 4).
-        List<byte> encodedInner = new List<byte>();
+        List<byte> encodedInner = new();
         // "is signed" + transaction protocol version (4)
         ((byte)(0b10000000 + 4)).EncodeTo(ref encodedInner);
         // from address for signature
-        signer.Address().EncodeTo(ref encodedInner);
+        signer.Address.EncodeTo(ref encodedInner);
         // the signature bytes
         signature.EncodeTo(ref encodedInner);
         // attach custom extra params
@@ -105,7 +105,7 @@ public partial class TxClient
         var len = encodedInner.Count;
         var encodedLen = CompactNum.CompactTo(len);
 
-        List<byte> extrinsic = new List<byte>();
+        List<byte> extrinsic = new();
         extrinsic.AddRange(encodedLen);
         extrinsic.AddRange(encodedInner);
 
@@ -128,7 +128,7 @@ public partial class TxClient
         )
     {
         // Get nonce from the node.
-        var accountNonce = await client.Rpc.SystemAccountNextIndex(signer.AccountId());
+        var accountNonce = await client.Rpc.SystemAccountNextIndex(signer.AccountId);
         return CreateSignedWithNonce(call, signer, accountNonce, otherParams);
     }
 

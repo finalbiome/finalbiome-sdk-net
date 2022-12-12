@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable CS8618
+
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using FinalBiome.Api.Types;

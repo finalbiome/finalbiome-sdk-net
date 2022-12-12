@@ -45,9 +45,9 @@ public class StorageChange
     /// <summary>
     /// The new storage value
     /// </summary>
-    public string StorageValue { get; internal set; }
+    public string? StorageValue { get; internal set; }
 
-    public StorageChange(List<byte> storageKey, string storageValue)
+    public StorageChange(List<byte> storageKey, string? storageValue)
     {
         StorageKey = storageKey;
         StorageValue = storageValue;

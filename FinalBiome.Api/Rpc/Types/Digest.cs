@@ -17,7 +17,8 @@ public class Digest : Codec
     {
         var bytes = new List<byte>();
 
-        bytes.AddRange(Logs.Encode());
+        if (Logs is not null)
+            bytes.AddRange(Logs.Encode());
 
         return bytes.ToArray();
     }

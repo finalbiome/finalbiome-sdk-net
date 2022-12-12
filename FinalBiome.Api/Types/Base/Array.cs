@@ -10,7 +10,7 @@ public class Array<T> : Codec where T : Codec, new()
     public T[] Value { get; internal set; }
 
     int? typeSize;
-    int innerTypeSize;
+    readonly int innerTypeSize;
 
     public override int TypeSize
     {
@@ -81,10 +81,19 @@ public class Array<T> : Codec where T : Codec, new()
         Bytes = Encode();
         TypeSize = Value.Length * innerTypeSize;
     }
-
+#pragma warning disable CS8618
     public Array()
+#pragma warning restore CS8618
     {
         innerTypeSize = new T().TypeSize;
     }
+
+    public static implicit operator T[](Array<T> v) => v.Value;
+    public static implicit operator Array<T>(T[] v) {
+        var res = new Array<T>();
+        res.Init(v);
+        return res;
+    }
+    
 }
 

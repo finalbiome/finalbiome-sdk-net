@@ -4,7 +4,7 @@ using FinalBiome.Api.Utils;
 
 namespace FinalBiome.Api.Types.Primitive
 {
-    public abstract class Number<T> : Primitive<T> where T : INumber<T>
+    public abstract class Number<T> : Primitive<T>
     {
         public override byte[] Encode() => Bytes;
 

@@ -27,6 +27,11 @@ namespace FinalBiome.Api.Storage
         /// we are expecting.
         /// </summary>
         Array<U8>? validation_hash => null;
+        /// <summary>
+        /// Return bytes representing this storage entry.
+        /// </summary>
+        /// <returns></returns>
+        List<byte> ToBytes();
     }
 
     /// <summary>
@@ -34,16 +39,18 @@ namespace FinalBiome.Api.Storage
     /// </summary>
     public class StaticStorageAddress : StorageAddress
     {
-        string palletName;
-        string entryName;
+        readonly string palletName;
+        readonly string entryName;
+
         /// <summary>
         /// How to access the specific value at that storage address.
         /// </summary>
-        List<StorageMapKey> storageEntryKeys;
+        readonly List<StorageMapKey> storageEntryKeys;
+
         /// <summary>
         /// Hash provided from static code for validation.
         /// </summary>
-        List<byte>? ValidationHash;
+        readonly List<byte>? ValidationHash;
 
         public StaticStorageAddress(
             string palletName,

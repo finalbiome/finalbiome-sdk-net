@@ -10,7 +10,7 @@ public class CompactIntegerType : Codec
 {
     public override string  TypeName() => "CompactInteger";
 
-    public int TypeSize { get; set; } = 0;
+    public override int TypeSize { get; internal set; } = 0;
 
     public void Create(string str)
     {

@@ -1,11 +1,12 @@
-﻿
+﻿#pragma warning disable IDE0028
+
 using Newtonsoft.Json.Linq;
 using FinalBiome.Api.Codegen.Metadata;
 namespace FinalBiome.Api.Codegen;
 
 public class ParsedCallsParams
 {
-    static string[] reservedKeywords =
+    static readonly string[] reservedKeywords =
     {
         "abstract",
         "as",
@@ -155,10 +156,10 @@ public class ParsedCalls
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public uint ModuleIndex;
     public int CallIndex;
-    public List<ParsedCallsParams> CallTypes = new List<ParsedCallsParams>();
+    public List<ParsedCallsParams> CallTypes = new();
     public List<string>? Docs;
     public bool Parsed = false;
-    public List<string> GeneratedCode = new List<string>();
+    public List<string> GeneratedCode = new();
     public string FileSuffix = "";
 
     public (string, string) CanonicalName
@@ -181,7 +182,7 @@ public class ParsedCalls
     /// <summary>
     /// Filename dir generates as TypeGenerator.StorageNamespacePrefix
     /// </summary>
-    public string FileNameDir
+    public static string FileNameDir
     {
         get
         {
@@ -192,16 +193,16 @@ public class ParsedCalls
 
 public class CallParser
 {
-    NodeMetadataV14 metadata;
+    readonly NodeMetadataV14 metadata;
     internal List<ParsedCalls> parsedCalls;
     /// <summary>
     /// Holds code of module classes.
     /// Key - the module name
     /// </summary>
-    internal Dictionary<string, ParsedCalls> parsedModules = new Dictionary<string, ParsedCalls>();
+    internal Dictionary<string, ParsedCalls> parsedModules = new();
 
-    List<string> transactionsClassSource = new List<string>();
-    TypeParser typeParser;
+    List<string> transactionsClassSource = new();
+    readonly TypeParser typeParser;
 
     public CallParser(NodeMetadataV14 metadata, TypeParser typeParser)
     {
@@ -230,10 +231,12 @@ public class CallParser
         if (module.Calls is not null)
             foreach (var call in ((NodeTypeVariant)metadata.Types[module.Calls.TypeId]).Variants)
             {
-                ParsedCalls pc = new ParsedCalls();
-                pc.ModuleName = module.Name;
-                pc.ModuleIndex = module.Index;
-                pc.CallName = TypeParser.SnakeCaseToTitle(call.Name);
+                ParsedCalls pc = new()
+                {
+                    ModuleName = module.Name,
+                    ModuleIndex = module.Index,
+                    CallName = TypeParser.SnakeCaseToTitle(call.Name)
+                };
                 // stupid Compiler Error CS0542
                 if (pc.CallName == module.Name) pc.CallName += "Call";
 
@@ -241,9 +244,11 @@ public class CallParser
                 if (call.TypeFields is not null)
                     foreach (var callType in call.TypeFields)
                     {
-                        ParsedCallsParams pcp = new ParsedCallsParams();
-                        pcp.Name = callType.Name;
-                        pcp.Type = typeParser.parsedTypes[callType.TypeId].FullCanonicalName;
+                        ParsedCallsParams pcp = new()
+                        {
+                            Name = callType.Name,
+                            Type = typeParser.parsedTypes[callType.TypeId].FullCanonicalName
+                        };
                         pc.CallTypes.Add(pcp);
                     }
                 if (call.Docs is not null)
@@ -268,12 +273,12 @@ public class CallParser
         }
     }
 
-    void GenerateTxClass(ParsedCalls pc)
+    static void GenerateTxClass(ParsedCalls pc)
     {
 
-        List<string> callParamsList = new List<string>();
-        List<string> callTypeList = new List<string>();
-        List<string> callNameList = new List<string>();
+        List<string> callParamsList = new();
+        List<string> callTypeList = new();
+        List<string> callNameList = new();
         foreach (var t in pc.CallTypes)
         {
             callParamsList.Add($"{t.Type} {t.Name}");
@@ -281,10 +286,8 @@ public class CallParser
             callNameList.Add(t.Name);
         }
         string callParam = String.Join(", ", callParamsList);
-        string callTypes = String.Join(", ", callTypeList);
-        string callNames = String.Join(", ", callNameList);
 
-        List<string> file = new List<string>();
+        List<string> file = new();
 
         file.Add($"namespace {pc.CanonicalName.Item1}");
         file.Add($"{{");
@@ -324,11 +327,13 @@ public class CallParser
     {
         if (parsedModules.ContainsKey(pc.ModuleName)) return;
 
-        ParsedCalls pcm = new ParsedCalls();
-        pcm.ModuleName = pc.ModuleName;
-        pcm.CallName = pc.CallName;
+        ParsedCalls pcm = new()
+        {
+            ModuleName = pc.ModuleName,
+            CallName = pc.CallName
+        };
 
-        List<string> file = new List<string>();
+        List<string> file = new();
 
         file.Add($"namespace {pc.CanonicalName.Item1}");
         file.Add($"{{");
@@ -351,7 +356,7 @@ public class CallParser
 
     void GenerateTransactionsClass()
     {
-        List<string> file = new List<string>();
+        List<string> file = new();
 
         file.Add($"namespace {TypeGenerator.RootNamespace}.{TypeGenerator.TransactionsNamespacePrefix}");
         file.Add($"{{");
@@ -383,16 +388,16 @@ public class CallParser
                 Console.WriteLine($"Type {s.ModuleName}.{s.CallName} doesn't parsed. Skip");
                 continue;
             }
-            string path = $"{outputDir}/{s.FileNameDir}";
+            string path = $"{outputDir}/{ParsedCalls.FileNameDir}";
             string pathFileName = $"{path}/{s.FileName}";
             Directory.CreateDirectory(path);
             Console.WriteLine($"Write file {pathFileName}");
-            File.WriteAllLines(pathFileName, TypeGenerator.banner.Concat(s.GeneratedCode));
+            File.WriteAllLines(pathFileName, TypeGenerator.StringsWithBanner(s.GeneratedCode));
         }
         // save Query class
         string pathTxFileName = $"{outputDir}/{TypeGenerator.TransactionsNamespacePrefix}/TxClient.cs";
         Console.WriteLine($"Write file {pathTxFileName}");
-        File.WriteAllLines(pathTxFileName, TypeGenerator.banner.Concat(transactionsClassSource));
+        File.WriteAllLines(pathTxFileName, TypeGenerator.StringsWithBanner(transactionsClassSource));
     }
 }
 

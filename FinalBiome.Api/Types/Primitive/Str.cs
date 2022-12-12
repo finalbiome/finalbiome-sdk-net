@@ -3,7 +3,7 @@ using FinalBiome.Api.Utils;
 
 namespace FinalBiome.Api.Types.Primitive
 {
-    public class Str : Primitive<string>, IFromNative<Str, string>
+    public class Str : Primitive<string>
     {
         public override string TypeName() => "str";
 
@@ -50,7 +50,7 @@ namespace FinalBiome.Api.Types.Primitive
         }
 
         public static implicit operator string(Str v) => v.Value;
-        public static explicit operator Str(string v) => From(v);
+        public static implicit operator Str(string v) => From(v);
 
     }
 }

@@ -2,6 +2,11 @@
 /// This file is generated automatically
 /// DO NOT CHANGE THE CONTENT OF THE FILE!
 ///
+
+#pragma warning disable IDE0090
+#pragma warning disable CA1822
+#pragma warning disable IDE0028
+#pragma warning disable IDE0052
 using System;
 using FinalBiome.Api.Types;
 using FinalBiome.Api.Types.Primitive;
@@ -13,7 +18,7 @@ namespace FinalBiome.Api.Types.PalletNonFungibleAssets.Pallet
     /// The origin must be Signed and must be a member of the organization<br/>
     ///
     ///
-    /// Generated from meta with Type Id 145, Variant Id 1
+    /// Generated from meta with Type Id 152, Variant Id 1
     /// </summary>
     public class CallDestroy : Codec
     {
@@ -45,3 +50,8 @@ namespace FinalBiome.Api.Types.PalletNonFungibleAssets.Pallet
         }
     }
 }
+
+#pragma warning restore IDE0090
+#pragma warning restore CA1822
+#pragma warning restore IDE0028
+#pragma warning restore IDE0052

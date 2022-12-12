@@ -2,13 +2,18 @@
 /// This file is generated automatically
 /// DO NOT CHANGE THE CONTENT OF THE FILE!
 ///
+
+#pragma warning disable IDE0090
+#pragma warning disable CA1822
+#pragma warning disable IDE0028
+#pragma warning disable IDE0052
 using System.Numerics;
 using FinalBiome.Api.Types.Primitive;
 using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.FinalbiomeNodeRuntime
 {
     /// <summary>
-    /// Generated from meta with Type Id 129
+    /// Generated from meta with Type Id 136
     /// </summary>
     public enum InnerCall : byte
     {
@@ -27,10 +32,15 @@ namespace FinalBiome.Api.Types.FinalbiomeNodeRuntime
         Mechanics = 12,
     }
     /// <summary>
-    /// Generated from meta with Type Id 129
+    /// Generated from meta with Type Id 136
     /// </summary>
     public class Call : Enum<InnerCall, FinalBiome.Api.Types.FrameSystem.Pallet.Call, BaseVoid, FinalBiome.Api.Types.PalletTimestamp.Pallet.Call, BaseVoid, FinalBiome.Api.Types.PalletGrandpa.Pallet.Call, FinalBiome.Api.Types.PalletBalances.Pallet.Call, BaseVoid, FinalBiome.Api.Types.PalletSudo.Pallet.Call, FinalBiome.Api.Types.PalletTemplate.Pallet.Call, FinalBiome.Api.Types.PalletOrganizationIdentity.Pallet.Call, FinalBiome.Api.Types.PalletFungibleAssets.Pallet.Call, FinalBiome.Api.Types.PalletNonFungibleAssets.Pallet.Call, FinalBiome.Api.Types.PalletMechanics.Pallet.Call>
     {
         public override string TypeName() => "Call";
     }
 }
+
+#pragma warning restore IDE0090
+#pragma warning restore CA1822
+#pragma warning restore IDE0028
+#pragma warning restore IDE0052

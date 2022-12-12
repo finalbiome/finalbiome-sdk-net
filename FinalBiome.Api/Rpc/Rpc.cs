@@ -14,13 +14,13 @@ using Index = U32;
 using AccountId = FinalBiome.Api.Types.SpCore.Crypto.AccountId32;
 using Hash = H256;
 using BlockNumber = U32;
-using StorageKey = Vec<U8>;
+using StorageKey = List<byte>;
 /// <summary>
 /// Client for substrate rpc interfaces
 /// </summary>
-public class Rpc
+public class Rpc : IDisposable
 {
-    RpcClient client;
+    readonly RpcClient client;
     /// <summary>
     /// Create a new [`Rpc`]
     /// </summary>
@@ -54,7 +54,8 @@ public class Rpc
     /// <returns></returns>
     public async Task<List<StorageKey>> StorageKeysPaged(List<byte> key, uint count, List<byte>? startKey, Hash? hash)
     {
-        return await client.Request<List<StorageKey>>("state_getKeysPaged", RpcClient.RpcParams(key.ToHex(), count, startKey?.ToHex(), hash?.ToHex()));
+        var res = await client.Request<List<string>>("state_getKeysPaged", RpcClient.RpcParams(key.ToHex(), count, startKey?.ToHex(), hash?.ToHex()));
+        return res.Select(v => HexUtils.HexToBytes(v).ToList()).ToList();
     }
 
     /// <summary>
@@ -90,7 +91,7 @@ public class Rpc
     /// <param name="storageKeys"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<Subscription<StorageChangeSet>> SubscribeStorage(IEnumerable<List<byte>>? storageKeys, CancellationToken? cancellationToken = null)
+    public async Task<Subscription<StorageChangeSet>> SubscribeStorage(IEnumerable<StorageKey>? storageKeys, CancellationToken? cancellationToken = null)
     {
         var parameters = storageKeys?.Select(k => k.ToHex()).ToArray();
 
@@ -135,6 +136,7 @@ public class Rpc
     /// <exception cref="NotImplementedException"></exception>
     public async Task SystemProperties()
     {
+        await Task.Yield();
         throw new NotImplementedException();
     }
 
@@ -145,6 +147,7 @@ public class Rpc
     /// <exception cref="NotImplementedException"></exception>
     public async Task SystemHealth()
     {
+        await Task.Yield();
         throw new NotImplementedException();
     }
 
@@ -426,6 +429,10 @@ public class Rpc
         await client.Unsubscribe(subscription);
     }
 
-
+    public void Dispose()
+    {
+        client.Dispose();
+        GC.SuppressFinalize(this);
+    }
 }
 
