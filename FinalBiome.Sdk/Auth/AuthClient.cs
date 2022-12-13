@@ -1,12 +1,16 @@
 using FinalBiome.Api.Tx;
+using Firebase.Auth;
+using Firebase.Auth.Providers;
 
 namespace FinalBiome.Sdk;
 
-using GamerAccount = FinalBiome.Api.Types.PalletSupport.GamerAccount;
+using GamerAccount = Api.Types.PalletSupport.GamerAccount;
 
 public class AuthClient
 {
     readonly Client client;
+
+    readonly Jimmy.JimmyClient jimmyClient;
 
     /// <summary>
     /// Current FinalBiome user.
@@ -74,10 +78,33 @@ public class AuthClient
     /// </summary>
     public OnStateChanged? StateChanged;
 
+    readonly FirebaseAuthClient fbClient;
+    internal User? fbUser;
+    internal string seed;
 
     public AuthClient(Client client)
     {
         this.client = client;
+        this.jimmyClient = new();
+        // init firebase client
+        FirebaseAuthConfig config = new FirebaseAuthConfig
+        {
+            ApiKey = "AIzaSyAPXCxpiWb3QKW4xSL1bej4gQRxVu--l5I",
+            AuthDomain = "finalbiome-jimmy.firebaseapp.com",
+            Providers = new FirebaseAuthProvider[]
+            {
+                new EmailProvider(),
+            }
+        };
+        this.fbClient = new(config);
+        fbClient.AuthStateChanged += AuthStateChangedHandler;
+    }
+
+    private void AuthStateChangedHandler(object? sender, UserEventArgs e)
+    {
+        fbUser = e.User;
+        // if (StateChanged is not null)
+        //     await StateChanged(fbUser is not null);
     }
 
     /// <summary>
@@ -89,6 +116,20 @@ public class AuthClient
     public async Task SignInWithEmailAndPassword(string email, string password)
     {
         // TODO: implement it
+        try
+        {
+            UserCredential userCredential = await fbClient.SignInWithEmailAndPasswordAsync(email, password).ConfigureAwait(false);;
+            fbUser = userCredential.User;
+        }
+        catch (FirebaseAuthException e)
+        {
+            fbUser = null;
+            throw e;
+        }
+        // get token
+        string token = await fbUser.GetIdTokenAsync().ConfigureAwait(false);
+        // get seed from jimmy
+        seed = await jimmyClient.GetSeed(token);
 
         // as long as it's just a stub
         // set user as Dave
@@ -102,6 +143,7 @@ public class AuthClient
 
     public async Task SignOut()
     {
+        await fbClient.SignOutAsync();
         user = null;
         if (StateChanged is not null)
             await StateChanged(false);
