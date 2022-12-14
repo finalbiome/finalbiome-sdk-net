@@ -22,12 +22,24 @@ using FinalBiome.Api.Types.PalletSupport.Characteristics;
 using FinalBiome.Api.Types.PalletSupport.Characteristics.Purchased;
 using FinalBiome.Api.Types.PalletSupport;
 using FinalBiome.Api.Types.SpRuntime.Multiaddress;
+using FinalBiome.Api.Types.PalletOrganizationIdentity.Types;
 
 /// <summary>
 /// Manipulation with network state for tests.
 /// </summary>
 static public class NetworkHelpers
 {
+    /// <summary>
+    /// Create game clietn and init it with Eve game
+    /// </summary>
+    /// <returns></returns>
+    static public async Task<Sdk.Client> GetSdkClientForEveGame()
+    {
+        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
+        ClientConfig config = new(eveGame);
+        return await Sdk.Client.Create(config);
+    }
+
     /// <summary>
     /// Exec BuyNfaMechanics in the Eve game by Dave of Nfa 1 and offer 0
     /// </summary>
@@ -290,5 +302,40 @@ static public class NetworkHelpers
         AccountId32 acc = new();
         acc.Init(Api.Utils.AddressUtils.GetPublicKeyFrom(ss58Address));
         return acc;
+    }
+
+    /// <summary>
+    /// Set onboarding assets for the Eve game.
+    /// Set as fa 0 - 100_000; fa 1 - 200_000;
+    /// </summary>
+    /// <returns></returns>
+    static public async Task SetGameOnboardingData()
+    {
+        Client api = await Client.New();
+        PairSigner signer = new(signer: AccountKeyring.Ferdie());
+        var organizationId = AccountKeyring.Eve();
+
+        OptionBoundedVecAirDropAsset assets = new();
+
+        BoundedVecAirDropAsset ass = new();
+        AirDropAsset a1 = new();
+        FungibleAssetId a1InnerId = 0;
+        FungibleAssetBalance a1InnerB = (BigInteger)100_000;
+        Tuple<FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.FungibleAssetId, FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetBalance.FungibleAssetBalance> a1t = new();
+        a1t.Init(a1InnerId, a1InnerB);
+        a1.Init(InnerAirDropAsset.Fa, a1t);
+        AirDropAsset a2 = new();
+        FungibleAssetId a2InnerId = 1;
+        FungibleAssetBalance a2InnerB = (BigInteger)200_000;
+        Tuple<FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.FungibleAssetId, FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetBalance.FungibleAssetBalance> a2t = new();
+        a2t.Init(a2InnerId, a2InnerB);
+        a2.Init(InnerAirDropAsset.Fa, a2t);
+        
+        ass.Init(new AirDropAsset[] {a1, a2});
+        assets.Init(ass);
+
+        var payload = api.Tx.OrganizationIdentity.SetOnboardingAssets(organizationId, assets);
+        var txProgress = await api.Tx.SignAndSubmitThenWatchDefault(payload, signer);
+        var _ = await txProgress.WaitForFinalizedSuccess();
     }
 }

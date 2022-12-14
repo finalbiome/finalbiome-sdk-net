@@ -7,9 +7,7 @@ public class NetworkEventsListenerTests
     [Test]
     public async Task NetworkEvenstsListenTest()
     {
-        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
-        ClientConfig config = new(eveGame);
-        using Client client = await Client.Create(config);
+        using Client client = await NetworkHelpers.GetSdkClientForEveGame();
 
         using CancellationTokenSource cts = new();
         using NetworkEventsListener l = new(client);

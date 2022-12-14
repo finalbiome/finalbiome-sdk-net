@@ -6,9 +6,7 @@ public class AuthClientTests
     [Test]
     public async Task SignInWithEmail()
     {
-        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
-        ClientConfig config = new(eveGame);
-        using Client client = await Client.Create(config);
+        using Client client = await NetworkHelpers.GetSdkClientForEveGame();
 
         await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
         Assert.Multiple(() =>
@@ -25,9 +23,7 @@ public class AuthClientTests
     [Test]
     public async Task StateChangedEventTest()
     {
-        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
-        ClientConfig config = new(eveGame);
-        using Client client = await Client.Create(config);
+        using Client client = await NetworkHelpers.GetSdkClientForEveGame();
 
         var wasCalled = false;
         client.Auth.StateChanged += async (a) => {

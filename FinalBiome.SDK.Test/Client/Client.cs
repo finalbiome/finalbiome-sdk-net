@@ -11,9 +11,7 @@ public class ClientTests
     [Test]
     public async Task InitAppTest()
     {
-        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
-        ClientConfig config = new(eveGame);
-        using Client client = await FinalBiome.Sdk.Client.Create(config);
+        using Client client = await NetworkHelpers.GetSdkClientForEveGame();
         
         Assert.Multiple(() =>
         {
@@ -27,7 +25,6 @@ public class ClientTests
         // check balance for the gamer for the ability to make game transactions
         await NetworkHelpers.TopupAccountBalance(client.Auth.user!.ToAddress());
 
-        await client.Mx.OnboardToGame();
         Thread.Sleep(2_000);
         Assert.Multiple(() =>
         {

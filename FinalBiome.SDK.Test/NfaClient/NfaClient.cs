@@ -11,9 +11,7 @@ public class NfaClientTests
     [Test]
     public async Task GetClassDetailsTest()
     {
-        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
-        ClientConfig config = new(eveGame);
-        using Client client = await Client.Create(config);
+        using Client client = await NetworkHelpers.GetSdkClientForEveGame();
 
         var classId = 1u;
         var details = await client.Nfa.GetClassDetails(classId);
@@ -24,9 +22,7 @@ public class NfaClientTests
     [Test]
     public async Task GetClassDetailsNotFoundTest()
     {
-        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
-        ClientConfig config = new(eveGame);
-        using Client client = await Client.Create(config);
+        using Client client = await NetworkHelpers.GetSdkClientForEveGame();
 
         var classId = 9999u;
         Assert.ThrowsAsync<NfaClassNotFoundException>(() => client.Nfa.GetClassDetails(classId));
@@ -39,9 +35,7 @@ public class NfaClientTests
     /// <returns></returns>
     public async Task GetInstanceDetailsTest()
     {        
-        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
-        ClientConfig config = new(eveGame);
-        using Client client = await Client.Create(config);
+        using Client client = await NetworkHelpers.GetSdkClientForEveGame();
         // login (it's not necessary to get instance details, but need to the helper for buying nfa)
         await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
         // check balance for the gamer for the ability to make game transactions
@@ -62,9 +56,7 @@ public class NfaClientTests
     [Test]
     public async Task GetInstanceDetailsNotFoundTest()
     {
-        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
-        ClientConfig config = new(eveGame);
-        using Client client = await Client.Create(config);
+        using Client client = await NetworkHelpers.GetSdkClientForEveGame();
 
         var classId = 0u;
         var instanceId = 9999u;
@@ -75,9 +67,7 @@ public class NfaClientTests
     public async Task ClassSubscriptionTest()
     {
         // for test events about changes of nfs classes, we create a test attribute and listen changes on the nfa class.
-        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
-        ClientConfig config = new(eveGame);
-        using Client client = await Client.Create(config);
+        using Client client = await NetworkHelpers.GetSdkClientForEveGame();
 
         var classId = 1u;
         int eventEmittedCount = 0;
@@ -116,9 +106,7 @@ public class NfaClientTests
     [Test]
     public async Task NewAssetsSubscriptionTest()
     {
-        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
-        ClientConfig config = new(eveGame);
-        using Client client = await Client.Create(config);
+        using Client client = await NetworkHelpers.GetSdkClientForEveGame();
 
         uint classId = 999;
         uint instanceId = 999;

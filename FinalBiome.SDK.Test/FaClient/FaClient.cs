@@ -7,9 +7,7 @@ public class FaClientTests
     public async Task ClientNotifiedAboutBalances()
     {
         // init api
-        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
-        ClientConfig config = new(eveGame);
-        using Client client = await Client.Create(config);
+        using Client client = await NetworkHelpers.GetSdkClientForEveGame();
 
         Assert.That(client.Fa.Balances, Is.Empty);
 
