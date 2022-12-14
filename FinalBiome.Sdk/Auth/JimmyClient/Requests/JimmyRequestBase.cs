@@ -13,7 +13,10 @@ public class DeviceIdRequest
 
 public class PhraseResponse
 {
+#pragma warning disable CS8618
     public string Phrase { get; set; }
+    public string Seed { get; set; }
+#pragma warning restore CS8618
 }
 
 /// <summary>
@@ -37,7 +40,9 @@ public abstract class JimmyRequestBase<TRequest, TResponse>
             },
             DefaultValueHandling = DefaultValueHandling.Ignore
         };
-        this.JsonSettings.Converters.Add(new StringEnumConverter { CamelCaseText = true });
+        this.JsonSettings.Converters.Add(new StringEnumConverter {
+            NamingStrategy = new CamelCaseNamingStrategy()
+            });
     }
 
     protected abstract string UrlFormat { get; }
@@ -47,7 +52,7 @@ public abstract class JimmyRequestBase<TRequest, TResponse>
     public virtual async Task<TResponse> ExecuteAsync(TRequest request, string? token, string? deviceId = null)
         {
             var responseData = string.Empty;
-            var requestData = request != null ? JsonConvert.SerializeObject(request, this.JsonSettingsOverride ?? this.JsonSettings) : null;
+            var requestData = request != null ? JsonConvert.SerializeObject(request, this.JsonSettingsOverride ?? this.JsonSettings) : "";
             var url = this.GetFormattedUrl(deviceId);
 
             try
@@ -69,7 +74,7 @@ public abstract class JimmyRequestBase<TRequest, TResponse>
 
                 httpResponse.EnsureSuccessStatusCode();
 
-                return response;
+                return response!;
             }
             catch (Exception e)
             {

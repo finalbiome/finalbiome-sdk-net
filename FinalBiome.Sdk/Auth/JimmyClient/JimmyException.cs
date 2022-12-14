@@ -37,7 +37,7 @@ public class JimmyException : Exception
 /// </summary>
 public class JimmyHttpException : JimmyException
 {
-    public JimmyHttpException(Exception innerException, string requestUrl, string requestData, string responseData, JimmyErrorReason reason = JimmyErrorReason.Unknown)
+    public JimmyHttpException(Exception innerException, string requestUrl, string? requestData, string responseData, JimmyErrorReason reason = JimmyErrorReason.Unknown)
         : base(GenerateExceptionMessage(requestUrl, requestData, responseData, reason), innerException, reason)
     {
         this.RequestUrl = requestUrl;
@@ -48,7 +48,7 @@ public class JimmyHttpException : JimmyException
     /// <summary>
     /// Json data passed to the authentication service.
     /// </summary>
-    public string RequestData
+    public string? RequestData
     {
         get;
     }
@@ -69,7 +69,7 @@ public class JimmyHttpException : JimmyException
         get;
     }
 
-    private static string GenerateExceptionMessage(string requestUrl, string requestData, string responseData, JimmyErrorReason errorReason)
+    private static string GenerateExceptionMessage(string requestUrl, string? requestData, string responseData, JimmyErrorReason errorReason)
     {
         return $"Exception occured during Firebase Http request.\nUrl: {requestUrl}\nRequest Data: {requestData}\nResponse: {responseData}\nReason: {errorReason}";
     }

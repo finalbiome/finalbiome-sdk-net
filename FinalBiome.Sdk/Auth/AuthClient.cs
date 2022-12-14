@@ -79,8 +79,6 @@ public class AuthClient
     public OnStateChanged? StateChanged;
 
     readonly FirebaseAuthClient fbClient;
-    internal User? fbUser;
-    internal string seed;
 
     public AuthClient(Client client)
     {
@@ -97,14 +95,6 @@ public class AuthClient
             }
         };
         this.fbClient = new(config);
-        fbClient.AuthStateChanged += AuthStateChangedHandler;
-    }
-
-    private void AuthStateChangedHandler(object? sender, UserEventArgs e)
-    {
-        fbUser = e.User;
-        // if (StateChanged is not null)
-        //     await StateChanged(fbUser is not null);
     }
 
     /// <summary>
@@ -116,6 +106,7 @@ public class AuthClient
     public async Task SignInWithEmailAndPassword(string email, string password)
     {
         // TODO: implement it
+        User? fbUser;
         try
         {
             UserCredential userCredential = await fbClient.SignInWithEmailAndPasswordAsync(email, password).ConfigureAwait(false);;
@@ -123,18 +114,15 @@ public class AuthClient
         }
         catch (FirebaseAuthException e)
         {
-            fbUser = null;
             throw e;
         }
         // get token
         string token = await fbUser.GetIdTokenAsync().ConfigureAwait(false);
-        // get seed from jimmy
-        seed = await jimmyClient.GetSeed(token);
+        // get a seed from the jimmy
+        string seed = await jimmyClient.GetSeed(token).ConfigureAwait(false);
 
-        // as long as it's just a stub
-        // set user as Dave
         var user = FinalBiome.Api.Tx.Account.FromSeed(FinalBiome.Api.Types.SpRuntime.InnerMultiSignature.Sr25519,
-            FinalBiome.Api.Utils.HexUtils.HexToBytes("0x868020ae0687dda7d57565093a69090211449845a7e11453612800b663307246"));
+            FinalBiome.Api.Utils.HexUtils.HexToBytes(seed));
         this.user = user;
 
         if (StateChanged is not null)
@@ -143,7 +131,7 @@ public class AuthClient
 
     public async Task SignOut()
     {
-        await fbClient.SignOutAsync();
+        await fbClient.SignOutAsync().ConfigureAwait(false);;
         user = null;
         if (StateChanged is not null)
             await StateChanged(false);

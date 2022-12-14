@@ -19,28 +19,28 @@ internal class JimmyClient
     }
 
     /// <summary>
-    /// Get a phrase for auth by credentials
+    /// Get a seed for auth by credentials
     /// </summary>
     /// <param name="token"></param>
     /// <returns></returns>
     internal async Task<string> GetSeed(string token)
     {
         var response = await this.getSeed.ExecuteAsync(new object(), token).ConfigureAwait(false);
-        return response.Phrase;
+        return response.Seed;
     }
 
     /// <summary>
-    /// Creaing and returns a generated phrase
+    /// Creaing and returns a generated seed
     /// </summary>
     /// <param name="token"></param>
     /// <returns></returns>
     internal async Task<string> CreateSeed(string token)
     {
         var response = await this.createSeed.ExecuteAsync(new object(), token).ConfigureAwait(false);
-        return response.Phrase;
+        return response.Seed;
     }
     /// <summary>
-    /// If deviceId is new, a new phrase is generated,
+    /// If deviceId is new, a new seed is generated,
     /// otherwise an already generated phrase is returned.
     /// </summary>
     /// <param name="token"></param>
@@ -48,7 +48,7 @@ internal class JimmyClient
     internal async Task<string> AnonimousSeed(string deviceId)
     {
         var response = await this.anonymousSeed.ExecuteAsync(new object(), null, deviceId).ConfigureAwait(false);
-        return response.Phrase;
+        return response.Seed;
     }
 
     /// <summary>
