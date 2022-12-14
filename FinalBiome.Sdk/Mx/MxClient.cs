@@ -97,18 +97,18 @@ public class MxClient : IDisposable
 
     internal static async Task<MxClient> Create(Client client, PairSigner signer)
     {
-        var accountNonce = await FetchNonce(client);
+        var accountNonce = await FetchNonce(client).ConfigureAwait(false);
 
         // get from the network all active mechanics and subscribe to it
         List<StorageAddress> mxAddresses = new();
-        await foreach (MxId mxId in FetchActiveMechanics(client))
+        await foreach (MxId mxId in FetchActiveMechanics(client).ConfigureAwait(false))
         {
             var addr = client.api.Storage.Mechanics.MechanicsGet(mxId.gamerAccount, (uint)mxId.nonce).Address; // TODO: change nonce to the u64 in the node
             mxAddresses.Add(addr);
         }
         CancellationTokenSource cts = new();
         SubscribeAggregator<MechanicDetails> subscriberToMechanics = new(client, tasksLimit: 5, cts.Token);
-        await subscriberToMechanics.Subscribe(mxAddresses);
+        await subscriberToMechanics.Subscribe(mxAddresses).ConfigureAwait(false);
 
         MxClient mxClient = new(client, signer, accountNonce, cts, subscriberToMechanics);
         return mxClient;
@@ -149,7 +149,7 @@ public class MxClient : IDisposable
         List<StorageKey>? keys;
         do
         {
-            keys = await client.api.Storage.FetchKeys(queryKey, 10, startKey, null);
+            keys = await client.api.Storage.FetchKeys(queryKey, 10, startKey, null).ConfigureAwait(false);
 
             if (keys is not null && keys.Count != 0)
             {
@@ -173,9 +173,9 @@ public class MxClient : IDisposable
     {
         // Construct call payload
         var organizationId = client.Game.Address;
-        var callTx = client.api.Tx.Mechanics.ExecBuyNfa(organizationId, classId, offerId);
+        var payload = client.api.Tx.Mechanics.ExecBuyNfa(organizationId, classId, offerId);
 
-        return await SubmitMx<MxResultBuyNfa>(callTx);
+        return await SubmitMx<MxResultBuyNfa>(payload).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -188,8 +188,18 @@ public class MxClient : IDisposable
     {
         // Construct call payload
         var organizationId = client.Game.Address;
-        var callTx = client.api.Tx.Mechanics.ExecBet(organizationId, classId, instanceId);
-        return await SubmitMx<MxResultBet>(callTx);
+        var payload = client.api.Tx.Mechanics.ExecBet(organizationId, classId, instanceId);
+        return await SubmitMx<MxResultBet>(payload).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Make onboarding to the game.
+    /// </summary>
+    /// <returns></returns>
+    public async Task OnboardToGame()
+    {
+        var payload = client.api.Tx.OrganizationIdentity.Onboarding(this.client.Game.Address);
+        var _ = await Submit(payload).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -209,8 +219,8 @@ public class MxClient : IDisposable
             .Concat(upgradePayload.Encode())
             .ToArray()
         );
-        var callTx = client.api.Tx.Mechanics.Upgrade(organizationId, upgradeData);
-        return await SubmitMx<MxResultBet>(callTx, mxId);
+        var payload = client.api.Tx.Mechanics.Upgrade(organizationId, upgradeData);
+        return await SubmitMx<MxResultBet>(payload, mxId).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -254,7 +264,7 @@ public class MxClient : IDisposable
                             if (!(data.Id == mxId.nonce && Enumerable.SequenceEqual(data.Owner.Bytes, mxId.gamerAccount.Bytes))) break;
                             // this is not the final status of the mechanics. Subscribe to changes.
                             var addr = client.api.Storage.Mechanics.MechanicsGet(mxId.gamerAccount, (uint)mxId.nonce).Address; // TODO: change nonce to the u64 in the node
-                            await this.subscriberToMechanics.Subscribe(addr);
+                            await this.subscriberToMechanics.Subscribe(addr).ConfigureAwait(false);;
 
                             return new TResult()
                             {
@@ -278,50 +288,65 @@ public class MxClient : IDisposable
     /// <returns></returns>
     private static async Task<ulong> FetchNonce(Client client)
     {
-        var accountNonce = await client.api.Rpc.SystemAccountNextIndex(client.Auth.UserAddress);
+        var accountNonce = await client.api.Rpc.SystemAccountNextIndex(client.Auth.UserAddress).ConfigureAwait(false);;
         return accountNonce;
     }
 
     /// <summary>
-    /// Submit constructed mechanics and return result of execution.
-    /// Mechanics id used for locate machanics events (by mechanics id).
-    /// For the new mechanics, id creates
+    /// Submit transaction with respect to nonce and return success events.
+    /// If nonce was wrong, nonce updates from the network and this call repeats.
     /// </summary>
     /// <param name="payload"></param>
+    /// <param name="retries"></param>
     /// <returns></returns>
-    private async Task<TResult> SubmitMx<TResult>(TxPayload payload, MxId? mxId = null, uint? retries = null) where TResult : MxResult, new()
+    private async Task<ExtrinsicEvents> Submit(TxPayload payload, uint? retries = null)
     {
         BaseExtrinsicParamsBuilder<PlainTip> otherParams = BaseExtrinsicParamsBuilder<PlainTip>.Default();
         var subExt = client.api.Tx.CreateSignedWithNonce(payload, signer, accountNonce, otherParams);
         try
         {
-            var txProgress = await subExt.SubmitAndWatch();
+            var txProgress = await subExt.SubmitAndWatch().ConfigureAwait(false);;
             accountNonce++;
-            var txInBlock = await txProgress.WaitForInBlock();
+            var txInBlock = await txProgress.WaitForInBlock().ConfigureAwait(false);;
             // the next WaitForSuccess method can throw an ExtrinsicFailedException
             // TODO: wrap into more convenient MechanicFailedException
-            var events = await txInBlock.WaitForSuccess();
-            // init id of mechanic if it doesn't exists.
-            // this place of mx id initialization statement is not error. On the network, creation of id happends after increasing the nonce.
-            mxId ??= new(client.Auth.GamerAccount, accountNonce);
-            return await MxResultFromEvents<TResult>((MxId)mxId, events);
+            ExtrinsicEvents? events = await txInBlock.WaitForSuccess().ConfigureAwait(false);;
+            return events;
         }
         catch (StreamJsonRpc.RemoteInvocationException e)
         {
-            if (e.ErrorData is not null && (string?)(Newtonsoft.Json.Linq.JToken)e.ErrorData == "Transaction is outdated")
+            var failureReason = NetworkFailureParser.GetFailureReason(e);
+            switch (failureReason)
             {
-                // suppose this happens if the local account's nonce is stale
-                // refresh nonce from the network and repeat request 
-                if (retries > 2) throw; // prevent infinite loop
-                this.accountNonce = await FetchNonce(client);
-                retries = retries is null ? 1 : retries++;
-                return await SubmitMx<TResult>(payload, mxId, retries);
-            }
-            else
-            {
-                throw;
+                case NetworkErrorReason.TransactionIsOutdated:
+                    {
+                        // suppose this happens if the local account's nonce is stale
+                        // refresh nonce from the network and repeat request 
+                        if (retries > 2) throw; // prevent infinite loop
+                        this.accountNonce = await FetchNonce(client).ConfigureAwait(false);
+                        retries = retries is null ? 1 : retries++;
+                        return await Submit(payload, retries).ConfigureAwait(false);
+                    }
+                default:
+                    throw NetworkFailureParser.WrapError(e);
             }
         }
+    }
+
+    /// <summary>
+    /// Submit constructed mechanics and return result of execution.
+    /// Mechanics id used for locate machanics events (by mechanics id).
+    /// For the new mechanics, id will be created
+    /// </summary>
+    /// <param name="payload"></param>
+    /// <returns></returns>
+    private async Task<TResult> SubmitMx<TResult>(TxPayload payload, MxId? mxId = null) where TResult : MxResult, new()
+    {
+        ExtrinsicEvents events = await Submit(payload).ConfigureAwait(false);;
+        // init id of mechanic if it doesn't exists.
+        // this place of mx id initialization statement is not error. On the network, creation of id happends after increasing the nonce.
+        mxId ??= new(client.Auth.GamerAccount, accountNonce);
+        return await MxResultFromEvents<TResult>((MxId)mxId, events).ConfigureAwait(false);;
     }
 
     /// <summary>

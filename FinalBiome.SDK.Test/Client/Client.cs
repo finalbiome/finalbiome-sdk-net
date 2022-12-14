@@ -1,4 +1,4 @@
-﻿using FinalBiome.Sdk;
+﻿
 namespace FinalBiome.Sdk.Test;
 
 public class ClientTests
@@ -23,7 +23,11 @@ public class ClientTests
             Assert.That(client.Auth.UserIsSet, Is.EqualTo(false));
         });
 
-        await client.Auth.SignInWithEmailAndPassword("username", "password");
+        await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
+        // check balance for the gamer for the ability to make game transactions
+        await NetworkHelpers.TopupAccountBalance(client.Auth.user!.ToAddress());
+
+        await client.Mx.OnboardToGame();
         Thread.Sleep(2_000);
         Assert.Multiple(() =>
         {
@@ -38,29 +42,5 @@ public class ClientTests
             Assert.That(client.Auth.UserIsSet, Is.EqualTo(false));
             Assert.That(client.Fa.Balances, Is.Empty);
         });
-    }
-
-    [Test]
-    public async Task StateChangedEventTest()
-    {
-        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
-        ClientConfig config = new(eveGame);
-        using Client client = await Client.Create(config);
-
-        var wasCalled = false;
-        client.Auth.StateChanged += async (a) => {
-            wasCalled = true;
-            await Task.Yield();
-        };
-
-        // login
-        await client.Auth.SignInWithEmailAndPassword("username", "password");
-        Assert.That(wasCalled, Is.EqualTo(true));
-
-        //logout
-        wasCalled = false;
-        await client.Auth.SignOut();
-        Assert.That(wasCalled, Is.EqualTo(true));
-
     }
 }

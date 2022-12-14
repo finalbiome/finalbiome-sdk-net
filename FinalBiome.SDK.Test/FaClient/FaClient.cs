@@ -21,7 +21,10 @@ public class FaClientTests
             updatedFa = e.Id;
         };
 
-        await client.Auth.SignInWithEmailAndPassword("username", "password");
+        await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
+        // check balance for the gamer for the ability to make game transactions
+        await NetworkHelpers.TopupAccountBalance(client.Auth.user!.ToAddress());
+
         Thread.Sleep(1_500);
         Assert.Multiple(() =>
         {
