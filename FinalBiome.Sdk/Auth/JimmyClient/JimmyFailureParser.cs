@@ -43,10 +43,6 @@ internal static class JimmyFailureParser
         {
             //the response wasn't JSON - no data to be parsed
         }
-        catch (Exception e)
-        {
-            // Debug.WriteLine($"Unexpected error trying to parse the response: {e}");
-        }
         return JimmyErrorReason.Unknown;
     }
 }
