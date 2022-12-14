@@ -104,7 +104,7 @@ public class NfaClient : IDisposable
     {
         // fetch all game classes and save
         List<NfaClassId> gameClasses = new();
-        await foreach (NfaClassId classId in FetchGameNfaClasses(client))
+        await foreach (NfaClassId classId in FetchGameNfaClasses(client).ConfigureAwait(false))
         {
             gameClasses.Add(classId);
         }
@@ -142,7 +142,7 @@ public class NfaClient : IDisposable
         List<StorageKey>? keys;
         do
         {
-            keys = await client.api.Storage.FetchKeys(queryKey, 10, startKey, null);
+            keys = await client.api.Storage.FetchKeys(queryKey, 10, startKey, null).ConfigureAwait(false);
 
             if (keys is not null && keys.Count != 0)
             {
@@ -174,7 +174,7 @@ public class NfaClient : IDisposable
         List<StorageKey>? keys;
         do
         {
-            keys = await this.client.api.Storage.FetchKeys(queryKey, 10, startKey, null);
+            keys = await this.client.api.Storage.FetchKeys(queryKey, 10, startKey, null).ConfigureAwait(false);
 
             if (keys is not null && keys.Count != 0)
             {
@@ -204,13 +204,13 @@ public class NfaClient : IDisposable
         }
         // fetch from the network. The best option would be not to request the current value separately, but to return it from the subscription. But it is not clear how to implement this normally.
         var detailsEntity = client.api.Storage.NonFungibleAssets.Assets(classId, instanceId);
-        var details = await detailsEntity.Fetch();
+        var details = await detailsEntity.Fetch().ConfigureAwait(false);
         // throw an exception if not exists
         if (details is null) throw new NfaInstanceNotFoundException(classId, instanceId);
         // storing in the cache
         nfaInstances[(classId, instanceId)] = details;
         // subscribe to changes
-        await subscriberToClasses.Subscribe(detailsEntity.Address);
+        await subscriberToClasses.Subscribe(detailsEntity.Address).ConfigureAwait(false);
         return details;
     }
 
@@ -233,13 +233,13 @@ public class NfaClient : IDisposable
 
         // fetch from the network. The best option would be not to request the current value separately, but to return it from the subscription. But it is not clear how to implement this normally.
         var detailsEntity = client.api.Storage.NonFungibleAssets.Classes(classId);
-        var details = await detailsEntity.Fetch();
+        var details = await detailsEntity.Fetch().ConfigureAwait(false);
         // throw an exception if not exists
         if (details is null) throw new NfaClassNotFoundException(classId);
         // storing in the cache
         nfaClasses[classId] = details;
         // subscribe to changes
-        await subscriberToClasses.Subscribe(detailsEntity.Address);
+        await subscriberToClasses.Subscribe(detailsEntity.Address).ConfigureAwait(false);
         return details;
     }
 
@@ -344,7 +344,7 @@ public class NfaClient : IDisposable
         // if user has been owned a new asset, we should subscribe on it changes.
         var detailsEntity = client.api.Storage.NonFungibleAssets.Assets(classId, instanceId);
 
-        await subscriberToInstances.Subscribe(detailsEntity.Address);
+        await subscriberToInstances.Subscribe(detailsEntity.Address).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -357,12 +357,12 @@ public class NfaClient : IDisposable
         if (isLogged) {
             // subscribe to all owned assets
             List<StorageAddress> ownedAssetsAdresses = new();
-            await foreach ((uint classId, uint instanceId) in FetchOwnedAssets())
+            await foreach ((uint classId, uint instanceId) in FetchOwnedAssets().ConfigureAwait(false))
             {
                 var assetAddress = client.api.Storage.NonFungibleAssets.Assets(classId, instanceId).Address;
                 ownedAssetsAdresses.Add(assetAddress);
             }
-            await this.subscriberToInstances.Subscribe(ownedAssetsAdresses);
+            await this.subscriberToInstances.Subscribe(ownedAssetsAdresses).ConfigureAwait(false);
             // TODO: sub to attributes
         }
         else

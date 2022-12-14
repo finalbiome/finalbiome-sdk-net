@@ -264,7 +264,7 @@ public class MxClient : IDisposable
                             if (!(data.Id == mxId.nonce && Enumerable.SequenceEqual(data.Owner.Bytes, mxId.gamerAccount.Bytes))) break;
                             // this is not the final status of the mechanics. Subscribe to changes.
                             var addr = client.api.Storage.Mechanics.MechanicsGet(mxId.gamerAccount, (uint)mxId.nonce).Address; // TODO: change nonce to the u64 in the node
-                            await this.subscriberToMechanics.Subscribe(addr).ConfigureAwait(false);;
+                            await this.subscriberToMechanics.Subscribe(addr).ConfigureAwait(false);
 
                             return new TResult()
                             {
@@ -305,12 +305,12 @@ public class MxClient : IDisposable
         var subExt = client.api.Tx.CreateSignedWithNonce(payload, signer, accountNonce, otherParams);
         try
         {
-            var txProgress = await subExt.SubmitAndWatch().ConfigureAwait(false);;
+            var txProgress = await subExt.SubmitAndWatch().ConfigureAwait(false);
             accountNonce++;
-            var txInBlock = await txProgress.WaitForInBlock().ConfigureAwait(false);;
+            var txInBlock = await txProgress.WaitForInBlock().ConfigureAwait(false);
             // the next WaitForSuccess method can throw an ExtrinsicFailedException
             // TODO: wrap into more convenient MechanicFailedException
-            ExtrinsicEvents? events = await txInBlock.WaitForSuccess().ConfigureAwait(false);;
+            ExtrinsicEvents? events = await txInBlock.WaitForSuccess().ConfigureAwait(false);
             return events;
         }
         catch (StreamJsonRpc.RemoteInvocationException e)
@@ -346,7 +346,7 @@ public class MxClient : IDisposable
         // init id of mechanic if it doesn't exists.
         // this place of mx id initialization statement is not error. On the network, creation of id happends after increasing the nonce.
         mxId ??= new(client.Auth.GamerAccount, accountNonce);
-        return await MxResultFromEvents<TResult>((MxId)mxId, events).ConfigureAwait(false);;
+        return await MxResultFromEvents<TResult>((MxId)mxId, events).ConfigureAwait(false);
     }
 
     /// <summary>

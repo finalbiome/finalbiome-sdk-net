@@ -109,7 +109,7 @@ public class AuthClient
         User? fbUser;
         try
         {
-            UserCredential userCredential = await fbClient.SignInWithEmailAndPasswordAsync(email, password).ConfigureAwait(false);;
+            UserCredential userCredential = await fbClient.SignInWithEmailAndPasswordAsync(email, password).ConfigureAwait(false);
             fbUser = userCredential.User;
         }
         catch (FirebaseAuthException e)
@@ -126,14 +126,14 @@ public class AuthClient
         this.user = user;
 
         if (StateChanged is not null)
-            await StateChanged(true);
+            await StateChanged(true).ConfigureAwait(false);
     }
 
     public async Task SignOut()
     {
-        await fbClient.SignOutAsync().ConfigureAwait(false);;
+        await fbClient.SignOutAsync().ConfigureAwait(false);
         user = null;
         if (StateChanged is not null)
-            await StateChanged(false);
+            await StateChanged(false).ConfigureAwait(false);
     }
 }

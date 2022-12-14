@@ -27,7 +27,7 @@ public class GameClient
 
     public static async Task<GameClient> Create(Client client) {
         GameClient gameClient = new (client);
-        gameClient.Data = await gameClient.GetGameData();
+        gameClient.Data = await gameClient.GetGameData().ConfigureAwait(false);
         return gameClient;
     }
 
@@ -37,7 +37,7 @@ public class GameClient
     /// <returns></returns>
     private async Task<GameData> GetGameData()
     {
-        OrganizationDetails? details = await client.api.Storage.OrganizationIdentity.Organizations(this.Address).Fetch();
+        OrganizationDetails? details = await client.api.Storage.OrganizationIdentity.Organizations(this.Address).Fetch().ConfigureAwait(false);
 
         if (details is null) throw new GameNotFoundException(this.client.config.Game);
         

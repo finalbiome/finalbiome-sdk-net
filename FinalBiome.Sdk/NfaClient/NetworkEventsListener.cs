@@ -64,7 +64,7 @@ internal class NetworkEventsListener : IDisposable
         var sub = client.api.Storage.System.Events().Subscribe(cancellationToken);
         try
         {
-            await foreach (var eventRecords in sub)
+            await foreach (var eventRecords in sub.ConfigureAwait(false))
             {
                 if (eventRecords is not null && client.Auth.UserAddress is not null)
                 foreach (var eventRecord in eventRecords.Value)
@@ -77,7 +77,7 @@ internal class NetworkEventsListener : IDisposable
                             ProcessEventNfaIssued(ev),
                             // find event about dropped mechanics by timeout
                             ProcessEventMechanicsDropped(ev)
-                        );
+                        ).ConfigureAwait(false);
                         #endregion
                     }
             }
@@ -105,7 +105,7 @@ internal class NetworkEventsListener : IDisposable
                     // send event about it
                     // OnNfaIssuedEvent(new NfaInstanceIssuedEventArgs(issuedData.ClassId, issuedData.AssetId));
                     if (NfaIssued is not null)
-                        await NfaIssued(issuedData.ClassId, issuedData.AssetId);
+                        await NfaIssued(issuedData.ClassId, issuedData.AssetId).ConfigureAwait(false);
                 }
             }
         }
@@ -133,7 +133,7 @@ internal class NetworkEventsListener : IDisposable
                 {
                     // send event about it
                     if (MechanicsDropped is not null)
-                        await MechanicsDropped(droppedData.Owner, droppedData.Id);
+                        await MechanicsDropped(droppedData.Owner, droppedData.Id).ConfigureAwait(false);
                 }
             }
         }
@@ -148,7 +148,7 @@ internal class NetworkEventsListener : IDisposable
     {
         if (client.Auth.UserAddress is null) throw new Exception("User not set");
         if (subscriberCancellationTokenSource.IsCancellationRequested) return;
-        await StopNetworkEventsListener();
+        await StopNetworkEventsListener().ConfigureAwait(false);
         CancellationToken cancellationToken = subscriberCancellationTokenSource.Token;
         subscriberTask = Task.Run(async () => await SubscribeToEvents(cancellationToken), cancellationToken);
     }
@@ -168,8 +168,9 @@ internal class NetworkEventsListener : IDisposable
             {
                 #if NETSTANDARD2_1
                 subscriberTask.Wait(TimeSpan.FromSeconds(10));
+                await Task.Yield();
                 #else
-                await subscriberTask.WaitAsync(TimeSpan.FromSeconds(10));
+                await subscriberTask.WaitAsync(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
                 #endif
             }
             catch (OperationCanceledException)
@@ -192,12 +193,12 @@ internal class NetworkEventsListener : IDisposable
     {
         if (isLogged) {
             // here we need fetch and subscribe to network events
-            await StartNetworkEventsListener();
+            await StartNetworkEventsListener().ConfigureAwait(false);
         }
         else
         {
             // here we need clean and unsubscribe from network events
-            await StopNetworkEventsListener();
+            await StopNetworkEventsListener().ConfigureAwait(false);
         }
     }
 

@@ -37,7 +37,7 @@ public class Client : IDisposable
     public static async Task<Client> Create(ClientConfig config)
     {
 
-        Api.Client api = await Api.Client.FromUrl(config.Endpoint);
+        Api.Client api = await Api.Client.FromUrl(config.Endpoint).ConfigureAwait(false);
         Client client = new(config, api);
         
         AuthClient auth = new(client);
@@ -45,16 +45,16 @@ public class Client : IDisposable
         // subscribe to the user state changes
         client.Auth.StateChanged += client.HandleUserStateChangedEvent;
         // game client we must be init before other modules
-        var gameClient = await GameClient.Create(client);
+        var gameClient = await GameClient.Create(client).ConfigureAwait(false);
         client.Game = gameClient;
 
         var faClientTask = FaClient.Create(client);
         var NfaClientTask = NfaClient.Create(client);
 
-        await Task.WhenAll(faClientTask, NfaClientTask);
+        await Task.WhenAll(faClientTask, NfaClientTask).ConfigureAwait(false);
 
-        var faClient = await faClientTask;
-        var nfaClient = await NfaClientTask;
+        var faClient = await faClientTask.ConfigureAwait(false);
+        var nfaClient = await NfaClientTask.ConfigureAwait(false);
 
         client.Fa = faClient;
         client.Nfa = nfaClient;
@@ -74,7 +74,7 @@ public class Client : IDisposable
             // init MxClient
             // MxClient can work only when the user is signed in.
             // So, we init MxClient after user has been signed in.
-            Mx = await MxClient.Create(this, Auth.signer!);
+            Mx = await MxClient.Create(this, Auth.signer!).ConfigureAwait(false);
         }
         else
         {
