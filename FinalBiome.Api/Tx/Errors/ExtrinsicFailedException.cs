@@ -19,11 +19,30 @@ public class ExtrinsicFailedException : Exception
             return this.DispatchError.Value == Types.SpRuntime.InnerDispatchError.Module;
         }
     }
+    /// <summary>
+    /// Module name if error type is module, otherwise null.
+    /// </summary>
+    /// <value></value>
+    public string? ModuleName { get; private set; }
+    /// <summary>
+    /// Module error value if error type is module, otherwise null.
+    /// </summary>
+    /// <value></value>
+    public string? ModuleError { get; private set; }
 
     public ExtrinsicFailedException(Hash extHash, DispatchError dispatchError) : base(MessageFactory(extHash, dispatchError))
     {
         this.DispatchError = dispatchError;
         this.ExtHash = extHash;
+
+        // check if the error type is a module and populate the appropriate properties
+        if (dispatchError.Value == Types.SpRuntime.InnerDispatchError.Module)
+        {
+            var err = (FinalBiome.Api.Types.SpRuntime.ModuleError)dispatchError.Value2;
+            var modErr = ErrorsMetadata.FindMetaError(err.Index.Value, err.Error.Value[0]);
+            ModuleName = modErr.Module;
+            ModuleError = modErr.Error;
+        }
     }
 
     static string MessageFactory(Hash extHash, DispatchError dispatchError)
