@@ -39,7 +39,7 @@ public class Rpc : IDisposable
     /// <returns></returns>
     public async Task<TResult> Storage<TResult>(List<byte> key, Hash? hash)
     {
-        return await client.Request<TResult>("state_getStorage", RpcClient.RpcParams(key.ToHex(), hash?.ToHex()));
+        return await client.Request<TResult>("state_getStorage", RpcClient.RpcParams(key.ToHex(), hash?.ToHex())).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -54,7 +54,7 @@ public class Rpc : IDisposable
     /// <returns></returns>
     public async Task<List<StorageKey>> StorageKeysPaged(List<byte> key, uint count, List<byte>? startKey, Hash? hash)
     {
-        var res = await client.Request<List<string>>("state_getKeysPaged", RpcClient.RpcParams(key.ToHex(), count, startKey?.ToHex(), hash?.ToHex()));
+        var res = await client.Request<List<string>>("state_getKeysPaged", RpcClient.RpcParams(key.ToHex(), count, startKey?.ToHex(), hash?.ToHex())).ConfigureAwait(false);
         return res.Select(v => HexUtils.HexToBytes(v).ToList()).ToList();
     }
 
@@ -68,7 +68,7 @@ public class Rpc : IDisposable
     public async Task<List<StorageChangeSet>> QueryStorage(List<List<byte>> keys, Hash from, Hash? to)
     {
         List<string> keysHashes = keys.Select(k => k.ToHex()!).ToList();
-        return await client.Request<List<StorageChangeSet>>("state_queryStorage", RpcClient.RpcParams(keysHashes, from.ToHex(), to?.ToHex()));
+        return await client.Request<List<StorageChangeSet>>("state_queryStorage", RpcClient.RpcParams(keysHashes, from.ToHex(), to?.ToHex())).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -80,7 +80,7 @@ public class Rpc : IDisposable
     public async Task<List<StorageChangeSet>> QueryStorageAt(List<List<byte>> keys, Hash? at)
     {
         List<string> keysHashes = keys.Select(k => k.ToHex()!).ToList();
-        return await client.Request<List<StorageChangeSet>>("state_queryStorageAt", RpcClient.RpcParams(keysHashes, at?.ToHex()));
+        return await client.Request<List<StorageChangeSet>>("state_queryStorageAt", RpcClient.RpcParams(keysHashes, at?.ToHex())).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -101,7 +101,7 @@ public class Rpc : IDisposable
             new object[] { parameters },
             "state_unsubscribeStorage",
             cancellationToken
-            );
+            ).ConfigureAwait(false);
 #pragma warning restore CS8601 // Possible null reference assignment.
     }
 
@@ -114,7 +114,7 @@ public class Rpc : IDisposable
         uint blockZero = 0;
         var parameters = RpcClient.RpcParams(blockZero);
 
-        var genesisHash = await client.Request<Hash>("chain_getBlockHash", parameters);
+        var genesisHash = await client.Request<Hash>("chain_getBlockHash", parameters).ConfigureAwait(false);
         return genesisHash;
     }
 
@@ -126,7 +126,7 @@ public class Rpc : IDisposable
     /// <returns></returns>
     public async Task<string> Metadata()
     {
-        return await client.Request<string>("state_getMetadata", RpcClient.RpcParams());
+        return await client.Request<string>("state_getMetadata", RpcClient.RpcParams()).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -157,7 +157,7 @@ public class Rpc : IDisposable
     /// <returns></returns>
     public async Task<string> SystemChain()
     {
-        return await client.Request<string>("system_chain", RpcClient.RpcParams());
+        return await client.Request<string>("system_chain", RpcClient.RpcParams()).ConfigureAwait(false);
     }
     /// <summary>
     /// Fetch system name
@@ -165,7 +165,7 @@ public class Rpc : IDisposable
     /// <returns></returns>
     public async Task<string> SystemName()
     {
-        return await client.Request<string>("system_name", RpcClient.RpcParams());
+        return await client.Request<string>("system_name", RpcClient.RpcParams()).ConfigureAwait(false);
     }
     /// <summary>
     /// Fetch system version
@@ -173,7 +173,7 @@ public class Rpc : IDisposable
     /// <returns></returns>
     public async Task<string> SystemVersion()
     {
-        return await client.Request<string>("system_version", RpcClient.RpcParams());
+        return await client.Request<string>("system_version", RpcClient.RpcParams()).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -183,7 +183,7 @@ public class Rpc : IDisposable
     /// <returns></returns>
     public async Task<ulong> SystemAccountNextIndex(AccountId account)
     {
-        return await client.Request<ulong>("system_accountNextIndex", RpcClient.RpcParams(AddressUtils.GetAddressFrom(account.Encode())));
+        return await client.Request<ulong>("system_accountNextIndex", RpcClient.RpcParams(AddressUtils.GetAddressFrom(account.Encode()))).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -193,7 +193,7 @@ public class Rpc : IDisposable
     /// <returns></returns>
     public async Task<Header> Header(Hash hash)
     {
-        return await client.Request<Header>("chain_getHeader", RpcClient.RpcParams(hash.ToHex()));
+        return await client.Request<Header>("chain_getHeader", RpcClient.RpcParams(hash.ToHex())).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -203,7 +203,7 @@ public class Rpc : IDisposable
     /// <returns></returns>
     public async Task<Hash> BlockHash(BlockNumber? blockNumber)
     {
-        return await client.Request<Hash>("chain_getBlockHash", RpcClient.RpcParams(blockNumber?.Value));
+        return await client.Request<Hash>("chain_getBlockHash", RpcClient.RpcParams(blockNumber?.Value)).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -212,7 +212,7 @@ public class Rpc : IDisposable
     /// <returns></returns>
     public async Task<Hash> FinalizedHead()
     {
-        return await client.Request<Hash>("chain_getFinalizedHead", RpcClient.RpcParams());
+        return await client.Request<Hash>("chain_getFinalizedHead", RpcClient.RpcParams()).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -222,7 +222,7 @@ public class Rpc : IDisposable
     /// <returns></returns>
     public async Task<ChainBlockResponse> Block(Hash hash)
     {
-        return await client.Request<ChainBlockResponse>("chain_getBlock", RpcClient.RpcParams(hash.ToHex()));
+        return await client.Request<ChainBlockResponse>("chain_getBlock", RpcClient.RpcParams(hash.ToHex())).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -239,7 +239,7 @@ public class Rpc : IDisposable
     public async Task<T> BlockStats<T>(Hash blockHash)
     {
         throw new NotImplementedException();
-        return await client.Request<T>("dev_getBlockStats", RpcClient.RpcParams(blockHash.ToHex()));
+        return await client.Request<T>("dev_getBlockStats", RpcClient.RpcParams(blockHash.ToHex())).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -252,7 +252,7 @@ public class Rpc : IDisposable
     public async Task<T> ReadProof<T>(List<List<byte>> keys, Hash hash)
     {
         List<string> keysHashes = keys.Select(k => k.ToHex()!).ToList();
-        return await client.Request<T>("state_getReadProof", RpcClient.RpcParams(keysHashes, hash.ToHex()));
+        return await client.Request<T>("state_getReadProof", RpcClient.RpcParams(keysHashes, hash.ToHex())).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -263,7 +263,7 @@ public class Rpc : IDisposable
     /// <returns></returns>
     public async Task<RuntimeVersion> RuntimeVersion(Hash? at)
     {
-        return await client.Request<RuntimeVersion>("state_getRuntimeVersion", RpcClient.RpcParams(at?.ToHex()));
+        return await client.Request<RuntimeVersion>("state_getRuntimeVersion", RpcClient.RpcParams(at?.ToHex())).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -280,7 +280,7 @@ public class Rpc : IDisposable
             RpcClient.RpcParams(),
             "chain_unsubscribeNewHeads",
             cancellationToken
-            );
+            ).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -297,7 +297,7 @@ public class Rpc : IDisposable
             RpcClient.RpcParams(),
             "chain_unsubscribeAllHeads",
             cancellationToken
-            );
+            ).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -316,7 +316,7 @@ public class Rpc : IDisposable
             RpcClient.RpcParams(),
             "chain_unsubscribeFinalizedHeads",
             cancellationToken
-            );
+            ).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -330,7 +330,7 @@ public class Rpc : IDisposable
             RpcClient.RpcParams(),
             "state_unsubscribeRuntimeVersion",
             cancellationToken
-            );
+            ).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -341,7 +341,7 @@ public class Rpc : IDisposable
     /// <returns></returns>
     public async Task<Hash> SubmitExtrinsic(IEnumerable<byte> extrinsic)
     {
-        return await client.Request<Hash>("author_submitExtrinsic", RpcClient.RpcParams(extrinsic.ToHex()));
+        return await client.Request<Hash>("author_submitExtrinsic", RpcClient.RpcParams(extrinsic.ToHex())).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -358,7 +358,7 @@ public class Rpc : IDisposable
             RpcClient.RpcParams(extrinsic.ToHex()),
             "author_unwatchExtrinsic",
             cancellationToken
-            );
+            ).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -370,7 +370,7 @@ public class Rpc : IDisposable
     /// <returns></returns>
     public async Task InsertKey(string keyType, Str suri, List<byte> publicKey)
     {
-        await client.Request<BaseVoid>("author_insertKey", RpcClient.RpcParams(keyType, suri.ToHex(), publicKey.ToHex()));
+        await client.Request<BaseVoid>("author_insertKey", RpcClient.RpcParams(keyType, suri.ToHex(), publicKey.ToHex())).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -379,7 +379,7 @@ public class Rpc : IDisposable
     /// <returns></returns>
     public async Task<byte[]> RotateKeys()
     {
-        var resp = await client.Request<Vec<U8>>("author_rotateKeys", RpcClient.RpcParams());
+        var resp = await client.Request<Vec<U8>>("author_rotateKeys", RpcClient.RpcParams()).ConfigureAwait(false);
         return resp.Encode();
     }
 
@@ -394,7 +394,7 @@ public class Rpc : IDisposable
     /// <returns></returns>
     public async Task<bool> HasSessionKeys(Vec<U8> sessionKeys)
     {
-        return await client.Request<bool>("author_hasSessionKeys", RpcClient.RpcParams(sessionKeys.ToHex()));
+        return await client.Request<bool>("author_hasSessionKeys", RpcClient.RpcParams(sessionKeys.ToHex())).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -407,7 +407,7 @@ public class Rpc : IDisposable
     /// <returns></returns>
     public async Task<bool> HasKey(IEnumerable<byte> publicKey, string keyType)
     {
-        return await client.Request<bool>("author_hasKey", RpcClient.RpcParams(publicKey.ToHex(), keyType));
+        return await client.Request<bool>("author_hasKey", RpcClient.RpcParams(publicKey.ToHex(), keyType)).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -421,12 +421,12 @@ public class Rpc : IDisposable
     /// <returns></returns>
     public async Task<ApplyExtrinsicResult> DryRun(IEnumerable<byte> encodedSigned, Hash? at)
     {
-        return await client.Request<ApplyExtrinsicResult>("system_dryRun", RpcClient.RpcParams(encodedSigned.ToHex(), at?.ToHex()));
+        return await client.Request<ApplyExtrinsicResult>("system_dryRun", RpcClient.RpcParams(encodedSigned.ToHex(), at?.ToHex())).ConfigureAwait(false);
     }
 
     public async Task Unsubscribe<TResult>(Subscription<TResult> subscription)
     {
-        await client.Unsubscribe(subscription);
+        await client.Unsubscribe(subscription).ConfigureAwait(false);
     }
 
     public void Dispose()

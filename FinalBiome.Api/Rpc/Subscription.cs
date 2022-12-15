@@ -51,9 +51,9 @@ public class Subscription<TResult> : ISubscription
     public async IAsyncEnumerable<TResult> data([EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         try {
-            while (await buffer.OutputAvailableAsync(this.cancellationToken))
+            while (await buffer.OutputAvailableAsync(this.cancellationToken).ConfigureAwait(false))
             {
-                yield return await buffer.ReceiveAsync<TResult>(this.cancellationToken);
+                yield return await buffer.ReceiveAsync<TResult>(this.cancellationToken).ConfigureAwait(false);
             }
         } finally {}
     }
@@ -66,7 +66,7 @@ public class Subscription<TResult> : ISubscription
     /// <returns></returns>
     internal async Task PostNewMessage(TResult data)
     {
-        await buffer.SendAsync(data);
+        await buffer.SendAsync(data).ConfigureAwait(false);
     }
 
     internal void Unsubscribe()

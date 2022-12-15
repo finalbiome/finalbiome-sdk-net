@@ -35,7 +35,7 @@ public class TxProgress
     public async IAsyncEnumerable<TxStatus> NextItem()
     {
         if (sub is not null)
-        await foreach (var status in sub.data())
+        await foreach (var status in sub.data().ConfigureAwait(false))
         {
             switch (status.Value)
             {
@@ -130,7 +130,7 @@ public class TxProgress
     /// <returns></returns>
     public async Task<TxInBlock> WaitForInBlock()
     {
-        await foreach (var status in NextItem())
+        await foreach (var status in NextItem().ConfigureAwait(false))
         {
             switch (status.Value)
             {
@@ -162,7 +162,7 @@ public class TxProgress
     /// <returns></returns>
     public async Task<TxInBlock> WaitForFinalized()
     {
-        await foreach (var status in NextItem())
+        await foreach (var status in NextItem().ConfigureAwait(false))
         {
             switch (status.Value)
             {
@@ -195,8 +195,8 @@ public class TxProgress
     /// <returns></returns>
     public async Task<ExtrinsicEvents> WaitForFinalizedSuccess()
     {
-        var fin = await WaitForFinalized();
-        return await fin.WaitForSuccess();
+        var fin = await WaitForFinalized().ConfigureAwait(false);
+        return await fin.WaitForSuccess().ConfigureAwait(false);
     }
 }
 

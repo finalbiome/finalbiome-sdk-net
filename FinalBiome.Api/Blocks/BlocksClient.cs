@@ -22,10 +22,10 @@ public class BlocksClient
         if (blockHash is not null) hash = blockHash;
         else
         {
-            hash = await client.Rpc.BlockHash(null);
+            hash = await client.Rpc.BlockHash(null).ConfigureAwait(false);
         }
 
-        Header header = await client.Rpc.Header(hash);
+        Header header = await client.Rpc.Header(hash).ConfigureAwait(false);
         if (header.Digest is null) throw new BlockHashNotFoundException(hash);
 
         return new Block(header, client);
@@ -38,11 +38,11 @@ public class BlocksClient
     /// <example>
     /// <code>
     /// var sub = client.Blocks.SubscribeFinalized(cancellationToken);
-    /// await foreach (var block in sub)
+    /// await foreach (var block in sub.ConfigureAwait(false))
     ///     {
     ///         Console.WriteLine($"Fin block: {block.Hash.ToHex()}\n");
     ///         // Ask for the events for this block.
-    ///         var events = await block.Events();
+    ///         var events = await block.Events().ConfigureAwait(false);
     ///         if (events.EventRecords is not null)
     ///         {
     ///             Console.WriteLine($"Events in the block: {block.Hash.ToHex()}\n");
@@ -60,13 +60,13 @@ public class BlocksClient
         // Fetch the last finalised block details immediately, so that we'll get
         // all blocks after this one.
         // -- it will be need when and maybe we'll implement a next task - Adjust the subscription stream to fill in any missing blocks.
-        //var lastFinalizedBlockHash = await client.Rpc.FinalizedHead();
-        //var lastFinalizedBlockHeader = await client.Rpc.Header(lastFinalizedBlockHash);
+        //var lastFinalizedBlockHash = await client.Rpc.FinalizedHead().ConfigureAwait(false);
+        //var lastFinalizedBlockHeader = await client.Rpc.Header(lastFinalizedBlockHash).ConfigureAwait(false);
         //var lastFinalizedBlockNum = lastFinalizedBlockHeader.Number;
 
-        var sub = await client.Rpc.SubscribeFinalizedBlockHeaders(cancellationToken);
+        var sub = await client.Rpc.SubscribeFinalizedBlockHeaders(cancellationToken).ConfigureAwait(false);
 
-        await foreach (var header in sub.data())
+        await foreach (var header in sub.data().ConfigureAwait(false))
         {
             Block block = new Block(header, this.client);
             yield return block;

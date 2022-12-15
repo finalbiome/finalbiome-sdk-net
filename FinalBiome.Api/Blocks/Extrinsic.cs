@@ -39,7 +39,7 @@ public class Extrinsic
     /// </summary>
     public async Task<ExtrinsicEvents> Events()
     {
-        var events = await this.cachedEvents.GetEvents(client, this.blockHash);
+        var events = await this.cachedEvents.GetEvents(client, this.blockHash).ConfigureAwait(false);
         Hash extHash = new Hash();
         extHash.Init(Hasher.BlakeTwo256(this.extrinsic.Bytes));
         return new ExtrinsicEvents(extHash, this.index, events);

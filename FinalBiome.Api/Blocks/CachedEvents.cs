@@ -19,7 +19,7 @@ public class CachedEvents
         if (this.cachedEvents is null)
         {
             Events.EventsClient ev = new Events.EventsClient(client);
-            this.cachedEvents = await ev.At(blockHash);
+            this.cachedEvents = await ev.At(blockHash).ConfigureAwait(false);
         }
 
         return cachedEvents;

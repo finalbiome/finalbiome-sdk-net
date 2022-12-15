@@ -59,7 +59,7 @@ public class Block
     /// <exception cref="BlockHashNotFoundException"></exception>
     public async Task<BlockBody> Body()
     {
-        var blockDetails = await client.Rpc.Block(this.Hash);
+        var blockDetails = await client.Rpc.Block(this.Hash).ConfigureAwait(false);
         if (blockDetails.Block is null) throw new BlockHashNotFoundException(this.Hash);
 
         return new BlockBody(client, blockDetails, cachedEvents);

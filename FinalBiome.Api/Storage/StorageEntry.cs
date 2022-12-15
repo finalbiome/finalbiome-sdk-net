@@ -34,7 +34,7 @@ namespace FinalBiome.Api.Storage
         /// <returns></returns>
         public async Task<TResult?> Fetch(IEnumerable<byte>? hash = null)
         {
-            return await client.Storage.Fetch<TResult>(Address, hash);
+            return await client.Storage.Fetch<TResult>(Address, hash).ConfigureAwait(false);
         }
         /// <summary>
         /// Subscribe to the changes at a given addres.
@@ -46,7 +46,7 @@ namespace FinalBiome.Api.Storage
             try
             {
                 var sub = client.Storage.SubscribeStorage<TResult>(Address, cancellationToken);
-                await foreach (var item in sub)
+                await foreach (var item in sub.ConfigureAwait(false))
                 {
                     yield return item;
                 }

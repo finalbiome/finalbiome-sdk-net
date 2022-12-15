@@ -35,10 +35,10 @@ public class EventsClient
         if (blockHash is not null) hash = blockHash;
         else
         {
-            hash = await client.Rpc.BlockHash(null);
+            hash = await client.Rpc.BlockHash(null).ConfigureAwait(false);
         }
 
-        var events = await client.Storage.System.Events().Fetch(hash.Encode());
+        var events = await client.Storage.System.Events().Fetch(hash.Encode()).ConfigureAwait(false);
 
         return new Events(hash, events);
     }

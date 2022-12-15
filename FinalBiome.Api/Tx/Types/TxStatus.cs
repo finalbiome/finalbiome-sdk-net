@@ -191,7 +191,7 @@ public class TxInBlock : Codec
     /// <exception cref="ExtrinsicFailedException"></exception>
     public async Task<ExtrinsicEvents> WaitForSuccess()
     {
-        var events = await FetchEvents();
+        var events = await FetchEvents().ConfigureAwait(false);
         // Try to find any errors; return the first one we encounter.
         foreach (var evr in events)
         {
@@ -222,7 +222,7 @@ public class TxInBlock : Codec
     /// <exception cref="NotImplementedException"></exception>
     public async Task<ExtrinsicEvents> FetchEvents()
     {
-        var block = await client.Rpc.Block(blockHash);
+        var block = await client.Rpc.Block(blockHash).ConfigureAwait(false);
         int extrinsicIdx = Array.FindIndex(
             block.Block.Extrinsics.Value,
             v => Enumerable.SequenceEqual(Hasher.BlakeTwo256(v.Bytes), extHash.Bytes)
@@ -232,7 +232,7 @@ public class TxInBlock : Codec
         if (extrinsicIdx == -1) throw new BlockHashNotFoundException(extHash);
 
         var eventsClient = new EventsClient(client);
-        var events = await eventsClient.At(blockHash);
+        var events = await eventsClient.At(blockHash).ConfigureAwait(false);
 
         return new ExtrinsicEvents(extHash, extrinsicIdx, events);
     }

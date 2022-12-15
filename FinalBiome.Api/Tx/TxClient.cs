@@ -128,7 +128,7 @@ public partial class TxClient
         )
     {
         // Get nonce from the node.
-        var accountNonce = await client.Rpc.SystemAccountNextIndex(signer.AccountId);
+        var accountNonce = await client.Rpc.SystemAccountNextIndex(signer.AccountId).ConfigureAwait(false);
         return CreateSignedWithNonce(call, signer, accountNonce, otherParams);
     }
 
@@ -148,7 +148,7 @@ public partial class TxClient
         )
     {
         BaseExtrinsicParamsBuilder<PlainTip> otherParams = BaseExtrinsicParamsBuilder<PlainTip>.Default();
-        return await SignAndSubmitThenWatch(call, signer, otherParams);
+        return await SignAndSubmitThenWatch(call, signer, otherParams).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -167,8 +167,8 @@ public partial class TxClient
         BaseExtrinsicParamsBuilder<PlainTip> otherParams
         )
     {
-        var subExt = await CreateSigned(call, signer, otherParams);
-        return await subExt.SubmitAndWatch();
+        var subExt = await CreateSigned(call, signer, otherParams).ConfigureAwait(false);
+        return await subExt.SubmitAndWatch().ConfigureAwait(false);
     }
 
     /// <summary>
@@ -192,7 +192,7 @@ public partial class TxClient
         )
     {
         BaseExtrinsicParamsBuilder<PlainTip> otherParams = BaseExtrinsicParamsBuilder<PlainTip>.Default();
-        return await SignAndSubmit(call, signer, otherParams);
+        return await SignAndSubmit(call, signer, otherParams).ConfigureAwait(false);
     }
 
     public async Task<Hash> SignAndSubmit(
@@ -201,7 +201,7 @@ public partial class TxClient
         BaseExtrinsicParamsBuilder<PlainTip> otherParams
         )
     {
-        var subExt = await CreateSigned(call, signer, otherParams);
-        return await subExt.Submit();
+        var subExt = await CreateSigned(call, signer, otherParams).ConfigureAwait(false);
+        return await subExt.Submit().ConfigureAwait(false);
     }
 }
