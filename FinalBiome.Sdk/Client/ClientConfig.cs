@@ -20,6 +20,13 @@ public class ClientConfig
     /// </summary>
     public string Endpoint { get; set; }
     /// <summary>
+    /// The data path to folder for persistence of the auth session data between sessions.<br/>
+    /// For Unity use Application.persistenceDataPath.<br/>
+    /// If not set, uses in-memory persistence.
+    /// </summary>
+    /// <value></value>
+    public string? PersistenceDataPath { get; set; } = null;
+    /// <summary>
     /// Create new confuguration for the App
     /// </summary>
     /// <param name="game">The game SS58 Address</param>

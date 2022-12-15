@@ -14,7 +14,11 @@ public class GlobalSetup
         // do unboarding for default test gamer.
 
         string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
-        ClientConfig config = new(eveGame);
+        ClientConfig config = new(eveGame)
+        {
+            // set persistence path for storing data
+            PersistenceDataPath = Path.GetTempPath()
+        };
         using Client client = await FinalBiome.Sdk.Client.Create(config);
 
         await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
@@ -35,6 +39,5 @@ public class GlobalSetup
                 throw;
             }
         }
-
     }
 }

@@ -8,6 +8,9 @@ public class MxClientTests
     [Test]
     public async Task HasNonceAfterLoginTest()
     {
+        // clean any stored user
+        File.Delete(Path.Combine(Path.GetTempPath(), "finalbiome_auth.json"));
+        
         using Client client = await NetworkHelpers.GetSdkClientForEveGame();
         // if user not signed in, we can't use MxClient
         Assert.Throws<ErrorNotAuthenticatedException>(() => { var _ = client.Mx.accountNonce; });
@@ -126,7 +129,11 @@ public class MxClientTests
 
         // init api
         string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
-        ClientConfig config = new(eveGame);
+        ClientConfig config = new(eveGame)
+        {
+            // set persistence path for storing data
+            PersistenceDataPath = Path.GetTempPath()
+        };
 
         MxResultBet resBet;
         using (Client client = await Client.Create(config))

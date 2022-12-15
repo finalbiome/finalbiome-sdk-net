@@ -59,6 +59,9 @@ public class Client : IDisposable
         client.Fa = faClient;
         client.Nfa = nfaClient;
 
+        // if firebase user already signed in, try to get seed
+        await client.Auth.FetchSeedByFbAuth().ConfigureAwait(false);
+        
         return client;
     }
 

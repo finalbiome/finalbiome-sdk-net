@@ -36,7 +36,11 @@ static public class NetworkHelpers
     static public async Task<Sdk.Client> GetSdkClientForEveGame()
     {
         string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
-        ClientConfig config = new(eveGame);
+        ClientConfig config = new(eveGame)
+        {
+            // set persistence path for storing data
+            PersistenceDataPath = Path.GetTempPath()
+        };
         return await Sdk.Client.Create(config);
     }
 

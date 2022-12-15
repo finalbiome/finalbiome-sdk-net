@@ -6,6 +6,9 @@ public class FaClientTests
     [Test]
     public async Task ClientNotifiedAboutBalances()
     {
+        // clean any stored user
+        File.Delete(Path.Combine(Path.GetTempPath(), "finalbiome_auth.json"));
+        
         // init api
         using Client client = await NetworkHelpers.GetSdkClientForEveGame();
 

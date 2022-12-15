@@ -11,6 +11,9 @@ public class ClientTests
     [Test]
     public async Task InitAppTest()
     {
+        // clean any stored user
+        File.Delete(Path.Combine(Path.GetTempPath(), "finalbiome_auth.json"));
+        
         using Client client = await NetworkHelpers.GetSdkClientForEveGame();
         
         Assert.Multiple(() =>

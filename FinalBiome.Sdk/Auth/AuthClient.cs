@@ -94,7 +94,15 @@ public class AuthClient
                 new EmailProvider(),
             }
         };
+        // if sets the path for persistence, init file repository for storing auth data.
+        if (!string.IsNullOrWhiteSpace(client.config.PersistenceDataPath))
+        {
+            FileUserRepository repository = new(client.config.PersistenceDataPath);
+            config.UserRepository = repository;
+        }
+
         this.fbClient = new(config);
+        this.fbClient.AuthStateChanged += FbAuthStateHandler;
     }
 
     /// <summary>
@@ -105,28 +113,15 @@ public class AuthClient
     /// <returns></returns>
     public async Task SignInWithEmailAndPassword(string email, string password)
     {
-        // TODO: implement it
-        User? fbUser;
         try
         {
-            UserCredential userCredential = await fbClient.SignInWithEmailAndPasswordAsync(email, password).ConfigureAwait(false);
-            fbUser = userCredential.User;
+            UserCredential _ = await fbClient.SignInWithEmailAndPasswordAsync(email, password).ConfigureAwait(false);
         }
         catch (FirebaseAuthException e)
         {
             throw e;
         }
-        // get token
-        string token = await fbUser.GetIdTokenAsync().ConfigureAwait(false);
-        // get a seed from the jimmy
-        string seed = await jimmyClient.GetSeed(token).ConfigureAwait(false);
-
-        var user = FinalBiome.Api.Tx.Account.FromSeed(FinalBiome.Api.Types.SpRuntime.InnerMultiSignature.Sr25519,
-            FinalBiome.Api.Utils.HexUtils.HexToBytes(seed));
-        this.user = user;
-
-        if (StateChanged is not null)
-            await StateChanged(true).ConfigureAwait(false);
+        await FetchSeedByFbAuth().ConfigureAwait(false);
     }
 
     public async Task SignOut()
@@ -135,5 +130,33 @@ public class AuthClient
         user = null;
         if (StateChanged is not null)
             await StateChanged(false).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Fetch seed from Jimmy by Firebase user and set it in the AuthClient
+    /// </summary>
+    /// <param name="fbUser"></param>
+    /// <returns></returns>
+    internal async Task FetchSeedByFbAuth()
+    {
+        if (this.fbClient.User is not null)
+        {
+            // get token
+            string token = await this.fbClient.User.GetIdTokenAsync().ConfigureAwait(false);
+            // get a seed from the jimmy
+            string seed = await jimmyClient.GetSeed(token).ConfigureAwait(false);
+
+            var user = FinalBiome.Api.Tx.Account.FromSeed(FinalBiome.Api.Types.SpRuntime.InnerMultiSignature.Sr25519,
+                FinalBiome.Api.Utils.HexUtils.HexToBytes(seed));
+            this.user = user;
+        }
+
+        if (StateChanged is not null)
+            await StateChanged(this.fbClient.User is not null).ConfigureAwait(false);
+    }
+
+    public void FbAuthStateHandler(object? o, UserEventArgs e)
+    {
+        // we need this handler, because if it not exists, firebase client doesn't read existed user from the local storage.
     }
 }
