@@ -9,6 +9,9 @@ public class GlobalSetup
     [OneTimeSetUp]
     public async Task RunBeforeAnyTests()
     {
+        // force logout
+        File.Delete(Path.Combine(Path.GetTempPath(), "finalbiome_auth.json"));
+        
         // set onboarding for Eve game
         await NetworkHelpers.SetGameOnboardingData();
         // do unboarding for default test gamer.
@@ -25,19 +28,9 @@ public class GlobalSetup
         // check balance for the gamer for the ability to make game transactions
         await NetworkHelpers.TopupAccountBalance(client.Auth.user!.ToAddress());
 
-        try {
-            await client.Mx.OnboardToGame();
-        }
-        catch (FinalBiome.Api.Tx.Errors.ExtrinsicFailedException e)
+        if (!(bool)client.Game.IsOnboarded!)
         {
-            if (e.IsModule && e.ModuleName == "OrganizationIdentity" && e.ModuleError == "AlreadyOnboarded")
-            {
-                // ignore that
-            }
-            else
-            {
-                throw;
-            }
+            await client.Mx.OnboardToGame();
         }
     }
 }

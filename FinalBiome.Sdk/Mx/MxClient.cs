@@ -198,8 +198,12 @@ public class MxClient : IDisposable
     /// <returns></returns>
     public async Task OnboardToGame()
     {
+        // if user is already onboarded, nothing to do
+        if (client.Game.IsOnboarded is not null && (bool)client.Game.IsOnboarded) return;
+
         var payload = client.api.Tx.OrganizationIdentity.Onboarding(this.client.Game.Address);
         var _ = await Submit(payload).ConfigureAwait(false);
+        client.Game.IsOnboarded = true;
     }
 
     /// <summary>
