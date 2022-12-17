@@ -18,10 +18,10 @@ internal static class JimmyFailureParser
         try
         {
             //create error data template and try to parse JSON
-            var errorData = new { error = new { code = 0, message = "errorid" } };
+            var errorData = new { message = "errorid" };
             errorData = JsonConvert.DeserializeAnonymousType(responseData, errorData);
             //errorData is just null if different JSON was received
-            switch (errorData?.error?.message)
+            switch (errorData?.message)
             {
                 case "Device Id not found in request":
                     return JimmyErrorReason.DeviceIdNotFound;
