@@ -143,9 +143,27 @@ public class AuthClient
         {
             // get token
             string token = await this.fbClient.User.GetIdTokenAsync().ConfigureAwait(false);
-            // get a seed from the jimmy
-            string seed = await jimmyClient.GetSeed(token).ConfigureAwait(false);
+            // get a seed from the jimmy, if it doesn't exist, create it.
+            // TODO: Refactor this. see must be creates when registers new account in the firebase. Or not?
+            string seed;
+            try
+            {
+                seed = await jimmyClient.GetSeed(token).ConfigureAwait(false);
+            }
+            catch (Jimmy.JimmyException e)
+            {
+                if (e.Reason == Jimmy.JimmyErrorReason.NotFound)
+                {
+                    // it means the seed was not created before
+                    // so, create it
+                    seed = await jimmyClient.CreateSeed(token).ConfigureAwait(false);
 
+                }
+                else
+                {
+                    throw;
+                }
+            }
             var user = FinalBiome.Api.Tx.Account.FromSeed(FinalBiome.Api.Types.SpRuntime.InnerMultiSignature.Sr25519,
                 FinalBiome.Api.Utils.HexUtils.HexToBytes(seed));
             this.user = user;
