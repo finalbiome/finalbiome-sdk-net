@@ -44,7 +44,7 @@ public class Client : IDisposable
         client.Auth = auth;
         // subscribe to the user state changes
         client.Auth.StateChanged += client.HandleUserStateChangedEvent;
-        // game client we must be init before other modules
+        // the game client we must init before other modules
         var gameClient = await GameClient.Create(client).ConfigureAwait(false);
         client.Game = gameClient;
 
@@ -59,8 +59,17 @@ public class Client : IDisposable
         client.Fa = faClient;
         client.Nfa = nfaClient;
 
-        // if firebase user already signed in, try to get seed
-        await client.Auth.FetchSeedByFbAuth().ConfigureAwait(false);
+        // if firebase user is not already signed in, login Anonymously
+        if (client.Auth.fbClient.User is null)
+        {
+            if (!config.NotAutoLogin)
+                await client.Auth.SignInAsAnonym();
+        }
+        else
+        {
+            // if firebase user already signed in, try to get seed
+            await client.Auth.FetchSeedByFbAuth().ConfigureAwait(false);
+        }
         
         return client;
     }

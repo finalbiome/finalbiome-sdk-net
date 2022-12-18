@@ -20,7 +20,8 @@ public class GlobalSetup
         ClientConfig config = new(eveGame)
         {
             // set persistence path for storing data
-            PersistenceDataPath = Path.GetTempPath()
+            PersistenceDataPath = Path.GetTempPath(),
+            NotAutoLogin = true,
         };
         using Client client = await FinalBiome.Sdk.Client.Create(config);
 
@@ -32,5 +33,30 @@ public class GlobalSetup
         {
             await client.Mx.OnboardToGame();
         }
+    }
+
+    [OneTimeSetUp]
+    public void DotEnvLoader()
+    {
+        // This will get the current WORKING directory (i.e. \bin\Debug)
+        string workingDirectory = Environment.CurrentDirectory;
+        string projectDirectory = Directory.GetParent(workingDirectory)!.Parent!.Parent!.FullName;
+
+        string envFilePath = Path.Combine(projectDirectory, ".env");
+
+        if (!File.Exists(envFilePath)) return;
+
+        foreach (var line in File.ReadAllLines(envFilePath))
+        {
+            var parts = line.Split(
+                '=',
+                StringSplitOptions.RemoveEmptyEntries);
+
+            if (parts.Length != 2)
+                continue;
+
+            Environment.SetEnvironmentVariable(parts[0], parts[1]);
+        }
+
     }
 }

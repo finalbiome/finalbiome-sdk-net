@@ -39,7 +39,8 @@ static public class NetworkHelpers
         ClientConfig config = new(eveGame)
         {
             // set persistence path for storing data
-            PersistenceDataPath = Path.GetTempPath()
+            PersistenceDataPath = Path.GetTempPath(),
+            NotAutoLogin = true,
         };
         return await Sdk.Client.Create(config);
     }

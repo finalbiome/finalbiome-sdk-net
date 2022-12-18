@@ -26,6 +26,12 @@ public class ClientConfig
     /// </summary>
     /// <value></value>
     public string? PersistenceDataPath { get; set; } = null;
+
+    /// <summary>
+    /// For testing purposes. Not auto login as an anonym.
+    /// </summary>
+    /// <value></value>
+    internal bool NotAutoLogin { get; set; } = false;
     /// <summary>
     /// Create new confuguration for the App
     /// </summary>

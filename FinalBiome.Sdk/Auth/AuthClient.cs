@@ -68,6 +68,11 @@ public class AuthClient
     public bool UserIsSet => user is not null;
 
     /// <summary>
+    /// Holds anonymous credentials if sign in was as anonym
+    /// </summary>
+    internal UserCredential? anonymCredential;
+
+    /// <summary>
     /// A delegate type that will invoke when state of the user has been changed
     /// </summary>
     /// <param name="loggedIn">true - logged in</param>
@@ -78,12 +83,12 @@ public class AuthClient
     /// </summary>
     public OnStateChanged? StateChanged;
 
-    readonly FirebaseAuthClient fbClient;
+    internal readonly FirebaseAuthClient fbClient;
 
     public AuthClient(Client client)
     {
         this.client = client;
-        this.jimmyClient = new();
+        jimmyClient = new();
         // init firebase client
         FirebaseAuthConfig config = new FirebaseAuthConfig
         {
@@ -101,8 +106,8 @@ public class AuthClient
             config.UserRepository = repository;
         }
 
-        this.fbClient = new(config);
-        this.fbClient.AuthStateChanged += FbAuthStateHandler;
+        fbClient = new(config);
+        fbClient.AuthStateChanged += FbAuthStateHandler;
     }
 
     /// <summary>
@@ -113,21 +118,59 @@ public class AuthClient
     /// <returns></returns>
     public async Task SignInWithEmailAndPassword(string email, string password)
     {
+        var _ = await fbClient.SignInWithEmailAndPasswordAsync(email, password).ConfigureAwait(false);
+        if (anonymCredential is not null)
+        {
+            anonymCredential = null;
+            // TODO: drop anonymous in the Jimmy and in the network
+        }
+        await FetchSeedByFbAuth().ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sign up user with email and password.
+    /// </summary>
+    /// <param name="email"></param>
+    /// <param name="password"></param>
+    /// <returns></returns>
+    public async Task SignUpWithEmailAndPassword(string email, string password)
+    {
+        var result = await fbClient.FetchSignInMethodsForEmailAsync(email);
+        if (result.UserExists) throw new Exception($"User with {email} email already exists");
+
+        var credential = EmailProvider.GetCredential(email, password);
         try
         {
-            UserCredential _ = await fbClient.SignInWithEmailAndPasswordAsync(email, password).ConfigureAwait(false);
+            await anonymCredential!.User.LinkWithCredentialAsync(credential);
+            // migrage seed
+            string token = await this.fbClient.User.GetIdTokenAsync().ConfigureAwait(false);
+            await jimmyClient.Migrage(token, fbClient.User.Uid).ConfigureAwait(false);
         }
         catch (FirebaseAuthException e)
         {
-            throw e;
+            // we can't link anonym and real accounts.
+            if (e.Reason != AuthErrorReason.EmailExists) throw;
+            // TODO: drop anonymous in the Jimmy and in the network
         }
-        await FetchSeedByFbAuth().ConfigureAwait(false);
+        anonymCredential = null;
+    }
+
+    /// <summary>
+    /// Sign in anonymously.
+    /// </summary>
+    /// <returns></returns>
+    internal async Task SignInAsAnonym()
+    {
+        anonymCredential = await fbClient.SignInAnonymouslyAsync().ConfigureAwait(false);
+        await FetchSeedAsAnonymous().ConfigureAwait(false);
     }
 
     public async Task SignOut()
     {
         await fbClient.SignOutAsync().ConfigureAwait(false);
         user = null;
+        anonymCredential = null;
+
         if (StateChanged is not null)
             await StateChanged(false).ConfigureAwait(false);
     }
@@ -173,6 +216,20 @@ public class AuthClient
             await StateChanged(this.fbClient.User is not null).ConfigureAwait(false);
     }
 
+    internal async Task FetchSeedAsAnonymous()
+    {
+        if (!this.fbClient.User.IsAnonymous) throw new Exception("Can't get anonymous seed, user is not anonym");
+
+        // string token = await this.fbClient.User.GetIdTokenAsync().ConfigureAwait(false);
+
+        string seed = await jimmyClient.AnonimousSeed(this.fbClient.User.Uid).ConfigureAwait(false);
+        var user = FinalBiome.Api.Tx.Account.FromSeed(FinalBiome.Api.Types.SpRuntime.InnerMultiSignature.Sr25519,
+            FinalBiome.Api.Utils.HexUtils.HexToBytes(seed));
+        this.user = user;
+
+        if (StateChanged is not null)
+            await StateChanged(this.fbClient.User is not null).ConfigureAwait(false);
+    }
     public void FbAuthStateHandler(object? o, UserEventArgs e)
     {
         // we need this handler, because if it not exists, firebase client doesn't read existed user from the local storage.

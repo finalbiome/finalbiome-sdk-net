@@ -132,7 +132,8 @@ public class MxClientTests
         ClientConfig config = new(eveGame)
         {
             // set persistence path for storing data
-            PersistenceDataPath = Path.GetTempPath()
+            PersistenceDataPath = Path.GetTempPath(),
+            NotAutoLogin = true,
         };
 
         MxResultBet resBet;
