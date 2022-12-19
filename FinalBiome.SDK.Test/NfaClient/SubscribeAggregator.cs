@@ -13,9 +13,7 @@ public class SubscribeAggregatorTests
     /// <returns></returns>
     public async Task SubscriberTest()
     {
-        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
-        ClientConfig config = new(eveGame);
-        using Client client = await Client.Create(config);
+        using Client client = await NetworkHelpers.GetSdkClientForEveGame();
         
         using CancellationTokenSource cts = new();
         using SubscribeAggregator<Api.Types.PalletFungibleAssets.Types.AssetAccount> s = new(client, 2, cts.Token);
@@ -48,9 +46,7 @@ public class SubscribeAggregatorTests
     [Test]
     public async Task SubscriberCancelTest()
     {
-        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
-        ClientConfig config = new(eveGame);
-        using Client client = await Client.Create(config);
+        using Client client = await NetworkHelpers.GetSdkClientForEveGame();
 
         using CancellationTokenSource cts = new();
         using SubscribeAggregator<Api.Types.PalletFungibleAssets.Types.AssetAccount> s = new(client, 2, cts.Token);
@@ -83,9 +79,7 @@ public class SubscribeAggregatorTests
     [Test]
     public async Task ReSubscribeTest()
     {
-        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
-        ClientConfig config = new(eveGame);
-        using Client client = await Client.Create(config);
+        using Client client = await NetworkHelpers.GetSdkClientForEveGame();
 
         using CancellationTokenSource cts = new();
         using SubscribeAggregator<Api.Types.PalletFungibleAssets.Types.AssetAccount> s = new(client, 2, cts.Token);

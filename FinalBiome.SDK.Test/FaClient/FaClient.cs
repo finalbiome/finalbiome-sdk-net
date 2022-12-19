@@ -6,10 +6,11 @@ public class FaClientTests
     [Test]
     public async Task ClientNotifiedAboutBalances()
     {
+        // clean any stored user
+        File.Delete(Path.Combine(Path.GetTempPath(), "finalbiome_auth.json"));
+        
         // init api
-        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
-        ClientConfig config = new(eveGame);
-        using Client client = await Client.Create(config);
+        using Client client = await NetworkHelpers.GetSdkClientForEveGame();
 
         Assert.That(client.Fa.Balances, Is.Empty);
 
@@ -21,7 +22,10 @@ public class FaClientTests
             updatedFa = e.Id;
         };
 
-        await client.Auth.SignInWithEmailAndPassword("username", "password");
+        await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
+        // check balance for the gamer for the ability to make game transactions
+        await NetworkHelpers.TopupAccountBalance(client.Auth.user!.ToAddress());
+
         Thread.Sleep(1_500);
         Assert.Multiple(() =>
         {

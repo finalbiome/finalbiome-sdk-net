@@ -30,7 +30,7 @@ namespace FinalBiome.Api.Rpc
             {
                 foreach (var resp in responses)
                 {
-                    await ((Subscription<TData>)subscription).PostNewMessage((TData)resp);
+                    await ((Subscription<TData>)subscription).PostNewMessage((TData)resp).ConfigureAwait(false);
                 }
             }
         }
@@ -70,7 +70,7 @@ namespace FinalBiome.Api.Rpc
             if (subscriptions.TryGetValue(subId, out ISubscription? value))
             {
                 Subscription<TData> subscription = (Subscription<TData>)value;
-                await subscription.PostNewMessage(data);
+                await subscription.PostNewMessage(data).ConfigureAwait(false);
             }
             else
             {
@@ -94,7 +94,7 @@ namespace FinalBiome.Api.Rpc
         [JsonRpcMethod("chain_allHead")]
         public async Task OnAllBlock(string subscription, Header result)
         {
-            await NotifySubscriber<Header>(subscription, result);
+            await NotifySubscriber<Header>(subscription, result).ConfigureAwait(false);
         }
         /// <summary>
         /// Response as Subscription for new block headers.<br/>
@@ -106,7 +106,7 @@ namespace FinalBiome.Api.Rpc
         [JsonRpcMethod("chain_newHead")]
         public async Task OnNewBlock(string subscription, Header result)
         {
-            await NotifySubscriber<Header>(subscription, result);
+            await NotifySubscriber<Header>(subscription, result).ConfigureAwait(false);
         }
         /// <summary>
         /// Response as Subscription for finalized block headers.<br/>
@@ -118,7 +118,7 @@ namespace FinalBiome.Api.Rpc
         [JsonRpcMethod("chain_finalizedHead")]
         public async Task OnFinalizedBlock(string subscription, Header result)
         {
-            await NotifySubscriber<Header>(subscription, result);
+            await NotifySubscriber<Header>(subscription, result).ConfigureAwait(false);
         }
         /// <summary>
         /// Response as Subscription for extrinsic updates
@@ -130,7 +130,7 @@ namespace FinalBiome.Api.Rpc
         [JsonRpcMethod("author_extrinsicUpdate")]
         public async Task OnExtrinsicUpdate(string subscription, SubstrateTxStatus result)
         {
-            await NotifySubscriber<SubstrateTxStatus>(subscription, result);
+            await NotifySubscriber<SubstrateTxStatus>(subscription, result).ConfigureAwait(false);
         }
         /// <summary>
         /// Response as Subscription for each block which changes the specified storage keys. If none are specified, then it creates a message for every block.
@@ -142,7 +142,7 @@ namespace FinalBiome.Api.Rpc
         [JsonRpcMethod("state_storage")]
         public async Task OnStorageChange(string subscription, StorageChangeSet result)
         {
-            await NotifySubscriber<StorageChangeSet>(subscription, result);
+            await NotifySubscriber<StorageChangeSet>(subscription, result).ConfigureAwait(false);
         }
     }
 }

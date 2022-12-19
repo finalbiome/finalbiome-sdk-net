@@ -7,15 +7,15 @@ public class NetworkEventsListenerTests
     [Test]
     public async Task NetworkEvenstsListenTest()
     {
-        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
-        ClientConfig config = new(eveGame);
-        using Client client = await Client.Create(config);
+        using Client client = await NetworkHelpers.GetSdkClientForEveGame();
 
         using CancellationTokenSource cts = new();
         using NetworkEventsListener l = new(client);
 
         // login
-        await client.Auth.SignInWithEmailAndPassword("Dave", "password");
+        await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
+        // check balance for the gamer for the ability to make game transactions
+        await NetworkHelpers.TopupAccountBalance(client.Auth.user!.ToAddress());
 
         uint classId = 999;
         uint instanceId = 999;
@@ -32,7 +32,7 @@ public class NetworkEventsListenerTests
         Assert.That(eventEmittedCount, Is.EqualTo(0));
         
         // by new nfa
-        (NfaClassId classIdExpected, NfaInstanceId instanceIdExpected) = await NetworkHelpers.ExecBuyNfaMechanic();
+        (NfaClassId classIdExpected, NfaInstanceId instanceIdExpected) = await NetworkHelpers.ExecBuyNfaMechanic(client.Auth.signer);
         Thread.Sleep(2_000);
         
         Assert.Multiple(() =>

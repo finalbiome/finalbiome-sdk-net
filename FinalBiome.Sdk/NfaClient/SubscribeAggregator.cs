@@ -95,7 +95,7 @@ internal class SubscribeAggregator<TResult> : IDisposable where TResult : Codec,
     /// <returns></returns>
     public async Task Subscribe(StorageKey storageKey)
     {
-        await Subscribe(new StorageKey[] { storageKey });
+        await Subscribe(new StorageKey[] { storageKey }).ConfigureAwait(false);
     }
     /// <summary>
     /// Subscribe to changes at given addresses.
@@ -120,7 +120,7 @@ internal class SubscribeAggregator<TResult> : IDisposable where TResult : Codec,
         else
         {
             // aggregate subscriptions into the one
-            await ReSubscribe();
+            await ReSubscribe().ConfigureAwait(false);
         }
     }
     /// <summary>
@@ -130,7 +130,7 @@ internal class SubscribeAggregator<TResult> : IDisposable where TResult : Codec,
     /// <returns></returns>
     public async Task Subscribe(StorageAddress address)
     {
-        await Subscribe(new StorageAddress[] { address });
+        await Subscribe(new StorageAddress[] { address }).ConfigureAwait(false);
     }
     /// <summary>
     /// Subscribe on given addresses.
@@ -178,12 +178,12 @@ internal class SubscribeAggregator<TResult> : IDisposable where TResult : Codec,
     async Task SubscribeAndListen(IEnumerable<StorageKey> storageKeys, CancellationToken cancellationToken)
     {
         // create subscription for all storage keys
-        var sub = await client.api.Rpc.SubscribeStorage(storageKeys, cancellationToken);
+        var sub = await client.api.Rpc.SubscribeStorage(storageKeys, cancellationToken).ConfigureAwait(false);
 
         // listen new changes and raise events
         try
         {
-            await foreach (var changeSet in sub.data(cancellationToken))
+            await foreach (var changeSet in sub.data(cancellationToken).ConfigureAwait(false))
             {
                 foreach (var change in changeSet.Changes)
                 {
@@ -215,7 +215,7 @@ internal class SubscribeAggregator<TResult> : IDisposable where TResult : Codec,
         }
         // from listen loop we exit only if cancellation occurs
         // unsubscribe from subscription on the network
-        await client.api.Rpc.Unsubscribe(sub);
+        await client.api.Rpc.Unsubscribe(sub).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -231,7 +231,7 @@ internal class SubscribeAggregator<TResult> : IDisposable where TResult : Codec,
         // wait while all subscription tasks are done.
         try
         {
-            await Task.WhenAll(subTasks.ToArray());
+            await Task.WhenAll(subTasks.ToArray()).ConfigureAwait(false);
         }
         catch (OperationCanceledException) // redutant. Tasks completed execution successfully with no aly exceptions. 
         {

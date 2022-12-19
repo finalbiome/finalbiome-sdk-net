@@ -21,6 +21,8 @@ using System.Numerics;
 using FinalBiome.Api.Types.PalletSupport.Characteristics;
 using FinalBiome.Api.Types.PalletSupport.Characteristics.Purchased;
 using FinalBiome.Api.Types.PalletSupport;
+using FinalBiome.Api.Types.SpRuntime.Multiaddress;
+using FinalBiome.Api.Types.PalletOrganizationIdentity.Types;
 
 /// <summary>
 /// Manipulation with network state for tests.
@@ -28,12 +30,27 @@ using FinalBiome.Api.Types.PalletSupport;
 static public class NetworkHelpers
 {
     /// <summary>
+    /// Create game clietn and init it with Eve game
+    /// </summary>
+    /// <returns></returns>
+    static public async Task<Sdk.Client> GetSdkClientForEveGame()
+    {
+        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
+        ClientConfig config = new(eveGame)
+        {
+            // set persistence path for storing data
+            PersistenceDataPath = Path.GetTempPath(),
+            NotAutoLogin = true,
+        };
+        return await Sdk.Client.Create(config);
+    }
+
+    /// <summary>
     /// Exec BuyNfaMechanics in the Eve game by Dave of Nfa 1 and offer 0
     /// </summary>
-    static public async Task<(NfaClassId classId, NfaInstanceId instanceId)> ExecBuyNfaMechanic()
+    static public async Task<(NfaClassId classId, NfaInstanceId instanceId)> ExecBuyNfaMechanic(PairSigner signer)
     {
         Client api = await Client.New();
-        PairSigner signer = new(AccountKeyring.Dave());
         var organizationId = AccountKeyring.Eve();
 
         NonFungibleClassId classId = new();
@@ -43,12 +60,15 @@ static public class NetworkHelpers
         var callTx = api.Tx.Mechanics.ExecBuyNfa(organizationId, classId, offerId);
         var buyNfa = await api.Tx.SignAndSubmitThenWatchDefault(callTx, signer);
         var events = await buyNfa.WaitForFinalizedSuccess();
+
+        var account = signer.AccountId;
         
         // find Issuance of nfa instance
         var ev = events.First(e => 
             e.Event.Value == Api.Types.FinalbiomeNodeRuntime.InnerEvent.NonFungibleAssets && 
             ((Event)e.Event.Value2).Value == InnerEvent.Issued &&
-            AddressUtils.GetAddressFrom(((EventIssued)((Event)e.Event.Value2).Value2).Owner.Bytes) == "5DAAnrj7VHTznn2AWBemMuyBwZWs6FNFjdyVXUeYum3PTXFy");
+            // AddressUtils.GetAddressFrom(((EventIssued)((Event)e.Event.Value2).Value2).Owner.Bytes) == "5DAAnrj7VHTznn2AWBemMuyBwZWs6FNFjdyVXUeYum3PTXFy");
+            Enumerable.SequenceEqual(((EventIssued)((Event)e.Event.Value2).Value2).Owner.Bytes, account.Bytes));
         if (ev is null) throw new Exception("Event NonFungibleAssets.Issued not found");
         var data = (EventIssued)((Event)ev.Event.Value2).Value2;
         return (data.ClassId, data.AssetId);
@@ -242,6 +262,85 @@ static public class NetworkHelpers
         comClassId.Init(classId);
         var txPayload = api.Tx.NonFungibleAssets.SetCharacteristic(organizationId,comClassId, characteristic);
         var txProgress = await api.Tx.SignAndSubmitThenWatchDefault(txPayload, signer);
+        var _ = await txProgress.WaitForFinalizedSuccess();
+    }
+
+    /// <summary>
+    /// Top up the account balance if it is below a certain threshold.
+    /// Makes as a transfer from Alice.
+    /// </summary>
+    /// <param name="account"></param>
+    /// <returns></returns>
+    static public async Task TopupAccountBalance(MultiAddress account)
+    {
+        BigInteger THRESHOLD = 10_000_000_000;
+
+        Client api = await Client.New();
+
+        var entity = api.Storage.System.Account((AccountId32)account.Value2);
+        var accInfo = await entity.Fetch();
+
+        if (accInfo is not null && accInfo.Data.Free >= THRESHOLD) return;
+
+        PairSigner signer = new(signer: AccountKeyring.Alice());
+
+        CompactU128 val = new();
+        val.Init(THRESHOLD);
+
+        var payload = api.Tx.Balances.Transfer(account, val);
+        var txProgress = await api.Tx.SignAndSubmitThenWatchDefault(payload, signer);
+        var _ = await txProgress.WaitForFinalizedSuccess();
+    }
+
+    /// <summary>
+    /// Convertor from email of the test user to the address.
+    /// </summary>
+    /// <param name="email"></param>
+    /// <returns></returns>
+    static public AccountId32 TestAccountToAddress(string email)
+    {
+        string ss58Address = email switch
+        {
+            "testdave@finalbiome.net" => "5GYyqgLd4qTqRzc3crZNqxrZnwBroGeUvob3t73CQXixPydQ",
+            _ => throw new Exception("Email not found"),
+        };
+        AccountId32 acc = new();
+        acc.Init(Api.Utils.AddressUtils.GetPublicKeyFrom(ss58Address));
+        return acc;
+    }
+
+    /// <summary>
+    /// Set onboarding assets for the Eve game.
+    /// Set as fa 0 - 100_000; fa 1 - 200_000;
+    /// </summary>
+    /// <returns></returns>
+    static public async Task SetGameOnboardingData()
+    {
+        Client api = await Client.New();
+        PairSigner signer = new(signer: AccountKeyring.Ferdie());
+        var organizationId = AccountKeyring.Eve();
+
+        OptionBoundedVecAirDropAsset assets = new();
+
+        BoundedVecAirDropAsset ass = new();
+        AirDropAsset a1 = new();
+        FungibleAssetId a1InnerId = 0;
+        FungibleAssetBalance a1InnerB = (BigInteger)100_000;
+        Tuple<FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.FungibleAssetId, FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetBalance.FungibleAssetBalance> a1t = new();
+        a1t.Init(a1InnerId, a1InnerB);
+        a1.Init(InnerAirDropAsset.Fa, a1t);
+        AirDropAsset a2 = new();
+        FungibleAssetId a2InnerId = 1;
+        FungibleAssetBalance a2InnerB = (BigInteger)200_000;
+        Tuple<FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.FungibleAssetId, FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetBalance.FungibleAssetBalance> a2t = new();
+        a2t.Init(a2InnerId, a2InnerB);
+        a2.Init(InnerAirDropAsset.Fa, a2t);
+        
+        ass.Init(new AirDropAsset[] {a1, a2});
+        assets.Init(ass);
+
+        var payload = api.Tx.OrganizationIdentity.SetOnboardingAssets(organizationId, assets);
+        var txProgress = await api.Tx.SignAndSubmitThenWatchDefault(payload, signer);
         var _ = await txProgress.WaitForFinalizedSuccess();
     }
 }

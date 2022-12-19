@@ -37,28 +37,40 @@ public class Client : IDisposable
     public static async Task<Client> Create(ClientConfig config)
     {
 
-        Api.Client api = await Api.Client.FromUrl(config.Endpoint);
+        Api.Client api = await Api.Client.FromUrl(config.Endpoint).ConfigureAwait(false);
         Client client = new(config, api);
         
         AuthClient auth = new(client);
         client.Auth = auth;
         // subscribe to the user state changes
         client.Auth.StateChanged += client.HandleUserStateChangedEvent;
-        // game client we must be init before other modules
-        var gameClient = await GameClient.Create(client);
+        // the game client we must init before other modules
+        var gameClient = await GameClient.Create(client).ConfigureAwait(false);
         client.Game = gameClient;
 
         var faClientTask = FaClient.Create(client);
         var NfaClientTask = NfaClient.Create(client);
 
-        await Task.WhenAll(faClientTask, NfaClientTask);
+        await Task.WhenAll(faClientTask, NfaClientTask).ConfigureAwait(false);
 
-        var faClient = await faClientTask;
-        var nfaClient = await NfaClientTask;
+        var faClient = await faClientTask.ConfigureAwait(false);
+        var nfaClient = await NfaClientTask.ConfigureAwait(false);
 
         client.Fa = faClient;
         client.Nfa = nfaClient;
 
+        // if firebase user is not already signed in, login Anonymously
+        if (client.Auth.fbClient.User is null)
+        {
+            if (!config.NotAutoLogin)
+                await client.Auth.SignInAsAnonym();
+        }
+        else
+        {
+            // if firebase user already signed in, try to get seed
+            await client.Auth.FetchSeedByFbAuth().ConfigureAwait(false);
+        }
+        
         return client;
     }
 
@@ -74,7 +86,7 @@ public class Client : IDisposable
             // init MxClient
             // MxClient can work only when the user is signed in.
             // So, we init MxClient after user has been signed in.
-            Mx = await MxClient.Create(this, Auth.signer!);
+            Mx = await MxClient.Create(this, Auth.signer!).ConfigureAwait(false);
         }
         else
         {

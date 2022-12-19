@@ -63,7 +63,7 @@ public class SubmittableExtrinsic
         // Get a hash of the extrinsic (we'll need this later).
         var extHash = Hasher.BlakeTwo256(encoded.ToArray());
         // Submit and watch for transaction progress.
-        var sub = await client.Rpc.WatchExtrinsic(encoded);
+        var sub = await client.Rpc.WatchExtrinsic(encoded).ConfigureAwait(false);
 
         return new TxProgress(sub, client, extHash);
     }
@@ -81,12 +81,12 @@ public class SubmittableExtrinsic
     /// <returns></returns>
     public async Task<Hash> Submit()
     {
-        return await client.Rpc.SubmitExtrinsic(encoded);
+        return await client.Rpc.SubmitExtrinsic(encoded).ConfigureAwait(false);
     }
 
     public async Task<FinalBiome.Api.Rpc.Types.ApplyExtrinsicResult> DryRun(Hash at)
     {
-        return await client.Rpc.DryRun(Encoded(), at);
+        return await client.Rpc.DryRun(Encoded(), at).ConfigureAwait(false);
     }
 }
 

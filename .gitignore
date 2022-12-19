@@ -404,3 +404,5 @@ ASALocalRun/
 # Local History for Visual Studio
 .localhistory/
 FinalBiome.Api.Codegen/Test/
+.env
+FinalBiome.SDK.Test/finalbiome-jimmy-firebase-adminsdk-88rwc-ff33ca7e26.json

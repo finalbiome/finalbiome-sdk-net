@@ -79,7 +79,7 @@ public class Client : IDisposable
     public static async Task<Client> New()
     {
         string url = "ws://127.0.0.1:9944";
-        return await Client.FromUrl(url);
+        return await Client.FromUrl(url).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -89,8 +89,8 @@ public class Client : IDisposable
     /// <returns></returns>
     public static async Task<Client> FromUrl(string url)
     {
-        RpcClient rpcClient = await RpcClient.Build(new Uri(url));
-        return await Client.FromRpcClient(rpcClient);
+        RpcClient rpcClient = await RpcClient.Build(new Uri(url)).ConfigureAwait(false);
+        return await Client.FromRpcClient(rpcClient).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -106,11 +106,11 @@ public class Client : IDisposable
         Task<FinalBiome.Api.Rpc.RuntimeVersion> runtimeVersionTask = rpc.RuntimeVersion(null);
         Task<string> metadataTask = rpc.Metadata();
 
-        await Task.WhenAll(genesisHashTask, runtimeVersionTask, metadataTask);
+        await Task.WhenAll(genesisHashTask, runtimeVersionTask, metadataTask).ConfigureAwait(false);
 
-        Hash genesisHash = await genesisHashTask;
-        FinalBiome.Api.Rpc.RuntimeVersion runtimeVersion = await runtimeVersionTask;
-        string metadata = await metadataTask;
+        Hash genesisHash = await genesisHashTask.ConfigureAwait(false);
+        FinalBiome.Api.Rpc.RuntimeVersion runtimeVersion = await runtimeVersionTask.ConfigureAwait(false);
+        string metadata = await metadataTask.ConfigureAwait(false);
 
         return new Client(
             genesisHash,

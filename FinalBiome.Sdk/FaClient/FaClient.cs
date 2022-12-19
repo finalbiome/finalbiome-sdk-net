@@ -77,7 +77,7 @@ public class FaClient : IDisposable
     {
         FaClient faClient = new(client: client);
 
-        return await Task.FromResult(faClient);
+        return await Task.FromResult(faClient).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -91,7 +91,7 @@ public class FaClient : IDisposable
         List<StorageKey>? keys;
         do
         {
-            keys = await client.api.Storage.FetchKeys(StorageKeyFAs, 10, startKey, null);
+            keys = await client.api.Storage.FetchKeys(StorageKeyFAs, 10, startKey, null).ConfigureAwait(false);
 
             if (keys is not null && keys.Count != 0)
             {
@@ -115,7 +115,7 @@ public class FaClient : IDisposable
         var sub = await client.api.Rpc.SubscribeStorage(storageKeys, cancellationToken);
         try
         {
-            await foreach (var changeSet in sub.data(cancellationToken))
+            await foreach (var changeSet in sub.data(cancellationToken).ConfigureAwait(false))
             {
                 foreach (var change in changeSet.Changes)
                 {
@@ -144,7 +144,7 @@ public class FaClient : IDisposable
         //
         }
         // unsubscribe from subscription on the network
-        await client.api.Rpc.Unsubscribe(sub);
+        await client.api.Rpc.Unsubscribe(sub).ConfigureAwait(false);
         // clean stored balances
         Balances.Clear();
     }
@@ -157,11 +157,11 @@ public class FaClient : IDisposable
     public async Task StartSubscriber()
     {
         if (subscriberCancellationTokenSource.Token.IsCancellationRequested) return;
-        await StopSubscriber();
+        await StopSubscriber().ConfigureAwait(false);
 
         /// create new task
         // get fa ids
-        List<FaAssetId> faIds = await FetchAllExistingFaIds();
+        List<FaAssetId> faIds = await FetchAllExistingFaIds().ConfigureAwait(false);
         // create storage keys
         List<StorageKey> keys = faIds.Select(id => {
             FungibleAssetId fid = new();
@@ -187,6 +187,7 @@ public class FaClient : IDisposable
             {
                 #if NETSTANDARD2_1
                 subscriberTask.Wait(TimeSpan.FromSeconds(10));
+                await Task.Yield();
                 #else
                 await subscriberTask.WaitAsync(TimeSpan.FromSeconds(10));
                 #endif
@@ -230,12 +231,12 @@ public class FaClient : IDisposable
     {
         if (isLogged) {
             // here we need fetch and subscribe to FA state
-            await StartSubscriber();
+            await StartSubscriber().ConfigureAwait(false);
         }
         else
         {
             // here we need clean and unsubscribe from FA state
-            await StopSubscriber();
+            await StopSubscriber().ConfigureAwait(false);
         }
     }
 

@@ -28,7 +28,7 @@ public class RpcClient : IDisposable
     internal static async Task<RpcClient> Build(Uri url)
     {
         ClientWebSocket ws = new();
-        await ws.ConnectAsync(url, CancellationToken.None);
+        await ws.ConnectAsync(url, CancellationToken.None).ConfigureAwait(false);
         JsonRpc rpc = new(new WebSocketMessageHandler(ws, messageFormatter()));
         RpcSubscriptionTarget subscriptionTarget = new();
         rpc.AddLocalRpcTarget(subscriptionTarget, new JsonRpcTargetOptions { AllowNonPublicInvocation = false });
@@ -63,7 +63,7 @@ public class RpcClient : IDisposable
     /// <returns></returns>
     public async Task<TResult> Request<TResult>(string method, object[] parameters)
     {
-        return await rpc.InvokeWithParameterObjectAsync<TResult>(method, parameters);
+        return await rpc.InvokeWithParameterObjectAsync<TResult>(method, parameters).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -80,11 +80,11 @@ public class RpcClient : IDisposable
     {
         cancellationToken ??= CancellationToken.None;
         // Subscribe on events
-        string subId = await Request<string>(sub, parameters);
+        string subId = await Request<string>(sub, parameters).ConfigureAwait(false);
         // Create subscription instance
         Subscription<TResult> subscription = new(subId, sub, parameters, unsub, (CancellationToken)cancellationToken);
         // Add to list
-        await this.subscriptionTarget.AddSubscription<TResult>(subscription);
+        await this.subscriptionTarget.AddSubscription<TResult>(subscription).ConfigureAwait(false);
 
         return subscription;
     }
@@ -102,7 +102,7 @@ public class RpcClient : IDisposable
         if (subscriptionTarget.SubscriptionExists(subscription))
         {
             string subId = subscription.Id;
-            string _ = await Request<string>(subscription.Unsub, new object[] { subId });
+            string _ = await Request<string>(subscription.Unsub, new object[] { subId }).ConfigureAwait(false);
             subscription.Unsubscribe();
             this.subscriptionTarget.RemoveSubscription(subscription);
         }

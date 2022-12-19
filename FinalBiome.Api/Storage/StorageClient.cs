@@ -23,7 +23,7 @@ public partial class StorageClient
         Hash? decodedHash = new();
         if (hash is not null) decodedHash.Init(hash.ToArray());
         else decodedHash = null;
-        return await client.Rpc.Storage<string>(key, decodedHash);
+        return await client.Rpc.Storage<string>(key, decodedHash).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -36,7 +36,7 @@ public partial class StorageClient
     public async Task<TResult?> Fetch<TResult>(StorageAddress address, IEnumerable<byte>? hash) where TResult : Codec, new()
     {
         var lookupBytes = StorageUtils.StorageAddressBytes(address);
-        var raw = await client.Storage.FetchRaw(lookupBytes, hash);
+        var raw = await client.Storage.FetchRaw(lookupBytes, hash).ConfigureAwait(false);
         if (raw is null || raw.Length == 0) return null;
         TResult result = new();
         result.Init(raw);
@@ -58,7 +58,7 @@ public partial class StorageClient
         Hash? decodedHash = new();
         if (hash is not null) decodedHash.Init(hash.ToArray());
         else decodedHash = null;
-        return await client.Rpc.StorageKeysPaged(queryKey, count, startKey, decodedHash);
+        return await client.Rpc.StorageKeysPaged(queryKey, count, startKey, decodedHash).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -73,11 +73,11 @@ public partial class StorageClient
     public async IAsyncEnumerable<TResult?> SubscribeStorage<TResult>(StorageAddress address, CancellationToken? cancellationToken = null) where TResult : Codec, new()
     {
         List<byte> lookupBytes = StorageUtils.StorageAddressBytes(address);
-        var sub = await client.Rpc.SubscribeStorage(new List<byte>[] { lookupBytes }, cancellationToken);
+        var sub = await client.Rpc.SubscribeStorage(new List<byte>[] { lookupBytes }, cancellationToken).ConfigureAwait(false);
         CancellationToken ct = cancellationToken ?? default;
         try
         {
-            await foreach (var changeSet in sub.data(ct))
+            await foreach (var changeSet in sub.data(ct).ConfigureAwait(false))
             {
                 foreach (var change in changeSet.Changes)
                 {
@@ -100,7 +100,7 @@ public partial class StorageClient
         {
             // from listen loop we exit only if cancellation occurs
             // unsubscribe from subscription on the network
-            await client.Rpc.Unsubscribe(sub);
+            await client.Rpc.Unsubscribe(sub).ConfigureAwait(false);
         }
     }
 }
