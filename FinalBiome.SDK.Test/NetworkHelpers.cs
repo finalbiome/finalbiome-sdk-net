@@ -30,7 +30,7 @@ using FinalBiome.Api.Types.PalletOrganizationIdentity.Types;
 static public class NetworkHelpers
 {
     /// <summary>
-    /// Create game clietn and init it with Eve game
+    /// Create game client and init it with Eve game
     /// </summary>
     /// <returns></returns>
     static public async Task<Sdk.Client> GetSdkClientForEveGame()

@@ -1,6 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <PackageId>FinalBiome.Api</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Sergey Kovalev</Authors>
+    <Company>FinalBiome</Company>
+    <Description>The general library to submit extrinsics to a substrate node and getting chain status via RPC.</Description>
+    <PackageProjectUrl>https://finalbiome.net</PackageProjectUrl>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<RepositoryUrl>https://github.com/finalbiome/finalbiome-sdk-net</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <TargetFrameworks>net7.0;netstandard2.1</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -86,4 +96,10 @@
       <DependentUpon>Enum.tt</DependentUpon>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+		<None Include="..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
 </Project>
