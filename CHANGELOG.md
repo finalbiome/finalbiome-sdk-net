@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="1.1.0"></a>
+## [1.1.0](https://www.github.com/finalbiome/finalbiome-sdk-net/releases/tag/v1.1.0) (2022-12-20)
+
+### Features
+
+* **auth:** added user info ([d9a2e7e](https://www.github.com/finalbiome/finalbiome-sdk-net/commit/d9a2e7e38b1cc394b13a0018714bff3c84dacff0))
+
 <a name="1.0.1"></a>
 ## [1.0.1](https://www.github.com/finalbiome/finalbiome-sdk-net/releases/tag/v1.0.1) (2022-12-19)
 

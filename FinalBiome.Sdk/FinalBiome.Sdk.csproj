@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <PackageId>FinalBiome.Sdk</PackageId>
-    <Version>1.0.1</Version>
+    <Version>1.1.0</Version>
     <Authors>Sergey Kovalev</Authors>
     <Company>FinalBiome</Company>
     <Description>Library for communication with the FinalBiome Network.</Description>
@@ -29,8 +29,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\LICENSE" Pack="true" PackagePath=""/>
-    <None Include="README.md" Pack="true" PackagePath="\"/>
+    <None Include="..\LICENSE" Pack="true" PackagePath="" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>
