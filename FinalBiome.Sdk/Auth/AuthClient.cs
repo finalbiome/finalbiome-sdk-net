@@ -68,6 +68,12 @@ public class AuthClient
     public bool UserIsSet => user is not null;
 
     /// <summary>
+    /// Information about current user.
+    /// </summary>
+    /// <value></value>
+    public UserInfo? UserInfo { get; internal set; }
+
+    /// <summary>
     /// Holds anonymous credentials if sign in was as anonym
     /// </summary>
     internal UserCredential? anonymCredential;
@@ -233,5 +239,6 @@ public class AuthClient
     public void FbAuthStateHandler(object? o, UserEventArgs e)
     {
         // we need this handler, because if it not exists, firebase client doesn't read existed user from the local storage.
+        this.UserInfo = e.User?.Info;
     }
 }

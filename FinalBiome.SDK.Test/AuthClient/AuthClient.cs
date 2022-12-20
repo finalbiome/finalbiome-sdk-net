@@ -96,6 +96,7 @@ public class AuthClientTests
                 // here we should be as anonym
                 Assert.That(client.Auth.fbClient.User.IsAnonymous, Is.True);
                 Assert.That(client.Auth.user, Is.Not.Null);
+                Assert.That(client.Auth.UserInfo?.IsAnonymous, Is.True);
             });
 
             // this device id of anonym
@@ -115,6 +116,8 @@ public class AuthClientTests
                 Assert.That(client.Auth.anonymCredential, Is.Null);
                 Assert.That(client.Auth.fbClient.User.Uid, Is.EqualTo(deviceId));
                 Assert.That(client.Auth.UserAddress.Bytes, Is.EqualTo(accountId));
+                Assert.That(client.Auth.UserInfo?.IsAnonymous, Is.False);
+                Assert.That(client.Auth.UserInfo?.Email, Is.EqualTo(newEmail));
             });
         }
 
