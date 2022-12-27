@@ -24,7 +24,7 @@ public class ClientTests
             Assert.That(client.Auth.UserIsSet, Is.EqualTo(false));
         });
 
-        await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
+        if (!client.Auth.UserIsSet) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
         // check balance for the gamer for the ability to make game transactions
         await NetworkHelpers.TopupAccountBalance(client.Auth.user!.ToAddress());
 
