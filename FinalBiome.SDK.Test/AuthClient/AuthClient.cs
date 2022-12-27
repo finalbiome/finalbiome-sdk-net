@@ -11,7 +11,7 @@ public class AuthClientTests
     {
         using Client client = await NetworkHelpers.GetSdkClientForEveGame();
 
-        await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
+        if (!client.Auth.UserIsSet) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
         Assert.That(client.Auth.user, Is.Not.Null);
         await client.Auth.SignOut();
         Assert.Multiple(() =>
@@ -48,28 +48,39 @@ public class AuthClientTests
         File.Delete(Path.Combine(Path.GetTempPath(), "finalbiome_auth.json"));
 
         string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
+
+        int eventEmittedCount = 0;
+
         ClientConfig config = new(eveGame)
         {
             // set persistence path for storing data
             PersistenceDataPath = Path.GetTempPath(),
             NotAutoLogin = true,
         };
+        config.StateChanged += async (a) => {
+            eventEmittedCount++;
+            await Task.Yield();
+        };
         using (Client client =  await Sdk.Client.Create(config))
         {
             Assert.That(client.Auth.UserIsSet, Is.False);
             // login
-            await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
+            if (!client.Auth.UserIsSet) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
             Assert.That(client.Auth.UserIsSet, Is.True);
+            Assert.That(eventEmittedCount, Is.EqualTo(1));
+
         }
 
         // auth session must be saved between game sessions
+        eventEmittedCount = 0;
         using (Client client =  await Sdk.Client.Create(config))
         {
+            Assert.That(eventEmittedCount, Is.EqualTo(1));
             Assert.That(client.Auth.UserIsSet, Is.True);
             // login out
             await client.Auth.SignOut();
             Assert.That(client.Auth.UserIsSet, Is.False);
-
+            Assert.That(eventEmittedCount, Is.EqualTo(2));
         }
     }
 

@@ -28,6 +28,11 @@ public class ClientConfig
     public string? PersistenceDataPath { get; set; } = null;
 
     /// <summary>
+    /// This event gets called whenever the user's account changes.
+    /// </summary>
+    public AuthClient.OnStateChanged? StateChanged;
+
+    /// <summary>
     /// For testing purposes. Not auto login as an anonym.
     /// </summary>
     /// <value></value>

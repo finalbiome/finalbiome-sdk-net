@@ -50,7 +50,7 @@ public class GameClientTest
         Assert.That(client.Game.IsOnboarded, Is.Null);
 
         // cleanup: remove user from the firebase
-        var defaultApp = FirebaseApp.Create();
+        var defaultApp = FirebaseApp.DefaultInstance ?? FirebaseApp.Create();
         UserRecord userRecord = await FirebaseAuth.DefaultInstance.GetUserByEmailAsync(newEmail);
         await FirebaseAuth.DefaultInstance.DeleteUserAsync(userRecord.Uid);
 

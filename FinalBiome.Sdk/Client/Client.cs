@@ -44,6 +44,11 @@ public class Client : IDisposable
         client.Auth = auth;
         // subscribe to the user state changes
         client.Auth.StateChanged += client.HandleUserStateChangedEvent;
+        // add subscriptions from config
+        if (config.StateChanged is not null)
+        {
+            client.Auth.StateChanged += config.StateChanged;
+        }
         // the game client we must init before other modules
         var gameClient = await GameClient.Create(client).ConfigureAwait(false);
         client.Game = gameClient;
