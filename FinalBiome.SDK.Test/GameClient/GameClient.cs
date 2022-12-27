@@ -1,4 +1,7 @@
 
+using FirebaseAdmin;
+using FirebaseAdmin.Auth;
+
 namespace FinalBiome.Sdk.Test;
 
 public class GameClientTest
@@ -9,12 +12,22 @@ public class GameClientTest
         // force logout
         File.Delete(Path.Combine(Path.GetTempPath(), "finalbiome_auth.json"));
 
-        using Client client = await NetworkHelpers.GetSdkClientForEveGame();
+        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
+        ClientConfig config = new(eveGame)
+        {
+            // set persistence path for storing data
+            PersistenceDataPath = Path.GetTempPath()
+        };
 
-        Assert.That(client.Game.IsOnboarded, Is.Null);
+        using Client client = await Sdk.Client.Create(config);
+
+        Assert.That(client.Game.IsOnboarded, Is.False);
 
         // login
-        await client.Auth.SignInWithEmailAndPassword("test03@finalbiome.net", "test03@finalbiome.net");
+        string newEmail = TestUtils.RandomString(8) + "@finalbiome.net";
+        string newPwd = TestUtils.RandomString(8);
+        await client.Auth.SignUpWithEmailAndPassword(newEmail, newPwd);
+
         // check balance for the gamer for the ability to make game transactions
         await NetworkHelpers.TopupAccountBalance(client.Auth.user!.ToAddress());
         
@@ -35,6 +48,11 @@ public class GameClientTest
         await client.Auth.SignOut();
 
         Assert.That(client.Game.IsOnboarded, Is.Null);
+
+        // cleanup: remove user from the firebase
+        var defaultApp = FirebaseApp.Create();
+        UserRecord userRecord = await FirebaseAuth.DefaultInstance.GetUserByEmailAsync(newEmail);
+        await FirebaseAuth.DefaultInstance.DeleteUserAsync(userRecord.Uid);
 
     }
 }
