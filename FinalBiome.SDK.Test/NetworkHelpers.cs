@@ -59,7 +59,8 @@ static public class NetworkHelpers
 
         var callTx = api.Tx.Mechanics.ExecBuyNfa(organizationId, classId, offerId);
         var buyNfa = await api.Tx.SignAndSubmitThenWatchDefault(callTx, signer);
-        var events = await buyNfa.WaitForFinalizedSuccess();
+        var txInBlock = await buyNfa.WaitForInBlock();
+        var events = await txInBlock.WaitForSuccess();
 
         var account = signer.AccountId;
         
@@ -103,7 +104,8 @@ static public class NetworkHelpers
 
         var callTx = api.Tx.NonFungibleAssets.CreateAttribute(organizationId, compactNfaId, attr);
         var createAttr = await api.Tx.SignAndSubmitThenWatchDefault(callTx, signer);
-        var _ = await createAttr.WaitForFinalizedSuccess();
+        var txInBlock = await createAttr.WaitForInBlock();
+        var _ = await txInBlock.WaitForSuccess();
     }
     /// <summary>
     /// Remove attribute. On behalf of Ferdie (manager of the Eve game)
@@ -127,7 +129,8 @@ static public class NetworkHelpers
 
         var callTx = api.Tx.NonFungibleAssets.RemoveAttribute(organizationId, compactNfaId, attrName);
         var createAttr = await api.Tx.SignAndSubmitThenWatchDefault(callTx, signer);
-        var _ = await createAttr.WaitForFinalizedSuccess();
+        var txInBlock = await createAttr.WaitForInBlock();
+        var _ = await txInBlock.WaitForSuccess();
     }
 
     /// <summary>
@@ -226,7 +229,8 @@ static public class NetworkHelpers
         characteristic.Init(InnerCharacteristic.Bettor, opBettor);
         var txPayload = api.Tx.NonFungibleAssets.SetCharacteristic(organizationId,comClassId, characteristic);
         var txProgress = await api.Tx.SignAndSubmitThenWatchDefault(txPayload, signer);
-        var _ = await txProgress.WaitForFinalizedSuccess();
+        var txInBlock = await txProgress.WaitForInBlock();
+        var _ = await txInBlock.WaitForSuccess();
     }
 
     /// <summary>
@@ -262,7 +266,8 @@ static public class NetworkHelpers
         comClassId.Init(classId);
         var txPayload = api.Tx.NonFungibleAssets.SetCharacteristic(organizationId,comClassId, characteristic);
         var txProgress = await api.Tx.SignAndSubmitThenWatchDefault(txPayload, signer);
-        var _ = await txProgress.WaitForFinalizedSuccess();
+        var txInBlock = await txProgress.WaitForInBlock();
+        var _ = await txInBlock.WaitForSuccess();
     }
 
     /// <summary>
@@ -289,7 +294,8 @@ static public class NetworkHelpers
 
         var payload = api.Tx.Balances.Transfer(account, val);
         var txProgress = await api.Tx.SignAndSubmitThenWatchDefault(payload, signer);
-        var _ = await txProgress.WaitForFinalizedSuccess();
+        var txInBlock = await txProgress.WaitForInBlock();
+        var _ = await txInBlock.WaitForSuccess();
     }
 
     /// <summary>
@@ -341,6 +347,7 @@ static public class NetworkHelpers
 
         var payload = api.Tx.OrganizationIdentity.SetOnboardingAssets(organizationId, assets);
         var txProgress = await api.Tx.SignAndSubmitThenWatchDefault(payload, signer);
-        var _ = await txProgress.WaitForFinalizedSuccess();
+        var txInBlock = await txProgress.WaitForInBlock();
+        var _ = await txInBlock.WaitForSuccess();
     }
 }
