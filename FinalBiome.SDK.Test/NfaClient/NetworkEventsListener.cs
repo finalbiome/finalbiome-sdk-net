@@ -13,11 +13,11 @@ public class NetworkEventsListenerTests
         using NetworkEventsListener l = new(client);
 
         // login
-        if (!client.Auth.UserIsSet) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
+        if (!await client.Auth.IsLoggedIn()) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
         // check balance for the gamer for the ability to make game transactions
-        await NetworkHelpers.TopupAccountBalance(client.Auth.user!.ToAddress());
+        await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
 
-        Thread.Sleep(100);
+        Thread.Sleep(1_000);
 
         uint classId = 999;
         uint instanceId = 999;

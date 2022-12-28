@@ -40,7 +40,6 @@ static public class NetworkHelpers
         {
             // set persistence path for storing data
             PersistenceDataPath = Path.GetTempPath(),
-            NotAutoLogin = true,
         };
         return await Sdk.Client.Create(config);
     }

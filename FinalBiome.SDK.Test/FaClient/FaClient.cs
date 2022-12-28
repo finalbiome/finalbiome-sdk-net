@@ -22,11 +22,10 @@ public class FaClientTests
             updatedFa = e.Id;
         };
 
-        if (!client.Auth.UserIsSet) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
+        if (!await client.Auth.IsLoggedIn()) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
         // check balance for the gamer for the ability to make game transactions
-        await NetworkHelpers.TopupAccountBalance(client.Auth.user!.ToAddress());
+        await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
 
-        Thread.Sleep(1_500);
         Assert.Multiple(() =>
         {
             Assert.That(client.Fa.Balances, Has.Count.EqualTo(2));

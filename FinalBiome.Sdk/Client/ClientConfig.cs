@@ -28,15 +28,10 @@ public class ClientConfig
     public string? PersistenceDataPath { get; set; } = null;
 
     /// <summary>
-    /// This event gets called whenever the user's account changes.
+    /// For internal purposes. This event gets called whenever the user's account changes.
     /// </summary>
-    public AuthClient.OnStateChanged? StateChanged;
+    internal AuthClient.OnStateChanged? InternalStateChanged;
 
-    /// <summary>
-    /// For testing purposes. Not auto login as an anonym.
-    /// </summary>
-    /// <value></value>
-    internal bool NotAutoLogin { get; set; } = false;
     /// <summary>
     /// Create new confuguration for the App
     /// </summary>

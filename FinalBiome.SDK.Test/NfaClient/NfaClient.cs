@@ -37,9 +37,9 @@ public class NfaClientTests
     {        
         using Client client = await NetworkHelpers.GetSdkClientForEveGame();
         // login (it's not necessary to get instance details, but need to the helper for buying nfa)
-        if (!client.Auth.UserIsSet) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
+        if (!await client.Auth.IsLoggedIn()) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
         // check balance for the gamer for the ability to make game transactions
-        await NetworkHelpers.TopupAccountBalance(client.Auth.user!.ToAddress());
+        await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
 
         // by new nfa
         (NfaClassId classId, NfaInstanceId instanceId) = await NetworkHelpers.ExecBuyNfaMechanic(client.Auth.signer);
@@ -85,7 +85,7 @@ public class NfaClientTests
 
         // get details. it subscribe the sdk to changes.
         var details = await client.Nfa.GetClassDetails(classId);
-        Thread.Sleep(2_000);
+        Thread.Sleep(1_000);
         Assert.Multiple(() =>
         {
             Assert.That(details?.Attributes.Value, Is.EqualTo(9));
@@ -124,9 +124,9 @@ public class NfaClientTests
         };
 
         // login
-        if (!client.Auth.UserIsSet) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
+        if (!await client.Auth.IsLoggedIn()) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
         // check balance for the gamer for the ability to make game transactions
-        await NetworkHelpers.TopupAccountBalance(client.Auth.user!.ToAddress());
+        await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
         
         Thread.Sleep(2_000);
         eventEmittedCount = 0;

@@ -1,6 +1,7 @@
 using FinalBiome.Api.Tx;
 using Firebase.Auth;
 using Firebase.Auth.Providers;
+using Firebase.Auth.Requests;
 
 namespace FinalBiome.Sdk;
 
@@ -15,7 +16,7 @@ public class AuthClient
     /// <summary>
     /// Current FinalBiome user.
     /// </summary>
-    internal Api.Tx.Account? user { get; set; }
+    internal Api.Tx.Account? Account { get; set; }
 
     /// <summary>
     /// The user address in the network.
@@ -26,8 +27,8 @@ public class AuthClient
     {
         get
         {
-            if (user is null) throw new ErrorNotAuthenticatedException();
-            return user;
+            if (Account is null) throw new ErrorNotAuthenticatedException();
+            return Account;
         }
     }
 
@@ -36,8 +37,8 @@ public class AuthClient
     {
         get
         {
-            if (user is null) throw new ErrorNotAuthenticatedException();
-            _signer ??= new PairSigner(user);
+            if (Account is null) throw new ErrorNotAuthenticatedException();
+            _signer ??= new PairSigner(Account);
             return _signer;
         }
     }
@@ -47,7 +48,7 @@ public class AuthClient
     {
         get
         {
-            if (user is null) throw new ErrorNotAuthenticatedException();
+            if (Account is null) throw new ErrorNotAuthenticatedException();
             if (_gamerAccount is null)
             {
                 _gamerAccount = new GamerAccount();
@@ -61,22 +62,40 @@ public class AuthClient
         }
     }
 
-    /// <summary>
-    /// Indicates whether a user account is set or not <br/>
-    /// This can be interpreted as whether the user is logged in or not.
-    /// </summary>
-    public bool UserIsSet => user is not null;
+    private User? _user;
 
+    public User? User
+    {
+        get
+        {
+            if (fbClient.User is not null) return fbClient.User;
+            return _user;
+        }
+        internal set
+        {
+            _user = value;
+        }
+    }
+
+    bool firebaseAuthInitialized = false;
+
+    private UserInfo? _userInfo;
     /// <summary>
     /// Information about current user.
     /// </summary>
     /// <value></value>
-    public UserInfo? UserInfo { get; internal set; }
-
-    /// <summary>
-    /// Holds anonymous credentials if sign in was as anonym
-    /// </summary>
-    internal UserCredential? anonymCredential;
+    public UserInfo? UserInfo
+    {
+        get
+        {
+            if (User is not null) return User.Info;
+            return _userInfo;
+        }
+        set
+        {
+            _userInfo = value;
+        }
+    }
 
     /// <summary>
     /// A delegate type that will invoke when state of the user has been changed
@@ -90,6 +109,7 @@ public class AuthClient
     public OnStateChanged? StateChanged;
 
     internal readonly FirebaseAuthClient fbClient;
+    private readonly FirebaseAuthConfig fbConfig;
 
     public AuthClient(Client client)
     {
@@ -112,10 +132,44 @@ public class AuthClient
             config.UserRepository = repository;
         }
 
-        fbClient = new(config);
-        fbClient.AuthStateChanged += FbAuthStateHandler;
+        this.fbConfig = config;
+        this.fbClient = new(config);
     }
 
+    private void InitFirebaseAuthClient()
+    {
+        if (!firebaseAuthInitialized)
+        {
+            this.fbClient.AuthStateChanged += FbAuthStateHandler;
+            firebaseAuthInitialized = true;
+        }
+    }
+    /// <summary>
+    /// Indicates whether a user account is set or not <br/>
+    /// This can be interpreted as whether the user is logged in or not.
+    /// </summary>
+    /// <returns></returns>
+    public async Task<bool> IsLoggedIn()
+    {
+        if (Account is not null) return true;
+
+        InitFirebaseAuthClient();
+
+        // try to get persisted credentials and if it exists, init account
+        if (await GetUserInfo())
+        {
+            if (UserInfo!.IsAnonymous)
+            {
+                await FetchSeedAsAnonymous().ConfigureAwait(false);
+            }
+            else
+            {
+                await FetchSeedByFbAuth().ConfigureAwait(false);
+            }
+        }
+
+        return Account is not null;
+    }
     /// <summary>
     /// Sing in user with email and password.
     /// </summary>
@@ -124,12 +178,10 @@ public class AuthClient
     /// <returns></returns>
     public async Task SignInWithEmailAndPassword(string email, string password)
     {
-        var _ = await fbClient.SignInWithEmailAndPasswordAsync(email, password).ConfigureAwait(false);
-        if (anonymCredential is not null)
-        {
-            anonymCredential = null;
-            // TODO: drop anonymous in the Jimmy and in the network
-        }
+        InitFirebaseAuthClient();
+
+        var credential = await fbClient.SignInWithEmailAndPasswordAsync(email, password).ConfigureAwait(false);
+        User = credential.User;
         await FetchSeedByFbAuth().ConfigureAwait(false);
     }
 
@@ -141,24 +193,37 @@ public class AuthClient
     /// <returns></returns>
     public async Task SignUpWithEmailAndPassword(string email, string password)
     {
-        var result = await fbClient.FetchSignInMethodsForEmailAsync(email);
-        if (result.UserExists) throw new Exception($"User with {email} email already exists");
+        InitFirebaseAuthClient();
 
-        var credential = EmailProvider.GetCredential(email, password);
-        try
+        var result = await fbClient.FetchSignInMethodsForEmailAsync(email);
+        if (result.UserExists) throw new Exception($"User with {email} email already exists.Tyr to sign in");
+
+
+        // if user anonym migrate seed, else create new
+        if (User is not null && User.IsAnonymous)
         {
-            await anonymCredential!.User.LinkWithCredentialAsync(credential);
+            var credential = EmailProvider.GetCredential(email, password);
+            var userCredential = await User.LinkWithCredentialAsync(credential);
+            User = userCredential.User;
             // migrage seed
-            string token = await this.fbClient.User.GetIdTokenAsync().ConfigureAwait(false);
-            await jimmyClient.Migrage(token, fbClient.User.Uid).ConfigureAwait(false);
+            string token = await this.GetIdToken().ConfigureAwait(false);
+            await jimmyClient.Migrage(token, User.Uid).ConfigureAwait(false);
         }
-        catch (FirebaseAuthException e)
+        else
         {
-            // we can't link anonym and real accounts.
-            if (e.Reason != AuthErrorReason.EmailExists) throw;
-            // TODO: drop anonymous in the Jimmy and in the network
+            var credential = await fbClient.CreateUserWithEmailAndPasswordAsync(email, password);
+            User = credential.User;
+            string token = await this.GetIdToken().ConfigureAwait(false);
+            var seed = await jimmyClient.CreateSeed(token);
+            var user = FinalBiome.Api.Tx.Account.FromSeed(FinalBiome.Api.Types.SpRuntime.InnerMultiSignature.Sr25519,
+            FinalBiome.Api.Utils.HexUtils.HexToBytes(seed));
+            this.Account = user;
         }
-        anonymCredential = null;
+        if (StateChanged is not null)
+        {
+            Console.WriteLine($"Invoke StateChanged (SignUp): {this.UserInfo is not null}");
+            await StateChanged(this.UserInfo is not null);
+        }
     }
 
     /// <summary>
@@ -167,18 +232,23 @@ public class AuthClient
     /// <returns></returns>
     internal async Task SignInAsAnonym()
     {
-        anonymCredential = await fbClient.SignInAnonymouslyAsync().ConfigureAwait(false);
+        InitFirebaseAuthClient();
+
+        await fbClient.SignInAnonymouslyAsync().ConfigureAwait(false);
         await FetchSeedAsAnonymous().ConfigureAwait(false);
     }
 
     public async Task SignOut()
     {
+        InitFirebaseAuthClient();
+
         await fbClient.SignOutAsync().ConfigureAwait(false);
-        user = null;
-        anonymCredential = null;
+        Account = null;
 
         if (StateChanged is not null)
+        {
             await StateChanged(false).ConfigureAwait(false);
+        }
     }
 
     /// <summary>
@@ -186,12 +256,12 @@ public class AuthClient
     /// </summary>
     /// <param name="fbUser"></param>
     /// <returns></returns>
-    internal async Task FetchSeedByFbAuth()
+    private async Task FetchSeedByFbAuth()
     {
-        if (this.fbClient.User is not null)
+        if (this.UserInfo is not null)
         {
             // get token
-            string token = await this.fbClient.User.GetIdTokenAsync().ConfigureAwait(false);
+            string token = await this.GetIdToken().ConfigureAwait(false);
             // get a seed from the jimmy, if it doesn't exist, create it.
             // TODO: Refactor this. see must be creates when registers new account in the firebase. Or not?
             string seed;
@@ -215,30 +285,72 @@ public class AuthClient
             }
             var user = FinalBiome.Api.Tx.Account.FromSeed(FinalBiome.Api.Types.SpRuntime.InnerMultiSignature.Sr25519,
                 FinalBiome.Api.Utils.HexUtils.HexToBytes(seed));
-            this.user = user;
+            this.Account = user;
         }
 
         if (StateChanged is not null)
-            await StateChanged(this.fbClient.User is not null).ConfigureAwait(false);
+            await StateChanged(this.UserInfo is not null).ConfigureAwait(false);
     }
 
-    internal async Task FetchSeedAsAnonymous()
+    private async Task FetchSeedAsAnonymous()
     {
-        if (!this.fbClient.User.IsAnonymous) throw new Exception("Can't get anonymous seed, user is not anonym");
+        if (User is null) throw new Exception("Can't get anonymous seed, SignInAsAnonym first.");
+        if (!User.IsAnonymous) throw new Exception("Can't get anonymous seed, user is not anonym");
 
-        // string token = await this.fbClient.User.GetIdTokenAsync().ConfigureAwait(false);
-
-        string seed = await jimmyClient.AnonimousSeed(this.fbClient.User.Uid).ConfigureAwait(false);
+        string seed = await jimmyClient.AnonimousSeed(User.Uid).ConfigureAwait(false);
         var user = FinalBiome.Api.Tx.Account.FromSeed(FinalBiome.Api.Types.SpRuntime.InnerMultiSignature.Sr25519,
             FinalBiome.Api.Utils.HexUtils.HexToBytes(seed));
-        this.user = user;
+        this.Account = user;
 
         if (StateChanged is not null)
-            await StateChanged(this.fbClient.User is not null).ConfigureAwait(false);
+            await StateChanged(this.UserInfo is not null);
     }
-    public void FbAuthStateHandler(object? o, UserEventArgs e)
+
+    private void FbAuthStateHandler(object? o, UserEventArgs e)
     {
         // we need this handler, because if it not exists, firebase client doesn't read existed user from the local storage.
-        this.UserInfo = e.User?.Info;
+        this.User = e.User;
+        if (e.User is null)
+            Account = null;
+    }
+
+    // this is a crutch for cases when the firebase client did not have time to initialize the saved user credentials
+    private async Task<bool> GetUserInfo()
+    {
+        var (userInfo, _) = await this.fbConfig.UserManager.GetUserAsync();
+        this.UserInfo = userInfo;
+        return this.UserInfo is not null;
+    }
+
+    private async Task<string> GetIdToken(bool forceRefresh = false)
+    {
+        if (User is not null) return await User.GetIdTokenAsync().ConfigureAwait(false);
+
+        Console.WriteLine($"GetIdToken (User null)");
+        // if user not exists, try make handmade token
+        var (userInfo, credential) = await this.fbConfig.UserManager.GetUserAsync();
+        if (userInfo is null || credential is null) throw new Exception("User not logged in");
+
+        this.UserInfo = userInfo;
+
+        if (forceRefresh || credential.IsExpired())
+        {
+            var token = new RefreshToken(this.fbConfig);
+            var refresh = await token.ExecuteAsync(new RefreshTokenRequest
+            {
+                GrantType = "refresh_token",
+                RefreshToken = credential.RefreshToken
+            });
+
+            credential = new FirebaseCredential
+            {
+                ExpiresIn = refresh.ExpiresIn,
+                IdToken = refresh.IdToken,
+                ProviderType = credential.ProviderType,
+                RefreshToken = refresh.RefreshToken
+            };
+        }
+
+        return credential.IdToken;
     }
 }

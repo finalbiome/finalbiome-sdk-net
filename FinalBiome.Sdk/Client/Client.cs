@@ -13,18 +13,14 @@ public class Client : IDisposable
     /// </summary>
     public readonly Api.Client api;
 
+    internal readonly NetworkEventsListener networkEventsListener;
+
     public GameClient Game { get; internal set; }
     public FaClient Fa { get; internal set; }
     public NfaClient Nfa { get; internal set; }
     public AuthClient Auth { get; internal set; }
-    private MxClient? _mxClient;
-    public MxClient Mx {
-        get {
-            if (_mxClient is null) throw new ErrorNotAuthenticatedException();
-            return _mxClient;
-        }
-        internal set => _mxClient = value;
-    }
+    public MxClient Mx { get; internal set; }
+
 
 #pragma warning disable CS8618
     Client(ClientConfig config, Api.Client api)
@@ -32,6 +28,9 @@ public class Client : IDisposable
     {
         this.config = config;
         this.api = api;
+        this.networkEventsListener = new(this);
+
+        this.config.InternalStateChanged += HandleUserStateChangedEvent;
     }
 
     public static async Task<Client> Create(ClientConfig config)
@@ -40,43 +39,41 @@ public class Client : IDisposable
         Api.Client api = await Api.Client.FromUrl(config.Endpoint).ConfigureAwait(false);
         Client client = new(config, api);
         
-        AuthClient auth = new(client);
-        client.Auth = auth;
-        // subscribe to the user state changes
-        client.Auth.StateChanged += client.HandleUserStateChangedEvent;
-        // add subscriptions from config
-        if (config.StateChanged is not null)
-        {
-            client.Auth.StateChanged += config.StateChanged;
-        }
         // the game client we must init before other modules
         var gameClient = await GameClient.Create(client).ConfigureAwait(false);
         client.Game = gameClient;
 
         var faClientTask = FaClient.Create(client);
         var NfaClientTask = NfaClient.Create(client);
+        var MxClientTask = MxClient.Create(client);
 
-        await Task.WhenAll(faClientTask, NfaClientTask).ConfigureAwait(false);
+        await Task.WhenAll(faClientTask, NfaClientTask, MxClientTask).ConfigureAwait(false);
 
         var faClient = await faClientTask.ConfigureAwait(false);
         var nfaClient = await NfaClientTask.ConfigureAwait(false);
-
+        var mxClient = await MxClientTask.ConfigureAwait(false);
+        
         client.Fa = faClient;
         client.Nfa = nfaClient;
+        client.Mx = mxClient;
 
-        // if firebase user is not already signed in, login Anonymously
-        if (client.Auth.fbClient.User is null)
-        {
-            if (!config.NotAutoLogin)
-                await client.Auth.SignInAsAnonym();
-        }
-        else
-        {
-            // if firebase user already signed in, try to get seed
-            await client.Auth.FetchSeedByFbAuth().ConfigureAwait(false);
-        }
+        client.InitAuthClient();
         
         return client;
+    }
+
+    void InitAuthClient()
+    {
+        Console.WriteLine($"InitAuthClient");
+        
+        Auth = new AuthClient(this);
+        // subscribe to the state changes for internal clients
+        if (config.InternalStateChanged is not null)
+        {
+            Auth.StateChanged += config.InternalStateChanged; //.Clone() as FinalBiome.Sdk.AuthClient.OnStateChanged;
+        }
+
+        config.InternalStateChanged = null;
     }
 
     /// <summary>
@@ -88,23 +85,22 @@ public class Client : IDisposable
     {
         if (logedIn)
         {
-            // init MxClient
-            // MxClient can work only when the user is signed in.
-            // So, we init MxClient after user has been signed in.
-            Mx = await MxClient.Create(this, Auth.signer!).ConfigureAwait(false);
+            // set signer for MxClient
+            this.Mx.Signer = Auth.signer!;
         }
         else
         {
-            _mxClient?.Dispose();
-            _mxClient = null;
+            this.Mx.Signer = null;
         }
+        await Task.Yield();
     }
 
     public void Dispose()
     {
+        networkEventsListener.Dispose();
         Fa?.Dispose();
         Nfa?.Dispose();
-        _mxClient?.Dispose();
+        Mx?.Dispose();
         api.Dispose();
         GC.SuppressFinalize(this);
     }

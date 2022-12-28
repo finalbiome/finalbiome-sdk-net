@@ -21,7 +21,7 @@ public class GameClientTest
 
         using Client client = await Sdk.Client.Create(config);
 
-        Assert.That(client.Game.IsOnboarded, Is.False);
+        Assert.That(client.Game.IsOnboarded, Is.Null);
 
         // login
         string newEmail = TestUtils.RandomString(8) + "@finalbiome.net";
@@ -29,7 +29,7 @@ public class GameClientTest
         await client.Auth.SignUpWithEmailAndPassword(newEmail, newPwd);
 
         // check balance for the gamer for the ability to make game transactions
-        await NetworkHelpers.TopupAccountBalance(client.Auth.user!.ToAddress());
+        await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
         
         Assert.That(client.Game.IsOnboarded, Is.False);
 

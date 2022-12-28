@@ -51,7 +51,7 @@ internal class NetworkEventsListener : IDisposable
         this.client = client;
         this.subscriberCancellationTokenSource = new();
 
-        this.client.Auth.StateChanged += HandleUserStateChangedEvent;
+        this.client.config.InternalStateChanged += HandleUserStateChangedEvent;
     }
 
     /// <summary>
