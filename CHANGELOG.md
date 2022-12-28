@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="2.0.0"></a>
+## [2.0.0](https://www.github.com/finalbiome/finalbiome-sdk-net/releases/tag/v2.0.0) (2022-12-28)
+
+### Features
+
+* added to config delegate StateChanged ([89c555d](https://www.github.com/finalbiome/finalbiome-sdk-net/commit/89c555db71116c188ea182689179611d0475638f))
+
+### Bug Fixes
+
+* refactored auth ([8620af2](https://www.github.com/finalbiome/finalbiome-sdk-net/commit/8620af2c92b5ef45c8c69c87f4e5b7167a76969f))
+
+### Breaking Changes
+
+* refactored auth ([8620af2](https://www.github.com/finalbiome/finalbiome-sdk-net/commit/8620af2c92b5ef45c8c69c87f4e5b7167a76969f))
+
 <a name="1.1.0"></a>
 ## [1.1.0](https://www.github.com/finalbiome/finalbiome-sdk-net/releases/tag/v1.1.0) (2022-12-20)
 
