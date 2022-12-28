@@ -29,7 +29,7 @@ public class GameClient
     {
         this.client = client;
         this.Address = this.client.config.GameAccount;
-        client.Auth.StateChanged += HandleUserStateChangedEvent;
+        this.client.config.InternalStateChanged += HandleUserStateChangedEvent;
     }
 
     public static async Task<GameClient> Create(Client client) {

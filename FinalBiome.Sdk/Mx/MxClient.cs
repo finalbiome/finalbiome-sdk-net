@@ -38,11 +38,30 @@ public class MxClient : IDisposable
 {
     readonly Client client;
 
+    private ulong? _accountNonce;
     /// <summary>
     /// Current nonce that can used for submitting Tx
     /// </summary>
-    internal ulong accountNonce;
-    readonly PairSigner signer;
+    internal ulong accountNonce {
+        get {
+            if (_accountNonce is null) throw new ErrorNotAuthenticatedException();
+            return (ulong)_accountNonce;
+        }
+        set => _accountNonce = value;
+    }
+    
+    private PairSigner? _signer;
+    internal PairSigner Signer {
+        private get
+        {
+            if (_signer is null) throw new ErrorNotAuthenticatedException();
+                return _signer;
+        }
+        set
+        {
+            _signer = value;
+        }
+    }
 
     /// <summary>
     /// Root bytes for the mechanics storage of the mechanics module
@@ -76,15 +95,11 @@ public class MxClient : IDisposable
 
     private MxClient(
         Client client, 
-        PairSigner signer, 
-        ulong accountNonce,
         CancellationTokenSource subscriberCancellationTokenSource,
         SubscribeAggregator<MechanicDetails> subscriberToMechanics
     )
     {
         this.client = client;
-        this.signer = signer;
-        this.accountNonce = accountNonce;
         this.activeMechanics = new();
         this.subscriberCancellationTokenSource = subscriberCancellationTokenSource;
 
@@ -92,26 +107,44 @@ public class MxClient : IDisposable
         this.subscriberToMechanics.StorageChanged += SubscriberToMechanicsDetailsHandler;
 
         // listen network events about mechanics dropped by timeout
-        this.client.Nfa.networkEventsListener.MechanicsDropped += MechanicsDroppedHandler;
+        this.client.networkEventsListener.MechanicsDropped += MechanicsDroppedHandler;
+
+        this.client.config.InternalStateChanged += HandleUserStateChangedEvent;
     }
 
-    internal static async Task<MxClient> Create(Client client, PairSigner signer)
+    internal static async Task<MxClient> Create(Client client)
     {
-        var accountNonce = await FetchNonce(client).ConfigureAwait(false);
-
-        // get from the network all active mechanics and subscribe to it
-        List<StorageAddress> mxAddresses = new();
-        await foreach (MxId mxId in FetchActiveMechanics(client).ConfigureAwait(false))
-        {
-            var addr = client.api.Storage.Mechanics.MechanicsGet(mxId.gamerAccount, (uint)mxId.nonce).Address; // TODO: change nonce to the u64 in the node
-            mxAddresses.Add(addr);
-        }
         CancellationTokenSource cts = new();
         SubscribeAggregator<MechanicDetails> subscriberToMechanics = new(client, tasksLimit: 5, cts.Token);
-        await subscriberToMechanics.Subscribe(mxAddresses).ConfigureAwait(false);
+        MxClient mxClient = new(client, cts, subscriberToMechanics);
+        return await Task.FromResult(mxClient).ConfigureAwait(false);
+    }
 
-        MxClient mxClient = new(client, signer, accountNonce, cts, subscriberToMechanics);
-        return mxClient;
+    /// <summary>
+    /// Handler to changes of the user state for subscribing to assets owned by user.
+    /// </summary>
+    /// <param name="isLogged"></param>
+    /// <returns></returns>
+    async Task HandleUserStateChangedEvent(bool isLogged)
+    {
+        Console.WriteLine($"UserStateChanged MxClient: {isLogged}");
+        if (isLogged)
+        {
+            this.accountNonce = await FetchNonce(client).ConfigureAwait(false);
+            // get from the network all active mechanics and subscribe to it
+            List<StorageAddress> mxAddresses = new();
+            await foreach (MxId mxId in FetchActiveMechanics(client).ConfigureAwait(false))
+            {
+                var addr = client.api.Storage.Mechanics.MechanicsGet(mxId.gamerAccount, (uint)mxId.nonce).Address; // TODO: change nonce to the u64 in the node
+                mxAddresses.Add(addr);
+            }
+            await this.subscriberToMechanics.Subscribe(mxAddresses).ConfigureAwait(false);
+        }
+        else
+        {
+            this._accountNonce = null;
+            await this.subscriberToMechanics.UnsubscribeAll();
+        }
     }
 
     void SubscriberToMechanicsDetailsHandler(object? o, StorageChangedEventArgs<MechanicDetails> eventArgs)
@@ -306,7 +339,7 @@ public class MxClient : IDisposable
     private async Task<ExtrinsicEvents> Submit(TxPayload payload, uint? retries = null)
     {
         BaseExtrinsicParamsBuilder<PlainTip> otherParams = BaseExtrinsicParamsBuilder<PlainTip>.Default();
-        var subExt = client.api.Tx.CreateSignedWithNonce(payload, signer, accountNonce, otherParams);
+        var subExt = client.api.Tx.CreateSignedWithNonce(payload, Signer, accountNonce, otherParams);
         try
         {
             var txProgress = await subExt.SubmitAndWatch().ConfigureAwait(false);

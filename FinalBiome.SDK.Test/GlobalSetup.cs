@@ -21,18 +21,19 @@ public class GlobalSetup
         {
             // set persistence path for storing data
             PersistenceDataPath = Path.GetTempPath(),
-            NotAutoLogin = true,
         };
-        using Client client = await FinalBiome.Sdk.Client.Create(config);
+        Client client = await FinalBiome.Sdk.Client.Create(config);
 
         await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
         // check balance for the gamer for the ability to make game transactions
-        await NetworkHelpers.TopupAccountBalance(client.Auth.user!.ToAddress());
+        await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
 
         if (!(bool)client.Game.IsOnboarded!)
         {
             await client.Mx.OnboardToGame();
         }
+
+        client.Dispose();
     }
 
     [OneTimeSetUp]

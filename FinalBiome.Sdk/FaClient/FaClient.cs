@@ -65,7 +65,7 @@ public class FaClient : IDisposable
     public FaClient(Client client)
     {
         this.client = client;
-        this.client.Auth.StateChanged += HandleUserStateChangedEvent;
+        this.client.config.InternalStateChanged += HandleUserStateChangedEvent;
     }
 
     /// <summary>

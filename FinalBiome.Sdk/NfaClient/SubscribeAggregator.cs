@@ -163,6 +163,16 @@ internal class SubscribeAggregator<TResult> : IDisposable where TResult : Codec,
         // resubscription will clean this unnecessary keys.
     }
 
+    /// <summary>
+    /// Unsubscribe from changes at all addresses.
+    /// </summary>
+    /// <returns></returns>
+    public async Task UnsubscribeAll()
+    {
+        activeStorageKeys.Clear();
+        await ReSubscribe();
+    }
+
     void OnStorageChangedEvent(StorageChangedEventArgs<TResult> e)
     {
         StorageChanged?.Invoke(this, e);
@@ -246,7 +256,8 @@ internal class SubscribeAggregator<TResult> : IDisposable where TResult : Codec,
         }
         subTasks.Clear();
         // 2. subscribe on all keys at once
-        CreateNewSubscriptionTask(activeStorageKeys.Values);
+        if (!activeStorageKeys.IsEmpty)
+            CreateNewSubscriptionTask(activeStorageKeys.Values);
     }
 
     /// <summary>

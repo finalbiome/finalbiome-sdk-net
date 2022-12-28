@@ -71,8 +71,6 @@ public class NfaClient : IDisposable
     /// </summary>
     readonly SubscribeAggregator<NfaAssetDetails> subscriberToInstances;
 
-    internal readonly NetworkEventsListener networkEventsListener;
-
     /// <summary>
     /// Event emitted when details of some Nfa class has been changed.
     /// </summary>
@@ -94,10 +92,9 @@ public class NfaClient : IDisposable
         subscriberToInstances = new(this.client, 5, subscriberCancellationTokenSource.Token);
         subscriberToInstances.StorageChanged += SubscriberToInstanceDetailsHandler;
 
-        networkEventsListener = new(this.client);
-        networkEventsListener.NfaIssued += NfaIssuedEventHandler;
+        client.networkEventsListener.NfaIssued += NfaIssuedEventHandler;
 
-        client.Auth.StateChanged += HandleUserStateChangedEvent;
+        this.client.config.InternalStateChanged += HandleUserStateChangedEvent;
     }
 
     public static async Task<NfaClient> Create(Client client)
@@ -120,7 +117,6 @@ public class NfaClient : IDisposable
         subscriberCancellationTokenSource.Dispose();
         subscriberToClasses.Dispose();
         subscriberToInstances.Dispose();
-        networkEventsListener.Dispose();
         GC.SuppressFinalize(this);
     }
 
