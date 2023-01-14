@@ -24,9 +24,8 @@ public class GameClientTest
         Assert.That(client.Game.IsOnboarded, Is.Null);
 
         // login
-        string newEmail = TestUtils.RandomString(8) + "@finalbiome.net";
-        string newPwd = TestUtils.RandomString(8);
-        await client.Auth.SignUpWithEmailAndPassword(newEmail, newPwd);
+        await using var user = new FirebaseUser();
+        await client.Auth.SignUpWithEmailAndPassword(user.Email, user.Password);
 
         // check balance for the gamer for the ability to make game transactions
         await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
@@ -48,11 +47,6 @@ public class GameClientTest
         await client.Auth.SignOut();
 
         Assert.That(client.Game.IsOnboarded, Is.Null);
-
-        // cleanup: remove user from the firebase
-        var defaultApp = FirebaseApp.DefaultInstance ?? FirebaseApp.Create();
-        UserRecord userRecord = await FirebaseAuth.DefaultInstance.GetUserByEmailAsync(newEmail);
-        await FirebaseAuth.DefaultInstance.DeleteUserAsync(userRecord.Uid);
 
     }
 }

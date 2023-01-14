@@ -1,4 +1,5 @@
 using FinalBiome.Api.Tx;
+using FinalBiome.Sdk.Jimmy;
 using Firebase.Auth;
 using Firebase.Auth.Providers;
 using Firebase.Auth.Requests;
@@ -61,6 +62,12 @@ public class AuthClient
             return _gamerAccount;
         }
     }
+
+    /// <summary>
+    /// Signature for registration in the quota management system.
+    /// </summary>
+    /// <value></value>
+    internal byte[]? SignUpSignature { get; set; }
 
     private User? _user;
 
@@ -215,8 +222,9 @@ public class AuthClient
             User = credential.User;
             string token = await this.GetIdToken().ConfigureAwait(false);
             var seed = await jimmyClient.CreateSeed(token);
+            this.SignUpSignature = seed.Sign;
             var user = FinalBiome.Api.Tx.Account.FromSeed(FinalBiome.Api.Types.SpRuntime.InnerMultiSignature.Sr25519,
-            FinalBiome.Api.Utils.HexUtils.HexToBytes(seed));
+            seed.SeedData);
             this.Account = user;
         }
         if (StateChanged is not null)
@@ -264,7 +272,7 @@ public class AuthClient
             string token = await this.GetIdToken().ConfigureAwait(false);
             // get a seed from the jimmy, if it doesn't exist, create it.
             // TODO: Refactor this. see must be creates when registers new account in the firebase. Or not?
-            string seed;
+            Seed seed;
             try
             {
                 seed = await jimmyClient.GetSeed(token).ConfigureAwait(false);
@@ -276,7 +284,7 @@ public class AuthClient
                     // it means the seed was not created before
                     // so, create it
                     seed = await jimmyClient.CreateSeed(token).ConfigureAwait(false);
-
+                    this.SignUpSignature = seed.Sign;
                 }
                 else
                 {
@@ -284,7 +292,7 @@ public class AuthClient
                 }
             }
             var user = FinalBiome.Api.Tx.Account.FromSeed(FinalBiome.Api.Types.SpRuntime.InnerMultiSignature.Sr25519,
-                FinalBiome.Api.Utils.HexUtils.HexToBytes(seed));
+                seed.SeedData);
             this.Account = user;
         }
 
@@ -297,9 +305,10 @@ public class AuthClient
         if (User is null) throw new Exception("Can't get anonymous seed, SignInAsAnonym first.");
         if (!User.IsAnonymous) throw new Exception("Can't get anonymous seed, user is not anonym");
 
-        string seed = await jimmyClient.AnonimousSeed(User.Uid).ConfigureAwait(false);
+        Seed seed = await jimmyClient.AnonimousSeed(User.Uid).ConfigureAwait(false);
+        this.SignUpSignature = seed.Sign;
         var user = FinalBiome.Api.Tx.Account.FromSeed(FinalBiome.Api.Types.SpRuntime.InnerMultiSignature.Sr25519,
-            FinalBiome.Api.Utils.HexUtils.HexToBytes(seed));
+            seed.SeedData);
         this.Account = user;
 
         if (StateChanged is not null)
@@ -326,7 +335,7 @@ public class AuthClient
     {
         if (User is not null) return await User.GetIdTokenAsync().ConfigureAwait(false);
 
-        Console.WriteLine($"GetIdToken (User null)");
+        // Console.WriteLine($"GetIdToken (User null)");
         // if user not exists, try make handmade token
         var (userInfo, credential) = await this.fbConfig.UserManager.GetUserAsync();
         if (userInfo is null || credential is null) throw new Exception("User not logged in");

@@ -6,6 +6,8 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using FinalBiome.Api.Types.Primitive;
 using FinalBiome.Api.Types.SpCore.Crypto;
+using FirebaseAdmin;
+using FirebaseAdmin.Auth;
 
 namespace FinalBiome.Sdk.Test;
 
@@ -225,5 +227,33 @@ public static class TestUtils
         const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
         return new string(Enumerable.Repeat(chars, length)
             .Select(s => s[random.Next(s.Length)]).ToArray());
+    }
+}
+
+/// <summary>
+/// Helper class for creating and destroing the Firabese user
+/// </summary>
+public class FirebaseUser: IAsyncDisposable
+{
+    public string Email;
+    public string Password;
+    
+    public FirebaseUser()
+    {
+        Email = TestUtils.RandomString(8) + "@finalbiome.net";
+        Password = TestUtils.RandomString(8);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        Console.WriteLine($"Remove user from Firebase...");
+
+        // cleanup: remove user from the firebase
+        _ = FirebaseApp.Create();
+        UserRecord userRecord = await FirebaseAuth.DefaultInstance.GetUserByEmailAsync(this.Email);
+        await FirebaseAuth.DefaultInstance.DeleteUserAsync(userRecord.Uid);
+
+        // Suppress finalization.
+        GC.SuppressFinalize(this);
     }
 }

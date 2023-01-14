@@ -7,6 +7,26 @@ namespace FinalBiome.Sdk.Test;
 public class AuthClientTests
 {
     [Test]
+    public async Task SignUpWithEmail()
+    {
+        // force logout
+        File.Delete(Path.Combine(Path.GetTempPath(), "finalbiome_auth.json"));
+        string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
+        ClientConfig config = new(eveGame)
+        {
+            // set persistence path for storing data
+            PersistenceDataPath = Path.GetTempPath(),
+        };
+        using Client client = await Sdk.Client.Create(config);
+        Assert.That(await client.Auth.IsLoggedIn(), Is.False);
+
+        await using var user = new FirebaseUser();
+        await client.Auth.SignUpWithEmailAndPassword(user.Email, user.Password);
+
+        Assert.That(await client.Auth.IsLoggedIn(), Is.True);
+    }
+    
+    [Test]
     public async Task SignInWithEmail()
     {
         // force logout
@@ -147,7 +167,6 @@ public class AuthClientTests
         File.Delete(Path.Combine(Path.GetTempPath(), "finalbiome_auth.json"));
 
         byte[]? accountId;
-        string newEmail;
 
         string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
         ClientConfig config = new(eveGame)
@@ -164,6 +183,7 @@ public class AuthClientTests
                 // here we should be as anonym
                 Assert.That(client.Auth.Account, Is.Null);
                 Assert.That(client.Auth.UserInfo, expression: Is.Null);
+                Assert.That(client.Auth.SignUpSignature, expression: Is.Null);
             });
 
             await client.Auth.SignInAsAnonym();
@@ -179,23 +199,25 @@ public class AuthClientTests
             // this device id of anonym
             var deviceId = client.Auth.fbClient.User.Uid;
             accountId = client.Auth.UserAddress.Bytes;
+            Assert.Multiple(() =>
+            {
+                Assert.That(client.Auth.User!.IsAnonymous, Is.True);
+                Assert.That(client.Auth.SignUpSignature, Is.Not.Null);
+            });
+            await using var user = new FirebaseUser();
 
-            Assert.That(client.Auth.User!.IsAnonymous, Is.True);
-
-            newEmail = TestUtils.RandomString(8) + "@finalbiome.net";
-            string newPwd = TestUtils.RandomString(8);
-
-            await client.Auth.SignUpWithEmailAndPassword(newEmail, newPwd);
+            await client.Auth.SignUpWithEmailAndPassword(user.Email, user.Password);
 
             Assert.Multiple(() =>
             {
                 Assert.That(client.Auth.Account, Is.Not.Null);
                 // after singing in user must be the same but non anonym
-                Assert.That(client.Auth.User.IsAnonymous, Is.False);
+                Assert.That(client.Auth.User!.IsAnonymous, Is.False);
                 Assert.That(client.Auth.fbClient.User.Uid, Is.EqualTo(deviceId));
                 Assert.That(client.Auth.UserAddress.Bytes, Is.EqualTo(accountId));
                 Assert.That(client.Auth.UserInfo?.IsAnonymous, Is.False);
-                Assert.That(client.Auth.UserInfo?.Email, Is.EqualTo(newEmail));
+                Assert.That(client.Auth.UserInfo?.Email, Is.EqualTo(user.Email));
+                Assert.That(client.Auth.SignUpSignature, Is.Null);
             });
         }
 
@@ -211,10 +233,5 @@ public class AuthClientTests
                 Assert.That(client.Auth.UserAddress.Bytes, Is.EqualTo(accountId));
             });
         }
-
-        // cleanup: remove user from the firebase
-        var defaultApp = FirebaseApp.Create();
-        UserRecord userRecord = await FirebaseAuth.DefaultInstance.GetUserByEmailAsync(newEmail);
-        await FirebaseAuth.DefaultInstance.DeleteUserAsync(userRecord.Uid);
     }
 }
