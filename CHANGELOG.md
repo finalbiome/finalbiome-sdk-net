@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="2.1.0"></a>
+## [2.1.0](https://www.github.com/finalbiome/finalbiome-sdk-net/releases/tag/v2.1.0) (2023-1-14)
+
+### Features
+
+* added signup call for new users ([6f8f65a](https://www.github.com/finalbiome/finalbiome-sdk-net/commit/6f8f65aed94d5143909f7c286bcf4a77b51b6e09))
+* bumps types to `v0.3.0` ([b521a04](https://www.github.com/finalbiome/finalbiome-sdk-net/commit/b521a0484bfcba2d8bf222ae8b1b2d6a8eaf1506))
+
 <a name="2.0.0"></a>
 ## [2.0.0](https://www.github.com/finalbiome/finalbiome-sdk-net/releases/tag/v2.0.0) (2022-12-28)
 
