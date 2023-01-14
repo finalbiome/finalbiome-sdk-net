@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 104
+    /// Generated from meta with Type Id 105
     /// </summary>
     public class WeakBoundedVecTuple_Public_U64 : WeakBoundedVec<FinalBiome.Api.Types.Tuple_Public_U64>
     {

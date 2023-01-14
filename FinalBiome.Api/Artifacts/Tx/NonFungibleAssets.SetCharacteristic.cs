@@ -13,7 +13,7 @@ namespace FinalBiome.Api.Tx
     {
         public StaticTxPayload SetCharacteristic(FinalBiome.Api.Types.SpRuntime.Multiaddress.MultiAddress organizationId, FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId.CompactNonFungibleClassId classId, FinalBiome.Api.Types.PalletSupport.Characteristics.Characteristic characteristic)
         {
-            byte palletIsx = 11;
+            byte palletIsx = 12;
             byte callIsx = 4;
 
             List<byte> callData = new List<byte>();

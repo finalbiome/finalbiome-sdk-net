@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletSupport.Characteristics.Bettor
 {
     /// <summary>
-    /// Generated from meta with Type Id 161
+    /// Generated from meta with Type Id 163
     /// </summary>
     public class BoundedVecBettorWinning : BoundedVec<FinalBiome.Api.Types.PalletSupport.Characteristics.Bettor.BettorWinning>
     {

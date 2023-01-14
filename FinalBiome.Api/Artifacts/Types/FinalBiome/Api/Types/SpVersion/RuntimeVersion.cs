@@ -13,7 +13,7 @@ using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.SpVersion
 {
     /// <summary>
-    /// Generated from meta with Type Id 87
+    /// Generated from meta with Type Id 88
     /// </summary>
     public class RuntimeVersion : Codec
     {

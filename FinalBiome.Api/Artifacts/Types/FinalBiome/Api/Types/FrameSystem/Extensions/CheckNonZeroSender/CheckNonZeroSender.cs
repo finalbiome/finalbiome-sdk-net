@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.FrameSystem.Extensions.CheckNonZeroSender
 {
     /// <summary>
-    /// Generated from meta with Type Id 207
+    /// Generated from meta with Type Id 212
     /// </summary>
     public class CheckNonZeroSender : BaseVoid
     {

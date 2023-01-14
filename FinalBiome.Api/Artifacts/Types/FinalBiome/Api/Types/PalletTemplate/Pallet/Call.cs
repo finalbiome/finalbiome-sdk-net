@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletTemplate.Pallet
     /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 137
+    /// Generated from meta with Type Id 138
     /// </summary>
     public enum InnerCall : byte
     {
@@ -34,7 +34,7 @@ namespace FinalBiome.Api.Types.PalletTemplate.Pallet
     /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 137
+    /// Generated from meta with Type Id 138
     /// </summary>
     public class Call : Enum<InnerCall, FinalBiome.Api.Types.PalletTemplate.Pallet.CallDoSomething, BaseVoid>
     {

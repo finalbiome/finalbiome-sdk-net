@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.FrameSystem.Extensions.CheckSpecVersion
 {
     /// <summary>
-    /// Generated from meta with Type Id 208
+    /// Generated from meta with Type Id 213
     /// </summary>
     public class CheckSpecVersion : BaseVoid
     {

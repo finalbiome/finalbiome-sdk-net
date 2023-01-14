@@ -13,7 +13,7 @@ using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.PalletBalances
 {
     /// <summary>
-    /// Generated from meta with Type Id 120
+    /// Generated from meta with Type Id 121
     /// </summary>
     public class BalanceLock : Codec
     {

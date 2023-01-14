@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.SpFinalityGrandpa
 {
     /// <summary>
-    /// Generated from meta with Type Id 107
+    /// Generated from meta with Type Id 108
     /// </summary>
     public enum InnerEquivocation : byte
     {
@@ -21,7 +21,7 @@ namespace FinalBiome.Api.Types.SpFinalityGrandpa
         Precommit = 1,
     }
     /// <summary>
-    /// Generated from meta with Type Id 107
+    /// Generated from meta with Type Id 108
     /// </summary>
     public class Equivocation : Enum<InnerEquivocation, FinalBiome.Api.Types.FinalityGrandpa.Equivocation, FinalBiome.Api.Types.FinalityGrandpa.Equivocation>
     {

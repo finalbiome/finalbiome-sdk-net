@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Tx
         /// </summary>
         public StaticTxPayload ExecBet(FinalBiome.Api.Types.SpCore.Crypto.AccountId32 organizationId, FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId classId, FinalBiome.Api.Types.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId assetId)
         {
-            byte palletIsx = 12;
+            byte palletIsx = 13;
             byte callIsx = 1;
 
             List<byte> callData = new List<byte>();

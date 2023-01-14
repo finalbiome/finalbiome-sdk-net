@@ -18,7 +18,7 @@ namespace FinalBiome.Api.Tx
         /// </summary>
         public StaticTxPayload Destroy(FinalBiome.Api.Types.SpRuntime.Multiaddress.MultiAddress organizationId, FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId.CompactNonFungibleClassId classId)
         {
-            byte palletIsx = 11;
+            byte palletIsx = 12;
             byte callIsx = 1;
 
             List<byte> callData = new List<byte>();

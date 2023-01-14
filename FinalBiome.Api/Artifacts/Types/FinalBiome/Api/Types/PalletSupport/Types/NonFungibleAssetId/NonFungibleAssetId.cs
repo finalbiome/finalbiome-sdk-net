@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletSupport.Types.NonFungibleAssetId
 {
     /// <summary>
-    /// Generated from meta with Type Id 46
+    /// Generated from meta with Type Id 47
     /// </summary>
     public class NonFungibleAssetId : FinalBiome.Api.Types.Primitive.U32
     {

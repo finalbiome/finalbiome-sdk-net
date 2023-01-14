@@ -24,7 +24,7 @@ namespace FinalBiome.Api.Types.PalletOrganizationIdentity.Pallet
     /// * ``<br/>
     ///
     ///
-    /// Generated from meta with Type Id 138, Variant Id 2
+    /// Generated from meta with Type Id 140, Variant Id 2
     /// </summary>
     public class CallRemoveMember : Codec
     {

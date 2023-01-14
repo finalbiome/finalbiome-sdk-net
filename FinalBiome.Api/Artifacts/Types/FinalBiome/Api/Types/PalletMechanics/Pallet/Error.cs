@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletMechanics.Pallet
     ///  Custom [dispatch errors](https://docs.substrate.io/main-docs/build/events-errors/) of this pallet. <br/>
     ///
     ///
-    /// Generated from meta with Type Id 200
+    /// Generated from meta with Type Id 205
     /// </summary>
     public enum InnerError : byte
     {
@@ -49,7 +49,7 @@ namespace FinalBiome.Api.Types.PalletMechanics.Pallet
     ///  Custom [dispatch errors](https://docs.substrate.io/main-docs/build/events-errors/) of this pallet. <br/>
     ///
     ///
-    /// Generated from meta with Type Id 200
+    /// Generated from meta with Type Id 205
     /// </summary>
     public class Error : Enum<InnerError, BaseVoid, BaseVoid, BaseVoid, BaseVoid, BaseVoid, BaseVoid>
     {

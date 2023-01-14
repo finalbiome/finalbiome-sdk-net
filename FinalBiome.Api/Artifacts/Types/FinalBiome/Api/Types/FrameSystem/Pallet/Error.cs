@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.FrameSystem.Pallet
     /// Error for the System pallet<br/>
     ///
     ///
-    /// Generated from meta with Type Id 93
+    /// Generated from meta with Type Id 94
     /// </summary>
     public enum InnerError : byte
     {
@@ -53,7 +53,7 @@ namespace FinalBiome.Api.Types.FrameSystem.Pallet
     /// Error for the System pallet<br/>
     ///
     ///
-    /// Generated from meta with Type Id 93
+    /// Generated from meta with Type Id 94
     /// </summary>
     public class Error : Enum<InnerError, BaseVoid, BaseVoid, BaseVoid, BaseVoid, BaseVoid, BaseVoid>
     {

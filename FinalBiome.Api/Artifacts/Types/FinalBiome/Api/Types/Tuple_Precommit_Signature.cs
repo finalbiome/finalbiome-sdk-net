@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 116
+    /// Generated from meta with Type Id 117
     /// </summary>
     public class Tuple_Precommit_Signature : FinalBiome.Api.Types.Tuple<FinalBiome.Api.Types.FinalityGrandpa.Precommit, FinalBiome.Api.Types.SpFinalityGrandpa.App.Signature>
     {

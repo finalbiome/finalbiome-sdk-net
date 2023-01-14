@@ -13,7 +13,7 @@ using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.PalletFungibleAssets.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 148
+    /// Generated from meta with Type Id 150
     /// </summary>
     public class TopUppedFA : Codec
     {

@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 113
+    /// Generated from meta with Type Id 114
     /// </summary>
     public class Tuple_Prevote_Signature : FinalBiome.Api.Types.Tuple<FinalBiome.Api.Types.FinalityGrandpa.Prevote, FinalBiome.Api.Types.SpFinalityGrandpa.App.Signature>
     {

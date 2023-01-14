@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletSupport.Characteristics
 {
     /// <summary>
-    /// Generated from meta with Type Id 154
+    /// Generated from meta with Type Id 156
     /// </summary>
     public enum InnerCharacteristic : byte
     {
@@ -21,7 +21,7 @@ namespace FinalBiome.Api.Types.PalletSupport.Characteristics
         Purchased = 1,
     }
     /// <summary>
-    /// Generated from meta with Type Id 154
+    /// Generated from meta with Type Id 156
     /// </summary>
     public class Characteristic : Enum<InnerCharacteristic, FinalBiome.Api.Types.OptionBettor, FinalBiome.Api.Types.OptionPurchased>
     {

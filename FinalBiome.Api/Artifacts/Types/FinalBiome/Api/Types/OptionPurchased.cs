@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 165
+    /// Generated from meta with Type Id 167
     /// </summary>
     public class OptionPurchased : Option<FinalBiome.Api.Types.PalletSupport.Characteristics.Purchased.Purchased>
     {

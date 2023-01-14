@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletMechanics.Pallet
     /// Execute mechanic `Bet`<br/>
     ///
     ///
-    /// Generated from meta with Type Id 170, Variant Id 1
+    /// Generated from meta with Type Id 172, Variant Id 1
     /// </summary>
     public class CallExecBet : Codec
     {

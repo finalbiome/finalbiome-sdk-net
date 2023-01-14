@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.FrameSystem.Pallet
     /// Kill some items from storage.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 75, Variant Id 6
+    /// Generated from meta with Type Id 76, Variant Id 6
     /// </summary>
     public class CallKillStorage : Codec
     {

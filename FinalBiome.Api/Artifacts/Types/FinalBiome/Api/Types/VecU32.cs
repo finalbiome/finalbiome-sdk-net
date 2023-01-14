@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 58
+    /// Generated from meta with Type Id 59
     /// </summary>
     public class VecU32 : Vec<FinalBiome.Api.Types.Primitive.U32>
     {

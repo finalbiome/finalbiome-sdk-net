@@ -31,7 +31,7 @@ namespace FinalBiome.Api.Types.PalletTimestamp.Pallet
     /// # &lt;/weight&gt;<br/>
     ///
     ///
-    /// Generated from meta with Type Id 95, Variant Id 0
+    /// Generated from meta with Type Id 96, Variant Id 0
     /// </summary>
     public class CallSet : Codec
     {

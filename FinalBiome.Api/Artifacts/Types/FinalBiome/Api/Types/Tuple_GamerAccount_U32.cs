@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 198
+    /// Generated from meta with Type Id 203
     /// </summary>
     public class Tuple_GamerAccount_U32 : FinalBiome.Api.Types.Tuple<FinalBiome.Api.Types.PalletSupport.GamerAccount, FinalBiome.Api.Types.Primitive.U32>
     {

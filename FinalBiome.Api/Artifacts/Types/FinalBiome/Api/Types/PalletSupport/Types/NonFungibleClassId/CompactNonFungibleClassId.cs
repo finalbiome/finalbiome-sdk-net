@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId;
     /// <summary>
-    /// Generated from meta with Type Id 153
+    /// Generated from meta with Type Id 155
     /// </summary>
 public class CompactNonFungibleClassId : Compact<FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId>
 {

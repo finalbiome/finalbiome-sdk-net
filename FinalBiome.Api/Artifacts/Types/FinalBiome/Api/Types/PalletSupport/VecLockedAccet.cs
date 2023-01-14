@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletSupport
 {
     /// <summary>
-    /// Generated from meta with Type Id 64
+    /// Generated from meta with Type Id 65
     /// </summary>
     public class VecLockedAccet : Vec<FinalBiome.Api.Types.PalletSupport.LockedAccet>
     {

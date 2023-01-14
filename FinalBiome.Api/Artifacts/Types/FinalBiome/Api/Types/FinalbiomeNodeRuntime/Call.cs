@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.FinalbiomeNodeRuntime
 {
     /// <summary>
-    /// Generated from meta with Type Id 136
+    /// Generated from meta with Type Id 137
     /// </summary>
     public enum InnerCall : byte
     {
@@ -26,15 +26,16 @@ namespace FinalBiome.Api.Types.FinalbiomeNodeRuntime
         Unsupported_6 = 6,
         Sudo = 7,
         TemplateModule = 8,
-        OrganizationIdentity = 9,
-        FungibleAssets = 10,
-        NonFungibleAssets = 11,
-        Mechanics = 12,
+        Users = 9,
+        OrganizationIdentity = 10,
+        FungibleAssets = 11,
+        NonFungibleAssets = 12,
+        Mechanics = 13,
     }
     /// <summary>
-    /// Generated from meta with Type Id 136
+    /// Generated from meta with Type Id 137
     /// </summary>
-    public class Call : Enum<InnerCall, FinalBiome.Api.Types.FrameSystem.Pallet.Call, BaseVoid, FinalBiome.Api.Types.PalletTimestamp.Pallet.Call, BaseVoid, FinalBiome.Api.Types.PalletGrandpa.Pallet.Call, FinalBiome.Api.Types.PalletBalances.Pallet.Call, BaseVoid, FinalBiome.Api.Types.PalletSudo.Pallet.Call, FinalBiome.Api.Types.PalletTemplate.Pallet.Call, FinalBiome.Api.Types.PalletOrganizationIdentity.Pallet.Call, FinalBiome.Api.Types.PalletFungibleAssets.Pallet.Call, FinalBiome.Api.Types.PalletNonFungibleAssets.Pallet.Call, FinalBiome.Api.Types.PalletMechanics.Pallet.Call>
+    public class Call : Enum<InnerCall, FinalBiome.Api.Types.FrameSystem.Pallet.Call, BaseVoid, FinalBiome.Api.Types.PalletTimestamp.Pallet.Call, BaseVoid, FinalBiome.Api.Types.PalletGrandpa.Pallet.Call, FinalBiome.Api.Types.PalletBalances.Pallet.Call, BaseVoid, FinalBiome.Api.Types.PalletSudo.Pallet.Call, FinalBiome.Api.Types.PalletTemplate.Pallet.Call, FinalBiome.Api.Types.PalletUsers.Pallet.Call, FinalBiome.Api.Types.PalletOrganizationIdentity.Pallet.Call, FinalBiome.Api.Types.PalletFungibleAssets.Pallet.Call, FinalBiome.Api.Types.PalletNonFungibleAssets.Pallet.Call, FinalBiome.Api.Types.PalletMechanics.Pallet.Call>
     {
         public override string TypeName() => "Call";
     }

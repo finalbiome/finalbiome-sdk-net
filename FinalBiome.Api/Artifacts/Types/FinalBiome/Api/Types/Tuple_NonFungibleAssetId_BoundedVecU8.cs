@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 194
+    /// Generated from meta with Type Id 199
     /// </summary>
     public class Tuple_NonFungibleAssetId_BoundedVecU8 : FinalBiome.Api.Types.Tuple<FinalBiome.Api.Types.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId, FinalBiome.Api.Types.BoundedVecU8>
     {

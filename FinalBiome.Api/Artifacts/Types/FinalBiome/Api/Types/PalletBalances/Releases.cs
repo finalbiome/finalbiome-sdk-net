@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletBalances
 {
     /// <summary>
-    /// Generated from meta with Type Id 126
+    /// Generated from meta with Type Id 127
     /// </summary>
     public enum InnerReleases : byte
     {
@@ -21,7 +21,7 @@ namespace FinalBiome.Api.Types.PalletBalances
         V2_0_0 = 1,
     }
     /// <summary>
-    /// Generated from meta with Type Id 126
+    /// Generated from meta with Type Id 127
     /// </summary>
     public class Releases : Enum<InnerReleases, BaseVoid, BaseVoid>
     {

@@ -18,7 +18,7 @@ namespace FinalBiome.Api.Tx
         /// </summary>
         public StaticTxPayload RemoveAttribute(FinalBiome.Api.Types.SpRuntime.Multiaddress.MultiAddress organizationId, FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId.CompactNonFungibleClassId classId, FinalBiome.Api.Types.BoundedVecU8 attributeName)
         {
-            byte palletIsx = 11;
+            byte palletIsx = 12;
             byte callIsx = 3;
 
             List<byte> callData = new List<byte>();

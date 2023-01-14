@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletFungibleAssets.Pallet
     /// Some assets were issued.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 41, Variant Id 1
+    /// Generated from meta with Type Id 42, Variant Id 1
     /// </summary>
     public class EventIssued : Codec
     {

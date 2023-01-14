@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletNonFungibleAssets.Pallet
     /// New attribute metadata has been set for the asset class.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 44, Variant Id 4
+    /// Generated from meta with Type Id 45, Variant Id 4
     /// </summary>
     public class EventAttributeCreated : Codec
     {

@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 155
+    /// Generated from meta with Type Id 157
     /// </summary>
     public class OptionBettor : Option<FinalBiome.Api.Types.PalletSupport.Characteristics.Bettor.Bettor>
     {

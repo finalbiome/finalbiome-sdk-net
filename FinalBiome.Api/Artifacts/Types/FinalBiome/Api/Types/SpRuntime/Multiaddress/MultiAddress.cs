@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.SpRuntime.Multiaddress
 {
     /// <summary>
-    /// Generated from meta with Type Id 128
+    /// Generated from meta with Type Id 129
     /// </summary>
     public enum InnerMultiAddress : byte
     {
@@ -24,7 +24,7 @@ namespace FinalBiome.Api.Types.SpRuntime.Multiaddress
         Address20 = 4,
     }
     /// <summary>
-    /// Generated from meta with Type Id 128
+    /// Generated from meta with Type Id 129
     /// </summary>
     public class MultiAddress : Enum<InnerMultiAddress, FinalBiome.Api.Types.SpCore.Crypto.AccountId32, FinalBiome.Api.Types.CompactTuple_Empty, FinalBiome.Api.Types.VecU8, FinalBiome.Api.Types.Array32U8, FinalBiome.Api.Types.Array20U8>
     {

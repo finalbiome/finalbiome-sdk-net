@@ -21,6 +21,7 @@ public partial class StorageClient
     public TransactionPayment TransactionPayment { get; internal set; }
     public Sudo Sudo { get; internal set; }
     public TemplateModule TemplateModule { get; internal set; }
+    public Users Users { get; internal set; }
     public OrganizationIdentity OrganizationIdentity { get; internal set; }
     public FungibleAssets FungibleAssets { get; internal set; }
     public NonFungibleAssets NonFungibleAssets { get; internal set; }
@@ -38,6 +39,7 @@ public partial class StorageClient
         TransactionPayment = new TransactionPayment(this.client);
         Sudo = new Sudo(this.client);
         TemplateModule = new TemplateModule(this.client);
+        Users = new Users(this.client);
         OrganizationIdentity = new OrganizationIdentity(this.client);
         FungibleAssets = new FungibleAssets(this.client);
         NonFungibleAssets = new NonFungibleAssets(this.client);

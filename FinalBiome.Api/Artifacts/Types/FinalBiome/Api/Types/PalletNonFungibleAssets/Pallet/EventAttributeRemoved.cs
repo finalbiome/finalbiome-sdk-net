@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletNonFungibleAssets.Pallet
     /// Attribute metadata has been removed for the asset class.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 44, Variant Id 5
+    /// Generated from meta with Type Id 45, Variant Id 5
     /// </summary>
     public class EventAttributeRemoved : Codec
     {

@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 178
+    /// Generated from meta with Type Id 183
     /// </summary>
     public class Tuple_AccountId32_AccountId32 : FinalBiome.Api.Types.Tuple<FinalBiome.Api.Types.SpCore.Crypto.AccountId32, FinalBiome.Api.Types.SpCore.Crypto.AccountId32>
     {

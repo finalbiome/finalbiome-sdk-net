@@ -13,7 +13,7 @@ using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.FrameSystem.Limits
 {
     /// <summary>
-    /// Generated from meta with Type Id 84
+    /// Generated from meta with Type Id 85
     /// </summary>
     public class BlockLength : Codec
     {

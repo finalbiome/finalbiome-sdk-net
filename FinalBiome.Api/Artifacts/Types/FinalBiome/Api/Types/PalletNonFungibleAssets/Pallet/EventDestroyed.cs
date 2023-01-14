@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletNonFungibleAssets.Pallet
     /// An asset class has been destroyed.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 44, Variant Id 1
+    /// Generated from meta with Type Id 45, Variant Id 1
     /// </summary>
     public class EventDestroyed : Codec
     {

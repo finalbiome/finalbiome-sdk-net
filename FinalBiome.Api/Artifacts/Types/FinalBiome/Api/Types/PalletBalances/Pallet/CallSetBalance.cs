@@ -23,7 +23,7 @@ namespace FinalBiome.Api.Types.PalletBalances.Pallet
     /// The dispatch origin for this call is `root`.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 127, Variant Id 1
+    /// Generated from meta with Type Id 128, Variant Id 1
     /// </summary>
     public class CallSetBalance : Codec
     {

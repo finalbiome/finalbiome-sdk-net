@@ -13,7 +13,7 @@ using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.PalletSupport
 {
     /// <summary>
-    /// Generated from meta with Type Id 53
+    /// Generated from meta with Type Id 54
     /// </summary>
     public class GamerAccount : Codec
     {

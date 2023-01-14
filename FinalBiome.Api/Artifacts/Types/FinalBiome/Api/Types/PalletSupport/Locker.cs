@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletSupport
 {
     /// <summary>
-    /// Generated from meta with Type Id 193
+    /// Generated from meta with Type Id 198
     /// </summary>
     public enum InnerLocker : byte
     {
@@ -21,7 +21,7 @@ namespace FinalBiome.Api.Types.PalletSupport
         Mechanic = 1,
     }
     /// <summary>
-    /// Generated from meta with Type Id 193
+    /// Generated from meta with Type Id 198
     /// </summary>
     public class Locker : Enum<InnerLocker, BaseVoid, FinalBiome.Api.Types.PalletSupport.MechanicId>
     {
