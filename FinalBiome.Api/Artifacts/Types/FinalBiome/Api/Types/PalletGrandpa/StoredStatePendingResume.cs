@@ -13,7 +13,7 @@ using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.PalletGrandpa
 {
     /// <summary>
-    /// Generated from meta with Type Id 102, Variant Id 3
+    /// Generated from meta with Type Id 103, Variant Id 3
     /// </summary>
     public class StoredStatePendingResume : Codec
     {

@@ -25,7 +25,7 @@ namespace FinalBiome.Api.Types.PalletSudo.Pallet
     /// # &lt;/weight&gt;<br/>
     ///
     ///
-    /// Generated from meta with Type Id 135, Variant Id 2
+    /// Generated from meta with Type Id 136, Variant Id 2
     /// </summary>
     public class CallSetKey : Codec
     {

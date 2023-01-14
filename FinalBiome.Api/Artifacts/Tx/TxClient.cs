@@ -19,6 +19,7 @@ namespace FinalBiome.Api.Tx
         public Balances Balances;
         public Sudo Sudo;
         public TemplateModule TemplateModule;
+        public Users Users;
         public OrganizationIdentity OrganizationIdentity;
         public FungibleAssets FungibleAssets;
         public NonFungibleAssets NonFungibleAssets;
@@ -33,6 +34,7 @@ namespace FinalBiome.Api.Tx
             Balances = new Balances(this.client);
             Sudo = new Sudo(this.client);
             TemplateModule = new TemplateModule(this.client);
+            Users = new Users(this.client);
             OrganizationIdentity = new OrganizationIdentity(this.client);
             FungibleAssets = new FungibleAssets(this.client);
             NonFungibleAssets = new NonFungibleAssets(this.client);

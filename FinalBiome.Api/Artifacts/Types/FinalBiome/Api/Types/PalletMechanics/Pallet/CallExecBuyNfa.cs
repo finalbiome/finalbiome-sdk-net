@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletMechanics.Pallet
     /// Execute mechanic `Buy NFA`<br/>
     ///
     ///
-    /// Generated from meta with Type Id 170, Variant Id 0
+    /// Generated from meta with Type Id 172, Variant Id 0
     /// </summary>
     public class CallExecBuyNfa : Codec
     {

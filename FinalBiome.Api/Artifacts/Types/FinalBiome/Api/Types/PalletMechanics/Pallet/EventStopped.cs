@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletMechanics.Pallet
     /// Mechanics was stopped.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 52, Variant Id 1
+    /// Generated from meta with Type Id 53, Variant Id 1
     /// </summary>
     public class EventStopped : Codec
     {

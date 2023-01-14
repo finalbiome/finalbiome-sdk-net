@@ -24,7 +24,7 @@ namespace FinalBiome.Api.Types.PalletGrandpa.Pallet
     /// reporter.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 105, Variant Id 1
+    /// Generated from meta with Type Id 106, Variant Id 1
     /// </summary>
     public class CallReportEquivocationUnsigned : Codec
     {

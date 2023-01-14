@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletMechanics.Pallet
     ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>
     ///
     ///
-    /// Generated from meta with Type Id 52
+    /// Generated from meta with Type Id 53
     /// </summary>
     public enum InnerEvent : byte
     {
@@ -37,7 +37,7 @@ namespace FinalBiome.Api.Types.PalletMechanics.Pallet
     ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>
     ///
     ///
-    /// Generated from meta with Type Id 52
+    /// Generated from meta with Type Id 53
     /// </summary>
     public class Event : Enum<InnerEvent, FinalBiome.Api.Types.PalletMechanics.Pallet.EventFinished, FinalBiome.Api.Types.PalletMechanics.Pallet.EventStopped, FinalBiome.Api.Types.PalletMechanics.Pallet.EventDroppedByTimeout>
     {

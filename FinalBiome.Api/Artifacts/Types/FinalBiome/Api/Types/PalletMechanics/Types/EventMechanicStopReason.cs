@@ -13,14 +13,14 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletMechanics.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 60
+    /// Generated from meta with Type Id 61
     /// </summary>
     public enum InnerEventMechanicStopReason : byte
     {
         UpgradeNeeded = 0,
     }
     /// <summary>
-    /// Generated from meta with Type Id 60
+    /// Generated from meta with Type Id 61
     /// </summary>
     public class EventMechanicStopReason : Enum<InnerEventMechanicStopReason, FinalBiome.Api.Types.PalletMechanics.Types.MechanicDetails>
     {

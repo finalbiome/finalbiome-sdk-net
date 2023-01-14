@@ -13,7 +13,7 @@ using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.SpFinalityGrandpa
 {
     /// <summary>
-    /// Generated from meta with Type Id 106
+    /// Generated from meta with Type Id 107
     /// </summary>
     public class EquivocationProof : Codec
     {

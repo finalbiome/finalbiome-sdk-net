@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletSupport
 {
     /// <summary>
-    /// Generated from meta with Type Id 142
+    /// Generated from meta with Type Id 144
     /// </summary>
     public class BoundedVecAttribute : BoundedVec<FinalBiome.Api.Types.PalletSupport.Attribute>
     {

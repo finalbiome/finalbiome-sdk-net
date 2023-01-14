@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletSupport.Characteristics.Bettor
 {
     /// <summary>
-    /// Generated from meta with Type Id 160
+    /// Generated from meta with Type Id 162
     /// </summary>
     public class VecBettorOutcome : Vec<FinalBiome.Api.Types.PalletSupport.Characteristics.Bettor.BettorOutcome>
     {

@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetBalance
 {
     /// <summary>
-    /// Generated from meta with Type Id 43
+    /// Generated from meta with Type Id 44
     /// </summary>
     public class FungibleAssetBalance : FinalBiome.Api.Types.Primitive.U128
     {

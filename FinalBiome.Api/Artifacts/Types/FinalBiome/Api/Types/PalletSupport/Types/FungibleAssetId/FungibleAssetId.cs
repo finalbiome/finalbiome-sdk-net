@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId
 {
     /// <summary>
-    /// Generated from meta with Type Id 42
+    /// Generated from meta with Type Id 43
     /// </summary>
     public class FungibleAssetId : FinalBiome.Api.Types.Primitive.U32
     {

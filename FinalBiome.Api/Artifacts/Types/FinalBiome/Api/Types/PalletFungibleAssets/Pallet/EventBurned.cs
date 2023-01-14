@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletFungibleAssets.Pallet
     /// Some assets were destroyed.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 41, Variant Id 2
+    /// Generated from meta with Type Id 42, Variant Id 2
     /// </summary>
     public class EventBurned : Codec
     {

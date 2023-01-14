@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletMechanics.Pallet
     /// Upgrade mechanic<br/>
     ///
     ///
-    /// Generated from meta with Type Id 170, Variant Id 2
+    /// Generated from meta with Type Id 172, Variant Id 2
     /// </summary>
     public class CallUpgrade : Codec
     {

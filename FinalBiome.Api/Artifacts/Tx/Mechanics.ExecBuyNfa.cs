@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Tx
         /// </summary>
         public StaticTxPayload ExecBuyNfa(FinalBiome.Api.Types.SpCore.Crypto.AccountId32 organizationId, FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId classId, FinalBiome.Api.Types.Primitive.U32 offerId)
         {
-            byte palletIsx = 12;
+            byte palletIsx = 13;
             byte callIsx = 0;
 
             List<byte> callData = new List<byte>();

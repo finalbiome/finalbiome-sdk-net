@@ -18,7 +18,7 @@ namespace FinalBiome.Api.Types.PalletBalances.Pallet
     /// Can only be called by ROOT.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 127, Variant Id 5
+    /// Generated from meta with Type Id 128, Variant Id 5
     /// </summary>
     public class CallForceUnreserve : Codec
     {

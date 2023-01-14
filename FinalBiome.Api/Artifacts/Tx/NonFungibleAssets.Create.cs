@@ -25,7 +25,7 @@ namespace FinalBiome.Api.Tx
         /// </summary>
         public StaticTxPayload Create(FinalBiome.Api.Types.SpRuntime.Multiaddress.MultiAddress organizationId, FinalBiome.Api.Types.VecU8 name)
         {
-            byte palletIsx = 11;
+            byte palletIsx = 12;
             byte callIsx = 0;
 
             List<byte> callData = new List<byte>();

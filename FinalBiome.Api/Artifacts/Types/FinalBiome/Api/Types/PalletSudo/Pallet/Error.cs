@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletSudo.Pallet
     /// Error for the Sudo pallet<br/>
     ///
     ///
-    /// Generated from meta with Type Id 174
+    /// Generated from meta with Type Id 176
     /// </summary>
     public enum InnerError : byte
     {
@@ -29,7 +29,7 @@ namespace FinalBiome.Api.Types.PalletSudo.Pallet
     /// Error for the Sudo pallet<br/>
     ///
     ///
-    /// Generated from meta with Type Id 174
+    /// Generated from meta with Type Id 176
     /// </summary>
     public class Error : Enum<InnerError, BaseVoid>
     {

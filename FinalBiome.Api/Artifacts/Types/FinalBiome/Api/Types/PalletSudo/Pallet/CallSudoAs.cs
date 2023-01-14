@@ -26,7 +26,7 @@ namespace FinalBiome.Api.Types.PalletSudo.Pallet
     /// # &lt;/weight&gt;<br/>
     ///
     ///
-    /// Generated from meta with Type Id 135, Variant Id 3
+    /// Generated from meta with Type Id 136, Variant Id 3
     /// </summary>
     public class CallSudoAs : Codec
     {

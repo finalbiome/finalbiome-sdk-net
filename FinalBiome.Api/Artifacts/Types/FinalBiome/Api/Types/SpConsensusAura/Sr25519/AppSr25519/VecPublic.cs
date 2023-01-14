@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.SpConsensusAura.Sr25519.AppSr25519
 {
     /// <summary>
-    /// Generated from meta with Type Id 100
+    /// Generated from meta with Type Id 101
     /// </summary>
     public class VecPublic : Vec<FinalBiome.Api.Types.SpConsensusAura.Sr25519.AppSr25519.Public>
     {

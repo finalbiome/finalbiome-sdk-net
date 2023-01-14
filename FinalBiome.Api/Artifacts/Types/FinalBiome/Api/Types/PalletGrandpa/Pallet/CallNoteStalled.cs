@@ -27,7 +27,7 @@ namespace FinalBiome.Api.Types.PalletGrandpa.Pallet
     /// Only callable by root.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 105, Variant Id 2
+    /// Generated from meta with Type Id 106, Variant Id 2
     /// </summary>
     public class CallNoteStalled : Codec
     {

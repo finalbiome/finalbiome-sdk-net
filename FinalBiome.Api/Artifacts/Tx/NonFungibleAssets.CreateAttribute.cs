@@ -18,7 +18,7 @@ namespace FinalBiome.Api.Tx
         /// </summary>
         public StaticTxPayload CreateAttribute(FinalBiome.Api.Types.SpRuntime.Multiaddress.MultiAddress organizationId, FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId.CompactNonFungibleClassId classId, FinalBiome.Api.Types.PalletSupport.Attribute attribute)
         {
-            byte palletIsx = 11;
+            byte palletIsx = 12;
             byte callIsx = 2;
 
             List<byte> callData = new List<byte>();

@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId
 {
     /// <summary>
-    /// Generated from meta with Type Id 184
+    /// Generated from meta with Type Id 189
     /// </summary>
     public class WeakBoundedVecFungibleAssetId : WeakBoundedVec<FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.FungibleAssetId>
     {

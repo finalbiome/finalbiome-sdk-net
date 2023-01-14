@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.SpCore
 {
     /// <summary>
-    /// Generated from meta with Type Id 117
+    /// Generated from meta with Type Id 118
     /// </summary>
     public class Void : BaseVoid
     {

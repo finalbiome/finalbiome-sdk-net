@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletNonFungibleAssets.Pallet
     ///  Custom [dispatch errors](https://docs.substrate.io/main-docs/build/events-errors/) of this pallet. <br/>
     ///
     ///
-    /// Generated from meta with Type Id 196
+    /// Generated from meta with Type Id 201
     /// </summary>
     public enum InnerError : byte
     {
@@ -95,7 +95,7 @@ namespace FinalBiome.Api.Types.PalletNonFungibleAssets.Pallet
     ///  Custom [dispatch errors](https://docs.substrate.io/main-docs/build/events-errors/) of this pallet. <br/>
     ///
     ///
-    /// Generated from meta with Type Id 196
+    /// Generated from meta with Type Id 201
     /// </summary>
     public class Error : Enum<InnerError, BaseVoid, BaseVoid, BaseVoid, BaseVoid, BaseVoid, BaseVoid, BaseVoid, BaseVoid, BaseVoid, BaseVoid, BaseVoid, BaseVoid, BaseVoid, BaseVoid, BaseVoid, BaseVoid, BaseVoid, BaseVoid, FinalBiome.Api.Types.PalletSupport.Errors.CommonError>
     {

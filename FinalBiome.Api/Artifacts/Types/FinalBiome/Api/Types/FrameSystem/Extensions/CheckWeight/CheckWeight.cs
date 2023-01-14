@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.FrameSystem.Extensions.CheckWeight
 {
     /// <summary>
-    /// Generated from meta with Type Id 214
+    /// Generated from meta with Type Id 219
     /// </summary>
     public class CheckWeight : BaseVoid
     {

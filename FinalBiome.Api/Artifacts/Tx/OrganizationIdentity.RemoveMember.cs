@@ -24,7 +24,7 @@ namespace FinalBiome.Api.Tx
         /// </summary>
         public StaticTxPayload RemoveMember(FinalBiome.Api.Types.SpCore.Crypto.AccountId32 who)
         {
-            byte palletIsx = 9;
+            byte palletIsx = 10;
             byte callIsx = 2;
 
             List<byte> callData = new List<byte>();

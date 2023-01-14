@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 129
+    /// Generated from meta with Type Id 130
     /// </summary>
     public class CompactTuple_Empty : BaseVoid
     {

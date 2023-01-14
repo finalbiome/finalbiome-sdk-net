@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletOrganizationIdentity.Pallet
     ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>
     ///
     ///
-    /// Generated from meta with Type Id 40
+    /// Generated from meta with Type Id 41
     /// </summary>
     public enum InnerEvent : byte
     {
@@ -50,7 +50,7 @@ namespace FinalBiome.Api.Types.PalletOrganizationIdentity.Pallet
     ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>
     ///
     ///
-    /// Generated from meta with Type Id 40
+    /// Generated from meta with Type Id 41
     /// </summary>
     public class Event : Enum<InnerEvent, Tuple<FinalBiome.Api.Types.Primitive.U32, FinalBiome.Api.Types.SpCore.Crypto.AccountId32>, Tuple<FinalBiome.Api.Types.VecU8, FinalBiome.Api.Types.SpCore.Crypto.AccountId32>, FinalBiome.Api.Types.SpCore.Crypto.AccountId32, Tuple<FinalBiome.Api.Types.SpCore.Crypto.AccountId32, FinalBiome.Api.Types.SpCore.Crypto.AccountId32>, Tuple<FinalBiome.Api.Types.SpCore.Crypto.AccountId32, FinalBiome.Api.Types.SpCore.Crypto.AccountId32>, Tuple<FinalBiome.Api.Types.SpCore.Crypto.AccountId32, FinalBiome.Api.Types.SpCore.Crypto.AccountId32>>
     {

@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletSupport.Characteristics.Bettor
 {
     /// <summary>
-    /// Generated from meta with Type Id 164
+    /// Generated from meta with Type Id 166
     /// </summary>
     public enum InnerDrawOutcomeResult : byte
     {
@@ -22,7 +22,7 @@ namespace FinalBiome.Api.Types.PalletSupport.Characteristics.Bettor
         Keep = 2,
     }
     /// <summary>
-    /// Generated from meta with Type Id 164
+    /// Generated from meta with Type Id 166
     /// </summary>
     public class DrawOutcomeResult : Enum<InnerDrawOutcomeResult, BaseVoid, BaseVoid, BaseVoid>
     {

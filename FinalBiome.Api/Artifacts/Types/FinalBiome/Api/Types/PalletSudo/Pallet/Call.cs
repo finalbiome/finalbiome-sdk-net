@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletSudo.Pallet
     /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 135
+    /// Generated from meta with Type Id 136
     /// </summary>
     public enum InnerCall : byte
     {
@@ -78,7 +78,7 @@ namespace FinalBiome.Api.Types.PalletSudo.Pallet
     /// Contains one variant per dispatchable that can be called by an extrinsic.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 135
+    /// Generated from meta with Type Id 136
     /// </summary>
     public class Call : Enum<InnerCall, FinalBiome.Api.Types.PalletSudo.Pallet.CallSudo, FinalBiome.Api.Types.PalletSudo.Pallet.CallSudoUncheckedWeight, FinalBiome.Api.Types.PalletSudo.Pallet.CallSetKey, FinalBiome.Api.Types.PalletSudo.Pallet.CallSudoAs>
     {

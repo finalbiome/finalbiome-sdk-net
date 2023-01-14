@@ -13,7 +13,7 @@ using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.FrameSystem.Limits
 {
     /// <summary>
-    /// Generated from meta with Type Id 82
+    /// Generated from meta with Type Id 83
     /// </summary>
     public class WeightsPerClass : Codec
     {

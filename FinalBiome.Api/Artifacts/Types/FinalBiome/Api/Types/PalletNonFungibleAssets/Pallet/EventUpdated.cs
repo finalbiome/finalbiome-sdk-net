@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletNonFungibleAssets.Pallet
     /// An asset class has been updated.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 44, Variant Id 2
+    /// Generated from meta with Type Id 45, Variant Id 2
     /// </summary>
     public class EventUpdated : Codec
     {

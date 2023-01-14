@@ -16,6 +16,7 @@ public class PhraseResponse
 #pragma warning disable CS8618
     public string Phrase { get; set; }
     public string Seed { get; set; }
+    public string? Sign { get; set; }
 #pragma warning restore CS8618
 }
 

@@ -20,7 +20,7 @@ namespace FinalBiome.Api.Tx
         /// </summary>
         public StaticTxPayload CreateOrganization(FinalBiome.Api.Types.VecU8 name)
         {
-            byte palletIsx = 9;
+            byte palletIsx = 10;
             byte callIsx = 0;
 
             List<byte> callData = new List<byte>();

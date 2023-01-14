@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletSupport
 {
     /// <summary>
-    /// Generated from meta with Type Id 48
+    /// Generated from meta with Type Id 49
     /// </summary>
     public enum InnerAttributeValue : byte
     {
@@ -21,7 +21,7 @@ namespace FinalBiome.Api.Types.PalletSupport
         Text = 1,
     }
     /// <summary>
-    /// Generated from meta with Type Id 48
+    /// Generated from meta with Type Id 49
     /// </summary>
     public class AttributeValue : Enum<InnerAttributeValue, FinalBiome.Api.Types.PalletSupport.NumberAttribute, FinalBiome.Api.Types.BoundedVecU8>
     {

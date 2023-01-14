@@ -13,7 +13,7 @@ using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.PalletBalances
 {
     /// <summary>
-    /// Generated from meta with Type Id 124
+    /// Generated from meta with Type Id 125
     /// </summary>
     public class ReserveData : Codec
     {

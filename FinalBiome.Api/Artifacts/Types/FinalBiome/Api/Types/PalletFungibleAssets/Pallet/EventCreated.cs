@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletFungibleAssets.Pallet
     /// The asset has been created.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 41, Variant Id 0
+    /// Generated from meta with Type Id 42, Variant Id 0
     /// </summary>
     public class EventCreated : Codec
     {

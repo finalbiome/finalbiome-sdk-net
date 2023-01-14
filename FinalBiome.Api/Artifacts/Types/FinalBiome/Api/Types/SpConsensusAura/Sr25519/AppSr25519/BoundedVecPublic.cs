@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.SpConsensusAura.Sr25519.AppSr25519
 {
     /// <summary>
-    /// Generated from meta with Type Id 97
+    /// Generated from meta with Type Id 98
     /// </summary>
     public class BoundedVecPublic : BoundedVec<FinalBiome.Api.Types.SpConsensusAura.Sr25519.AppSr25519.Public>
     {

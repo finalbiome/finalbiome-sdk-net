@@ -26,15 +26,16 @@ namespace FinalBiome.Api.Types.FinalbiomeNodeRuntime
         TransactionPayment = 6,
         Sudo = 7,
         TemplateModule = 8,
-        OrganizationIdentity = 9,
-        FungibleAssets = 10,
-        NonFungibleAssets = 11,
-        Mechanics = 12,
+        Users = 9,
+        OrganizationIdentity = 10,
+        FungibleAssets = 11,
+        NonFungibleAssets = 12,
+        Mechanics = 13,
     }
     /// <summary>
     /// Generated from meta with Type Id 17
     /// </summary>
-    public class Event : Enum<InnerEvent, FinalBiome.Api.Types.FrameSystem.Pallet.Event, BaseVoid, BaseVoid, BaseVoid, FinalBiome.Api.Types.PalletGrandpa.Pallet.Event, FinalBiome.Api.Types.PalletBalances.Pallet.Event, FinalBiome.Api.Types.PalletTransactionPayment.Pallet.Event, FinalBiome.Api.Types.PalletSudo.Pallet.Event, FinalBiome.Api.Types.PalletTemplate.Pallet.Event, FinalBiome.Api.Types.PalletOrganizationIdentity.Pallet.Event, FinalBiome.Api.Types.PalletFungibleAssets.Pallet.Event, FinalBiome.Api.Types.PalletNonFungibleAssets.Pallet.Event, FinalBiome.Api.Types.PalletMechanics.Pallet.Event>
+    public class Event : Enum<InnerEvent, FinalBiome.Api.Types.FrameSystem.Pallet.Event, BaseVoid, BaseVoid, BaseVoid, FinalBiome.Api.Types.PalletGrandpa.Pallet.Event, FinalBiome.Api.Types.PalletBalances.Pallet.Event, FinalBiome.Api.Types.PalletTransactionPayment.Pallet.Event, FinalBiome.Api.Types.PalletSudo.Pallet.Event, FinalBiome.Api.Types.PalletTemplate.Pallet.Event, FinalBiome.Api.Types.PalletUsers.Pallet.Event, FinalBiome.Api.Types.PalletOrganizationIdentity.Pallet.Event, FinalBiome.Api.Types.PalletFungibleAssets.Pallet.Event, FinalBiome.Api.Types.PalletNonFungibleAssets.Pallet.Event, FinalBiome.Api.Types.PalletMechanics.Pallet.Event>
     {
         public override string TypeName() => "Event";
     }

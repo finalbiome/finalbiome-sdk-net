@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Tx
         /// </summary>
         public StaticTxPayload SetOnboardingAssets(FinalBiome.Api.Types.SpCore.Crypto.AccountId32 organizationId, FinalBiome.Api.Types.OptionBoundedVecAirDropAsset assets)
         {
-            byte palletIsx = 9;
+            byte palletIsx = 10;
             byte callIsx = 3;
 
             List<byte> callData = new List<byte>();

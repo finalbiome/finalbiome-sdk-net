@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 177
+    /// Generated from meta with Type Id 182
     /// </summary>
     public class BoundedVecU8 : BoundedVec<FinalBiome.Api.Types.Primitive.U8>
     {

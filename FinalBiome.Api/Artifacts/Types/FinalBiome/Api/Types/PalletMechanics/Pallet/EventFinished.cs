@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletMechanics.Pallet
     /// Mechanics done.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 52, Variant Id 0
+    /// Generated from meta with Type Id 53, Variant Id 0
     /// </summary>
     public class EventFinished : Codec
     {

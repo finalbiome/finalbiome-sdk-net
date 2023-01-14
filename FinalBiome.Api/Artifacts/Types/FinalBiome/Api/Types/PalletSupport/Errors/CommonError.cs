@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletSupport.Errors
 {
     /// <summary>
-    /// Generated from meta with Type Id 197
+    /// Generated from meta with Type Id 202
     /// </summary>
     public enum InnerCommonError : byte
     {
@@ -22,7 +22,7 @@ namespace FinalBiome.Api.Types.PalletSupport.Errors
         WrongPurchased = 2,
     }
     /// <summary>
-    /// Generated from meta with Type Id 197
+    /// Generated from meta with Type Id 202
     /// </summary>
     public class CommonError : Enum<InnerCommonError, BaseVoid, BaseVoid, BaseVoid>
     {

@@ -20,7 +20,7 @@ namespace FinalBiome.Api.Types.PalletOrganizationIdentity.Pallet
     /// The dispatch origin for this call must be Signed.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 138, Variant Id 0
+    /// Generated from meta with Type Id 140, Variant Id 0
     /// </summary>
     public class CallCreateOrganization : Codec
     {

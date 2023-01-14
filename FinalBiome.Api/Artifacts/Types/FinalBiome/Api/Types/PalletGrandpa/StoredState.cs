@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletGrandpa
 {
     /// <summary>
-    /// Generated from meta with Type Id 102
+    /// Generated from meta with Type Id 103
     /// </summary>
     public enum InnerStoredState : byte
     {
@@ -23,7 +23,7 @@ namespace FinalBiome.Api.Types.PalletGrandpa
         PendingResume = 3,
     }
     /// <summary>
-    /// Generated from meta with Type Id 102
+    /// Generated from meta with Type Id 103
     /// </summary>
     public class StoredState : Enum<InnerStoredState, BaseVoid, FinalBiome.Api.Types.PalletGrandpa.StoredStatePendingPause, BaseVoid, FinalBiome.Api.Types.PalletGrandpa.StoredStatePendingResume>
     {

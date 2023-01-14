@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletNonFungibleAssets.Pallet
     /// An asset `instance` has been issued.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 44, Variant Id 3
+    /// Generated from meta with Type Id 45, Variant Id 3
     /// </summary>
     public class EventIssued : Codec
     {

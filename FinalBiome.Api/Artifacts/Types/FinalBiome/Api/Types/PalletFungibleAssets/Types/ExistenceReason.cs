@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletFungibleAssets.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 183
+    /// Generated from meta with Type Id 188
     /// </summary>
     public enum InnerExistenceReason : byte
     {
@@ -23,7 +23,7 @@ namespace FinalBiome.Api.Types.PalletFungibleAssets.Types
         DepositRefunded = 3,
     }
     /// <summary>
-    /// Generated from meta with Type Id 183
+    /// Generated from meta with Type Id 188
     /// </summary>
     public class ExistenceReason : Enum<InnerExistenceReason, BaseVoid, BaseVoid, FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetBalance.FungibleAssetBalance, BaseVoid>
     {

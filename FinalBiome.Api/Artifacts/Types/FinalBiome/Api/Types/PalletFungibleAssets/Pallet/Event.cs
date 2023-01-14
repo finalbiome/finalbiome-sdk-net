@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletFungibleAssets.Pallet
     ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>
     ///
     ///
-    /// Generated from meta with Type Id 41
+    /// Generated from meta with Type Id 42
     /// </summary>
     public enum InnerEvent : byte
     {
@@ -46,7 +46,7 @@ namespace FinalBiome.Api.Types.PalletFungibleAssets.Pallet
     ///  The [event](https://docs.substrate.io/main-docs/build/events-errors/) emitted by this pallet. <br/>
     ///
     ///
-    /// Generated from meta with Type Id 41
+    /// Generated from meta with Type Id 42
     /// </summary>
     public class Event : Enum<InnerEvent, FinalBiome.Api.Types.PalletFungibleAssets.Pallet.EventCreated, FinalBiome.Api.Types.PalletFungibleAssets.Pallet.EventIssued, FinalBiome.Api.Types.PalletFungibleAssets.Pallet.EventBurned, Tuple<FinalBiome.Api.Types.Primitive.U32, FinalBiome.Api.Types.SpCore.Crypto.AccountId32>, FinalBiome.Api.Types.PalletFungibleAssets.Pallet.EventDestroyed>
     {

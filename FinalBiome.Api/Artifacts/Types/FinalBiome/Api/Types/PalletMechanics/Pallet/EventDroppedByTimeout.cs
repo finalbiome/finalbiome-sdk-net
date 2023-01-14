@@ -16,7 +16,7 @@ namespace FinalBiome.Api.Types.PalletMechanics.Pallet
     /// Mechanics as dropped by typeout.<br/>
     ///
     ///
-    /// Generated from meta with Type Id 52, Variant Id 2
+    /// Generated from meta with Type Id 53, Variant Id 2
     /// </summary>
     public class EventDroppedByTimeout : Codec
     {

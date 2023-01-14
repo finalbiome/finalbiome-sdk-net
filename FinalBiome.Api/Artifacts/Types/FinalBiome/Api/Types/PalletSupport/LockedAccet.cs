@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletSupport
 {
     /// <summary>
-    /// Generated from meta with Type Id 63
+    /// Generated from meta with Type Id 64
     /// </summary>
     public enum InnerLockedAccet : byte
     {
@@ -21,7 +21,7 @@ namespace FinalBiome.Api.Types.PalletSupport
         Nfa = 1,
     }
     /// <summary>
-    /// Generated from meta with Type Id 63
+    /// Generated from meta with Type Id 64
     /// </summary>
     public class LockedAccet : Enum<InnerLockedAccet, Tuple<FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetId.FungibleAssetId, FinalBiome.Api.Types.PalletSupport.Types.FungibleAssetBalance.FungibleAssetBalance>, Tuple<FinalBiome.Api.Types.PalletSupport.Types.NonFungibleClassId.NonFungibleClassId, FinalBiome.Api.Types.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId>>
     {

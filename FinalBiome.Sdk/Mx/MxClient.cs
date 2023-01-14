@@ -15,6 +15,7 @@ using FinalBiome.Api.Types.PalletMechanics.Types;
 using FinalBiome.Api.Extensions;
 using FinalBiome.Api.Types;
 using FinalBiome.Api.Types.PalletSupport;
+using FinalBiome.Api.Types.Primitive;
 
 /// <summary>
 /// Client for access mechanics execution and mechanics traction.
@@ -131,6 +132,9 @@ public class MxClient : IDisposable
         if (isLogged)
         {
             this.accountNonce = await FetchNonce(client).ConfigureAwait(false);
+            // try to signup if needed
+            await SignUpToNetwork();
+
             // get from the network all active mechanics and subscribe to it
             List<StorageAddress> mxAddresses = new();
             await foreach (MxId mxId in FetchActiveMechanics(client).ConfigureAwait(false))
@@ -237,6 +241,27 @@ public class MxClient : IDisposable
         var payload = client.api.Tx.OrganizationIdentity.Onboarding(this.client.Game.Address);
         var _ = await Submit(payload).ConfigureAwait(false);
         client.Game.IsOnboarded = true;
+    }
+
+    /// <summary>
+    /// Makes SignUp call on the node.
+    /// 
+    /// It makes after immediately after initialization if signup signature exists in AuthClient.
+    /// It needed for registration in the quota management system.
+    /// </summary>
+    /// <returns></returns>
+    private async Task SignUpToNetwork()
+    {
+        // if signature does not exist, nothing to do.
+        if (client.Auth.SignUpSignature is null) return;
+        Console.WriteLine($"SignUpToNetwork...");
+
+        var sign = new BoundedVecU8();
+        sign.Init(client.Auth.SignUpSignature.Select(v => U8.From(v)).ToArray());
+
+        var payload = client.api.Tx.Users.SignUp(sign);
+        var _ = await Submit(payload).ConfigureAwait(false);
+        client.Auth.SignUpSignature = null;
     }
 
     /// <summary>

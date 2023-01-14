@@ -23,10 +23,10 @@ internal class JimmyClient
     /// </summary>
     /// <param name="token"></param>
     /// <returns></returns>
-    internal async Task<string> GetSeed(string token)
+    internal async Task<Seed> GetSeed(string token)
     {
         var response = await this.getSeed.ExecuteAsync(new object(), token).ConfigureAwait(false);
-        return response.Seed;
+        return new(response);
     }
 
     /// <summary>
@@ -34,10 +34,10 @@ internal class JimmyClient
     /// </summary>
     /// <param name="token"></param>
     /// <returns></returns>
-    internal async Task<string> CreateSeed(string token)
+    internal async Task<Seed> CreateSeed(string token)
     {
         var response = await this.createSeed.ExecuteAsync(new object(), token).ConfigureAwait(false);
-        return response.Seed;
+        return new(response);
     }
     /// <summary>
     /// If deviceId is new, a new seed is generated,
@@ -45,10 +45,10 @@ internal class JimmyClient
     /// </summary>
     /// <param name="token"></param>
     /// <returns></returns>
-    internal async Task<string> AnonimousSeed(string deviceId)
+    internal async Task<Seed> AnonimousSeed(string deviceId)
     {
         var response = await this.anonymousSeed.ExecuteAsync(new object(), null, deviceId).ConfigureAwait(false);
-        return response.Seed;
+        return new(response);
     }
 
     /// <summary>
@@ -73,5 +73,21 @@ internal class JimmyClient
     {
         var _ = await this.remove.ExecuteAsync(new DeviceIdRequest { DeviceId = deviceId }, token, deviceId).ConfigureAwait(false);
         return;
+    }
+}
+
+internal class Seed
+{
+    public readonly byte[] SeedData;
+
+    /// <summary>
+    /// Raw signature, if returned from Jimmy
+    /// </summary>
+    public readonly byte[]? Sign;
+
+    internal Seed(PhraseResponse phraseResponse)
+    {
+        this.SeedData = FinalBiome.Api.Utils.HexUtils.HexToBytes(phraseResponse.Seed);
+        this.Sign = phraseResponse.Sign is null ? null : FinalBiome.Api.Utils.HexUtils.HexToBytes(phraseResponse.Sign);
     }
 }

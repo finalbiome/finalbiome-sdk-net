@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.PalletMechanics.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 55
+    /// Generated from meta with Type Id 56
     /// </summary>
     public enum InnerEventMechanicResultData : byte
     {
@@ -21,7 +21,7 @@ namespace FinalBiome.Api.Types.PalletMechanics.Types
         Bet = 1,
     }
     /// <summary>
-    /// Generated from meta with Type Id 55
+    /// Generated from meta with Type Id 56
     /// </summary>
     public class EventMechanicResultData : Enum<InnerEventMechanicResultData, FinalBiome.Api.Types.PalletSupport.Types.NonFungibleAssetId.NonFungibleAssetId, FinalBiome.Api.Types.PalletMechanics.Types.EventMechanicResultDataBet>
     {

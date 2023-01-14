@@ -13,7 +13,7 @@ using FinalBiome.Api.Types;
 namespace FinalBiome.Api.Types.FrameSystem.Extensions.CheckTxVersion
 {
     /// <summary>
-    /// Generated from meta with Type Id 209
+    /// Generated from meta with Type Id 214
     /// </summary>
     public class CheckTxVersion : BaseVoid
     {

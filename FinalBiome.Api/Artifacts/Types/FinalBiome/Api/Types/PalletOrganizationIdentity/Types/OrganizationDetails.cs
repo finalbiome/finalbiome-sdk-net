@@ -13,7 +13,7 @@ using FinalBiome.Api.Types.Primitive;
 namespace FinalBiome.Api.Types.PalletOrganizationIdentity.Types
 {
     /// <summary>
-    /// Generated from meta with Type Id 176
+    /// Generated from meta with Type Id 181
     /// </summary>
     public class OrganizationDetails : Codec
     {
