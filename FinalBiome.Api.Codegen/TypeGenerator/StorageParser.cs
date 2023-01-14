@@ -109,7 +109,7 @@ namespace FinalBiome.Api.Codegen
                         ps.OutputType = typeParser.parsedTypes[storage.TypeMap.Item1].FullCanonicalName;
                         break;
                     case FinalBiome.Api.Codegen.Metadata.Storage.Type.Map:
-                        ps.OutputType = typeParser.parsedTypes[storage.TypeMap.Item2.Value].FullCanonicalName;
+                        ps.OutputType = typeParser.parsedTypes[storage.TypeMap.Item2!.Value].FullCanonicalName;
                         if (storage.TypeMap.Item2.Hashers.Length == 1)
                         {
                             ps.InputTypes = new List<string>() { typeParser.parsedTypes[storage.TypeMap.Item2.Key].FullCanonicalName };
