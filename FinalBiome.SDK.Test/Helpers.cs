@@ -249,7 +249,8 @@ public class FirebaseUser: IAsyncDisposable
         Console.WriteLine($"Remove user from Firebase...");
 
         // cleanup: remove user from the firebase
-        _ = FirebaseApp.Create();
+        if (FirebaseApp.DefaultInstance is null)
+            _ = FirebaseApp.Create();
         UserRecord userRecord = await FirebaseAuth.DefaultInstance.GetUserByEmailAsync(this.Email);
         await FirebaseAuth.DefaultInstance.DeleteUserAsync(userRecord.Uid);
 
