@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="2.1.1"></a>
+## [2.1.1](https://www.github.com/finalbiome/finalbiome-sdk-net/releases/tag/v2.1.1) (2023-1-22)
+
+### Bug Fixes
+
+* **sdk:** logging out didn't delete stale data ([a94f742](https://www.github.com/finalbiome/finalbiome-sdk-net/commit/a94f742bceb45fe0590657f6bff6f54b3a7ff1d4))
+
 <a name="2.1.0"></a>
 ## [2.1.0](https://www.github.com/finalbiome/finalbiome-sdk-net/releases/tag/v2.1.0) (2023-1-14)
 
