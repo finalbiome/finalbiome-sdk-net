@@ -30,7 +30,7 @@ public class Client : IDisposable
         this.api = api;
         this.networkEventsListener = new(this);
 
-        this.config.InternalStateChanged += HandleUserStateChangedEvent;
+        // this.config.InternalStateChanged += HandleUserStateChangedEvent;
     }
 
     public static async Task<Client> Create(ClientConfig config)
@@ -74,25 +74,6 @@ public class Client : IDisposable
         }
 
         config.InternalStateChanged = null;
-    }
-
-    /// <summary>
-    /// If user status has been changed, we need fetch user data from the network or clean existed data.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    async Task HandleUserStateChangedEvent(bool logedIn)
-    {
-        if (logedIn)
-        {
-            // set signer for MxClient
-            this.Mx.Signer = Auth.signer!;
-        }
-        else
-        {
-            this.Mx.Signer = null;
-        }
-        await Task.Yield();
     }
 
     public void Dispose()

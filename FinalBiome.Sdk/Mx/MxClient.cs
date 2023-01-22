@@ -12,7 +12,6 @@ using FinalBiome.Api.Storage;
 using StorageKey = List<byte>;
 using Index = Api.Types.Primitive.U32;
 using FinalBiome.Api.Types.PalletMechanics.Types;
-using FinalBiome.Api.Extensions;
 using FinalBiome.Api.Types;
 using FinalBiome.Api.Types.PalletSupport;
 using FinalBiome.Api.Types.Primitive;
@@ -49,19 +48,6 @@ public class MxClient : IDisposable
             return (ulong)_accountNonce;
         }
         set => _accountNonce = value;
-    }
-    
-    private PairSigner? _signer;
-    internal PairSigner Signer {
-        private get
-        {
-            if (_signer is null) throw new ErrorNotAuthenticatedException();
-                return _signer;
-        }
-        set
-        {
-            _signer = value;
-        }
     }
 
     /// <summary>
@@ -133,7 +119,7 @@ public class MxClient : IDisposable
         {
             this.accountNonce = await FetchNonce(client).ConfigureAwait(false);
             // try to signup if needed
-            await SignUpToNetwork();
+            await SignUpToNetwork().ConfigureAwait(false);
 
             // get from the network all active mechanics and subscribe to it
             List<StorageAddress> mxAddresses = new();
@@ -236,11 +222,12 @@ public class MxClient : IDisposable
     public async Task OnboardToGame()
     {
         // if user is already onboarded, nothing to do
-        if (client.Game.IsOnboarded is not null && (bool)client.Game.IsOnboarded) return;
-
-        var payload = client.api.Tx.OrganizationIdentity.Onboarding(this.client.Game.Address);
-        var _ = await Submit(payload).ConfigureAwait(false);
-        client.Game.IsOnboarded = true;
+        if (client.Game.IsOnboarded is null || !(bool)client.Game.IsOnboarded)
+        {
+            var payload = client.api.Tx.OrganizationIdentity.Onboarding(this.client.Game.Address);
+            var _ = await Submit(payload).ConfigureAwait(false);
+            client.Game.IsOnboarded = true;
+        }
     }
 
     /// <summary>
@@ -253,15 +240,17 @@ public class MxClient : IDisposable
     private async Task SignUpToNetwork()
     {
         // if signature does not exist, nothing to do.
-        if (client.Auth.SignUpSignature is null) return;
-        Console.WriteLine($"SignUpToNetwork...");
+        if (client.Auth.SignUpSignature is not null)
+        {
+            Console.WriteLine($"SignUpToNetwork...");
 
-        var sign = new BoundedVecU8();
-        sign.Init(client.Auth.SignUpSignature.Select(v => U8.From(v)).ToArray());
+            var sign = new BoundedVecU8();
+            sign.Init(client.Auth.SignUpSignature.Select(v => U8.From(v)).ToArray());
 
-        var payload = client.api.Tx.Users.SignUp(sign);
-        var _ = await Submit(payload).ConfigureAwait(false);
-        client.Auth.SignUpSignature = null;
+            var payload = client.api.Tx.Users.SignUp(sign);
+            var _events = await Submit(payload).ConfigureAwait(false);
+            client.Auth.SignUpSignature = null;
+        }
     }
 
     /// <summary>
@@ -348,10 +337,9 @@ public class MxClient : IDisposable
     /// </summary>
     /// <param name="client"></param>
     /// <returns></returns>
-    private static async Task<ulong> FetchNonce(Client client)
+    private static Task<ulong> FetchNonce(Client client)
     {
-        var accountNonce = await client.api.Rpc.SystemAccountNextIndex(client.Auth.UserAddress).ConfigureAwait(false);;
-        return accountNonce;
+        return client.api.Rpc.SystemAccountNextIndex(client.Auth.UserAddress);
     }
 
     /// <summary>
@@ -361,10 +349,10 @@ public class MxClient : IDisposable
     /// <param name="payload"></param>
     /// <param name="retries"></param>
     /// <returns></returns>
-    private async Task<ExtrinsicEvents> Submit(TxPayload payload, uint? retries = null)
+    private async Task<ExtrinsicEvents> Submit(TxPayload payload, uint retries = 1)
     {
         BaseExtrinsicParamsBuilder<PlainTip> otherParams = BaseExtrinsicParamsBuilder<PlainTip>.Default();
-        var subExt = client.api.Tx.CreateSignedWithNonce(payload, Signer, accountNonce, otherParams);
+        var subExt = client.api.Tx.CreateSignedWithNonce(payload, client.Auth.Signer, accountNonce, otherParams);
         try
         {
             var txProgress = await subExt.SubmitAndWatch().ConfigureAwait(false);
@@ -386,7 +374,7 @@ public class MxClient : IDisposable
                         // refresh nonce from the network and repeat request 
                         if (retries > 2) throw; // prevent infinite loop
                         this.accountNonce = await FetchNonce(client).ConfigureAwait(false);
-                        retries = retries is null ? 1 : retries++;
+                        retries++;
                         return await Submit(payload, retries).ConfigureAwait(false);
                     }
                 default:

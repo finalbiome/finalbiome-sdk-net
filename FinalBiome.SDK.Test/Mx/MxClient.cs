@@ -215,10 +215,11 @@ public class MxClientTests
         await NetworkHelpers.SetCharacteristicPurchased(classId, 1, 3);
         // init api
         using Client client = await NetworkHelpers.GetSdkClientForEveGame();
-        if (!await client.Auth.IsLoggedIn()) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
-        // check balance for the gamer for the ability to make game transactions
-        await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
-
+        // create a new firebase user and make sign up
+        await using var user = new FirebaseUser();
+        await client.Auth.SignUpWithEmailAndPassword(user.Email, user.Password);
+        Thread.Sleep(2_000);
+        await client.Mx.OnboardToGame();
         // buy nfa for bets
         var resBuy = await client.Mx.ExecBuyNfa(classId, 0);
         var instanceId = (NonFungibleAssetId)resBuy.ResultRaw!.Value2;
@@ -236,7 +237,7 @@ public class MxClientTests
         MxId expectedMxId = res.Id;
         var expectedDetails = res.Reason;
 
-        // Thread.Sleep(100);
+        Thread.Sleep(100);
         Assert.Multiple(() =>
         {
             Assert.That(eventEmittedCount, Is.EqualTo(1));

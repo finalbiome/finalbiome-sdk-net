@@ -32,9 +32,9 @@ public class NetworkEventsListenerTests
         await l.StartNetworkEventsListener();
         Thread.Sleep(2_000);
         Assert.That(eventEmittedCount, Is.EqualTo(0));
-        
+
         // by new nfa
-        (NfaClassId classIdExpected, NfaInstanceId instanceIdExpected) = await NetworkHelpers.ExecBuyNfaMechanic(client.Auth.signer);
+        (NfaClassId classIdExpected, NfaInstanceId instanceIdExpected) = await NetworkHelpers.ExecBuyNfaMechanic(client.Auth.Signer);
         Thread.Sleep(2_000);
         
         Assert.Multiple(() =>

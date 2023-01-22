@@ -1,6 +1,5 @@
 
-using FirebaseAdmin;
-using FirebaseAdmin.Auth;
+using System.Numerics;
 
 namespace FinalBiome.Sdk.Test;
 
@@ -234,4 +233,78 @@ public class AuthClientTests
             });
         }
     }
+
+    [Test]
+    public async Task Logout()
+    {
+        // force logout
+        File.Delete(Path.Combine(Path.GetTempPath(), "finalbiome_auth.json"));
+        using Client client = await NetworkHelpers.GetSdkClientForEveGame();
+        // create a new firebase user and make sign up
+        await using var user = new FirebaseUser();
+        await client.Auth.SignUpWithEmailAndPassword(user.Email, user.Password);
+        Assert.Multiple(async () =>
+        {
+            Assert.That(await client.Auth.IsLoggedIn(), Is.True);
+            Assert.That(client.Auth.User, Is.Not.Null);
+            Assert.That(client.Auth.UserAddress, Is.Not.Null);
+            Assert.That(client.Auth.UserInfo, Is.Not.Null);
+        });
+        // wait login initialization
+        Thread.Sleep(1_000);
+
+        await client.Auth.SignOut();
+        Assert.Multiple(() =>
+        {
+
+            // Assert.That(await client.Auth.IsLoggedIn(), Is.False);
+            Assert.That(client.Auth.User, Is.Null);
+            Assert.That(client.Auth.UserInfo, Is.Null);
+        });
+    }
+
+    [Test]
+    public async Task LogoutWithChangingAccount()
+    {
+        // force logout
+        File.Delete(Path.Combine(Path.GetTempPath(), "finalbiome_auth.json"));
+        using Client client = await NetworkHelpers.GetSdkClientForEveGame();
+        // create a new firebase user and make sign up
+        await using var user1 = new FirebaseUser();
+        await client.Auth.SignUpWithEmailAndPassword(user1.Email, user1.Password);
+
+        var user1Account = client.Auth.Signer.AccountId.Bytes;
+        // wait login initialization
+        Thread.Sleep(2_000);
+        // try to make some tx
+        await client.Mx.OnboardToGame();
+        // assert that user can makes any transactions because they have some balance after signing up to the network.
+        using Api.Client api = await Api.Client.New();
+        var info1 = await api.Storage.System.Account(client.Auth.UserAddress).Fetch();
+        Assert.That(info1!.Data.Free.Value, Is.GreaterThan(BigInteger.Zero));
+
+        // logout
+        await client.Auth.SignOut();
+
+        // create a new firebase user and make sign up
+        await using var user2 = new FirebaseUser();
+        await client.Auth.SignUpWithEmailAndPassword(user2.Email, user2.Password);
+
+        var user2Account = client.Auth.Signer.AccountId.Bytes;
+
+        Assert.That(user2Account, Is.Not.EqualTo(user1Account));
+
+        // wait login initialization
+        Thread.Sleep(2_000);
+        // try to make some tx
+        await client.Mx.OnboardToGame();
+        // assert that user can makes any transactions because they have some balance after signing up to the network.
+        var info2 = await api.Storage.System.Account(client.Auth.UserAddress).Fetch();
+        Assert.That(info2!.Data.Free.Value, Is.GreaterThan(BigInteger.Zero));
+
+        // login as first user
+        // await client.Auth.SignUpWithEmailAndPassword(user1.Email, user1.Password);
+
+    }
+
 }

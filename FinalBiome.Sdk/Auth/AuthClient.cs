@@ -34,7 +34,7 @@ public class AuthClient
     }
 
     PairSigner? _signer;
-    internal PairSigner signer
+    internal PairSigner Signer
     {
         get
         {
@@ -230,7 +230,7 @@ public class AuthClient
         if (StateChanged is not null)
         {
             Console.WriteLine($"Invoke StateChanged (SignUp): {this.UserInfo is not null}");
-            await StateChanged(this.UserInfo is not null);
+            await StateChanged(this.UserInfo is not null).ConfigureAwait(false);
         }
     }
 
@@ -251,12 +251,16 @@ public class AuthClient
         InitFirebaseAuthClient();
 
         await fbClient.SignOutAsync().ConfigureAwait(false);
-        Account = null;
 
         if (StateChanged is not null)
         {
             await StateChanged(false).ConfigureAwait(false);
         }
+
+        Account = null;
+        UserInfo = null;
+        _signer = null;
+        _gamerAccount = null;
     }
 
     /// <summary>
@@ -312,15 +316,13 @@ public class AuthClient
         this.Account = user;
 
         if (StateChanged is not null)
-            await StateChanged(this.UserInfo is not null);
+            await StateChanged(this.UserInfo is not null).ConfigureAwait(false);
     }
 
     private void FbAuthStateHandler(object? o, UserEventArgs e)
     {
         // we need this handler, because if it not exists, firebase client doesn't read existed user from the local storage.
         this.User = e.User;
-        if (e.User is null)
-            Account = null;
     }
 
     // this is a crutch for cases when the firebase client did not have time to initialize the saved user credentials
