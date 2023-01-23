@@ -238,7 +238,7 @@ public class AuthClient
     /// Sign in anonymously.
     /// </summary>
     /// <returns></returns>
-    internal async Task SignInAsAnonym()
+    public async Task SignInAsAnonym()
     {
         InitFirebaseAuthClient();
 
