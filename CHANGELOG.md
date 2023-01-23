@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="2.1.2"></a>
+## [2.1.2](https://www.github.com/finalbiome/finalbiome-sdk-net/releases/tag/v2.1.2) (2023-1-23)
+
+### Bug Fixes
+
+* public anonym signin method ([d64cfc5](https://www.github.com/finalbiome/finalbiome-sdk-net/commit/d64cfc5f30a6700605ac8b1469e40d3b7aa44ef1))
+
 <a name="2.1.1"></a>
 ## [2.1.1](https://www.github.com/finalbiome/finalbiome-sdk-net/releases/tag/v2.1.1) (2023-1-22)
 

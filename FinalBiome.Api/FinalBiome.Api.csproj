@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <PackageId>FinalBiome.Api</PackageId>
-    <Version>2.1.1</Version>
+    <Version>2.1.2</Version>
     <Authors>Sergey Kovalev</Authors>
     <Company>FinalBiome</Company>
     <Description>The general library to submit extrinsics to a substrate node and getting chain status via RPC.</Description>
