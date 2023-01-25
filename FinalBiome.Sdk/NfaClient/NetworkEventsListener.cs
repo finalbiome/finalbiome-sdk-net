@@ -50,8 +50,6 @@ internal class NetworkEventsListener : IDisposable
     {
         this.client = client;
         this.subscriberCancellationTokenSource = new();
-
-        this.client.config.InternalStateChanged += HandleUserStateChangedEvent;
     }
 
     /// <summary>
@@ -189,7 +187,7 @@ internal class NetworkEventsListener : IDisposable
     /// </summary>
     /// <param name="isLogged"></param>
     /// <returns></returns>
-    async Task HandleUserStateChangedEvent(bool isLogged)
+    internal async Task HandleUserStateChangedEvent(bool isLogged)
     {
         if (isLogged) {
             // here we need fetch and subscribe to network events

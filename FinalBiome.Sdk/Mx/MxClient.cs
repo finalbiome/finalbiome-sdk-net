@@ -95,8 +95,6 @@ public class MxClient : IDisposable
 
         // listen network events about mechanics dropped by timeout
         this.client.networkEventsListener.MechanicsDropped += MechanicsDroppedHandler;
-
-        this.client.config.InternalStateChanged += HandleUserStateChangedEvent;
     }
 
     internal static async Task<MxClient> Create(Client client)
@@ -112,7 +110,7 @@ public class MxClient : IDisposable
     /// </summary>
     /// <param name="isLogged"></param>
     /// <returns></returns>
-    async Task HandleUserStateChangedEvent(bool isLogged)
+    internal async Task HandleUserStateChangedEvent(bool isLogged)
     {
         Console.WriteLine($"UserStateChanged MxClient: {isLogged}");
         if (isLogged)

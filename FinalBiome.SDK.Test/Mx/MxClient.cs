@@ -94,9 +94,10 @@ public class MxClientTests
 
         // init api
         using Client client = await NetworkHelpers.GetSdkClientForEveGame();
-        if (!await client.Auth.IsLoggedIn()) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
-        // check balance for the gamer for the ability to make game transactions
-        await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
+
+        await using var user = new FirebaseUser();
+        await client.Auth.SignUpWithEmailAndPassword(user.Email, user.Password);
+        await client.Mx.OnboardToGame();
 
         // buy nfa for bets
         var resBuy = await client.Mx.ExecBuyNfa(classId, 0);
@@ -104,19 +105,13 @@ public class MxClientTests
 
         // first round
         var resBet = await client.Mx.ExecBet(classId, instanceId);
-        Assert.Multiple(() =>
-        {
-            Assert.That(resBet.Status, Is.EqualTo(ResultStatus.Stopped));
-            Assert.That(resBet.Reason.Data.Outcomes, Has.Count.EqualTo(1));
-        });
-        // TODO: ...
+        Assert.That(resBet.Status, Is.EqualTo(ResultStatus.Stopped));
+        Assert.That(resBet.Reason.Data.Outcomes, Has.Count.EqualTo(1));
+
         // second round
         var resBet2 = await client.Mx.UpgradeBet(resBet.Id);
-        Assert.Multiple(() =>
-        {
-            Assert.That(resBet2.Status, Is.EqualTo(ResultStatus.Finished));
-            Assert.That(resBet2.Result.Outcomes, Has.Count.EqualTo(2));
-        });
+        Assert.That(resBet2.Status, Is.EqualTo(ResultStatus.Finished));
+        Assert.That(resBet2.Result.Outcomes, Has.Count.EqualTo(2));
     }
 
     [Test]
@@ -156,8 +151,6 @@ public class MxClientTests
         // check balance for the gamer for the ability to make game transactions
         await NetworkHelpers.TopupAccountBalance(client2.Auth.Account!.ToAddress());
 
-        // Thread.Sleep(1_000);
-
         Assert.That(client2.Mx.activeMechanics, Has.Count.AtLeast(1));
         // any acvive mechanics has the same gamer account
         foreach (var (mxid, details) in client2.Mx.activeMechanics)
@@ -189,8 +182,6 @@ public class MxClientTests
         // check balance for the gamer for the ability to make game transactions
         await NetworkHelpers.TopupAccountBalance(client2.Auth.Account!.ToAddress());
 
-        // Thread.Sleep(100); // need to check why
-
         Assert.That(client1.Mx.accountNonce, Is.EqualTo(client2.Mx.accountNonce));
 
         // buy nfa by the client1
@@ -218,7 +209,6 @@ public class MxClientTests
         // create a new firebase user and make sign up
         await using var user = new FirebaseUser();
         await client.Auth.SignUpWithEmailAndPassword(user.Email, user.Password);
-        Thread.Sleep(2_000);
         await client.Mx.OnboardToGame();
         // buy nfa for bets
         var resBuy = await client.Mx.ExecBuyNfa(classId, 0);
@@ -226,9 +216,10 @@ public class MxClientTests
 
         MxId? mxId = null;
         MechanicDetails? details = null;
-        int eventEmittedCount = 0;
+        using var wasCalled = new AutoResetEvent(false);
+
         client.Mx.MechanicsChanged += (o, e) => {
-            eventEmittedCount++;
+            Assert.That(wasCalled.Set(), Is.True);
             mxId = e.Id;
             details = e.Details;
         };
@@ -237,10 +228,9 @@ public class MxClientTests
         MxId expectedMxId = res.Id;
         var expectedDetails = res.Reason;
 
-        Thread.Sleep(100);
         Assert.Multiple(() =>
         {
-            Assert.That(eventEmittedCount, Is.EqualTo(1));
+            Assert.That(wasCalled.WaitOne(TimeSpan.FromSeconds(5)), Is.True);
             Assert.That(mxId?.nonce, Is.EqualTo(expectedMxId.nonce));
             Assert.That(mxId?.gamerAccount.OrganizationId.Bytes, Is.EqualTo(expectedMxId.gamerAccount.OrganizationId.Bytes));
             Assert.That(mxId?.gamerAccount.AccountId.Bytes, Is.EqualTo(expectedMxId.gamerAccount.AccountId.Bytes));
@@ -251,7 +241,7 @@ public class MxClientTests
         var fin = await client.Mx.UpgradeBet(expectedMxId);
         Assert.Multiple(() =>
         {
-            Assert.That(eventEmittedCount, Is.EqualTo(2));
+            Assert.That(wasCalled.WaitOne(TimeSpan.FromSeconds(5)), Is.True);
             Assert.That(mxId?.nonce, Is.EqualTo(expectedMxId.nonce));
             Assert.That(mxId?.gamerAccount.OrganizationId.Bytes, Is.EqualTo(expectedMxId.gamerAccount.OrganizationId.Bytes));
             Assert.That(mxId?.gamerAccount.AccountId.Bytes, Is.EqualTo(expectedMxId.gamerAccount.AccountId.Bytes));
@@ -296,5 +286,23 @@ public class MxClientTests
             Assert.That(mxId?.gamerAccount.OrganizationId.Bytes, Is.EqualTo(expectedMxId.gamerAccount.OrganizationId.Bytes));
             Assert.That(mxId?.gamerAccount.AccountId.Bytes, Is.EqualTo(expectedMxId.gamerAccount.AccountId.Bytes));
         });
+    }
+
+    [Test]
+    public async Task SignInWithOnboarding()
+    {
+        // force logout
+        File.Delete(Path.Combine(Path.GetTempPath(), "finalbiome_auth.json"));
+        using Client client = await NetworkHelpers.GetSdkClientForEveGame();
+
+
+        client.Auth.StateChanged += async (isLoggedIn) =>
+        {
+            // try to make some tx. Tx can't be failing with account balance too low error
+            await client.Mx.OnboardToGame();
+        };
+
+        // login as anonym
+        await client.Auth.SignInAsAnonym();
     }
 }

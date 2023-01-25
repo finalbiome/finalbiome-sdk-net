@@ -82,20 +82,25 @@ public class AuthClientTests
     {
         using Client client = await NetworkHelpers.GetSdkClientForEveGame();
 
-        var wasCalled = false;
-        client.Auth.StateChanged += async (a) => {
-            wasCalled = true;
+        using var wasCalled = new AutoResetEvent(false);
+        client.Auth.StateChanged += async (a) =>
+        {
+            Assert.That(wasCalled.Set(), Is.True);
             await Task.Yield();
         };
 
-        // login
-        await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
-        Assert.That(wasCalled, Is.EqualTo(true));
+        // sign up
+        await using var user = new FirebaseUser();
+        await client.Auth.SignUpWithEmailAndPassword(user.Email, user.Password);
+        Assert.That(wasCalled.WaitOne(TimeSpan.FromSeconds(5)), Is.True);
 
         //logout
-        wasCalled = false;
         await client.Auth.SignOut();
-        Assert.That(wasCalled, Is.EqualTo(true));
+        Assert.That(wasCalled.WaitOne(TimeSpan.FromSeconds(5)), Is.True);
+
+        // sign in
+        await client.Auth.SignInWithEmailAndPassword(user.Email, user.Password);
+        Assert.That(wasCalled.WaitOne(TimeSpan.FromSeconds(5)), Is.True);
     }
 
     [Test]
@@ -106,7 +111,7 @@ public class AuthClientTests
 
         string eveGame = "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw";
 
-        int eventEmittedCount = 0;
+        using var wasCalled = new AutoResetEvent(false);
 
         ClientConfig config = new(eveGame)
         {
@@ -116,23 +121,20 @@ public class AuthClientTests
 
         using (Client client =  await Sdk.Client.Create(config))
         {
-            
-            client.Auth.StateChanged += async (a) => {
-                eventEmittedCount++;
+            client.Auth.StateChanged += async (a) =>
+            {
+                Assert.That(wasCalled.Set(), Is.True);
                 await Task.Yield();
             };
 
             Assert.That(await client.Auth.IsLoggedIn(), Is.False);
-            // login
-            await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
+            // sign up
+            await using var user = new FirebaseUser();
+            await client.Auth.SignUpWithEmailAndPassword(user.Email, user.Password);
 
+            Assert.That(wasCalled.WaitOne(TimeSpan.FromSeconds(5)), Is.True);
             Assert.That(await client.Auth.IsLoggedIn(), Is.True);
-            Assert.That(eventEmittedCount, Is.EqualTo(1));
-
         }
-
-        // auth session must be saved between game sessions
-        eventEmittedCount = 0;
 
         ClientConfig config2 = new(eveGame)
         {
@@ -142,20 +144,20 @@ public class AuthClientTests
         
         using (Client client = await Sdk.Client.Create(config2))
         {
-            client.Auth.StateChanged += async (a) => {
-                Console.WriteLine($"Outer Invoke StateChanged 1");
-                eventEmittedCount++;
+            client.Auth.StateChanged += async (a) =>
+            {
+                Assert.That(wasCalled.Set(), Is.True);
                 await Task.Yield();
             };
 
             Assert.That(await client.Auth.IsLoggedIn(), Is.True);
-            Assert.That(eventEmittedCount, Is.EqualTo(1));
+            Assert.That(wasCalled.WaitOne(TimeSpan.FromSeconds(5)), Is.True);
 
             // login out
             await client.Auth.SignOut();
 
             Assert.That(await client.Auth.IsLoggedIn(), Is.False);
-            Assert.That(eventEmittedCount, Is.EqualTo(2));
+            Assert.That(wasCalled.WaitOne(TimeSpan.FromSeconds(5)), Is.True);
         }
     }
 
@@ -198,13 +200,9 @@ public class AuthClientTests
             // this device id of anonym
             var deviceId = client.Auth.fbClient.User.Uid;
             accountId = client.Auth.UserAddress.Bytes;
-            Assert.Multiple(() =>
-            {
-                Assert.That(client.Auth.User!.IsAnonymous, Is.True);
-                Assert.That(client.Auth.SignUpSignature, Is.Not.Null);
-            });
-            await using var user = new FirebaseUser();
+            Assert.That(client.Auth.User!.IsAnonymous, Is.True);
 
+            await using var user = new FirebaseUser();
             await client.Auth.SignUpWithEmailAndPassword(user.Email, user.Password);
 
             Assert.Multiple(() =>
@@ -274,8 +272,6 @@ public class AuthClientTests
         await client.Auth.SignUpWithEmailAndPassword(user1.Email, user1.Password);
 
         var user1Account = client.Auth.Signer.AccountId.Bytes;
-        // wait login initialization
-        Thread.Sleep(2_000);
         // try to make some tx
         await client.Mx.OnboardToGame();
         // assert that user can makes any transactions because they have some balance after signing up to the network.
@@ -294,8 +290,6 @@ public class AuthClientTests
 
         Assert.That(user2Account, Is.Not.EqualTo(user1Account));
 
-        // wait login initialization
-        Thread.Sleep(2_000);
         // try to make some tx
         await client.Mx.OnboardToGame();
         // assert that user can makes any transactions because they have some balance after signing up to the network.

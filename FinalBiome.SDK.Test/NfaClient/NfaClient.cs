@@ -69,9 +69,11 @@ public class NfaClientTests
         using Client client = await NetworkHelpers.GetSdkClientForEveGame();
 
         var classId = 1u;
+        using var wasCalled = new AutoResetEvent(false);
         int eventEmittedCount = 0;
         client.Nfa.NfaClassChanged += (o, e) =>
         {
+            Assert.That(wasCalled.Set(), Is.True);
             eventEmittedCount++;
             if (eventEmittedCount != 2) return;
             Assert.Multiple(() =>
@@ -84,7 +86,9 @@ public class NfaClientTests
 
         // get details. it subscribe the sdk to changes.
         var details = await client.Nfa.GetClassDetails(classId);
-        Thread.Sleep(1_000);
+        Assert.That(wasCalled.WaitOne(TimeSpan.FromSeconds(5)), Is.True);
+
+
         Assert.Multiple(() =>
         {
             Assert.That(details?.Attributes.Value, Is.EqualTo(9));
@@ -95,10 +99,12 @@ public class NfaClientTests
         // create attr. it should emit event from subscription
         await NetworkHelpers.CreateClassAttribute(classId, "testAttr", "testVal");
 
+        Assert.That(wasCalled.WaitOne(TimeSpan.FromSeconds(5)), Is.True);
         Assert.That(eventEmittedCount, Is.EqualTo(2));
 
         //cleanup
         await NetworkHelpers.RemoveClassAttribute(1, "testAttr");
+        Assert.That(wasCalled.WaitOne(TimeSpan.FromSeconds(5)), Is.True);
         Assert.That(eventEmittedCount, Is.EqualTo(3));
     }
 
@@ -109,35 +115,25 @@ public class NfaClientTests
 
         uint classId = 999;
         uint instanceId = 999;
-        int eventEmittedCount = 0;
+        using var wasCalled = new AutoResetEvent(false);
         client.Nfa.NfaInstanceChanged += (o, e) => {
-            eventEmittedCount++;
+            Assert.That(wasCalled.Set(), Is.True);
             classId = e.classId;
             instanceId = e.instanceId;
-            Assert.Multiple(() =>
-            {
-                Assert.That(e.details, Is.Not.Null);
-                // Assert.That(e.details?.Owner.ToHuman(), Is.EqualTo("\"5GYyqgLd4qTqRzc3crZNqxrZnwBroGeUvob3t73CQXixPydQ\""));
-                // Assert.That(e.details?.Locked.Value, Is.EqualTo(InnerLocker.None));
-            });
+            Assert.That(e.details, Is.Not.Null);
         };
 
         // login
-        if (!await client.Auth.IsLoggedIn()) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
-        // check balance for the gamer for the ability to make game transactions
-        await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
-        
-        Thread.Sleep(2_000);
-        eventEmittedCount = 0;
+        await using var user = new FirebaseUser();
+        await client.Auth.SignUpWithEmailAndPassword(user.Email, user.Password);
+        await client.Mx.OnboardToGame();
+       
         // by new nfa
         (NfaClassId classIdExpected, NfaInstanceId instanceIdExpected) = await NetworkHelpers.ExecBuyNfaMechanic(client.Auth.Signer);
-        Thread.Sleep(2_000);
-        Assert.Multiple(() =>
-        {
-            Assert.That(eventEmittedCount, Is.AtLeast(1));
-            Assert.That(classId, Is.EqualTo(classIdExpected));
-            Assert.That(instanceId, Is.EqualTo(instanceIdExpected));
-        });
+
+        Assert.That(wasCalled.WaitOne(TimeSpan.FromSeconds(5)), Is.True);
+        Assert.That(classId, Is.EqualTo(classIdExpected));
+        Assert.That(instanceId, Is.EqualTo(instanceIdExpected));
     }
 
     [Test]

@@ -29,7 +29,6 @@ public class GameClient
     {
         this.client = client;
         this.Address = this.client.config.GameAccount;
-        this.client.config.InternalStateChanged += HandleUserStateChangedEvent;
     }
 
     public static async Task<GameClient> Create(Client client) {
@@ -68,7 +67,7 @@ public class GameClient
     /// </summary>
     /// <param name="isLogged"></param>
     /// <returns></returns>
-    async Task HandleUserStateChangedEvent(bool isLogged)
+    internal async Task HandleUserStateChangedEvent(bool isLogged)
     {
         if (isLogged) {
             // init game onboarded

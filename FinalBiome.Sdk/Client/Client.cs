@@ -29,8 +29,6 @@ public class Client : IDisposable
         this.config = config;
         this.api = api;
         this.networkEventsListener = new(this);
-
-        // this.config.InternalStateChanged += HandleUserStateChangedEvent;
     }
 
     public static async Task<Client> Create(ClientConfig config)
@@ -57,23 +55,9 @@ public class Client : IDisposable
         client.Nfa = nfaClient;
         client.Mx = mxClient;
 
-        client.InitAuthClient();
+        client.Auth = new AuthClient(client);
         
         return client;
-    }
-
-    void InitAuthClient()
-    {
-        Console.WriteLine($"InitAuthClient");
-        
-        Auth = new AuthClient(this);
-        // subscribe to the state changes for internal clients
-        if (config.InternalStateChanged is not null)
-        {
-            Auth.StateChanged += config.InternalStateChanged; //.Clone() as FinalBiome.Sdk.AuthClient.OnStateChanged;
-        }
-
-        config.InternalStateChanged = null;
     }
 
     public void Dispose()

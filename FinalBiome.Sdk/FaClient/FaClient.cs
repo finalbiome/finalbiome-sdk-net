@@ -65,7 +65,6 @@ public class FaClient : IDisposable
     public FaClient(Client client)
     {
         this.client = client;
-        this.client.config.InternalStateChanged += HandleUserStateChangedEvent;
     }
 
     /// <summary>
@@ -227,7 +226,7 @@ public class FaClient : IDisposable
     /// </summary>
     /// <param name="isLogged"></param>
     /// <returns></returns>
-    async Task HandleUserStateChangedEvent(bool isLogged)
+    internal async Task HandleUserStateChangedEvent(bool isLogged)
     {
         if (isLogged) {
             // here we need fetch and subscribe to FA state

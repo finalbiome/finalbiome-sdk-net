@@ -93,8 +93,6 @@ public class NfaClient : IDisposable
         subscriberToInstances.StorageChanged += SubscriberToInstanceDetailsHandler;
 
         client.networkEventsListener.NfaIssued += NfaIssuedEventHandler;
-
-        this.client.config.InternalStateChanged += HandleUserStateChangedEvent;
     }
 
     public static async Task<NfaClient> Create(Client client)
@@ -348,7 +346,7 @@ public class NfaClient : IDisposable
     /// </summary>
     /// <param name="isLogged"></param>
     /// <returns></returns>
-    async Task HandleUserStateChangedEvent(bool isLogged)
+    internal async Task HandleUserStateChangedEvent(bool isLogged)
     {
         if (isLogged) {
             // subscribe to all owned assets
