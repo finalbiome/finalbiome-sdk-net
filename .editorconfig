@@ -5,3 +5,5 @@ dotnet_diagnostic.VSTHRD200.severity = silent
 dotnet_diagnostic.IDE1006.severity = silent
 # 'new' expression can be simplified
 dotnet_diagnostic.IDE0090.severity = silent
+# Call independent Assert statements from inside an Assert.Multiple
+dotnet_diagnostic.NUnit2045.severity = silent

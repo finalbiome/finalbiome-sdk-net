@@ -14,11 +14,11 @@ public class FaClientTests
 
         Assert.That(client.Fa.Balances, Is.Empty);
 
-        int eventEmittedCount = 0;
+        using var wasCalled = new AutoResetEvent(false);
         uint? updatedFa = null;
         client.Fa.FaBalanceChanged += (o, e) =>
         {
-            eventEmittedCount++;
+            Assert.That(wasCalled.Set(), Is.True);
             updatedFa = e.Id;
         };
 
@@ -26,13 +26,11 @@ public class FaClientTests
         // check balance for the gamer for the ability to make game transactions
         await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
 
-        Assert.Multiple(() =>
-        {
-            Assert.That(client.Fa.Balances, Has.Count.EqualTo(2));
-            Assert.That(eventEmittedCount, Is.AtLeast(1));
-            Assert.That(updatedFa, Is.Not.Null);
-            Assert.That(client.Fa.Balances[(uint)updatedFa!], Is.AtLeast(0));
-        });
+        Assert.That(client.Fa.Balances, Has.Count.EqualTo(2));
+        Assert.That(wasCalled.WaitOne(TimeSpan.FromSeconds(5)), Is.True);
+
+        Assert.That(updatedFa, Is.Not.Null);
+        Assert.That(client.Fa.Balances[(uint)updatedFa!], Is.AtLeast(0));
 
     }
 }

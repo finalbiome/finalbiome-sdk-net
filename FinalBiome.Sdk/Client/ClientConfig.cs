@@ -28,11 +28,6 @@ public class ClientConfig
     public string? PersistenceDataPath { get; set; } = null;
 
     /// <summary>
-    /// For internal purposes. This event gets called whenever the user's account changes.
-    /// </summary>
-    internal AuthClient.OnStateChanged? InternalStateChanged;
-
-    /// <summary>
     /// Create new confuguration for the App
     /// </summary>
     /// <param name="game">The game SS58 Address</param>

@@ -193,6 +193,24 @@ public class AuthClient
     }
 
     /// <summary>
+    /// Notifies internal clients about user state changing
+    /// </summary>
+    /// <returns></returns>
+    async Task NotifyStateChanges(bool isLogged)
+    {
+        List<Task> tasks = new()
+        {
+            client.networkEventsListener.HandleUserStateChangedEvent(isLogged),
+            client.Fa.HandleUserStateChangedEvent(isLogged),
+            client.Nfa.HandleUserStateChangedEvent(isLogged),
+            client.Game.HandleUserStateChangedEvent(isLogged),
+            client.Mx.HandleUserStateChangedEvent(isLogged)
+        };
+
+        await Task.WhenAll(tasks).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sign up user with email and password.
     /// </summary>
     /// <param name="email"></param>
@@ -227,6 +245,8 @@ public class AuthClient
             seed.SeedData);
             this.Account = user;
         }
+        await NotifyStateChanges(this.UserInfo is not null).ConfigureAwait(false);
+
         if (StateChanged is not null)
         {
             Console.WriteLine($"Invoke StateChanged (SignUp): {this.UserInfo is not null}");
@@ -251,6 +271,8 @@ public class AuthClient
         InitFirebaseAuthClient();
 
         await fbClient.SignOutAsync().ConfigureAwait(false);
+
+        await NotifyStateChanges(false).ConfigureAwait(false);
 
         if (StateChanged is not null)
         {
@@ -300,6 +322,8 @@ public class AuthClient
             this.Account = user;
         }
 
+        await NotifyStateChanges(this.UserInfo is not null).ConfigureAwait(false);
+
         if (StateChanged is not null)
             await StateChanged(this.UserInfo is not null).ConfigureAwait(false);
     }
@@ -314,6 +338,8 @@ public class AuthClient
         var user = FinalBiome.Api.Tx.Account.FromSeed(FinalBiome.Api.Types.SpRuntime.InnerMultiSignature.Sr25519,
             seed.SeedData);
         this.Account = user;
+
+        await NotifyStateChanges(this.UserInfo is not null).ConfigureAwait(false);
 
         if (StateChanged is not null)
             await StateChanged(this.UserInfo is not null).ConfigureAwait(false);
