@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="2.1.4"></a>
+## [2.1.4](https://www.github.com/finalbiome/finalbiome-sdk-net/releases/tag/v2.1.4) (2023-1-27)
+
 <a name="2.1.3"></a>
 ## [2.1.3](https://www.github.com/finalbiome/finalbiome-sdk-net/releases/tag/v2.1.3) (2023-1-25)
 
