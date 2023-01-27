@@ -38,17 +38,7 @@ public class MxClient : IDisposable
 {
     readonly Client client;
 
-    private ulong? _accountNonce;
-    /// <summary>
-    /// Current nonce that can used for submitting Tx
-    /// </summary>
-    internal ulong accountNonce {
-        get {
-            if (_accountNonce is null) throw new ErrorNotAuthenticatedException();
-            return (ulong)_accountNonce;
-        }
-        set => _accountNonce = value;
-    }
+    internal readonly MxSubmitter MxSubmitter;
 
     /// <summary>
     /// Root bytes for the mechanics storage of the mechanics module
@@ -87,6 +77,7 @@ public class MxClient : IDisposable
     )
     {
         this.client = client;
+        this.MxSubmitter = new(client);
         this.activeMechanics = new();
         this.subscriberCancellationTokenSource = subscriberCancellationTokenSource;
 
@@ -115,7 +106,6 @@ public class MxClient : IDisposable
         Console.WriteLine($"UserStateChanged MxClient: {isLogged}");
         if (isLogged)
         {
-            this.accountNonce = await FetchNonce(client).ConfigureAwait(false);
             // try to signup if needed
             await SignUpToNetwork().ConfigureAwait(false);
 
@@ -130,7 +120,7 @@ public class MxClient : IDisposable
         }
         else
         {
-            this._accountNonce = null;
+            this.MxSubmitter.Reset();
             await this.subscriberToMechanics.UnsubscribeAll();
         }
     }
@@ -223,7 +213,7 @@ public class MxClient : IDisposable
         if (client.Game.IsOnboarded is null || !(bool)client.Game.IsOnboarded)
         {
             var payload = client.api.Tx.OrganizationIdentity.Onboarding(this.client.Game.Address);
-            var _ = await Submit(payload).ConfigureAwait(false);
+            var _ = await this.MxSubmitter.Submit(payload).ConfigureAwait(false);
             client.Game.IsOnboarded = true;
         }
     }
@@ -246,7 +236,7 @@ public class MxClient : IDisposable
             sign.Init(client.Auth.SignUpSignature.Select(v => U8.From(v)).ToArray());
 
             var payload = client.api.Tx.Users.SignUp(sign);
-            var _events = await Submit(payload).ConfigureAwait(false);
+            var _events = await this.MxSubmitter.Submit(payload).ConfigureAwait(false);
             client.Auth.SignUpSignature = null;
         }
     }
@@ -331,57 +321,6 @@ public class MxClient : IDisposable
     }
 
     /// <summary>
-    /// Get actual nonce from the network
-    /// </summary>
-    /// <param name="client"></param>
-    /// <returns></returns>
-    private static Task<ulong> FetchNonce(Client client)
-    {
-        return client.api.Rpc.SystemAccountNextIndex(client.Auth.UserAddress);
-    }
-
-    /// <summary>
-    /// Submit transaction with respect to nonce and return success events.
-    /// If nonce was wrong, nonce updates from the network and this call repeats.
-    /// </summary>
-    /// <param name="payload"></param>
-    /// <param name="retries"></param>
-    /// <returns></returns>
-    private async Task<ExtrinsicEvents> Submit(TxPayload payload, uint retries = 1)
-    {
-        BaseExtrinsicParamsBuilder<PlainTip> otherParams = BaseExtrinsicParamsBuilder<PlainTip>.Default();
-        var subExt = client.api.Tx.CreateSignedWithNonce(payload, client.Auth.Signer, accountNonce, otherParams);
-        try
-        {
-            var txProgress = await subExt.SubmitAndWatch().ConfigureAwait(false);
-            accountNonce++;
-            var txInBlock = await txProgress.WaitForInBlock().ConfigureAwait(false);
-            // the next WaitForSuccess method can throw an ExtrinsicFailedException
-            // TODO: wrap into more convenient MechanicFailedException
-            ExtrinsicEvents? events = await txInBlock.WaitForSuccess().ConfigureAwait(false);
-            return events;
-        }
-        catch (StreamJsonRpc.RemoteInvocationException e)
-        {
-            var failureReason = NetworkFailureParser.GetFailureReason(e);
-            switch (failureReason)
-            {
-                case NetworkErrorReason.TransactionIsOutdated:
-                    {
-                        // suppose this happens if the local account's nonce is stale
-                        // refresh nonce from the network and repeat request 
-                        if (retries > 2) throw; // prevent infinite loop
-                        this.accountNonce = await FetchNonce(client).ConfigureAwait(false);
-                        retries++;
-                        return await Submit(payload, retries).ConfigureAwait(false);
-                    }
-                default:
-                    throw NetworkFailureParser.WrapError(e);
-            }
-        }
-    }
-
-    /// <summary>
     /// Submit constructed mechanics and return result of execution.
     /// Mechanics id used for locate machanics events (by mechanics id).
     /// For the new mechanics, id will be created
@@ -390,10 +329,10 @@ public class MxClient : IDisposable
     /// <returns></returns>
     private async Task<TResult> SubmitMx<TResult>(TxPayload payload, MxId? mxId = null) where TResult : MxResult, new()
     {
-        ExtrinsicEvents events = await Submit(payload).ConfigureAwait(false);;
+        ExtrinsicEvents events = await this.MxSubmitter.Submit(payload).ConfigureAwait(false);;
         // init id of mechanic if it doesn't exists.
         // this place of mx id initialization statement is not error. On the network, creation of id happends after increasing the nonce.
-        mxId ??= new(client.Auth.GamerAccount, accountNonce);
+        mxId ??= new(client.Auth.GamerAccount, await this.MxSubmitter.GetAccountNonce());
         return await MxResultFromEvents<TResult>((MxId)mxId, events).ConfigureAwait(false);
     }
 

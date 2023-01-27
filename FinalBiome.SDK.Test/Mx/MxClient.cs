@@ -13,13 +13,13 @@ public class MxClientTests
         
         using Client client = await NetworkHelpers.GetSdkClientForEveGame();
         // if user not signed in, we can't use MxClient
-        Assert.Throws<ErrorNotAuthenticatedException>(() => { var _ = client.Mx.accountNonce; });
+        Assert.ThrowsAsync<ErrorNotAuthenticatedException>(async () => { var _ = await client.Mx.MxSubmitter.GetAccountNonce(); });
 
         if (!await client.Auth.IsLoggedIn()) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
         // check balance for the gamer for the ability to make game transactions
         await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
 
-        Assert.That(client.Mx.accountNonce, Is.AtLeast(0));
+        Assert.That(await client.Mx.MxSubmitter.GetAccountNonce(), Is.AtLeast(0));
     }
 
     [Test]
@@ -30,14 +30,11 @@ public class MxClientTests
         // check balance for the gamer for the ability to make game transactions
         await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
 
-        var currNonce = client.Mx.accountNonce;
+        var currNonce = await client.Mx.MxSubmitter.GetAccountNonce();
         var res = await client.Mx.ExecBuyNfa(0, 0);
-        Assert.Multiple(() =>
-        {
-            Assert.That(res.Status, expression: Is.EqualTo(ResultStatus.Finished));
-            Assert.That(client.Mx.accountNonce, Is.EqualTo(currNonce + 1));
-            Assert.That(res.Result.InstanceId, Is.AtLeast(0));
-        });
+        Assert.That(res.Status, expression: Is.EqualTo(ResultStatus.Finished));
+        Assert.That(await client.Mx.MxSubmitter.GetAccountNonce(), Is.EqualTo(currNonce + 1));
+        Assert.That(res.Result.InstanceId, Is.AtLeast(0));
     }
 
     [Test]
@@ -48,13 +45,13 @@ public class MxClientTests
         // check balance for the gamer for the ability to make game transactions
         await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
 
-        var currNonce = client.Mx.accountNonce;
+        var currNonce = await client.Mx.MxSubmitter.GetAccountNonce();
 
         try {
             var res = await client.Mx.ExecBuyNfa(0, 999);
         }
         catch (Exception) { }
-        Assert.That(client.Mx.accountNonce, Is.EqualTo(currNonce + 1));
+        Assert.That(await client.Mx.MxSubmitter.GetAccountNonce(), Is.EqualTo(currNonce + 1));
 
     }
 
@@ -182,19 +179,16 @@ public class MxClientTests
         // check balance for the gamer for the ability to make game transactions
         await NetworkHelpers.TopupAccountBalance(client2.Auth.Account!.ToAddress());
 
-        Assert.That(client1.Mx.accountNonce, Is.EqualTo(client2.Mx.accountNonce));
+        Assert.That(await client1.Mx.MxSubmitter.GetAccountNonce(), Is.EqualTo(await client2.Mx.MxSubmitter.GetAccountNonce()));
 
         // buy nfa by the client1
         var res1 = await client1.Mx.ExecBuyNfa(0, 0);
-        Assert.Multiple(() =>
-        {
-            Assert.That(res1.Status, expression: Is.EqualTo(ResultStatus.Finished));
-            Assert.That(client1.Mx.accountNonce, Is.EqualTo(client2.Mx.accountNonce + 1));
-        });
+        Assert.That(res1.Status, Is.EqualTo(ResultStatus.Finished));
+        Assert.That(await client1.Mx.MxSubmitter.GetAccountNonce(), Is.EqualTo(await client2.Mx.MxSubmitter.GetAccountNonce() + 1));
 
         // buy second nfa by the client2
         var res2 = await client2.Mx.ExecBuyNfa(0, 0);
-        Assert.That(res2.Status, expression: Is.EqualTo(ResultStatus.Finished));
+        Assert.That(res2.Status, Is.EqualTo(ResultStatus.Finished));
     }
 
     [Test]
