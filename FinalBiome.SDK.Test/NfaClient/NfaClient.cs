@@ -12,7 +12,7 @@ public class NfaClientTests
     {
         using Client client = await NetworkHelpers.GetSdkClientForEveGame();
 
-        var classId = 1u;
+        var classId = 0u;
         var details = await client.Nfa.GetClassDetails(classId);
         Assert.That(details, Is.Not.Null);
         Assert.That(details.Name.ToHuman(), Is.EqualTo("\"Stave\""));
@@ -37,8 +37,6 @@ public class NfaClientTests
         using Client client = await NetworkHelpers.GetSdkClientForEveGame();
         // login (it's not necessary to get instance details, but need to the helper for buying nfa)
         if (!await client.Auth.IsLoggedIn()) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
-        // check balance for the gamer for the ability to make game transactions
-        await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
 
         // by new nfa
         (NfaClassId classId, NfaInstanceId instanceId) = await NetworkHelpers.ExecBuyNfaMechanic(client.Auth.Signer);
@@ -68,7 +66,7 @@ public class NfaClientTests
         // for test events about changes of nfs classes, we create a test attribute and listen changes on the nfa class.
         using Client client = await NetworkHelpers.GetSdkClientForEveGame();
 
-        var classId = 1u;
+        var classId = 0u;
         using var wasCalled = new AutoResetEvent(false);
         int eventEmittedCount = 0;
         client.Nfa.NfaClassChanged += (o, e) =>
@@ -103,7 +101,7 @@ public class NfaClientTests
         Assert.That(eventEmittedCount, Is.EqualTo(2));
 
         //cleanup
-        await NetworkHelpers.RemoveClassAttribute(1, "testAttr");
+        await NetworkHelpers.RemoveClassAttribute(classId, "testAttr");
         Assert.That(wasCalled.WaitOne(TimeSpan.FromSeconds(5)), Is.True);
         Assert.That(eventEmittedCount, Is.EqualTo(3));
     }
