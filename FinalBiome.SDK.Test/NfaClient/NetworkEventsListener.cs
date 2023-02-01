@@ -14,8 +14,6 @@ public class NetworkEventsListenerTests
 
         // login
         if (!await client.Auth.IsLoggedIn()) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
-        // check balance for the gamer for the ability to make game transactions
-        await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
 
         Thread.Sleep(1_000);
 
