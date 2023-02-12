@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="2.1.5"></a>
+## [2.1.5](https://www.github.com/finalbiome/finalbiome-sdk-net/releases/tag/v2.1.5) (2023-2-12)
+
+### Bug Fixes
+
+* user not found in the firebase wrap ([f84c3fc](https://www.github.com/finalbiome/finalbiome-sdk-net/commit/f84c3fcbc6d118622071af371624c38ac15465a6))
+
 <a name="2.1.4"></a>
 ## [2.1.4](https://www.github.com/finalbiome/finalbiome-sdk-net/releases/tag/v2.1.4) (2023-1-27)
 
