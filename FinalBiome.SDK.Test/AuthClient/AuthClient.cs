@@ -113,6 +113,8 @@ public class AuthClientTests
 
         using var wasCalled = new AutoResetEvent(false);
 
+        await using var user = new FirebaseUser();
+
         ClientConfig config = new(eveGame)
         {
             // set persistence path for storing data
@@ -129,7 +131,6 @@ public class AuthClientTests
 
             Assert.That(await client.Auth.IsLoggedIn(), Is.False);
             // sign up
-            await using var user = new FirebaseUser();
             await client.Auth.SignUpWithEmailAndPassword(user.Email, user.Password);
 
             Assert.That(wasCalled.WaitOne(TimeSpan.FromSeconds(5)), Is.True);
@@ -166,6 +167,7 @@ public class AuthClientTests
     {
         // force logout
         File.Delete(Path.Combine(Path.GetTempPath(), "finalbiome_auth.json"));
+        await using var user = new FirebaseUser();
 
         byte[]? accountId;
 
@@ -202,7 +204,6 @@ public class AuthClientTests
             accountId = client.Auth.UserAddress.Bytes;
             Assert.That(client.Auth.User!.IsAnonymous, Is.True);
 
-            await using var user = new FirebaseUser();
             await client.Auth.SignUpWithEmailAndPassword(user.Email, user.Password);
 
             Assert.Multiple(() =>

@@ -26,9 +26,6 @@ public class GameClientTest
         // login
         await using var user = new FirebaseUser();
         await client.Auth.SignUpWithEmailAndPassword(user.Email, user.Password);
-
-        // check balance for the gamer for the ability to make game transactions
-        await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
         
         Assert.That(client.Game.IsOnboarded, Is.False);
 

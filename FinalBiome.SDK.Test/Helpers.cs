@@ -254,6 +254,9 @@ public class FirebaseUser: IAsyncDisposable
         UserRecord userRecord = await FirebaseAuth.DefaultInstance.GetUserByEmailAsync(this.Email);
         await FirebaseAuth.DefaultInstance.DeleteUserAsync(userRecord.Uid);
 
+        // force logout
+        File.Delete(Path.Combine(Path.GetTempPath(), "finalbiome_auth.json"));
+
         // Suppress finalization.
         GC.SuppressFinalize(this);
     }

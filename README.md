@@ -7,3 +7,5 @@ This repository includes the following projects:
 * [FinalBiome.Api.Codegen](./FinalBiome.Api.Codegen/) - a helper console application for automatically generating types and methods from node metadata for the [FinalBiome.Api](./FinalBiome.Api/)
 * [FinalBiome.Api.Test/](./FinalBiome.Api.Test/) - Unit tests for the [FinalBiome.Api](./FinalBiome.Api/)
 * [Console.Api](./Console.Api/) - the sandbox with API usage examples
+* [FinalBiome.Sdk](./FinalBiome.Sdk/) - a library for using with the FinalBiome Network
+* [FinalBiome.Sdk.Test/](./FinalBiome.Api.Test/) - Unit tests for the [FinalBiome.Sdk](./FinalBiome.Sdk/)

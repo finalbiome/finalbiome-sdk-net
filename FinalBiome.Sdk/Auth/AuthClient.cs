@@ -171,7 +171,22 @@ public class AuthClient
             }
             else
             {
-                await FetchSeedByFbAuth().ConfigureAwait(false);
+                try
+                {
+                    await FetchSeedByFbAuth().ConfigureAwait(false);
+                }
+                catch (Firebase.Auth.FirebaseAuthHttpException e)
+                {
+                    // catch case if the user was disabled or removed on the Firebase side, but local store hold credentials of that user.
+                    if (e.Reason == AuthErrorReason.UserNotFound || e.Reason == AuthErrorReason.UserDisabled)
+                    {
+                        await fbClient.SignOutAsync();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
             }
         }
 

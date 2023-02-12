@@ -16,8 +16,6 @@ public class MxClientTests
         Assert.ThrowsAsync<ErrorNotAuthenticatedException>(async () => { var _ = await client.Mx.MxSubmitter.GetAccountNonce(); });
 
         if (!await client.Auth.IsLoggedIn()) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
-        // check balance for the gamer for the ability to make game transactions
-        await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
 
         Assert.That(await client.Mx.MxSubmitter.GetAccountNonce(), Is.AtLeast(0));
     }
@@ -27,8 +25,6 @@ public class MxClientTests
     {
         using Client client = await NetworkHelpers.GetSdkClientForEveGame();
         if (!await client.Auth.IsLoggedIn()) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
-        // check balance for the gamer for the ability to make game transactions
-        await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
 
         var currNonce = await client.Mx.MxSubmitter.GetAccountNonce();
         var res = await client.Mx.ExecBuyNfa(0, 0);
@@ -42,8 +38,6 @@ public class MxClientTests
     {
         using Client client = await NetworkHelpers.GetSdkClientForEveGame();
         if (!await client.Auth.IsLoggedIn()) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
-        // check balance for the gamer for the ability to make game transactions
-        await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
 
         var currNonce = await client.Mx.MxSubmitter.GetAccountNonce();
 
@@ -66,8 +60,6 @@ public class MxClientTests
         // init api
         using Client client = await NetworkHelpers.GetSdkClientForEveGame();
         if (!await client.Auth.IsLoggedIn()) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
-        // check balance for the gamer for the ability to make game transactions
-        await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
 
         // buy nfa for bets
         var resBuy = await client.Mx.ExecBuyNfa(classId, 0);
@@ -94,6 +86,7 @@ public class MxClientTests
 
         await using var user = new FirebaseUser();
         await client.Auth.SignUpWithEmailAndPassword(user.Email, user.Password);
+        Assert.That(await client.Auth.IsLoggedIn(), Is.True);
         await client.Mx.OnboardToGame();
 
         // buy nfa for bets
@@ -131,8 +124,6 @@ public class MxClientTests
         using (Client client = await Client.Create(config))
         {
             if (!await client.Auth.IsLoggedIn()) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
-            // check balance for the gamer for the ability to make game transactions
-            await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
 
             // buy nfa for bets
             var resBuy = await client.Mx.ExecBuyNfa(classId, 0);
@@ -145,8 +136,6 @@ public class MxClientTests
         // create new api
         using Client client2 = await NetworkHelpers.GetSdkClientForEveGame();
         if (!await client2.Auth.IsLoggedIn()) await client2.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
-        // check balance for the gamer for the ability to make game transactions
-        await NetworkHelpers.TopupAccountBalance(client2.Auth.Account!.ToAddress());
 
         Assert.That(client2.Mx.activeMechanics, Has.Count.AtLeast(1));
         // any acvive mechanics has the same gamer account
@@ -171,13 +160,9 @@ public class MxClientTests
         // init two clients, exec mx in the first client and try exec other mx in the second one.
         using Client client1 = await NetworkHelpers.GetSdkClientForEveGame();
         if (!await client1.Auth.IsLoggedIn()) await client1.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
-        // check balance for the gamer for the ability to make game transactions
-        await NetworkHelpers.TopupAccountBalance(client1.Auth.Account!.ToAddress());
 
         using Client client2 = await NetworkHelpers.GetSdkClientForEveGame();
         if (!await client2.Auth.IsLoggedIn()) await client2.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
-        // check balance for the gamer for the ability to make game transactions
-        await NetworkHelpers.TopupAccountBalance(client2.Auth.Account!.ToAddress());
 
         Assert.That(await client1.Mx.MxSubmitter.GetAccountNonce(), Is.EqualTo(await client2.Mx.MxSubmitter.GetAccountNonce()));
 
@@ -255,8 +240,6 @@ public class MxClientTests
         // init api
         using Client client = await NetworkHelpers.GetSdkClientForEveGame();
         if (!await client.Auth.IsLoggedIn()) await client.Auth.SignInWithEmailAndPassword("testdave@finalbiome.net", "testDave@finalbiome.net");
-        // check balance for the gamer for the ability to make game transactions
-        await NetworkHelpers.TopupAccountBalance(client.Auth.Account!.ToAddress());
 
         // buy nfa for bets
         var resBuy = await client.Mx.ExecBuyNfa(classId, 0);
